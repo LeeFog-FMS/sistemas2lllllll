@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabaritando IFSC: Escalas e Fusos Horários</title>
+    <!-- Tailwind CSS CDN para estilização rápida, moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b; /* Slate 800 - Leitura extremamente confortável */
+        }
+        .highlight {
+            background-color: #fef08a; /* Amarelo marca-texto suave */
+            color: #854d0e; /* Texto marrom escuro para contraste ideal */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .highlight-blue {
+            background-color: #e0f2fe; /* Azul suave */
+            color: #0369a1;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-yellow-200">
+
+    <!-- CONTAINER PRINCIPAL -->
+    <main class="max-w-4xl mx-auto px-4 py-8 md:py-12 w-full">
+        
+        <!-- CABEÇALHO -->
+        <header class="border-b border-slate-200 pb-6 mb-8 text-center md:text-left">
+            <div class="inline-block bg-emerald-100 text-emerald-800 text-xs font-semibold tracking-wider uppercase px-3 py-1 rounded-full mb-3">
+                Foco EBTT • Banca FAURGS
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
+                Escalas Cartográficas e Fusos Horários
+            </h1>
+            <p class="text-slate-500 mt-2 text-base md:text-lg">
+                Guia Teórico de Alta Performance e Memorização para o Concurso de Professor do IFSC.
+            </p>
+        </header>
+
+        <!-- PLAYER DE ÁUDIO INTEGRADO -->
+        <section class="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-10 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Audioaula de Apoio</h3>
+                    <p class="text-xs text-slate-500">Escute este resumo enquanto revisa os pontos-chave abaixo.</p>
+                </div>
+                
+                <!-- Interface do Player -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+                    <!-- Configuração do Arquivo MP3 -->
+                    <div class="flex flex-col">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-1">Arquivo de Áudio</label>
+                        <input 
+                            type="text" 
+                            id="audio-source-input" 
+                            class="bg-white border border-slate-300 rounded px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500 w-full sm:w-48"
+                            value="aula_escalas_fusos.mp3" 
+                            placeholder="Nome do arquivo.mp3"
+                            onchange="updateAudioSource(this.value)"
+                        />
+                    </div>
+                    
+                    <!-- Elemento HTML5 de Áudio -->
+                    <div class="flex items-center gap-2 pt-4 sm:pt-0">
+                        <audio id="lesson-audio" class="h-8 max-w-full" controls>
+                            <!-- 
+                              ==================================================================
+                              INSTRUÇÃO PARA O DESENVOLVEDOR:
+                              Substitua o valor de "src" abaixo pelo nome do seu arquivo MP3.
+                              ==================================================================
+                            -->
+                            <source id="audio-src" src="aula_escalas.mp3" type="audio/mpeg">
+                            <!-- ================================================================== -->
+                            Seu navegador não suporta este player de áudio.
+                        </audio>
+
+                        <!-- Controle de Velocidade -->
+                        <div class="flex flex-col">
+                            <label class="text-[10px] font-bold text-slate-500 uppercase mb-1">Velocidade</label>
+                            <select 
+                                id="playback-speed" 
+                                class="bg-white border border-slate-300 rounded px-1.5 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+                                onchange="changeSpeed(this.value)"
+                            >
+                                <option value="1">1.0x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5" selected>1.5x</option>
+                                <option value="1.75">1.75x</option>
+                                <option value="2">2.0x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-2 text-[11px] text-emerald-700 italic flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                <span>Dica: Use a velocidade 1.5x ou 1.75x para acelerar a revisão pré-prova!</span>
+            </div>
+        </section>
+
+        <!-- CONTEÚDO PRINCIPAL (AULA INTEGRAL) -->
+        <article class="space-y-12 text-slate-800 leading-relaxed text-base">
+
+            <!-- INTRODUÇÃO & CONCEITO DE EXAME -->
+            <section class="space-y-4">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="text-emerald-600">01.</span> Introdução ao Perfil FAURGS (EBTT)
+                </h2>
+                <p>
+                    O concurso para a carreira de Ensino Básico, Técnico e Tecnológico (EBTT) do <strong class="text-slate-900">IFSC</strong> exige do candidato não apenas a memorização conceitual, mas a <span class="highlight">capacidade prática de converter dados em resoluções rápidas</span>. A banca <strong class="text-slate-900">FAURGS</strong> é conhecida por sua literalidade, rigor técnico e por incluir problemas de cálculo que testam a atenção do geógrafo em conversão de unidades e transições longitudinais.
+                </p>
+            </section>
+
+            <!-- TEMA 1: ESCALAS CARTOGRÁFICAS -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="text-emerald-600">02.</span> Escalas Cartográficas: Teoria e Cálculos
+                </h2>
+                
+                <p>
+                    A escala expressa a <strong class="text-slate-900">relação de proporcionalidade</strong> entre as dimensões reais do terreno (<span class="highlight-blue">D</span>) e as dimensões representadas no mapa (<span class="highlight-blue">d</span>).
+                </p>
+
+                <!-- CARD DE FÓRMULA -->
+                <div class="bg-slate-50 border-l-4 border-emerald-500 rounded-r-lg p-5 my-4">
+                    <p class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2">Fórmula Base da Cartografia</p>
+                    <div class="flex flex-col sm:flex-row items-center justify-around gap-4 py-2">
+                        <div class="text-center">
+                            <span class="text-2xl font-black text-slate-900">D = d · E</span>
+                        </div>
+                        <div class="text-xs text-slate-600 space-y-1">
+                            <div>• <strong>D</strong> = Distância Real (geralmente em metros ou quilômetros)</div>
+                            <div>• <strong>d</strong> = Distância no Mapa (geralmente em centímetros)</div>
+                            <div>• <strong>E</strong> = Denominador da Escala (adimensional)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SUBTEMA: NUMÉRICA X GRÁFICA -->
+                <div class="space-y-3">
+                    <h3 class="text-lg font-semibold text-slate-900">Escala Numérica vs. Escala Gráfica</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>
+                            <strong>Escala Numérica:</strong> Apresentada como uma fração ou razão (ex: <span class="highlight-blue">1:50.000</span> ou <span class="highlight-blue">1/50.000</span>). Significa que 1 unidade no mapa equivale a 50.000 unidades idênticas na realidade.
+                        </li>
+                        <li>
+                            <strong>Escala Gráfica:</strong> Representada como uma linha graduada (semelhante a uma régua). <span class="highlight">Vantagem cobrada em prova:</span> se o mapa for ampliado ou reduzido fotocopiado, a escala gráfica sofre a mesma distorção proporcional que o mapa, mantendo-se matematicamente correta (diferente da escala numérica, que perde a validade após alteração no tamanho do papel).
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- TABELA DE CONVERSÃO DE UNIDADES (SEM SCROLL) -->
+                <div class="space-y-3">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400">Tabela Prática de Conversão de Unidades</h3>
+                    <div class="border border-slate-200 rounded-lg overflow-hidden bg-white">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                    <th class="p-3 font-semibold">De</th>
+                                    <th class="p-3 font-semibold">Para</th>
+                                    <th class="p-3 font-semibold">Regra Rápida</th>
+                                    <th class="p-3 font-semibold">Exemplo</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-slate-700">
+                                <tr>
+                                    <td class="p-3 font-medium">Quilômetros (km)</td>
+                                    <td class="p-3">Centímetros (cm)</td>
+                                    <td class="p-3 text-emerald-700 font-bold">Adicione 5 zeros</td>
+                                    <td class="p-3">4 km = 400.000 cm</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Metros (m)</td>
+                                    <td class="p-3">Centímetros (cm)</td>
+                                    <td class="p-3 text-emerald-700 font-bold">Adicione 2 zeros</td>
+                                    <td class="p-3">150 m = 15.000 cm</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Centímetros (cm)</td>
+                                    <td class="p-3">Quilômetros (km)</td>
+                                    <td class="p-3 text-amber-700 font-bold">Corte 5 zeros</td>
+                                    <td class="p-3">500.000 cm = 5 km</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-medium">Centímetros (cm)</td>
+                                    <td class="p-3">Metros (m)</td>
+                                    <td class="p-3 text-amber-700 font-bold">Corte 2 zeros</td>
+                                    <td class="p-3">25.000 cm = 250 m</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- SUBTEMA: MAIOR X MENOR -->
+                <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                    <h4 class="text-sm font-bold text-amber-800 uppercase tracking-wider mb-1">⚠️ Pegadinha Clássica: "Maior" vs. "Menor"</h4>
+                    <p class="text-sm text-amber-900">
+                        Quanto <strong>menor for o denominador</strong> da escala (ex: 1:2.000), <span class="highlight">MAIOR é a escala</span>, o que significa que o mapa apresenta <strong>mais detalhes</strong> e representa uma <strong>área menor</strong> (ideal para plantas urbanas).<br>
+                        Quanto <strong>maior for o denominador</strong> (ex: 1:10.000.000), <span class="highlight">MENOR é a escala</span>, o mapa apresenta <strong>poucos detalhes</strong> e representa uma <strong>área muito grande</strong> (como um planisfério).
+                    </p>
+                </div>
+            </section>
+
+            <!-- TEMA 2: SISTEMA INTERNACIONAL DE FUSOS HORÁRIOS -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="text-emerald-600">03.</span> O Sistema Internacional de Fusos Horários
+                </h2>
+
+                <p>
+                    Como a Terra tem formato aproximadamente esferoidal e realiza seu movimento de rotação (360 graus) em aproximadamente 24 horas, dividimos a circunferência do planeta para criar a regra do tempo padrão internacional:
+                </p>
+
+                <!-- CARD MATEMÁTICO -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-5 text-center my-4">
+                    <div class="text-xl font-bold text-slate-900">360° / 24 horas = 15° por Fuso</div>
+                    <p class="text-xs text-slate-500 mt-1">Cada fuso horário corresponde a uma faixa longitudinal de exatamente 15 graus.</p>
+                </div>
+
+                <!-- REGRAS DE ORIENTAÇÃO -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-slate-200 rounded-lg p-4 bg-white">
+                        <span class="text-xs font-bold text-emerald-600 uppercase">Para Leste (E)</span>
+                        <h4 class="text-lg font-bold text-slate-900 mt-1">As horas aumentam (+)</h4>
+                        <p class="text-sm text-slate-600 mt-1">Como a Terra gira de Oeste para Leste, as localidades a Leste veem o sol nascer primeiro, possuindo fusos horários adiantados.</p>
+                    </div>
+                    <div class="border border-slate-200 rounded-lg p-4 bg-white">
+                        <span class="text-xs font-bold text-amber-600 uppercase">Para Oeste (W / O)</span>
+                        <h4 class="text-lg font-bold text-slate-900 mt-1">As horas diminuem (-)</h4>
+                        <p class="text-sm text-slate-600 mt-1">As horas se tornam mais atrasadas à medida que nos deslocamos para o Oeste em relação ao Meridiano de Greenwich (0°).</p>
+                    </div>
+                </div>
+
+                <!-- LINHA INTERNACIONAL DE DATA -->
+                <div class="space-y-2">
+                    <h3 class="text-lg font-semibold text-slate-900">Linha Internacional de Mudança de Data (LID)</h3>
+                    <p>
+                        A LID localiza-se no <strong class="text-slate-900">antimeridiano de Greenwich (180°)</strong>. Ao cruzar essa linha de <span class="highlight-blue">Oeste para Leste</span>, você atrasa um dia no calendário. Ao cruzá-la de <span class="highlight-blue">Leste para Oeste</span>, adianta-se um dia inteiro no calendário.
+                    </p>
+                </div>
+            </section>
+
+            <!-- TEMA 3: FUSOS HORÁRIOS DO BRASIL -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="text-emerald-600">04.</span> Os 4 Fusos Horários do Brasil (Vigentes)
+                </h2>
+
+                <p>
+                    O Brasil adota atualmente <strong class="text-slate-900">quatro fusos horários oficiais</strong>, todos localizados a Oeste do meridiano de Greenwich (portanto, todos com horários atrasados em relação a Londres, UTC/GMT). A estruturação atual é dada pela lei <span class="highlight">Decreto 12.876 de 2013</span> (que restabeleceu o quarto fuso extinto em 2008).
+                </p>
+
+                <!-- TABELA DOS FUSOS DO BRASIL (ESTRUTURADA PARA CABER SEM SCROLL) -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden bg-white">
+                    <table class="w-full text-left text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th class="p-3 font-semibold">Fuso</th>
+                                <th class="p-3 font-semibold">Diferença (UTC)</th>
+                                <th class="p-3 font-semibold">Diferença (Brasília)</th>
+                                <th class="p-3 font-semibold">Abrangência Territorial</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-700">
+                            <tr>
+                                <td class="p-3 font-bold">1º Fuso (30° O)</td>
+                                <td class="p-3 text-red-600 font-semibold">UTC -2</td>
+                                <td class="p-3">+1 hora</td>
+                                <td class="p-3">Ilhas Oceânicas (Fernando de Noronha, Trindade e Martim Vaz, Atol das Rocas).</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-3 font-bold">2º Fuso (45° O)</td>
+                                <td class="p-3 text-red-600 font-semibold">UTC -3</td>
+                                <td class="p-3 font-bold text-emerald-700">Fuso Oficial</td>
+                                <td class="p-3">Regiões Sul, Sudeste, Nordeste, estados de Goiás, Tocantins, Pará, Amapá e o Distrito Federal.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold">3º Fuso (60° O)</td>
+                                <td class="p-3 text-red-600 font-semibold">UTC -4</td>
+                                <td class="p-3">-1 hora</td>
+                                <td class="p-3">Mato Grosso, Mato Grosso do Sul, Rondônia, Roraima e a maior parte do Amazonas (porção oriental).</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-3 font-bold">4º Fuso (75° O)</td>
+                                <td class="p-3 text-red-600 font-semibold">UTC -5</td>
+                                <td class="p-3">-2 horas</td>
+                                <td class="p-3">Estado do Acre e a porção mais ocidental do Amazonas (a oeste da linha Purus-Manacapuru).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-slate-100 rounded-lg p-4 border border-slate-300">
+                    <p class="text-xs text-slate-600">
+                        <strong class="text-slate-900">Nota Histórica para Prova:</strong> Em 2008, o Brasil tentou unificar seu horário de 4 para 3 fusos (anexando o Acre ao fuso UTC-4). Porém, após referendo popular realizado em 2010, a população acreana rejeitou a mudança. Assim, em <strong class="text-slate-900">2013</strong>, a legislação restabeleceu o quarto fuso nacional (UTC-5), divisão que permanece ativa hoje.
+                    </p>
+                </div>
+            </section>
+
+            <!-- TEMA 4: ANÁLISE DE TENDÊNCIAS E PEGUINHAS DA FAURGS -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="text-emerald-600">05.</span> Análise de Tendências e "Peguinhas" FAURGS (EBTT)
+                </h2>
+
+                <p>
+                    A banca FAURGS, tradicional nas seleções do Rio Grande do Sul e de institutos federais adjacentes, constrói questões com as seguintes dinâmicas recorrentes:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="border-l-4 border-amber-500 pl-4 py-1">
+                        <h4 class="font-bold text-slate-900">1. A Armadilha do Tempo de Viagem (Deslocamento de Aeronaves)</h4>
+                        <p class="text-sm text-slate-600">
+                            A banca adora pedir o cálculo de chegada de um voo. <span class="highlight">Lembre-se do algoritmo de ouro:</span> primeiro faça a conta da diferença de fuso horário simples entre a origem e o destino (ajustando a hora), e depois <strong>some</strong> o tempo de duração da viagem. Nunca subtraia o tempo de voo.
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-amber-500 pl-4 py-1">
+                        <h4 class="font-bold text-slate-900">2. Escala com Áreas e Volumes (Cálculo Quadrático)</h4>
+                        <p class="text-sm text-slate-600">
+                            Se a FAURGS pedir a relação de proporção de uma <strong>área</strong> (ex: metros quadrados), você não pode usar a escala de forma simples. A escala para áreas é quadrática: <span class="highlight-blue">Área Real = Área no Mapa · E²</span>. Se a escala é 1:100, 1 cm² no mapa equivale a 10.000 cm² (ou 1 m²) na realidade!
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-amber-500 pl-4 py-1">
+                        <h4 class="font-bold text-slate-900">3. Confundir os Fusos de Estados do Norte</h4>
+                        <p class="text-sm text-slate-600">
+                            Atenção redobrada para o estado do <strong>Amazonas</strong>. Ele é o único estado brasileiro cortado por dois fusos (UTC-4 na porção oriental e UTC-5 na ocidental). O Pará, que antigamente tinha dois fusos, hoje é inteiramente unificado no fuso de Brasília (UTC-3). Isso é prato cheio para proposições de "verdadeiro ou falso".
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </article>
+
+        <!-- SEÇÃO DE RECOMENDAÇÃO PRÉ-PROVA -->
+        <section class="mt-12 p-6 bg-emerald-50 border border-emerald-100 rounded-xl">
+            <h3 class="font-bold text-emerald-900 text-lg mb-2">Checklist Rápido para o Dia da Prova</h3>
+            <ul class="space-y-2 text-sm text-emerald-800">
+                <li class="flex items-start gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span>
+                    <span>No cálculo de escalas, escreva sempre a fórmula <strong class="text-emerald-900">D = d · E</strong> antes de começar e passe todas as medidas para a mesma unidade (geralmente centímetros).</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span>
+                    <span>Leste (Oriente) sempre soma horas; Oeste (Ocidente) sempre diminui horas.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-emerald-600 font-bold">✓</span>
+                    <span>Os fusos do Brasil são todos negativos em relação ao Meridiano de Greenwich: -2h (islas), -3h (oficial), -4h (MT/MS/RO/RR/AM) e -5h (AC/AM ocidental).</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- BOTÃO DE REDIRECIONAMENTO DE QUESTÕES -->
+        <div class="mt-12 text-center">
+            <a 
+                href="escalasquestoes.html" 
+                class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+            >
+                <span>Praticar Questões de Escalas e Fusos (FAURGS)</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+            <p class="text-xs text-slate-400 mt-2">Você será redirecionado para a página questoes.html</p>
+        </div>
+
+    </main>
+
+    <!-- RODAPÉ -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-6 mt-16">
+        <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>© 2026 Guia de Sobrevivência do Candidato EBTT. Foco total na aprovação IFSC.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE INTERAÇÃO DO PLAYER -->
+    <script>
+        const audio = document.getElementById('lesson-audio');
+        const playbackSpeedSelect = document.getElementById('playback-speed');
+        const audioSourceInput = document.getElementById('audio-source-input');
+        const audioSrc = document.getElementById('audio-src');
+
+        // Define a velocidade inicial como 1.5x (foco no estudo ativo acelerado)
+        window.addEventListener('load', () => {
+            audio.playbackRate = parseFloat(playbackSpeedSelect.value);
+        });
+
+        // Altera velocidade de reprodução
+        function changeSpeed(speed) {
+            audio.playbackRate = parseFloat(speed);
+        }
+
+        // Permite ao usuário alterar o arquivo MP3 dinamicamente
+        function updateAudioSource(newFilename) {
+            if (newFilename.trim() !== '') {
+                const isPlaying = !audio.paused;
+                audioSrc.src = newFilename;
+                audio.load(); // Recarrega o player de áudio com a nova fonte
+                
+                // Reaplica a velocidade selecionada ao carregar o áudio novo
+                audio.playbackRate = parseFloat(playbackSpeedSelect.value);
+                
+                if (isPlaying) {
+                    audio.play();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

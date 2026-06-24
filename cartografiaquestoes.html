@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Avançado de Cartografia e Orientação (FAURGS)</title>
+    <!-- Google Fonts: Inter for unmatched legibility -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS for modern responsive utility design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for precise, thematic iconography -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- MathJax for rendering high-fidelity astronomical & cartographical formulas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f7fa',
+                            100: '#e4ebf4',
+                            200: '#c2d2e5',
+                            500: '#3b628c',
+                            600: '#2b4d75',
+                            700: '#1f3a5b',
+                            800: '#152942',
+                            900: '#0b1626',
+                        },
+                        accent: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#16a34a',
+                            600: '#15803d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth transition properties */
+        .option-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom scrollbar to keep layout clean and professional */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .prose table {
+            width: 100%;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-collapse: collapse;
+        }
+        .prose th {
+            background-color: #f8fafc;
+            color: #1e293b;
+            font-weight: 600;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .prose td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+            font-size: 0.925rem;
+        }
+        .prose tr:hover {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-50 text-slate-800 min-h-screen flex flex-col font-sans selection:bg-brand-100 antialiased">
+
+    <!-- Top Progress & Timer Navigation (Sticky) -->
+    <div class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 text-white p-2 rounded-lg flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-map-location-dot text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xs sm:text-sm font-bold text-slate-900 tracking-tight uppercase">Simulador Acadêmico</h1>
+                    <p class="text-[10px] sm:text-xs text-slate-500 font-medium">Fundamentos de Cartografia &bull; Estilo FAURGS</p>
+                </div>
+            </div>
+
+            <!-- Quiz Timer and Dynamic Progress Monitor -->
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-2 text-xs font-semibold text-slate-500 bg-slate-100 py-1.5 px-3 rounded-full">
+                    <span class="w-2 h-2 rounded-full bg-slate-400 animate-pulse"></span>
+                    <span id="answered-badge">Respostas: 0 / 10</span>
+                </div>
+                <div class="flex items-center space-x-2 text-slate-700 bg-brand-50 border border-brand-100 py-1.5 px-4 rounded-lg shadow-sm">
+                    <i class="fa-regular fa-clock text-brand-600 font-bold animate-pulse"></i>
+                    <span id="timer-display" class="font-mono font-bold text-sm tracking-widest text-brand-800">00:00:00</span>
+                </div>
+            </div>
+        </div>
+        <!-- Linear Progress bar indicator -->
+        <div class="w-full bg-slate-100 h-1.5 overflow-hidden">
+            <div id="top-progress-bar" class="bg-brand-600 h-1.5 w-0 transition-all duration-500 ease-out"></div>
+        </div>
+    </div>
+
+    <!-- Main Content Container Grid -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Left Side: Interactive Board (Questions Column) -->
+        <div class="w-full lg:w-3/4 flex flex-col space-y-8">
+            
+            <!-- Hero Instruction Banner -->
+            <div class="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-[0_4px_20px_rgb(0,0,0,0.02)] flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div class="space-y-2">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-100 text-brand-700">
+                        <i class="fa-solid fa-graduation-cap mr-1.5"></i> Concurso Padrão FAURGS
+                    </span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Banco de Questões e Resoluções Integradas
+                    </h2>
+                    <p class="text-slate-600 text-sm sm:text-base leading-relaxed max-w-2xl">
+                        Este simulador reproduz o formato rigoroso de cobrança conceitual e analítica da banca FAURGS. Responda as 10 questões de múltipla escolha e obtenha, imediatamente após o envio, o cálculo de acertos e a resolução detalhada de cada questão na mesma página.
+                    </p>
+                </div>
+                <div class="flex-shrink-0 flex md:flex-col gap-3">
+                    <button onclick="resetQuiz()" class="text-xs font-semibold px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 transition active:scale-95 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-rotate-right"></i> Reiniciar
+                    </button>
+                    <button onclick="scrollToGrade()" id="btn-quick-results" class="hidden text-xs font-semibold px-4 py-2.5 rounded-xl bg-brand-600 text-white hover:bg-brand-700 transition shadow-sm hover:shadow active:scale-95 flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-chart-simple"></i> Ver Resultado
+                    </button>
+                </div>
+            </div>
+
+            <!-- The Form holding the Question Elements -->
+            <form id="quiz-form" onsubmit="handleQuizSubmit(event)" class="space-y-8">
+                <!-- Dynamically populated via JS to avoid huge static redundancy and allow state binding -->
+                <div id="questions-wrapper" class="space-y-8"></div>
+
+                <!-- Custom Modal/Container for Confirmation before Submitting -->
+                <div id="quiz-submit-box" class="bg-white rounded-2xl border border-slate-200/80 p-8 shadow-[0_8px_30px_rgb(0,0,0,0.03)] text-center space-y-6">
+                    <div class="max-w-md mx-auto space-y-3">
+                        <i class="fa-solid fa-paper-plane text-brand-500 text-4xl mb-2"></i>
+                        <h3 class="text-lg font-bold text-slate-900">Finalizar e Corrigir Simulado?</h3>
+                        <p class="text-sm text-slate-500">
+                            Certifique-se de que respondeu todas as questões. Ao enviar, você receberá a pontuação final e o gabarito comentado passo a passo para cada item.
+                        </p>
+                    </div>
+
+                    <div class="flex justify-center items-center gap-4">
+                        <button type="submit" class="w-full sm:w-auto px-8 py-4 bg-brand-600 text-white rounded-xl font-bold hover:bg-brand-700 transition duration-150 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 text-sm sm:text-base">
+                            <i class="fa-solid fa-square-check mr-2"></i> Enviar Respostas para Avaliação
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Results Dashboard Panel (Hidden Initially) -->
+            <div id="results-panel" class="hidden bg-white rounded-2xl border border-slate-200/80 p-8 shadow-[0_10px_40px_rgba(0,0,0,0.04)] space-y-8 scroll-mt-20">
+                <div class="text-center space-y-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-accent-100 text-accent-600">
+                        <i class="fa-solid fa-circle-check mr-1.5"></i> Desempenho Calculado com Sucesso
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Seu Desempenho no Simulado</h3>
+                    <p class="text-slate-500 text-sm sm:text-base max-w-lg mx-auto">
+                        Veja abaixo a sua métrica de acertos, tempo gasto e as resoluções acadêmicas completas para cada questão resolvida.
+                    </p>
+                </div>
+
+                <!-- Score Dashboard Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Score Card -->
+                    <div class="bg-brand-50 border border-brand-100 rounded-xl p-6 flex flex-col items-center justify-center text-center space-y-2">
+                        <span class="text-xs font-bold text-brand-600 uppercase tracking-widest">Respostas Corretas</span>
+                        <div class="flex items-baseline space-x-1">
+                            <span id="score-correct" class="text-4xl sm:text-5xl font-black text-brand-800">0</span>
+                            <span class="text-slate-400 font-semibold text-lg">/ 10</span>
+                        </div>
+                        <span id="score-percentage" class="text-sm font-semibold text-slate-500">Aproveitamento: 0%</span>
+                    </div>
+
+                    <!-- Time Spent Card -->
+                    <div class="bg-slate-50 border border-slate-100 rounded-xl p-6 flex flex-col items-center justify-center text-center space-y-2">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Tempo de Prova</span>
+                        <div class="flex items-center space-x-2 text-slate-800">
+                            <i class="fa-regular fa-clock text-2xl text-slate-400"></i>
+                            <span id="time-spent" class="text-3xl font-black">00:00</span>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-500">Ritmo constante</span>
+                    </div>
+
+                    <!-- Status/Rating Card -->
+                    <div class="bg-emerald-50 border border-emerald-100/50 rounded-xl p-6 flex flex-col items-center justify-center text-center space-y-2">
+                        <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Status de Aptidão</span>
+                        <div class="flex items-center space-x-2">
+                            <i id="rating-icon" class="fa-solid fa-trophy text-emerald-500 text-3xl"></i>
+                            <span id="rating-text" class="text-2xl font-black text-emerald-800">Excelente</span>
+                        </div>
+                        <span id="rating-desc" class="text-sm font-semibold text-slate-500">Pronto para a aprovação!</span>
+                    </div>
+                </div>
+
+                <!-- Custom feedback messages inside results panel -->
+                <div class="bg-amber-50 border border-amber-200/60 rounded-xl p-4 flex items-start space-x-3 text-amber-800 text-xs sm:text-sm">
+                    <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 flex-shrink-0"></i>
+                    <div>
+                        <p class="font-bold">As resoluções detalhadas estão disponíveis diretamente abaixo de cada questão!</p>
+                        <p class="mt-0.5 text-amber-700/90 leading-relaxed">Role para cima ou clique nas caixas de navegação lateral para revisar cada item com calma. Todos os erros e acertos estão sinalizados visualmente no corpo do simulado.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Side: Sidebar Navigation (Sticky on desktop) -->
+        <aside class="w-full lg:w-1/4">
+            <div class="sticky top-24 bg-white rounded-2xl border border-slate-200/80 p-6 shadow-[0_4px_25px_rgb(0,0,0,0.015)] space-y-6">
+                <div>
+                    <h3 class="font-bold text-slate-900 text-sm uppercase tracking-wider flex items-center justify-between">
+                        <span>Painel de Controle</span>
+                        <i class="fa-solid fa-compass text-brand-500"></i>
+                    </h3>
+                    <p class="text-xs text-slate-500 mt-1">Acompanhe seu avanço em tempo real durante a execução da prova.</p>
+                </div>
+
+                <!-- Progress Meter -->
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-bold">
+                        <span class="text-slate-500">Progresso Geral</span>
+                        <span id="aside-progress-text" class="text-brand-600">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-2">
+                        <div id="aside-progress-bar" class="bg-brand-600 h-2 rounded-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Question Grid Map -->
+                <div class="space-y-3">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block">Navegador de Questões</span>
+                    <div class="grid grid-cols-5 gap-2" id="grid-navigation">
+                        <!-- Navigation grid nodes added via JS -->
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-5 space-y-3 text-xs text-slate-500">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3.5 h-3.5 bg-slate-100 border border-slate-300 rounded-md"></div>
+                        <span>Não Respondida</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-3.5 h-3.5 bg-brand-100 border border-brand-300 rounded-md"></div>
+                        <span>Selecionada/Pendente</span>
+                    </div>
+                    <div id="legend-correct" class="hidden flex items-center space-x-2">
+                        <div class="w-3.5 h-3.5 bg-emerald-100 border border-emerald-400 rounded-md flex items-center justify-center text-[8px] text-emerald-700 font-bold"><i class="fa-solid fa-check"></i></div>
+                        <span>Correta</span>
+                    </div>
+                    <div id="legend-incorrect" class="hidden flex items-center space-x-2">
+                        <div class="w-3.5 h-3.5 bg-rose-100 border border-rose-400 rounded-md flex items-center justify-center text-[8px] text-rose-700 font-bold"><i class="fa-solid fa-xmark"></i></div>
+                        <span>Incorreta / Errada</span>
+                    </div>
+                </div>
+
+                <!-- Action Button in Sidebar -->
+                <div class="border-t border-slate-100 pt-5">
+                    <button onclick="scrollToSubmit()" id="btn-submit-quick" class="w-full py-3 bg-brand-50 hover:bg-brand-100 text-brand-700 rounded-xl text-xs font-bold transition duration-150 flex items-center justify-center gap-1.5 border border-brand-200">
+                        <i class="fa-solid fa-circle-chevron-down text-brand-600"></i> Ir para o Envio
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 text-xs sm:text-sm py-8 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-nodes text-brand-500 text-lg"></i>
+                <span class="font-bold text-slate-200 tracking-wide">FAURGS Cartografia &bull; Simulado Integrado</span>
+            </div>
+            <p class="text-center md:text-right text-slate-500 text-[11px] sm:text-xs">
+                Desenvolvido como ferramenta instrucional em conformidade com as diretrizes da ABNT NBR 13133 e Geodésia Contemporânea.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Highly rigorous bank containing exact contents of the previous FAURGS Cartography document
+        const questionsDB = [
+            {
+                id: 1,
+                title: "Questão 1",
+                statement: "De acordo com os preceitos teóricos da cartografia geral e as especificações técnicas contidas na norma ABNT NBR 13133, a representação gráfica do espaço geográfico assume diferentes formatos conforme a escala, a finalidade e a necessidade de considerar a curvatura terrestre. Considere as seguintes afirmações sobre plantas, cartas e mapas:<br><br><b>I</b> - A planta é a representação gráfica de uma parte limitada da superfície terrestre, sobre um plano horizontal local, em escalas grandes (superiores a 1:10.000), na qual se despreza a curvatura da Terra.<br><b>II</b> - A carta consiste em uma representação cartográfica plana, em escala média ou grande, subdividida em folhas de forma sistemática, obedecendo a um plano nacional ou internacional de mapeamento, sendo indicada para estudos que exigem precisão geométrica e avaliação de distâncias.<br><b>III</b> - O mapa é a representação plana e bidimensional de uma vasta região da superfície terrestre, elaborada em escala pequena, apresentando elevado grau de generalização e abstração dos elementos representados, sendo inadequada para medições locais de altíssima precisão.<br><br>Quais estão corretas?",
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // Alternative E
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: E</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A diferenciação clássica entre plantas, cartas e mapas obedece a critérios consolidados de escala, área de abrangência e rigor geodésico, regulados tecnicamente em âmbito nacional.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>A afirmação I está correta</strong> porque a planta representa uma porção muito limitada da superfície terrestre, utilizando escalas de grande detalhe (superiores a 1:10.000, como 1:2.000 ou 1:1.000). Como a área representada é reduzida (técnica de topografia clássica), os efeitos da curvatura terrestre não geram erros significativos que afetem as mensurações planas locais, permitindo que a Terra seja representada como um plano horizontal.</li>
+                            <li><strong>A afirmação II está correta</strong> porque a carta apresenta escalas médias ou grandes e é projetada sistematicamente em folhas articuladas, conforme redes internacionais de mapeamento. Ela é o meio ideal para o planejamento técnico de obras de infraestrutura, engenharia e navegação devido ao seu rigor geométrico e exatidão posicional.</li>
+                            <li><strong>A afirmação III está correta</strong> porque o mapa é uma representação de escalas pequenas (como 1:1.000.000 ou menores), cobrindo vastas extensões geográficas, o que exige um elevado nível de generalização cartográfica. Ele é empregado para análises de caráter geral, temático e didático, sendo desprovido de detalhamento geométrico local de alta precisão.</li>
+                        </ul>
+                        <div class="overflow-x-auto my-4 border border-slate-200 rounded-xl">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Categoria</th>
+                                        <th>Intervalo de Escala</th>
+                                        <th>Curvatura Terrestre</th>
+                                        <th>Sistematização</th>
+                                        <th>Aplicação Principal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-semibold">Planta</td>
+                                        <td>Escalas Grandes (&gt; 1:10.000)</td>
+                                        <td>Desprezada (Plano local)</td>
+                                        <td>Não sistemática (Projetos locais)</td>
+                                        <td>Engenharia, arquitetura, cadastro</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Carta</td>
+                                        <td>Médias/Grandes (1:10k a 1:250k)</td>
+                                        <td>Considerada de forma rigorosa</td>
+                                        <td>Altamente sistemática</td>
+                                        <td>Planejamento, aviação, engenharia civil</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Mapa</td>
+                                        <td>Escalas Pequenas (&lt; 1:250k)</td>
+                                        <td>Sempre considerada</td>
+                                        <td>Isolada ou integrada (Atlas)</td>
+                                        <td>Análise geopolítica, didática, geral</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "Questão 2",
+                statement: "A cartografia temática contemporânea utiliza representações espaciais não euclidianas para evidenciar a dinâmica de variáveis socioeconômicas. Sobre a técnica cartográfica denominada anamorfose, assinale a alternativa correta:",
+                options: [
+                    "A anamorfose espacial mantém a precisão métrica das distâncias e a conformidade das formas originais dos países, distorcendo apenas a orientação dos paralelos e meridianos.",
+                    "Trata-se de uma representação tridimensional obtida por projeções azimutais planas, na qual as deformações são minimizadas nas regiões polares e maximizadas na linha do Equador.",
+                    "Consiste em uma transformação cartográfica na qual as áreas das unidades territoriais são alteradas de forma proporcional ao valor do fenômeno estatístico representado, provocando a distorção intencional de suas fronteiras políticas.",
+                    "Por se tratar de um esboço gráfico intuitivo e sem escala definida, a anamorfose é classificada formalmente como um croqui pela norma ABNT NBR 13133.",
+                    "A referida técnica aplica-se exclusivamente à representação de variáveis físicas da paisagem, como as curvas de nível e a declividade média do relevo."
+                ],
+                correct: 2, // Alternative C
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: C</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A evolução cartográfica estimulou o desenvolvimento de linguagens capazes de destacar feições espaciais de interesse estatístico de maneira mais direta do que os mapas tradicionais baseados na métrica euclidiana rígida.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>Alternativa C (Correta):</strong> A definição conceitual de anamorfose estabelece que ela é uma transformação cartográfica espacial na qual a área dos polígonos territoriais é redesenhada de maneira proporcional ao valor quantitativo de uma dada variável estatística (por exemplo, população absoluta, PIB ou consumo energético). Isso provoca um esticamento ou compressão das fronteiras originais, convertendo o mapa em uma espécie de gráfico estatístico espacializado.</li>
+                            <li><strong>Por que as demais estão incorretas?</strong> A alternativa A é incorreta porque a anamorfose tem como princípio fundamental a deformação severa das formas originais. A B está incorreta porque a técnica não se limita a projeções azimutais. A D está errada porque a anamorfose utiliza algoritmos matemáticos rigorosos de deformação proporcional, diferentemente de um croqui. A E está errada pois ela se aplica quase que exclusivamente a variáveis temáticas humanas e socioeconômicas e não físicas do relevo.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "Questão 3",
+                statement: "No âmbito da orientação em campanha e da topografia, as direções angulares de alinhamentos na superfície da Terra variam conforme o referencial de Norte adotado. Sabendo-se que o rumo verdadeiro de um determinado alinhamento espacial é de $11^\\circ 41'\\text{ NE}$ e que a declinação magnética local vale $5^\\circ 56'\\text{ W}$, o rumo magnético do referido alinhamento é:",
+                options: [
+                    "$5^\\circ 45'\\text{ NE}$.",
+                    "$5^\\circ 45'\\text{ NW}$.",
+                    "$11^\\circ 41'\\text{ NW}$.",
+                    "$17^\\circ 37'\\text{ NE}$.",
+                    "$17^\\circ 37'\\text{ NW}$."
+                ],
+                correct: 3, // Alternative D
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: D</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A conversão entre direções angulares geográficas (verdadeiras) e magnéticas baseia-se na variação espacial e temporal do vetor do campo geomagnético (declinação magnética). O cálculo obedece à relação fundamental entre os azimutes e a declinação local:
+                        </p>
+                        <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 my-3 text-center text-sm font-mono text-slate-700">
+                            $$\\text{Azimute Verdadeiro (AV)} = \\text{Azimute Magnético (AM)} + \\text{Declinação Magnética (DM)}$$
+                            $$\\text{Azimute Magnético (AM)} = \\text{Azimute Verdadeiro (AV)} - \\text{Declinação Magnética (DM)}$$
+                        </div>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            No primeiro quadrante (Nordeste - NE), o valor numérico do rumo coincide diretamente com o do azimute:
+                            $$\\text{Rumo Verdadeiro (RV)} = 11^\\circ 41'\\text{ NE} \\implies \\text{AV} = 11^\\circ 41'$$
+                        </p>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Como a declinação magnética calculada possui orientação para Oeste (W), ela apresenta sinal algébrico negativo no modelo trigonométrico convencional:
+                            $$\\text{DM} = 5^\\circ 56'\\text{ W} = -5^\\circ 56'$$
+                        </p>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Para determinar o Azimute Magnético, realiza-se a substituição algébrica dos valores:
+                            $$\\text{AM} = 11^\\circ 41' - (-5^\\circ 56') = 11^\\circ 41' + 5^\\circ 56'$$
+                            Para somar os valores angulares em base sexagesimal (onde $1^\\circ = 60'$):
+                            $$\\text{AM} = (11^\\circ + 5^\\circ) + (41' + 56') = 16^\\circ + 97'$$
+                            Como $97' = 1^\\circ 37'$, realiza-se o transporte para a unidade de grau:
+                            $$\\text{AM} = 16^\\circ + 1^\\circ 37' = 17^\\circ 37'$$
+                        </p>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Uma vez que o Azimute Magnético resultante de $17^\\circ 37'$ situa-se no primeiro quadrante (entre $0^\\circ$ e $90^\\circ$), ele equivale ao rumo magnético de sentido Nordeste (NE):
+                            $$\\text{Rumo Magnético (RM)} = 17^\\circ 37'\\text{ NE}$$
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "Questão 4",
+                statement: "A determinação de coordenadas astronômicas e geográficas constitui a base histórica e metodológica dos sistemas de navegação e localização espacial. Analise as seguintes afirmações sobre os referenciais de orientação celeste e as coordenadas astronômicas:<br><br><b>I</b> - A latitude astronômica de um ponto de observação é numericamente igual à altura angular do polo celeste elevado (Polo Norte ou Polo Sul Celeste) medida a partir do plano do horizonte local.<br><b>II</b> - A estrela Acrux ($\\alpha$ Crucis), integrante da constelação do Cruzeiro do Sul e que possui declinação de $-65^\\circ$, comporta-se como uma estrela circumpolar para um observador posicionado em Porto Alegre (latitude aproximada de $-30^\\circ$), estando sempre acima do horizonte.<br><b>III</b> - A estrela Polar (Polaris), por situar-se muito próxima ao Polo Celeste Norte, pode ser empregada como referencial de orientação para a determinação do Norte verdadeiro por observadores localizados em qualquer latitude do Hemisfério Sul.<br><br>Quais estão corretas?",
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 2, // Alternative C
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: C</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A orientação e a determinação de coordenadas terrestres mediante técnicas de astronomia de posição requerem o entendimento do movimento aparente dos astros sobre a esfera celeste.
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>A afirmação I está correta</strong> porque a latitude astronômica ($\\Phi$) de uma localidade é definida matematicamente como o arco do meridiano celeste compreendido entre o equador celeste e o zênite do observador, o que equivale exatamente à elevação angular do polo celeste visível medida acima da linha do horizonte local.</li>
+                            <li><strong>A afirmação II está correta</strong> porque a condição matemática de circumpolaridade estabelece que a estrela nunca se põe abaixo do horizonte local. A relação que define uma estrela circumpolar é expressa por:
+                            $$|\\delta| \\geq 90^\\circ - |\\Phi|$$
+                            Onde $\\delta$ é a declinação da estrela e $\\Phi$ é a latitude do observador, possuindo o mesmo sinal (hemisfério). Para Porto Alegre ($\\Phi = -30^\\circ$) e a estrela Acrux ($\\delta = -65^\\circ$):
+                            $$|-65^\\circ| \\geq 90^\\circ - |-30^\\circ| \\implies 65^\\circ \\geq 60^\\circ \\quad \\text{(Verdadeiro)}$$
+                            Portanto, ela é de fato circumpolar em Porto Alegre.</li>
+                            <li><strong>A afirmação III está incorreta</strong> porque a estrela Polar (Polaris) possui declinação de aproximadamente $+89^\\circ$. Devido à curvatura da Terra, ela permanece permanentemente abaixo da linha do horizonte para qualquer observador no Hemisfério Sul, impossibilitando sua observação nesta região.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                title: "Questão 5",
+                statement: "As projeções cartográficas viabilizam a transposição da superfície esferoidal terrestre para o plano bidimensional do mapa, gerando distorções inevitáveis. Associe os tipos de propriedades das projeções descritos no bloco inferior com as respectivas definições apresentadas no bloco superior:<br><br>1. Projeção Conforme<br>2. Projeção Equivalente<br>3. Projeção Equidistante<br>4. Projeção Afilática<br><br>( ) Não conserva áreas, ângulos ou distâncias, mas distribui e minimiza o conjunto das deformações cartográficas de maneira equilibrada; a projeção de Robinson é um exemplo típico.<br>( ) Preserva os ângulos e as formas das áreas representadas em escalas microscópicas, cruzando paralelos e meridianos em ângulos retos, porém distorce as áreas; a projeção de Mercator é o exemplo clássico.<br>( ) Mantém a proporcionalidade das áreas representadas, embora distorça as formas continentais e os ângulos das coordenadas geográficas; a projeção de Gall-Peters exemplifica esta propriedade.<br>( ) Conserva as distâncias lineares corretas ao longo de direções predeterminadas a partir de um ponto ou linha de referência central; a projeção plana azimutal equidistante é utilizada no emblema oficial da ONU.<br><br>A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    "1 – 2 – 4 – 3.",
+                    "2 – 1 – 3 – 4.",
+                    "4 – 1 – 2 – 3.",
+                    "4 – 2 – 1 – 3.",
+                    "3 – 4 – 1 – 2."
+                ],
+                correct: 2, // Alternative C
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: C</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A associação correta das características de cada projeção se estabelece da seguinte forma:
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-decimal pl-5">
+                            <li><strong>( 4 ) Projeção Afilática:</strong> Não conserva propriedades de forma absoluta, mas sim de maneira equilibrada. Exemplo: Robinson.</li>
+                            <li><strong>( 1 ) Projeção Conforme:</strong> Preserva ângulos e formas microscópicas de maneira exata, mas distorce áreas em altas latitudes. Exemplo: Mercator.</li>
+                            <li><strong>( 2 ) Projeção Equivalente:</strong> Mantém a proporcionalidade das áreas em todo o globo, mas distorce formas e direções. Exemplo: Gall-Peters.</li>
+                            <li><strong>( 3 ) Projeção Equidistante:</strong> Mantém distâncias lineares exatas a partir de um ponto central específico de referência. Exemplo: Projeção Azimutal oficial da ONU.</li>
+                        </ul>
+                        <p class="leading-relaxed text-sm text-slate-600 font-semibold">A sequência correspondente é 4 - 1 - 2 - 3 (Alternativa C).</p>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "Questão 6",
+                statement: "Para fins de representação e navegação terrestre, os cartógrafos e engenheiros utilizam diferentes referenciais angulares de direção, genericamente conhecidos como os \"três nortes\". Preencha correta e respectivamente as lacunas do texto abaixo sobre as relações angulares entre esses referenciais:<br><br>A Declinação magnética é o ângulo formado entre os vetores __________ e __________ associados a um ponto. E a Convergência meridiana plana é o ângulo formado entre os vetores __________ e __________ associados a um ponto.<br><br>Assinale a alternativa que preenche correta e respectivamente as lacunas:",
+                options: [
+                    "Norte Verdadeiro / Norte Magnético / Norte Verdadeiro / Norte da Quadrícula.",
+                    "Norte Verdadeiro / Sul Magnético / Norte Magnético / Norte da Quadrícula.",
+                    "Norte Verdadeiro / Norte da Quadrícula / Norte Verdadeiro / Norte Magnético.",
+                    "Norte Magnético / Norte da Quadrícula / Norte Verdadeiro / Sul Magnético.",
+                    "Norte da Quadrícula / Norte Magnético / Norte Magnético / Norte Verdadeiro."
+                ],
+                correct: 0, // Alternative A
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: A</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A correta definição dos ângulos de orientação se apoia nas relações geométricas entre os três eixos de norte principais:
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>Declinação Magnética (DM):</strong> Ângulo formado entre as direções do <strong>Norte Verdadeiro</strong> (geográfico) e do <strong>Norte Magnético</strong> (fornecido pela bússola).</li>
+                            <li><strong>Convergência Meridiana Plana ($\gamma$):</strong> Ângulo de desvio formado entre o <strong>Norte Verdadeiro</strong> e o <strong>Norte da Quadrícula</strong> (coordenadas planas do grid do mapa).</li>
+                        </ul>
+                        <div class="overflow-x-auto my-4 border border-slate-200 rounded-xl">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Referencial</th>
+                                        <th>Origem Física/Geométrica</th>
+                                        <th>Tipo de Variação</th>
+                                        <th>Aplicação Típica</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="font-semibold">Norte Verdadeiro</td>
+                                        <td>Eixo de Rotação Terrestre</td>
+                                        <td>Estático em relação aos meridianos</td>
+                                        <td>Coordenadas geográficas gerais</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Norte Magnético</td>
+                                        <td>Campo Geomagnético (Núcleo)</td>
+                                        <td>Dinâmico (Espaço-Temporal)</td>
+                                        <td>Orientação rápida por agulha imantada</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="font-semibold">Norte da Quadrícula</td>
+                                        <td>Sistema de Projeção Plana (Grid)</td>
+                                        <td>Varia em relação ao meridiano central</td>
+                                        <td>Mapeamento sistemático (UTM)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: "Questão 7",
+                statement: "A escala cartográfica expressa a proporção matemática entre a distância gráfica medida no plano e a correspondente distância real no terreno. Considere que duas cidades distam $15\\text{ km}$ em linha reta no terreno. Um estudante dispõe de duas representações cartográficas desse espaço: o Mapa A (escala 1:50.000) e o Mapa B (escala 1:250.000).<br><br>Sobre essas representações, assinale a alternativa correta:",
+                options: [
+                    "A distância gráfica entre as duas cidades será de $30\\text{ cm}$ no Mapa A e de $6\\text{ cm}$ no Mapa B.",
+                    "O Mapa B apresenta uma escala maior do que o Mapa A, permitindo a exibição de maior riqueza de detalhes e menor generalização espacial.",
+                    "A distância gráfica entre as duas cidades será de $3\\text{ cm}$ no Mapa A e de $12\\text{ cm}$ no Mapa B.",
+                    "Caso o Mapa A seja submetido a uma redução fotomecânica linear à metade de seu tamanho físico, sua escala numérica passará a ser 1:25.000.",
+                    "O Mapa A abrange uma área geográfica real consideravelmente maior do que o Mapa B se ambas as representações possuírem as mesmas dimensões de folha."
+                ],
+                correct: 0, // Alternative A
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: A</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            A escala cartográfica obedece à relação fundamental:
+                            $$E = \\frac{d}{D} \\implies d = D \\times E = \\frac{D}{e}$$
+                            Onde $D$ é a distância real no terreno, $d$ é a distância gráfica e $e$ é o denominador da escala.
+                        </p>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Convertendo a distância real de quilômetros para centímetros:
+                            $$D = 15\\text{ km} = 15.000\\text{ m} = 1.500.000\\text{ cm}$$
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>Cálculo para o Mapa A (1:50.000):</strong>
+                            $$d_A = \\frac{1.500.000\\text{ cm}}{50.000} = 30\\text{ cm}$$</li>
+                            <li><strong>Cálculo para o Mapa B (1:250.000):</strong>
+                            $$d_B = \\frac{1.500.000\\text{ cm}}{250.000} = 6\\text{ cm}$$</li>
+                        </ul>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Isso valida diretamente a correção da <strong>Alternativa A</strong>.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: "Questão 8",
+                statement: "A evolução das técnicas cartográficas redefiniu a precisão espacial e os métodos de aquisição de dados geográficos. Considere as seguintes afirmações relativas ao avanço da cartografia, das ferramentas de Sensoriamento Remoto e dos mapas temáticos:<br><br><b>I</b> - O Sistema de Posicionamento Global (GPS) é um sistema eletrônico apoiado em redes de satélites artificiais que permite a localização espacial instantânea de objetos em qualquer ponto da superfície terrestre.<br><b>II</b> - Imagens de satélite com resolução espacial nominal de 100 metros são adequadas para identificar elementos urbanos de alta precisão, como casas, edifícios residenciais e árvores individuais de um pomar.<br><b>III</b> - Os mapas temáticos pedológicos, geomorfológicos e hipsométricos representam a distribuição espacial dos solos, das formas do relevo e da altimetria da superfície terrestre, respectivamente.<br><br>Quais estão corretas?",
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e III.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 2, // Alternative C
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: C</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Análise minuciosa das premissas:
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>Afirmação I (Correta):</strong> O GPS (Global Positioning System) é um sistema eletrônico de navegação e geolocalização baseado na trilateração por satélites que permite coordenadas precisas a qualquer momento do dia de forma automatizada.</li>
+                            <li><strong>Afirmação II (Incorreta):</strong> Uma resolução de 100 metros significa que cada pixel no mapa abrange um quadrado real de $100\\text{ m} \\times 100\\text{ m}$ ($10.000\\text{ m}^2$) de solo. Elementos pequenos como casas ou árvores necessitam de imagens com alta resolução métrica ou submétrica (resolução menor que 1 a 2 metros).</li>
+                            <li><strong>Afirmação III (Correta):</strong> Descreve perfeitamente os mapas temáticos físicos: pedologia (solos), geomorfologia (relevo/formas) e hipsometria (alturas de relevo/altimetria).</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                title: "Questão 9",
+                statement: "A modelagem precisa da superfície terrestre exige a distinção geométrica entre diferentes superfícies de referência cartográficas e geodésicas. Sobre as coordenadas astronômicas, elipsoidais e a determinação do modelo de representação da Terra, assinale a alternativa correta:",
+                options: [
+                    "O elipsoide de referência é uma superfície de caráter puramente físico, coincidente com o nível médio dos mares em repouso e prolongado sob as massas continentais.",
+                    "A normal ao elipsoide de referência e a vertical astronômica indicada pela direção do fio de prumo local coincidem perfeitamente em toda a superfície do globo terrestre, anulando o desvio da vertical.",
+                    "O método astrogravimétrico de modelagem do geoide emprega as componentes do desvio da vertical obtidas a partir do confronto entre as coordenadas astronômicas e as coordenadas elipsoidais de um mesmo ponto.",
+                    "A altitude ortométrica de um ponto terrestre corresponde à distância medida ao longo da normal elipsoidal a partir da superfície do elipsoide de revolução até o referido ponto.",
+                    "O datum horizontal oficial do Brasil, o SIRGAS 2000, apoia-se em uma modelagem topocêntrica que ajusta o elipsoide de referência localmente à região sul-americana."
+                ],
+                correct: 2, // Alternative C
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: C</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Modelagem do geoide e as superfícies geodésicas associadas:
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>Alternativa C (Correta):</strong> O desvio ou deflexão da vertical é o desvio angular entre a vertical física (indicada pelo fio de prumo real do campo de gravidade local) e a normal matemática do elipsoide. Confrontando coordenadas elipsoidais e astronômicas em um ponto, é possível extrair estas componentes e estimar com precisão as ondulações do geoide pelo método astrogravimétrico.</li>
+                            <li><strong>Por que as demais estão incorretas?</strong> A alternativa A é falsa porque o elipsoide de referência é puramente geométrico/matemático (o geoide é físico). A B é falsa porque as anomalias de massa terrestres fazem com que essas direções raramente coincidam. A D descreve a altitude geométrica, e não ortométrica (medida sobre o geoide). A E está errada porque o SIRGAS 2000 é um sistema geocêntrico internacional, moderno e sem vinculações topocêntricas isoladas.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                title: "Questão 10",
+                statement: "O Sistema de Projeção Universal Transversa de Mercator (UTM) é amplamente adotado em mapeamentos sistemáticos devido ao seu rigor geométrico e padronização métrica. Sobre as especificações técnicas da projeção UTM, analise as seguintes afirmações:<br><br><b>I</b> - O sistema UTM divide a superfície terrestre em 60 fusos longitudinais de $6^\\circ$ de amplitude, numerados de 1 a 60 a partir do meridiano de $180^\\circ$ (antimeridiano de Greenwich), progredindo para Leste.<br><b>II</b> - No sistema UTM, adota-se um fator de escala de deformação linear igual a $k_0 = 0,9996$ sobre o meridiano central de cada fuso, garantindo que as deformações nas bordas do fuso permaneçam sob limites estritos.<br><b>III</b> - Para evitar coordenadas planas cartesianas negativas no Hemisfério Sul, atribui-se uma constante de $10.000.000\\text{ m}$ à linha do Equador para a coordenada Norte ($Y$) e uma constante de $500.000\\text{ m}$ ao meridiano central de cada fuso para a coordenada Leste ($X$).<br><br>Quais estão corretas?",
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // Alternative E
+                explanation: `
+                    <div class="prose">
+                        <h4 class="text-emerald-800 font-bold text-sm mb-2"><i class="fa-solid fa-circle-check"></i> Gabarito: E</h4>
+                        <p class="leading-relaxed text-sm text-slate-600 mb-4">
+                            Análise dos parâmetros técnicos do sistema de projeção UTM:
+                        </p>
+                        <ul class="space-y-2 text-sm text-slate-600 mb-4 list-disc pl-5">
+                            <li><strong>Afirmação I (Correta):</strong> Divide a Terra em 60 fusos longitudinais e simétricos de $6^\\circ$. A contagem se inicia no antimeridiano de Greenwich ($180^\\circ$) progredindo no sentido Leste.</li>
+                            <li><strong>Afirmação II (Correta):</strong> Aplica um fator de deformação de escala na linha secante ($k_0 = 0,9996$) no Meridiano Central de cada fuso para controlar o aumento exponencial do erro de escala rumo às bordas.</li>
+                            <li><strong>Afirmação III (Correta):</strong> No Hemisfério Sul, o Equador vale $10.000.000\\text{ m}$ Norte ($Y$) decrescendo em direção ao sul. E o meridiano central possui constante padrão de $500.000\\text{ m}$ Leste ($X$) eliminando quaisquer chances de coordenadas de campo negativas.</li>
+                        </ul>
+                    </div>
+                `
+            }
+        ];
+
+        let userAnswers = {};
+        let quizSubmitted = false;
+        let timerSeconds = 0;
+        let timerInterval = null;
+
+        // Populate questions grid and actual elements on page load
+        window.onload = function() {
+            renderQuestions();
+            renderNavigationGrid();
+            startTimer();
+            updateProgress();
+        };
+
+        // Render standard question structures to the DOM
+        function renderQuestions() {
+            const container = document.getElementById('questions-wrapper');
+            container.innerHTML = '';
+
+            questionsDB.forEach((q, qIndex) => {
+                const questionCard = document.createElement('div');
+                questionCard.id = `q-card-${q.id}`;
+                questionCard.className = "bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-8 shadow-[0_4px_25px_rgb(0,0,0,0.01)] hover:border-slate-300 transition duration-300 scroll-mt-24 space-y-6";
+
+                // Question Title & Badges
+                let badges = `
+                    <div class="flex items-center justify-between">
+                        <span class="inline-flex items-center text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-full border border-brand-100">
+                            Questão ${q.id} de 10
+                        </span>
+                        <span id="badge-status-${q.id}" class="text-xs font-bold text-slate-400">
+                            Pendente <i class="fa-regular fa-circle ml-1"></i>
+                        </span>
+                    </div>
+                `;
+
+                // Render Options inside a grid format
+                let optionsHtml = '<div class="grid grid-cols-1 gap-3">';
+                q.options.forEach((opt, optIndex) => {
+                    const optionLetter = String.fromCharCode(65 + optIndex); // A, B, C, D, E
+                    optionsHtml += `
+                        <div id="q-${q.id}-opt-${optIndex}" 
+                             onclick="selectOption(${q.id}, ${optIndex})"
+                             class="option-card flex items-start gap-3 p-4 rounded-xl border border-slate-200/80 bg-slate-50/50 text-slate-700 hover:bg-slate-100/50 hover:border-slate-300 cursor-pointer active:scale-[0.99] select-none text-sm sm:text-base leading-relaxed">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-lg bg-white border border-slate-300 text-slate-600 font-bold text-xs sm:text-sm flex items-center justify-center transition">
+                                ${optionLetter}
+                            </span>
+                            <div class="flex-grow">${opt}</div>
+                        </div>
+                    `;
+                });
+                optionsHtml += '</div>';
+
+                questionCard.innerHTML = `
+                    ${badges}
+                    <div class="text-slate-800 text-sm sm:text-base leading-relaxed space-y-3 font-medium">
+                        ${q.statement}
+                    </div>
+                    ${optionsHtml}
+                    <!-- Dynamic resolution field (Hidden by default) -->
+                    <div id="resolution-holder-${q.id}" class="hidden mt-6 pt-6 border-t border-slate-100 space-y-4"></div>
+                `;
+
+                container.appendChild(questionCard);
+            });
+
+            // Trigger MathJax reload to render Equations correctly
+            if (window.MathJax) {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        function renderNavigationGrid() {
+            const grid = document.getElementById('grid-navigation');
+            grid.innerHTML = '';
+
+            questionsDB.forEach(q => {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${q.id}`;
+                btn.type = "button";
+                btn.onclick = () => scrollToQuestion(q.id);
+                btn.className = "h-10 rounded-xl border border-slate-200 text-slate-500 font-bold hover:bg-slate-50 hover:text-slate-800 transition active:scale-90 text-xs flex items-center justify-center";
+                btn.innerText = q.id;
+                grid.appendChild(btn);
+            });
+        }
+
+        // Selects an option inside a question card
+        function selectOption(qId, optIndex) {
+            if (quizSubmitted) return; // Block selection if already graded
+
+            userAnswers[qId] = optIndex;
+
+            // Clear active styling for sibling choices
+            const q = questionsDB.find(x => x.id === qId);
+            q.options.forEach((_, index) => {
+                const optElement = document.getElementById(`q-${qId}-opt-${index}`);
+                const letterBox = optElement.querySelector('span');
+
+                optElement.classList.remove('border-brand-500', 'bg-brand-50/50', 'text-brand-900', 'ring-1', 'ring-brand-500');
+                optElement.classList.add('border-slate-200/80', 'bg-slate-50/50', 'text-slate-700');
+                letterBox.classList.remove('bg-brand-600', 'text-white', 'border-brand-600');
+                letterBox.classList.add('bg-white', 'text-slate-600', 'border-slate-300');
+            });
+
+            // Apply selected styling to chosen option
+            const selectedElement = document.getElementById(`q-${qId}-opt-${optIndex}`);
+            const selectedLetterBox = selectedElement.querySelector('span');
+
+            selectedElement.classList.add('border-brand-500', 'bg-brand-50/50', 'text-brand-900', 'ring-1', 'ring-brand-500');
+            selectedElement.classList.remove('border-slate-200/80', 'bg-slate-50/50', 'text-slate-700');
+            selectedLetterBox.classList.add('bg-brand-600', 'text-white', 'border-brand-600');
+            selectedLetterBox.classList.remove('bg-white', 'text-slate-600', 'border-slate-300');
+
+            // Update badges & progress parameters
+            updateQuestionStatus(qId, true);
+            updateProgress();
+        }
+
+        function updateQuestionStatus(qId, answered) {
+            const statusBadge = document.getElementById(`badge-status-${qId}`);
+            const navBtn = document.getElementById(`nav-btn-${qId}`);
+
+            if (answered) {
+                statusBadge.innerHTML = 'Selecionada <i class="fa-solid fa-circle-dot ml-1 text-brand-500 animate-pulse"></i>';
+                statusBadge.className = "text-xs font-bold text-brand-600";
+                
+                navBtn.className = "h-10 rounded-xl border border-brand-300 bg-brand-50 text-brand-700 font-extrabold transition active:scale-90 text-xs flex items-center justify-center";
+            }
+        }
+
+        function updateProgress() {
+            const total = questionsDB.length;
+            const answeredCount = Object.keys(userAnswers).length;
+            const percentage = Math.round((answeredCount / total) * 100);
+
+            // Update top bar
+            document.getElementById('top-progress-bar').style.width = `${percentage}%`;
+            // Update sidebar
+            document.getElementById('aside-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('aside-progress-text').innerText = `${percentage}%`;
+            // Update textual counter
+            document.getElementById('answered-badge').innerText = `Respostas: ${answeredCount} / ${total}`;
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                const hrs = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+                const mins = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+                const secs = String(timerSeconds % 60).padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${hrs}:${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // Navigation anchors helper
+        function scrollToQuestion(id) {
+            const element = document.getElementById(`q-card-${id}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function scrollToSubmit() {
+            document.getElementById('quiz-submit-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function scrollToGrade() {
+            document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function handleQuizSubmit(event) {
+            event.preventDefault();
+            if (quizSubmitted) return;
+
+            // Secure user confirmations (Not using simple alerts)
+            const unansweredCount = questionsDB.length - Object.keys(userAnswers).length;
+            if (unansweredCount > 0) {
+                const confirmSubmit = confirm(`Você ainda possui ${unansweredCount} questão(ões) sem resposta. Deseja finalizar assim mesmo?`);
+                if (!confirmSubmit) return;
+            }
+
+            // Stop timer
+            clearInterval(timerInterval);
+            quizSubmitted = true;
+
+            // Score Calculations
+            let correctCount = 0;
+            questionsDB.forEach(q => {
+                const userSelected = userAnswers[q.id];
+                const isCorrect = (userSelected !== undefined && userSelected === q.correct);
+                if (isCorrect) correctCount++;
+
+                // Visual grading of option cards
+                revealGradesAndExplanations(q, userSelected, isCorrect);
+            });
+
+            // Display Results Board
+            renderResultsDashboard(correctCount);
+
+            // Adjust navigation panel visual states
+            revealNavigationResults();
+
+            // Enable quick jump back to results
+            document.getElementById('btn-quick-results').classList.remove('hidden');
+
+            // Force MathJax to run to format formulas inside newly revealed explanation cards
+            if (window.MathJax) {
+                window.MathJax.typesetPromise();
+            }
+
+            // Scroll beautifully to the results dashboard
+            setTimeout(scrollToGrade, 350);
+        }
+
+        function revealGradesAndExplanations(question, selectedIndex, isCorrect) {
+            const card = document.getElementById(`q-card-${question.id}`);
+            const badge = document.getElementById(`badge-status-${question.id}`);
+            
+            // Set header statuses
+            if (isCorrect) {
+                badge.innerHTML = 'Correta <i class="fa-solid fa-circle-check ml-1 text-emerald-500"></i>';
+                badge.className = "text-xs font-bold text-emerald-600";
+                card.classList.add('border-emerald-200', 'bg-emerald-50/5');
+            } else {
+                badge.innerHTML = 'Incorreta <i class="fa-solid fa-circle-xmark ml-1 text-rose-500"></i>';
+                badge.className = "text-xs font-bold text-rose-600";
+                card.classList.add('border-rose-200', 'bg-rose-50/5');
+            }
+
+            // Highlight incorrect options vs correct answers
+            question.options.forEach((_, index) => {
+                const optElement = document.getElementById(`q-${question.id}-opt-${index}`);
+                const letterBox = optElement.querySelector('span');
+
+                // Clear temporary active style
+                optElement.classList.remove('border-brand-500', 'bg-brand-50/50', 'text-brand-900', 'ring-1', 'ring-brand-500');
+                optElement.classList.add('opacity-75'); // slightly dim unselected answers for extreme contrast on true answers
+                optElement.style.pointerEvents = 'none'; // prevent changes
+
+                if (index === question.correct) {
+                    // Correct options must be marked in strong green borders
+                    optElement.classList.remove('bg-slate-50/50', 'border-slate-200/80', 'opacity-75');
+                    optElement.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'opacity-100');
+                    letterBox.classList.remove('bg-white', 'text-slate-600', 'border-slate-300');
+                    letterBox.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+                } else if (index === selectedIndex) {
+                    // Selected wrong answers marked in dark red
+                    optElement.classList.remove('bg-slate-50/50', 'border-slate-200/80', 'opacity-75');
+                    optElement.classList.add('bg-rose-50', 'border-rose-500', 'text-rose-900', 'opacity-100');
+                    letterBox.classList.remove('bg-white', 'text-slate-600', 'border-slate-300');
+                    letterBox.classList.add('bg-rose-600', 'text-white', 'border-rose-600');
+                }
+            });
+
+            // Reveal and structure deep technical solutions inside the placeholder
+            const resolutionHolder = document.getElementById(`resolution-holder-${question.id}`);
+            resolutionHolder.className = "mt-6 pt-6 border-t border-slate-200 space-y-4 block bg-slate-50/60 p-4 sm:p-6 rounded-xl border border-slate-100";
+            resolutionHolder.innerHTML = `
+                <div class="flex items-center space-x-2 text-brand-800 border-b border-slate-200/80 pb-3 mb-3">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                    <h5 class="font-bold text-sm sm:text-base">Gabarito Comentado Oficial</h5>
+                </div>
+                ${question.explanation}
+            `;
+        }
+
+        function renderResultsDashboard(correct) {
+            const total = questionsDB.length;
+            const percentage = Math.round((correct / total) * 100);
+
+            // Display elements
+            document.getElementById('quiz-submit-box').classList.add('hidden');
+            document.getElementById('results-panel').classList.remove('hidden');
+
+            // Grade values
+            document.getElementById('score-correct').innerText = correct;
+            document.getElementById('score-percentage').innerText = `Aproveitamento: ${percentage}%`;
+
+            // Time spent parsing
+            const mins = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(timerSeconds % 60).padStart(2, '0');
+            document.getElementById('time-spent').innerText = `${mins}:${secs}`;
+
+            // Rating calculations & status messages
+            const rIcon = document.getElementById('rating-icon');
+            const rText = document.getElementById('rating-text');
+            const rDesc = document.getElementById('rating-desc');
+
+            if (percentage >= 80) {
+                rIcon.className = "fa-solid fa-trophy text-emerald-500 text-3xl";
+                rText.innerText = "Aprovado!";
+                rText.className = "text-2xl font-black text-emerald-700";
+                rDesc.innerText = "Excelente domínio técnico cartográfico.";
+            } else if (percentage >= 50) {
+                rIcon.className = "fa-solid fa-circle-exclamation text-amber-500 text-3xl";
+                rText.innerText = "Atenção!";
+                rText.className = "text-2xl font-black text-amber-700";
+                rDesc.innerText = "Bom desempenho. Revise os detalhes das equações.";
+            } else {
+                rIcon.className = "fa-solid fa-triangle-exclamation text-rose-500 text-3xl";
+                rText.innerText = "Revisar";
+                rText.className = "text-2xl font-black text-rose-700";
+                rDesc.innerText = "Estude as resoluções detalhadas com atenção.";
+            }
+        }
+
+        // Map navigation panels with correct/incorrect colors
+        function revealNavigationResults() {
+            document.getElementById('legend-correct').classList.remove('hidden');
+            document.getElementById('legend-incorrect').classList.remove('hidden');
+
+            questionsDB.forEach(q => {
+                const userSelected = userAnswers[q.id];
+                const isCorrect = (userSelected !== undefined && userSelected === q.correct);
+                const btn = document.getElementById(`nav-btn-${q.id}`);
+
+                if (isCorrect) {
+                    btn.className = "h-10 rounded-xl border border-emerald-400 bg-emerald-100 text-emerald-700 font-extrabold hover:bg-emerald-200 transition text-xs flex items-center justify-center";
+                    btn.innerHTML = `${q.id} <i class="fa-solid fa-check text-[8px] ml-1"></i>`;
+                } else {
+                    btn.className = "h-10 rounded-xl border border-rose-400 bg-rose-100 text-rose-700 font-extrabold hover:bg-rose-200 transition text-xs flex items-center justify-center";
+                    btn.innerHTML = `${q.id} <i class="fa-solid fa-xmark text-[8px] ml-1"></i>`;
+                }
+            });
+        }
+
+        function resetQuiz() {
+            const confirmReset = confirm("Deseja realmente reiniciar o simulado? Suas respostas atuais serão perdidas.");
+            if (!confirmReset) return;
+
+            userAnswers = {};
+            quizSubmitted = false;
+            timerSeconds = 0;
+
+            // Re-render UI Elements to clean slate
+            renderQuestions();
+            renderNavigationGrid();
+            startTimer();
+            updateProgress();
+
+            // Reset wrappers
+            document.getElementById('quiz-submit-box').classList.remove('hidden');
+            document.getElementById('results-panel').classList.add('hidden');
+            document.getElementById('btn-quick-results').classList.add('hidden');
+            document.getElementById('legend-correct').classList.add('hidden');
+            document.getElementById('legend-incorrect').classList.add('hidden');
+
+            // Scroll smoothly back to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

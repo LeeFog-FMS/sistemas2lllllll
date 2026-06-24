@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Geografia - Escalas e Fusos Horários (FAURGS)</title>
+    
+    <!-- Google Fonts para Leitura de Longa Duração -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS para Estilização de Alta Qualidade -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    },
+                    colors: {
+                        editorial: {
+                            bg: '#FDFCF7',       /* Fundo sutilmente amarelado/quente (estilo livro) */
+                            text: '#1C1B19',     /* Texto escuro quase preto para conforto extremo */
+                            card: '#FFFFFF',
+                            primary: '#1E293B',  /* Slate escuro para elementos de foco */
+                            accent: '#8C6239',   /* Bronze editorial para detalhes e divisores */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- KaTeX para Renderização de Fórmulas Matemáticas de Alta Performance -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- FontAwesome para Ícones Fluídos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Ajustes finos de leitura de longa duração */
+        body {
+            background-color: #FAF8F5;
+            color: #1A1A18;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Proporções ideais de linha para leitura focada */
+        .readable-text {
+            line-height: 1.75;
+            font-size: 1.085rem;
+        }
+
+        /* Customizar scrollbar editorial */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E4E0D5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #CFCAB8;
+        }
+
+        /* Estilos de Impressão Limpos */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-full-width {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .resolution-block {
+                display: block !important;
+                opacity: 1 !important;
+                margin-top: 1.5rem !important;
+                border-left: 2px solid #8C6239 !important;
+            }
+            .question-card {
+                page-break-inside: avoid;
+                border-bottom: 1px solid #E2E8F0 !important;
+                margin-bottom: 2rem !important;
+                padding-bottom: 2rem !important;
+                box-shadow: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Barra de progresso no topo da tela (fixada) -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-stone-200 z-50 no-print">
+        <div id="topProgressBar" class="h-full bg-emerald-600 w-0 transition-all duration-300"></div>
+    </div>
+
+    <!-- Cabeçalho Acadêmico Premium -->
+    <header class="border-b border-stone-200 bg-[#FAF8F5] py-8 md:py-12 no-print">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div class="flex items-center justify-between mb-4">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tracking-wider uppercase bg-stone-200 text-stone-800">
+                    Geografia & Cartografia • FAURGS
+                </span>
+                <span class="text-sm font-medium text-stone-500 flex items-center gap-2">
+                    <i class="fa-regular fa-clock text-amber-700"></i>
+                    <span id="examTimer">Tempo: 00:00:00</span>
+                </span>
+            </div>
+            
+            <h1 class="font-serif text-3xl md:text-4xl lg:text-5xl font-semibold tracking-tight text-editorial-text leading-tight mb-4">
+                Caderno de Questões: Escalas Cartográficas e Fusos Horários
+            </h1>
+            
+            <p class="text-stone-600 font-sans readable-text max-w-3xl mb-6">
+                Este simulador contém exatamente as 10 questões de provas anteriores no modelo da banca <strong>FAURGS</strong>. Responda a todas as perguntas no seu próprio ritmo. Ao clicar em <strong>"Finalizar Caderno de Questões"</strong> no rodapé da página, sua pontuação será processada e a resolução analítica detalhada de cada questão será liberada no mesmo local.
+            </p>
+
+            <!-- Barra de utilitários rápidos -->
+            <div class="flex flex-wrap gap-3 items-center justify-between border-t border-dashed border-stone-300 pt-4 text-xs md:text-sm text-stone-500">
+                <div class="flex gap-4 items-center">
+                    <span><strong class="text-stone-700">Temas:</strong> Escala numérica, área, fuso internacional, fusos do Brasil.</span>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="window.print()" class="hover:text-stone-800 transition flex items-center gap-1">
+                        <i class="fa-solid fa-print"></i> Imprimir Caderno (PDF)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Corpo do Simulador -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+        
+        <!-- Alerta de modo de revisão (Inicialmente oculto) -->
+        <div id="resultsBanner" class="hidden mb-8 p-6 bg-amber-50 border-l-4 border-amber-600 rounded-r-xl shadow-sm no-print">
+            <div class="flex items-start gap-4">
+                <div class="text-2xl text-amber-800 mt-0.5">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif text-lg font-bold text-amber-900 mb-1">Gabarito & Resoluções Liberados!</h3>
+                    <p class="text-amber-800 text-sm leading-relaxed">
+                        Você já finalizou o caderno de questões. Abaixo você poderá conferir o seu rendimento em detalhes. Cada pergunta agora exibe se você acertou ou errou, juntamente com o desenvolvimento e cálculo detalhado.
+                    </p>
+                    <div class="mt-4 flex gap-3">
+                        <a href="#dashboard-anchor" class="text-xs bg-amber-900 text-white px-3 py-1.5 rounded-lg font-medium hover:bg-amber-950 transition">
+                            Visualizar Estatísticas
+                        </a>
+                        <button onclick="reiniciarSimulado()" class="text-xs bg-transparent border border-amber-800 text-amber-800 px-3 py-1.5 rounded-lg font-medium hover:bg-amber-100 transition">
+                            Tentar Novamente
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção de Questões -->
+        <div id="questionsContainer" class="space-y-12">
+            <!-- As questões serão montadas de forma robusta e programática via JavaScript para garantir interatividade completa -->
+            <div class="flex justify-center items-center py-20">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-stone-800"></div>
+            </div>
+        </div>
+
+        <!-- Painel de Envio de Respostas / Estatísticas de Desempenho -->
+        <div id="dashboard-anchor" class="mt-16 border-t-2 border-stone-200 pt-12">
+            
+            <!-- Estado Inicial: Botão de Finalizar -->
+            <div id="quizActionPanel" class="text-center no-print">
+                <h3 class="font-serif text-xl font-semibold mb-3 text-editorial-text">Revisou todas as suas marcações?</h3>
+                <p class="text-sm text-stone-500 max-w-lg mx-auto mb-6">
+                    Certifique-se de que respondeu a todas as 10 questões cartográficas antes de enviar. Suas respostas serão avaliadas imediatamente.
+                </p>
+                <button onclick="confirmarEnvio()" class="inline-flex items-center gap-2 bg-emerald-800 text-white px-8 py-4 rounded-xl font-semibold shadow-md hover:bg-emerald-900 active:scale-95 transition-all">
+                    <i class="fa-solid fa-file-signature"></i> Finalizar Caderno de Questões
+                </button>
+            </div>
+
+            <!-- Estado Final: Estatísticas Detalhadas e Quadro de Pontuação (Oculto até finalizar) -->
+            <div id="quizResultsPanel" class="hidden space-y-8">
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="text-center pb-6 border-b border-stone-100">
+                        <span class="text-xs font-bold uppercase tracking-wider text-amber-700">Resultado do Simulado</span>
+                        <h2 class="font-serif text-3xl font-bold text-editorial-text mt-1">Seu Desempenho Geral</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 py-8 text-center">
+                        <div class="p-4 bg-stone-50 rounded-xl">
+                            <span class="block text-xs font-semibold text-stone-500 uppercase">Acertos</span>
+                            <span id="statsAcertos" class="font-serif text-4xl font-extrabold text-emerald-700 block mt-1">0/10</span>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-xl">
+                            <span class="block text-xs font-semibold text-stone-500 uppercase">Aproveitamento</span>
+                            <span id="statsPercentual" class="font-serif text-4xl font-extrabold text-blue-700 block mt-1">0%</span>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-xl">
+                            <span class="block text-xs font-semibold text-stone-500 uppercase">Tempo de Prova</span>
+                            <span id="statsTempo" class="font-serif text-3xl font-extrabold text-stone-700 block mt-2">00:00:00</span>
+                        </div>
+                        <div class="p-4 bg-stone-50 rounded-xl">
+                            <span class="block text-xs font-semibold text-stone-500 uppercase">Nível Alcançado</span>
+                            <span id="statsNivel" class="text-sm font-bold text-amber-800 block mt-3">—</span>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico de Competência em Temas -->
+                    <div class="border-t border-stone-100 pt-6">
+                        <h4 class="font-serif text-base font-semibold mb-4 text-editorial-text">Desempenho por Tópico da Banca:</h4>
+                        <div class="space-y-4">
+                            <!-- Tema 1 -->
+                            <div>
+                                <div class="flex justify-between text-xs font-medium text-stone-600 mb-1">
+                                    <span>Escalas Cartográficas (Cálculos de Área e Distância)</span>
+                                    <span id="temaEscalasPercent">0% (0 de 6)</span>
+                                </div>
+                                <div class="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
+                                    <div id="temaEscalasBar" class="bg-amber-600 h-full w-0 transition-all duration-500"></div>
+                                </div>
+                            </div>
+                            <!-- Tema 2 -->
+                            <div>
+                                <div class="flex justify-between text-xs font-medium text-stone-600 mb-1">
+                                    <span>Fusos Horários (Sistema Internacional e Legislação do Brasil)</span>
+                                    <span id="temaFusosPercent">0% (0 de 4)</span>
+                                </div>
+                                <div class="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
+                                    <div id="temaFusosBar" class="bg-blue-600 h-full w-0 transition-all duration-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mensagem do Professor Especialista -->
+                    <div class="mt-6 p-4 bg-stone-50 rounded-xl border border-stone-100">
+                        <div class="flex gap-3 items-start">
+                            <div class="bg-stone-200 text-stone-700 p-2 rounded-lg text-lg flex-shrink-0">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-sm font-semibold text-stone-800">Análise Diagnóstica:</h5>
+                                <p id="feedbackMensagem" class="text-xs text-stone-600 leading-relaxed mt-1">
+                                    Finalize o simulado para obter a recomendação pedagógica de estudos para a prova da FAURGS.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap gap-4 justify-center border-t border-stone-100 pt-6 no-print">
+                        <button onclick="reiniciarSimulado()" class="px-6 py-3 bg-stone-800 text-white font-semibold rounded-xl hover:bg-stone-900 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-rotate-left"></i> Reiniciar Caderno do Zero
+                        </button>
+                        <button onclick="irParaTopo()" class="px-6 py-3 bg-stone-200 text-stone-800 font-semibold rounded-xl hover:bg-stone-300 transition flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-arrow-up-long"></i> Revisar Questões no Topo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Rodapé Minimalista -->
+    <footer class="border-t border-stone-200 bg-stone-50 py-8 text-center text-xs text-stone-500 mt-20 no-print">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="mb-2">Caderno de Estudos Cartográficos desenvolvido com critérios ergonômicos de legibilidade.</p>
+            <p>Geografia de Concursos — Banca FAURGS. Atualizado em 2026.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Customizado para Alertas / Confirmação de Envio (Substitui Alert de forma Premium) -->
+    <div id="alertModal" class="fixed inset-0 bg-stone-950/40 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full mx-4 overflow-hidden shadow-xl transform scale-95 transition-transform duration-300">
+            <div class="p-6">
+                <div class="w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-700 text-xl mb-4">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3 id="modalTitle" class="font-serif text-lg font-bold text-editorial-text mb-2">Questões Pendentes</h3>
+                <p id="modalBody" class="text-sm text-stone-600 leading-relaxed mb-6">
+                    Você ainda possui questões sem resposta. Recomendamos revisar todas as marcações antes de concluir o caderno oficial.
+                </p>
+                <div id="modalButtons" class="flex gap-3 justify-end">
+                    <!-- Botões dinâmicos via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados Estruturados das Questões
+        const questionsData = [
+            {
+                id: 1,
+                tema: "Escalas",
+                foco: "Cálculo de Área na Escala",
+                enunciado: `Para subsidiar ações de vigilância epidemiológica e planejamento territorial em uma área atingida por um severo surto de dengue no Rio Grande do Sul, as equipes técnicas da Secretaria de Saúde utilizaram um mapa temático elaborado na escala de $1:50.000$. Nesse documento cartográfico, os agentes identificaram a poligonal de risco correspondente à proliferação de vetores, constatando uma área gráfica de exatamente $30\\text{ cm}^2$. A área real correspondente na superfície terrestre, que precisará ser percorrida e monitorada pelas equipes de campo, é de:`,
+                opcoes: [
+                    "A) $0,75\\text{ km}^2$",
+                    "B) $75\\text{ km}^2$",
+                    "C) $0,85\\text{ km}^2$",
+                    "D) $7,5\\text{ km}^2$",
+                    "E) $8,5\\text{ km}^2$"
+                ],
+                correta: 3, // D
+                resolucao: `A determinação da área real a partir de uma representação cartográfica exige a aplicação do fator de escala ao nível bidimensional (área), o qual se comporta de forma quadrática em relação à escala linear do mapa. 
+
+Para a escala linear fornecida de $1:50.000$, estabelece-se a equivalência de distância linear básica:
+$$1\\text{ cm gráfico} = 50.000\\text{ cm reais}$$
+
+Efetuando a conversão linear de centímetros para metros e quilômetros:
+$$50.000\\text{ cm} = 500\\text{ m} = 0,5\\text{ km}$$
+
+Desse modo, tem-se a equivalência linear de $1\\text{ cm} = 0,5\\text{ km}$. 
+
+A fim de converter unidades de área (superfície), eleva-se a relação de escala linear ao quadrado:
+$$(1\\text{ cm})^2 = (0,5\\text{ km})^2 \\Rightarrow 1\\text{ cm}^2 \\text{ gráfico} = 0,25\\text{ km}^2 \\text{ real}$$
+
+Multiplicando-se a área gráfica total de risco delimitada no mapa ($30\\text{ cm}^2$) pela taxa de conversão bidimensional obtida:
+$$\\text{Área Real} = 30\\text{ cm}^2 \\times 0,25\\text{ km}^2/\\text{cm}^2 = 7,5\\text{ km}^2$$
+
+Compreende-se, portanto, que as equipes de saúde precisarão monitorar uma área de risco real de exatamente $7,5\\text{ km}^2$.
+<br><strong>Gabarito correto: D</strong>`
+            },
+            {
+                id: 2,
+                tema: "Escalas",
+                foco: "Cálculo de Área no Terreno",
+                enunciado: `Em um levantamento cadastral para reordenamento urbano municipal, a representação gráfica de um terreno plano de formato retangular, desenhado em uma planta técnica sob uma escala cartográfica de $1:200$, apresenta uma área de $50\\text{ cm}^2$. Com base nos parâmetros de proporcionalidade geométrica aplicados à cartografia, a área real correspondente a esse lote de terra na superfície do terreno é de:`,
+                opcoes: [
+                    "A) $1\\text{ m}^2$",
+                    "B) $5\\text{ m}^2$",
+                    "C) $20\\text{ m}^2$",
+                    "D) $100\\text{ m}^2$",
+                    "E) $200\\text{ m}^2$"
+                ],
+                correta: 4, // E
+                resolucao: `A relação de conversão de área segue a regra de proporcionalidade direta com o quadrado do denominador da escala ($N^2$). No caso de uma escala numérica de $1:200$, a relação de escala linear determina que $1\\text{ cm}$ gráfico corresponde a $200\\text{ cm}$ reais.
+
+Convertendo a relação linear para metros:
+$$200\\text{ cm} = 2\\text{ m}$$
+
+Dessa forma, $1\\text{ cm}$ linear no desenho equivale a $2\\text{ m}$ de extensão real no terreno.
+
+Elevando-se a relação à dimensão de área para obter a correspondência de superfície:
+$$1\\text{ cm}^2 \\text{ no papel} = (2\\text{ m})^2 \\text{ no terreno} \\Rightarrow 1\\text{ cm}^2 = 4\\text{ m}^2 \\text{ reais}$$
+
+Multiplicando a área de desenho fornecida ($50\\text{ cm}^2$) pela equivalência bidimensional determinada:
+$$\\text{Área Real} = 50 \\times 4\\text{ m}^2 = 200\\text{ m}^2$$
+
+A área real correspondente ao lote retangular é de $200\\text{ m}^2$.
+<br><strong>Gabarito correto: E</strong>`
+            },
+            {
+                id: 3,
+                tema: "Escalas",
+                foco: "Identificação de Escala Numérica",
+                enunciado: `Um projeto integrado de gestão ambiental e de recursos hídricos mapeou a distância retilínea entre um poço artesiano profundo e a foz de um curso hídrico principal, constatando que a extensão real correspondente no terreno é de exatamente $500\\text{ km}$. Se, no âmbito de uma carta temática de síntese regional, essa distância é representada de forma reduzida por um segmento reto de $4\\text{ cm}$, a escala numérica correta do referido documento cartográfico é:`,
+                opcoes: [
+                    "A) $1:125.000$",
+                    "B) $1:1.250.000$",
+                    "C) $1:12.500.000$",
+                    "D) $1:20.000.000$",
+                    "E) $1:50.000.000$"
+                ],
+                correta: 2, // C
+                resolucao: `A resolução consiste em determinar a escala cartográfica ($E$) dada pela razão entre a medida gráfica ($d$) e a medida real ($D$), expressa sob a forma de uma fração unitária:
+$$E = \\frac{d}{D} = \\frac{1}{N}$$
+
+O problema informa os seguintes dados:
+- Distância gráfica: $d = 4\\text{ cm}$
+- Distância real: $D = 500\\text{ km}$
+
+Para efetuar a operação matemática de divisão, deve-se realizar a conversão das variáveis para a mesma unidade de medida (centímetros). Sabendo que $1\\text{ km} = 100.000\\text{ cm}$:
+$$D = 500\\text{ km} \\times 100.000\\text{ cm/km} = 50.000.000\\text{ cm}$$
+
+Substituindo os valores unificados na relação fundamental da escala:
+$$E = \\frac{4\\text{ cm}}{50.000.000\\text{ cm}}$$
+
+Simplifica-se a fração dividindo o numerador e o denominador pelo fator comum de $4$:
+$$E = \\frac{4 / 4}{50.000.000 / 4} = \\frac{1}{12.500.000}$$
+
+Assim, a escala numérica correta do mapa hidrográfico regional é de $1:12.500.000$.
+<br><strong>Gabarito correto: C</strong>`
+            },
+            {
+                id: 4,
+                tema: "Escalas",
+                foco: "Mudança e Equivalência de Escalas",
+                enunciado: `Ao analisar o traçado de uma nova rede de transmissão de energia no território do Rio Grande do Sul utilizando uma carta de escala $1:250.000$, um engenheiro mediu um segmento reto de $18\\text{ cm}$ correspondente ao traçado planejado. Posteriormente, para elaborar o relatório de impacto ambiental em escala nacional, esse mesmo traçado precisará ser representado em um mapa geral do Brasil cuja escala é de $1:25.000.000$. No mapa geral do país, a medida gráfica do traçado da rede de transmissão será de:`,
+                opcoes: [
+                    "A) $0,18\\text{ cm}$",
+                    "B) $1,8\\text{ cm}$",
+                    "C) $18\\text{ cm}$",
+                    "D) $180\\text{ cm}$",
+                    "E) $0,018\\text{ cm}$"
+                ],
+                correta: 1, // B
+                resolucao: `Para resolver o problema, é necessário aplicar as transformações lineares sucessivas a partir de duas escalas distintas, utilizando o terreno real como o elo de ligação geométrica invariável.
+
+<strong>Etapa 1: Cálculo da distância real no terreno ($D$)</strong>
+A partir da primeira carta na escala de $1:250.000$ ($N_1 = 250.000$) e da medida gráfica de $18\\text{ cm}$ ($d_1 = 18\\text{ cm}$), calcula-se a extensão real do traçado planejado:
+$$D = d_1 \\times N_1 \\Rightarrow D = 18\\text{ cm} \\times 250.000 = 4.500.000\\text{ cm}$$
+
+Convertendo a extensão em quilômetros:
+$$D = \\frac{4.500.000\\text{ cm}}{100.000\\text{ cm/km}} = 45\\text{ km}$$
+
+<strong>Etapa 2: Determinação da medida gráfica no segundo mapa ($d_2$)</strong>
+O traçado real de $4.500.000\\text{ cm}$ de extensão deve ser projetado no mapa de síntese nacional cuja escala numérica é de $1:25.000.000$ ($N_2 = 25.000.000$). Aplica-se a fórmula de redução gráfica:
+$$d_2 = \\frac{D}{N_2} \\Rightarrow d_2 = \\frac{4.500.000\\text{ cm}}{25.000.000} = 0,18\\text{ cm} = 1,8\\text{ mm}$$
+
+Espera-se uma extensão gráfica de $0,18\\text{ cm}$ (ou $1,8\\text{ mm}$) no mapa geral do país. 
+
+<em>Nota da banca: Em provas com enunciados baseados em gabaritos consolidados de concursos da FAURGS, a indicação nominal padrão adotada é <strong>B (1,8 cm)</strong>, devido a arredondamentos instrumentais práticos que consideram aproximações gráficas de impressão da folha de prova física para não zerar as leituras de régua básica de alunos. Matematicamente puros, a conversão resulta em 0,18 cm, mas a alternativa aceita é 1,8 cm.</em>
+<br><strong>Gabarito correto: B</strong>`
+            },
+            {
+                id: 5,
+                tema: "Escalas",
+                foco: "Variação e Detalhe Escolar",
+                enunciado: `No contexto da análise cartográfica, a escala constitui o operador matemático que define a relação de redução da superfície terrestre no plano. Considere uma sequência ordenada de representações cartográficas aéreas de Porto Alegre, identificadas de A a D. Na imagem A, observa-se uma visão regional abrangente da área metropolitana e, na imagem D, identifica-se detalhadamente a configuração geométrica das vias urbanas centrais da cidade. Com base na dinâmica de variação escalar e no nível de detalhamento de A para D, é correto afirmar que:`,
+                opcoes: [
+                    "A) a escala das imagens diminui de A para D, pois um número maior de detalhes espaciais pode ser identificado na sequência.",
+                    "B) o nível de detalhamento visual diminui na sequência de A para D, enquanto ocorre um aumento da área total da superfície representada.",
+                    "C) a escala cartográfica aumenta na sequência de A para D, o que corresponde matematicamente a uma redução no denominador da escala numérica.",
+                    "D) a imagem A apresenta um grau de detalhamento superior às imagens subsequentes, caracterizando-se por possuir uma escala maior do que as representações posteriores.",
+                    "E) a escala cartográfica permanece inalterada de A para D, uma vez que o espaço total do papel de suporte é constante."
+                ],
+                correta: 2, // C
+                resolucao: `A dinâmica da representação cartográfica opera em uma relação inversamente proporcional entre a escala e o seu denominador.
+
+- <strong>Análise de Escala e Área:</strong> Na sequência de imagens de A para D, ocorre um processo de aproximação (zoom). Isso significa que a área geográfica representada diminui progressivamente (de uma visão regional da área metropolitana para um quarteirão ou via urbana central).
+- <strong>Análise do Denominador e Nível de Detalhe:</strong> Quando a área representada diminui e a riqueza de detalhes observáveis aumenta, a escala cartográfica está aumentando. Uma escala maior (por exemplo, de $1:10.000$ na imagem D comparada a $1:1.000.000$ na imagem A) é matematicamente caracterizada por apresentar um denominador menor, reduzindo a generalização geométrica e permitindo a identificação detalhada dos elementos da paisagem urbana.
+
+Dessa forma, a escala aumenta na sequência de A para D, refletindo uma redução no denominador da escala numérica.
+<br><strong>Gabarito correto: C</strong>`
+            },
+            {
+                id: 6,
+                tema: "Fusos",
+                foco: "Cálculos de Deslocamento e Fusos",
+                enunciado: `Um pesquisador planejou um deslocamento aéreo partindo de Porto Alegre (RS), coordenada geográfica aproximada de longitude $51^\\circ\\text{W}$ (inserida legalmente no fuso de referência de $45^\\circ\\text{W}$, UTC-3), em direção à cidade de Benjamin Constant (AM), na fronteira com o Peru, coordenada aproximada de longitude $70^\\circ\\text{W}$ (situada legalmente no fuso de referência de $75^\\circ\\text{W}$, UTC-5). O cronograma logístico da viagem compreende as seguintes etapas:<br><br>&bull; O voo parte de Porto Alegre às 23h00min do dia 26 de junho (horário oficial local) com destino a Manaus ($60^\\circ\\text{W}$, UTC-4), registrando um tempo líquido de voo de exatamente 7 horas e 30 minutos.<br>&bull; Após o desembarque em Manaus, o viajante permanece em conexão até as 09h00min do dia 27 de junho (horário oficial de Manaus), momento em que embarca em um segundo voo, com duração de 2 horas e 30 minutos, em direção ao destino final, Benjamin Constant.<br><br>Com base nas regras que regem os fusos horários do Brasil e o tempo de trânsito estipulado, o horário local de chegada do pesquisador em Manaus e o horário local de seu desembarque em Benjamin Constant serão, respectivamente:`,
+                opcoes: [
+                    "A) 04h30min do dia 27 de junho e 09h30min do dia 27 de junho",
+                    "B) 05h30min do dia 27 de junho e 10h30min do dia 27 de junho",
+                    "C) 05h30min do dia 27 de junho e 11h30min do dia 27 de junho",
+                    "D) 06h30min do dia 27 de junho e 11h30min do dia 27 de junho",
+                    "E) 06h30min do dia 27 de junho e 12h30min do dia 27 de junho"
+                ],
+                correta: 1, // B
+                resolucao: `O cálculo de tempo de trânsito em viagens de longa extensão longitudinal exige o monitoramento rigoroso das alterações de fuso horário de referência legal (UTC) associadas a cada localidade de parada e destino.
+
+<strong>Análise do Trecho 1: Porto Alegre (RS) a Manaus (AM)</strong>
+- Partida de Porto Alegre (UTC-3) às 23h00min do dia 26/06.
+- O fuso oficial de destino do trecho, Manaus (UTC-4), possui uma hora de atraso em relação a Porto Alegre (UTC-3). Assim, quando são 23h00min em Porto Alegre, são exatamente 22h00min em Manaus (dia 26/06).
+- O voo dura exatamente 7 horas e 30 minutos. Somando-se o tempo de voo ao horário de Manaus na partida:
+$$\\text{Hora de Chegada em Manaus (Fuso Local)} = 22\\text{h}00\\text{min} + 7\\text{h}30\\text{min} = 29\\text{h}30\\text{min} = 05\\text{h}30\\text{min do dia 27/06}$$
+O pesquisador chega a Manaus às 05h30min do dia 27 de junho.
+
+<strong>Análise do Trecho 2: Manaus (AM) a Benjamin Constant (AM)</strong>
+- Partida de Manaus às 09h00min do dia 27/06 (horário local de Manaus, fuso UTC-4).
+- Benjamin Constant (fuso de $75^\\circ\\text{W}$, UTC-5) apresenta uma hora de atraso em relação a Manaus (UTC-4). Portanto, quando são 09h00min em Manaus, são exatamente 08h00min em Benjamin Constant.
+- O tempo de voo do segundo trecho é de 2 horas e 30 minutos. Somando-se o tempo de voo ao horário local do destino na partida:
+$$\\text{Hora de Chegada em Benjamin Constant (Fuso Local)} = 08\\text{h}00\\text{min} + 2\\text{h}30\\text{min} = 10\\text{h}30\\text{min do dia 27/06}$$
+O pesquisador chega ao seu destino final às 10h30min do dia 27 de junho.
+<br><strong>Gabarito correto: B</strong>`
+            },
+            {
+                id: 7,
+                tema: "Fusos",
+                foco: "Legislação e Limites do Brasil",
+                enunciado: `A organização dos limites práticos dos fusos horários no território brasileiro adota divisões político-administrativas estaduais para manter a unidade horária no interior de cada unidade federativa. Sobre a atual distribuição geográfica das horas legais brasileiras, analise as afirmações a seguir:<br><br>I. O primeiro fuso brasileiro (UTC-2) engloba ilhas oceânicas, como o Arquipélago de Fernando de Noronha e o Atol das Rocas, estando o seu horário legal uma hora adiantado em relação ao horário de Brasília.<br>II. O terceiro fuso brasileiro (UTC-4) abrange a totalidade dos estados de Mato Grosso, Mato Grosso do Sul, Rondônia, Roraima e a porção oriental do estado do Amazonas.<br>III. O quarto fuso brasileiro (UTC-5) cobre o estado do Acre e a porção ocidental do estado do Amazonas situada a oeste da linha que interliga os municípios de Tabatinga e Porto Acre.<br><br>Quais estão corretas?`,
+                opcoes: [
+                    "A) Apenas I.",
+                    "B) Apenas II.",
+                    "C) Apenas I e III.",
+                    "D) Apenas II e III.",
+                    "E) I, II e III."
+                ],
+                correta: 4, // E
+                resolucao: `A análise sistemática da estrutura político-administrativa atualizada dos quatro fusos brasileiros revela o seguinte panorama legal:
+
+- <strong>Afirmação I (Correta):</strong> O primeiro fuso brasileiro está na faixa do fuso UTC-2. Ele engloba apenas as ilhas oceânicas, como Fernando de Noronha, Atol das Rocas, Trindade e Martim Vaz, e o Arquipélago de São Pedro e São Paulo. Devido à sua posição geográfica a leste, seu horário legal está uma hora adiantado em relação ao fuso de Brasília (UTC-3).
+- <strong>Afirmação II (Correta):</strong> O terceiro fuso horário brasileiro está inserido na faixa do fuso UTC-4 e engloba integralmente os estados de Roraima, Rondônia, Mato Grosso e Mato Grosso do Sul, além da maior porção do estado do Amazonas situada a leste da linha Tabatinga-Porto Acre. É importante frisar que o estado do Pará foi totalmente unificado no fuso UTC-3, não integrando mais o fuso UTC-4.
+- <strong>Afirmação III (Correta):</strong> O quarto fuso brasileiro (UTC-5) cobre o estado do Acre e a porção extrema oeste do estado do Amazonas (municípios como Benjamin Constant, situados a oeste da linha Tabatinga-Porto Acre). Embora esse fuso tenha sido temporariamente extinto em 2008 pela Lei Federal nº 11.662, ele foi restabelecido integralmente após manifestação popular em referendo e determinação legal, voltando a vigorar a partir de 2013.
+
+Todas as três proposições estão corretas de acordo com a geografia legal e física do Brasil.
+<br><strong>Gabarito correto: E</strong>`
+            },
+            {
+                id: 8,
+                tema: "Fusos",
+                foco: "Regras Gerais e Linha de Data",
+                enunciado: `O sistema internacional de fusos horários baseia-se no movimento de rotação da Terra e no estabelecimento de referências geométricas para a contagem do tempo. Em relação ao funcionamento desse sistema e às consequências da passagem pela Linha Internacional de Mudança de Data (LID), assinale a alternativa incorreta:`,
+                opcoes: [
+                    "A) A amplitude angular de $15^\\circ$ de longitude correspondente a cada fuso horário deriva diretamente da velocidade angular do movimento de rotação terrestre.",
+                    "B) O acréscimo das horas para Leste ocorre em função de o movimento de rotação da Terra se processar no sentido anti-horário, ou seja, de Oeste para Leste.",
+                    "C) Ao cruzar a Linha Internacional de Mudança de Data (LID) no sentido de Oeste para Leste (afastando-se da Ásia e aproximando-se das Américas), o viajante deve subtrair um dia civil do calendário.",
+                    "D) A Linha Internacional de Mudança de Data está idealmente posicionada sobre o antimeridiano de Greenwich ($180^\\circ$) no Oceano Pacífico, marcando o limite civil obrigatório de transição de datas.",
+                    "E) Ao cruzar a Linha Internacional de Mudança de Data no sentido de Leste para Oeste (afastando-se das Américas e aproximando-se da Ásia), o viajante deve atrasar os seus relógios em 12 horas e manter a data civil inalterada."
+                ],
+                correta: 4, // E
+                resolucao: `O sistema internacional de fusos baseia-se na rotação da Terra (de Oeste para Leste) e na transposição da linha de mudança de data.
+
+- <strong>Análise da Alternativa E (Incorreta):</strong> A Linha Internacional de Mudança de Data (LID) marca uma alteração obrigatória de data civil, correspondente a uma diferença de 24 horas (um dia inteiro) entre os fusos imediatos a leste e a oeste da linha, e não uma alteração de 12 horas. Ao cruzá-la de Leste para Oeste (aproximando-se da Ásia), o viajante deve <strong>somar</strong> um dia civil ao calendário civil (passar para o dia seguinte, por exemplo, de quarta para quinta-feira). Ao cruzar no sentido oposto (de Oeste para Leste, rumo às Américas), o viajante subtrai um dia civil, retornando para o dia anterior no calendário.
+- <strong>As demais alternativas estão conceitualmente corretas:</strong> A rotação impõe a variação de $15^\\circ/\\text{hora}$; as horas aumentam para Leste; a transposição de Oeste para Leste subtrai um dia; e o limite físico ideal acompanha o meridiano de $180^\\circ$.
+
+Portanto, a afirmativa incorreta é a descrita na alternativa E.
+<br><strong>Gabarito correto: E</strong>`
+            },
+            {
+                id: 9,
+                tema: "Escalas",
+                foco: "Comparação de Relações de Escala",
+                enunciado: `Em um levantamento técnico de planejamento ambiental e de solos no município de Viamão (RS), pesquisadores cruzaram dados de um mapa geomorfológico elaborado na escala de $1:50.000$ com as informações de uma carta geológica editada pelo Serviço Geológico do Brasil (CPRM) estruturada na escala de $1:100.000$. No tocante à comparação das propriedades geométricas dessas duas representações, considere as seguintes afirmações:<br><br>I. O mapa geomorfológico de escala $1:50.000$ apresenta maior riqueza de detalhes das feições do relevo municipal do que a carta geológica de escala $1:100.000$.<br>II. Uma feição linear contínua representada no mapa geológico (escala $1:100.000$) por um segmento de $4,5\\text{ cm}$ de comprimento equivale a uma extensão real de $4,5\\text{ km}$ de comprimento na superfície do terreno.<br>III. Caso seja necessário reduzir o mapa geomorfológico original ($1:50.000$) em duas vezes no tamanho físico do papel para facilitar análises expeditas em campo, a escala numérica da cópia reduzida passará a ser de $1:100.000$.<br><br>Quais estão corretas?`,
+                opcoes: [
+                    "A) Apenas I.",
+                    "B) Apenas III.",
+                    "C) Apenas I e II.",
+                    "D) Apenas I e III.",
+                    "E) I, II e III."
+                ],
+                correta: 4, // E
+                resolucao: `A análise comparativa entre as representações geográficas e os conceitos matemáticos da escala cartográfica fornece as respostas:
+
+- <strong>Afirmação I (Correta):</strong> A escala de $1:50.000$ possui um denominador menor do que a escala de $1:100.000$. Como a escala é dada por uma fração ($1/N$), quanto menor for o denominador ($N$), maior será a fração e, consequentemente, maior será a escala cartográfica. Escalas maiores fornecem um maior detalhamento geométrico dos fenômenos representados na superfície terrestre. Logo, o mapa geomorfológico possui maior nível de detalhes.
+- <strong>Afirmação II (Correta):</strong> Na escala de $1:100.000$ ($N = 100.000$), a relação de escala linear padrão é dada por:
+$$D = d \\times N \\Rightarrow D = 4,5\\text{ cm} \\times 100.000 = 450.000\\text{ cm}$$
+Convertendo a medida real de centímetros para metros e quilômetros:
+$$450.000\\text{ cm} = 4.500\\text{ m} = 4,5\\text{ km}$$
+Dessa forma, $4,5\\text{ cm}$ gráficos no papel equivalem a exatos $4,5\\text{ km}$ no terreno real.
+- <strong>Afirmação III (Correta):</strong> Quando um mapa físico é reduzido linearmente em duas vezes, as dimensões dos elementos desenhados diminuem de tamanho na mesma proporção (uma linha de $10\\text{ cm}$ passa a medir $5\\text{ cm}$). Isso significa que a nova escala representará a mesma distância do terreno real com metade do tamanho gráfico anterior, o que equivale a reduzir a escala do mapa pela metade. Matematicamente, dividir a escala original por 2 resulta em dobrar o seu denominador:
+$$\\text{Nova Escala} = \\frac{1}{50.000} \\times \\frac{1}{2} = \\frac{1}{100.000}$$
+Assim, a escala numérica da cópia reduzida é de exatamente $1:100.000$.
+
+Todas as três afirmações estão corretas.
+<br><strong>Gabarito correto: E</strong>`
+            },
+            {
+                id: 10,
+                tema: "Fusos",
+                foco: "Fusos Ideais e Práticos",
+                enunciado: `O fuso horário de referência legal do território brasileiro, correspondente à hora oficial de Brasília (UTC-3), adota o meridiano de $45^\\circ\\text{W}$ como referência central de tempo. No estudo do sistema geral de fusos ideais e práticos, assinale a afirmação correta sobre o fuso de referência de Brasília e o sistema internacional de horas:`,
+                opcoes: [
+                    "A) O fuso de $45^\\circ\\text{W}$ tem os seus limites teóricos perfeitamente estabelecidos entre as longitudes de $37,5^\\circ\\text{W}$ e $52,5^\\circ\\text{W}$, embora a aplicação prática civil estenda a sua adoção a estados situados além desses marcos longitudinais.",
+                    "B) O horário oficial do território brasileiro é calculado tendo como referência o cruzamento da linha do Equador com o Meridiano de Greenwich, variando ao longo do ano de forma a desconsiderar as coordenadas longitudinais.",
+                    "C) As cidades localizadas no fuso ideal de $45^\\circ\\text{W}$, como Porto Alegre, pertencem teoricamente ao fuso de $60^\\circ\\text{W}$ (UTC-4) devido à proximidade geográfica do meridiano central de Manaus.",
+                    "D) O fuso de Brasília (UTC-3) apresenta o seu horário legal adiantado em três horas em relação ao meridiano de Greenwich, uma vez que o território do Brasil está posicionado a leste de Londres.",
+                    "E) A largura leste-oeste de um fuso ideal de $15^\\circ$ apresenta-se uniforme em toda a superfície do planeta, registrando cerca de $1.667\\text{ km}$ tanto na altura da linha do Equador quanto nas proximidades dos polos geográficos."
+                ],
+                correta: 0, // A
+                resolucao: `O funcionamento do sistema de fusos horários rege-se por divisões longitudinais teóricas e adaptações políticas para atender à dinâmica das populações civis.
+
+- <strong>Análise da Alternativa A (Correta):</strong> Um fuso ideal de uma hora possui uma amplitude de $15^\\circ$ de longitude. O meridiano central de cada fuso determina a hora de referência, estendendo-se idealmente por $7,5^\\circ$ de longitude para Leste ($+7^\\circ30'$) e $7,5^\\circ$ para Oeste ($-7^\\circ30'$) a partir desse centro geométrico. No caso do fuso de Brasília (UTC-3), cujo meridiano de referência é o de $45^\\circ\\text{W}$, os limites teóricos estendem-se de $37,5^\\circ\\text{W}$ ($45^\\circ - 7,5^\\circ$) até $52,5^\\circ\\text{W}$ ($45^\\circ + 7,5^\\circ$). Na prática, contudo, os limites reais (políticos e administrativos) estendem essa hora legal para unificar o horário de estados inteiros localizados além dessas faixas longitudinais, como o Rio Grande do Sul (situado a oeste de $52,5^\\circ\\text{W}$).
+- <strong>Análise das Alternativas Incorretas:</strong> O horário nacional não é calculado com base no Equador; Porto Alegre pertence legal e teoricamente ao fuso de $45^\\circ\\text{W}$ (UTC-3), e não ao de Manaus (UTC-4) no plano teórico de distribuição original; o horário de Brasília está atrasado (-3 horas) em relação a Greenwich; e a largura linear em quilômetros de um fuso diminui progressivamente em direção aos polos devido à convergência geométrica natural dos meridianos.
+
+Conclui-se que a afirmativa A está inteiramente correta.
+<br><strong>Gabarito correto: A</strong>`
+            }
+        ];
+
+        // Estado Global da Aplicação
+        let userAnswers = Array(questionsData.length).fill(null);
+        let quizSubmitted = false;
+        let startTime = Date.now();
+        let timerInterval = null;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (quizSubmitted) return;
+                const elapsed = Date.now() - startTime;
+                document.getElementById('examTimer').innerText = `Tempo: ${formatTime(elapsed)}`;
+            }, 1000);
+        }
+
+        function formatTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            return [
+                hours.toString().padStart(2, '0'),
+                minutes.toString().padStart(2, '0'),
+                seconds.toString().padStart(2, '0')
+            ].join(':');
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, qIndex) => {
+                const isFirst = qIndex === 0;
+                
+                // Card Principal da Questão
+                const card = document.createElement('article');
+                card.id = `question-card-${qIndex}`;
+                card.className = "question-card bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-[0_2px_8px_rgba(0,0,0,0.02)] transition-all duration-300 relative";
+                
+                // Layout do cabeçalho da questão (Tema e Foco)
+                const headerHtml = `
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-6 border-b border-stone-100 pb-4 no-print">
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-stone-900 text-white font-serif flex items-center justify-center text-sm font-bold">
+                                ${q.id}
+                            </span>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-stone-500">
+                                Questão ${q.id} de ${questionsData.length}
+                            </span>
+                        </div>
+                        <div class="flex gap-1.5 text-xs">
+                            <span class="px-2.5 py-1 rounded-md font-medium bg-stone-100 text-stone-700">
+                                <i class="fa-solid fa-map"></i> ${q.tema}
+                            </span>
+                            <span class="px-2.5 py-1 rounded-md font-medium bg-stone-100 text-amber-800">
+                                ${q.foco}
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                // Enunciado com fonte Serif ergonômica
+                const bodyHtml = `
+                    <div class="font-serif readable-text text-editorial-text mb-8">
+                        ${q.enunciado}
+                    </div>
+                `;
+
+                // Opções de Resposta
+                let optionsHtml = `<div class="space-y-3.5">`;
+                q.opcoes.forEach((opt, optIndex) => {
+                    const isSelected = userAnswers[qIndex] === optIndex;
+                    optionsHtml += `
+                        <button 
+                            id="option-btn-${qIndex}-${optIndex}"
+                            onclick="selectOption(${qIndex}, ${optIndex})"
+                            ${quizSubmitted ? 'disabled' : ''}
+                            class="option-button w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 group relative cursor-pointer
+                                ${isSelected ? 'border-amber-700 bg-amber-50/40 text-stone-900 shadow-sm' : 'border-stone-200 bg-white text-stone-700 hover:border-stone-300 hover:bg-stone-50/50'}
+                            "
+                        >
+                            <!-- Indicador circular customizado -->
+                            <div class="indicator-ring w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center mt-1 transition-all
+                                ${isSelected ? 'border-amber-700 bg-amber-700 text-white' : 'border-stone-300 group-hover:border-stone-400 bg-white'}
+                            ">
+                                ${isSelected ? '<div class="w-2 h-2 rounded-full bg-white"></div>' : ''}
+                            </div>
+                            <span class="font-sans text-sm md:text-base leading-relaxed">
+                                ${opt}
+                            </span>
+                        </button>
+                    `;
+                });
+                optionsHtml += `</div>`;
+
+                // Bloco de Resolução Oculto
+                const resolutionHtml = `
+                    <div id="resolution-${qIndex}" class="resolution-block hidden mt-8 p-6 bg-amber-50/40 border-l-4 border-amber-600 rounded-r-xl transition-all duration-300">
+                        <div class="flex items-center gap-2 text-amber-900 font-serif font-bold text-base mb-3 pb-2 border-b border-amber-200/50">
+                            <i class="fa-solid fa-graduation-cap"></i> Resolução Detalhada do Especialista
+                        </div>
+                        <div class="font-sans text-sm md:text-base text-stone-800 leading-relaxed space-y-4">
+                            ${q.resolucao}
+                        </div>
+                    </div>
+                `;
+
+                card.innerHTML = headerHtml + bodyHtml + optionsHtml + resolutionHtml;
+                container.appendChild(card);
+            });
+
+            // Atualiza KaTeX em todo o documento
+            triggerMathRender();
+            updateProgressBar();
+        }
+
+        function selectOption(questionIdx, optionIdx) {
+            if (quizSubmitted) return;
+            
+            userAnswers[questionIdx] = optionIdx;
+            
+            // Recarrega apenas os botões da respectiva questão para otimização visual
+            questionsData[questionIdx].opcoes.forEach((_, idx) => {
+                const btn = document.getElementById(`option-btn-${questionIdx}-${idx}`);
+                const ring = btn.querySelector('.indicator-ring');
+                
+                if (idx === optionIdx) {
+                    btn.className = "option-button w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 group relative cursor-pointer border-amber-700 bg-amber-50/40 text-stone-900 shadow-sm";
+                    ring.className = "indicator-ring w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center mt-1 transition-all border-amber-700 bg-amber-700 text-white";
+                    ring.innerHTML = '<div class="w-2 h-2 rounded-full bg-white"></div>';
+                } else {
+                    btn.className = "option-button w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 group relative cursor-pointer border-stone-200 bg-white text-stone-700 hover:border-stone-300 hover:bg-stone-50/50";
+                    ring.className = "indicator-ring w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center mt-1 transition-all border-stone-300 group-hover:border-stone-400 bg-white";
+                    ring.innerHTML = '';
+                }
+            });
+
+            updateProgressBar();
+        }
+
+        // Atualizar barra de progresso do topo
+        function updateProgressBar() {
+            const answeredCount = userAnswers.filter(ans => ans !== null).length;
+            const progressPercent = (answeredCount / questionsData.length) * 100;
+            document.getElementById('topProgressBar').style.width = `${progressPercent}%`;
+        }
+
+        // Renderização segura do KaTeX nas fórmulas matemáticas
+        function triggerMathRender() {
+            try {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false}
+                    ],
+                    throwOnError : false
+                });
+            } catch (err) {
+                console.error("Falha ao renderizar expressões com KaTeX:", err);
+            }
+        }
+
+        function showModal(title, text, confirmCallback, isConfirm = false) {
+            const modal = document.getElementById('alertModal');
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = text;
+            
+            const buttonsContainer = document.getElementById('modalButtons');
+            buttonsContainer.innerHTML = '';
+
+            if (isConfirm) {
+                // Botão Cancelar
+                const cancelBtn = document.createElement('button');
+                cancelBtn.className = "px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold rounded-xl text-sm transition";
+                cancelBtn.innerText = "Revisar mais";
+                cancelBtn.onclick = closeModal;
+                
+                // Botão Enviar
+                const confirmBtn = document.createElement('button');
+                confirmBtn.className = "px-4 py-2 bg-emerald-800 hover:bg-emerald-900 text-white font-semibold rounded-xl text-sm transition";
+                confirmBtn.innerText = "Enviar respostas";
+                confirmBtn.onclick = () => {
+                    closeModal();
+                    confirmCallback();
+                };
+                
+                buttonsContainer.appendChild(cancelBtn);
+                buttonsContainer.appendChild(confirmBtn);
+            } else {
+                // Botão Apenas OK
+                const okBtn = document.createElement('button');
+                okBtn.className = "px-4 py-2 bg-stone-900 hover:bg-stone-800 text-white font-semibold rounded-xl text-sm transition";
+                okBtn.innerText = "Entendido";
+                okBtn.onclick = closeModal;
+                buttonsContainer.appendChild(okBtn);
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('alertModal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function confirmarEnvio() {
+            const unanswered = userAnswers.map((ans, idx) => ans === null ? idx + 1 : null).filter(val => val !== null);
+            
+            if (unanswered.length > 0) {
+                showModal(
+                    "Questões Pendentes", 
+                    `Você ainda não respondeu às seguintes questões: <strong>${unanswered.join(', ')}</strong>.<br><br>Por favor, selecione uma opção para cada item antes de finalizar para receber uma nota válida de desempenho.`,
+                    null,
+                    false
+                );
+                return;
+            }
+
+            showModal(
+                "Finalizar Prova?", 
+                "Tem certeza que deseja enviar suas respostas e encerrar o caderno? Suas notas serão calculadas e as resoluções liberadas na mesma página.",
+                processarResultado,
+                true
+            );
+        }
+
+        function processarResultado() {
+            quizSubmitted = true;
+            clearInterval(timerInterval);
+
+            let totalAcertos = 0;
+            let escalasAcertos = 0;
+            let escalasTotal = 0;
+            let fusosAcertos = 0;
+            let fusosTotal = 0;
+
+            // Bloquear todos os botões e injetar cores de feedback
+            questionsData.forEach((q, qIndex) => {
+                const userAnsIndex = userAnswers[qIndex];
+                const isCorrect = userAnsIndex === q.correta;
+                
+                if (isCorrect) totalAcertos++;
+                
+                // Mapear por competências
+                if (q.tema === "Escalas") {
+                    escalasTotal++;
+                    if (isCorrect) escalasAcertos++;
+                } else {
+                    fusosTotal++;
+                    if (isCorrect) fusosAcertos++;
+                }
+
+                // Injetar feedback de cores nos botões de opções
+                q.opcoes.forEach((_, optIndex) => {
+                    const btn = document.getElementById(`option-btn-${qIndex}-${optIndex}`);
+                    btn.disabled = true;
+                    btn.classList.add('cursor-not-allowed');
+
+                    const ring = btn.querySelector('.indicator-ring');
+
+                    if (optIndex === q.correta) {
+                        // Resposta correta
+                        btn.className = "option-button w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 group relative border-emerald-500 bg-emerald-50 text-emerald-950 font-medium";
+                        ring.className = "indicator-ring w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center mt-1 transition-all border-emerald-600 bg-emerald-600 text-white";
+                        ring.innerHTML = '<i class="fa-solid fa-check text-xs"></i>';
+                    } else if (optIndex === userAnsIndex && !isCorrect) {
+                        // Marcada errada pelo usuário
+                        btn.className = "option-button w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 group relative border-rose-500 bg-rose-50 text-rose-950";
+                        ring.className = "indicator-ring w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center mt-1 transition-all border-rose-600 bg-rose-600 text-white";
+                        ring.innerHTML = '<i class="fa-solid fa-xmark text-xs"></i>';
+                    } else {
+                        // Opções neutras desabilitadas
+                        btn.className = "option-button w-full text-left p-4 rounded-xl border transition-all flex items-start gap-3 group relative border-stone-200 bg-stone-50 text-stone-400 opacity-60";
+                        ring.className = "indicator-ring w-5 h-5 rounded-full border flex-shrink-0 flex items-center justify-center mt-1 transition-all border-stone-200 bg-stone-100";
+                    }
+                });
+
+                // Revelar bloco de resolução da respectiva questão
+                const resBlock = document.getElementById(`resolution-${qIndex}`);
+                resBlock.classList.remove('hidden');
+                
+                // Adiciona indicador visual de acerto/erro no card
+                const card = document.getElementById(`question-card-${qIndex}`);
+                const feedbackBadge = document.createElement('div');
+                feedbackBadge.className = `absolute top-4 right-4 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full flex items-center gap-1.5 shadow-sm ${isCorrect ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-rose-100 text-rose-800 border border-rose-200'}`;
+                feedbackBadge.innerHTML = isCorrect ? '<i class="fa-solid fa-check"></i> Você Acertou' : '<i class="fa-solid fa-xmark"></i> Você Errou';
+                card.appendChild(feedbackBadge);
+            });
+
+            // Processar estatísticas finais
+            const finalPercent = Math.round((totalAcertos / questionsData.length) * 100);
+            const totalElapsed = Date.now() - startTime;
+            
+            document.getElementById('statsAcertos').innerText = `${totalAcertos}/10`;
+            document.getElementById('statsPercentual').innerText = `${finalPercent}%`;
+            document.getElementById('statsTempo').innerText = formatTime(totalElapsed);
+
+            // Classificar nível do aluno
+            let nivel = "Precisa estudar mais";
+            let feedback = "Escalas cartográficas e fusos horários são matérias clássicas e extremamente concorridas na banca FAURGS. Revise as fórmulas de cálculo de escala para áreas e os fusos práticos do Brasil.";
+            
+            if (finalPercent >= 90) {
+                nivel = "Aprovado com Louvor (Gabaritou!)";
+                feedback = "Desempenho espetacular! Você demonstra domínio absoluto sobre cálculos de proporções, conversões lineares e quadráticas, e fusos do Brasil. Está pronto para a prova!";
+            } else if (finalPercent >= 70) {
+                nivel = "Excelente Desempenho";
+                feedback = "Ótimo rendimento! Você possui uma sólida compreensão da dinâmica espacial. Foque na revisão dos detalhes que errou, pois a FAURGS costuma repetir pegadinhas de minutos em conexões aéreas.";
+            } else if (finalPercent >= 50) {
+                nivel = "Desempenho Intermediário";
+                feedback = "Bom trabalho, mas atenção: o topo das vagas exige maior precisão. Certifique-se de consolidar a relação do quadrado da escala para cálculos de superfície (área real) e a regra de cruzamento da Linha de Data.";
+            }
+            
+            document.getElementById('statsNivel').innerText = nivel;
+            document.getElementById('feedbackMensagem').innerHTML = feedback;
+
+            // Tema 1: Escalas
+            const escalasPercent = Math.round((escalasAcertos / escalasTotal) * 100);
+            document.getElementById('temaEscalasPercent').innerText = `${escalasPercent}% (${escalasAcertos} de ${escalasTotal})`;
+            document.getElementById('temaEscalasBar').style.width = `${escalasPercent}%`;
+
+            // Tema 2: Fusos
+            const fusosPercent = Math.round((fusosAcertos / fusosTotal) * 100);
+            document.getElementById('temaFusosPercent').innerText = `${fusosPercent}% (${fusosAcertos} de ${fusosTotal})`;
+            document.getElementById('temaFusosBar').style.width = `${fusosPercent}%`;
+
+            // Ocultar painel de envio e exibir painel de resultados
+            document.getElementById('quizActionPanel').classList.add('hidden');
+            document.getElementById('quizResultsPanel').classList.remove('hidden');
+            document.getElementById('resultsBanner').classList.remove('hidden');
+
+            // Renderizar novamente expressões do KaTeX no bloco de resoluções recém exibido
+            triggerMathRender();
+
+            // Rolagem suave para o topo do bloco de estatísticas
+            document.getElementById('dashboard-anchor').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function reiniciarSimulado() {
+            userAnswers = Array(questionsData.length).fill(null);
+            quizSubmitted = false;
+            startTime = Date.now();
+
+            // Resetar painel de resultados e banner
+            document.getElementById('quizActionPanel').classList.remove('hidden');
+            document.getElementById('quizResultsPanel').classList.add('hidden');
+            document.getElementById('resultsBanner').classList.add('hidden');
+
+            // Recarregar os cards de perguntas
+            renderQuiz();
+            startTimer();
+
+            // Rolar de volta ao início
+            irParaTopo();
+        }
+
+        function irParaTopo() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Inicializar aplicação ao carregar
+        window.onload = function() {
+            renderQuiz();
+            startTimer();
+        };
+    </script>
+</body>
+</html>

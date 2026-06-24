@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Geografia - Estilo FAURGS</title>
+    
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <!-- KaTeX CDN para renderização de fórmulas matemáticas e geodésicas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
+    <style>
+        body {
+            background-color: #f8fafc; /* Slate 50 - Tom suave para descanso visual */
+            color: #1e293b; /* Slate 800 - Alto contraste, porém menos agressivo que o preto puro */
+        }
+        .prose-custom p {
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+        /* Transições suaves para interatividade */
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom scrollbar para estética refinada */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 tracking-tight leading-tight">Simulado FAURGS</h1>
+                    <p class="text-xs text-slate-500 font-medium">Coordenadas Geográficas e Projeções Cartográficas</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden sm:flex items-center space-x-2 bg-slate-100 px-3.5 py-1.5 rounded-full text-slate-600 text-sm font-semibold">
+                    <svg class="w-4 h-4 text-slate-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span id="timer">00:00:00</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Coluna Esquerda: Navegação / Progresso (Fixa em telas grandes) -->
+        <aside class="w-full lg:w-80 shrink-0 order-last lg:order-first">
+            <div class="sticky top-24 space-y-6">
+                <!-- Card de Progresso Geral -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs">
+                    <h3 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Progresso do Simulado</h3>
+                    
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs font-semibold text-slate-500 mb-2">
+                            <span>Questões Respondidas</span>
+                            <span id="progress-text">0 de 10</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2.5">
+                            <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Seleção de Questões -->
+                    <div class="grid grid-cols-5 gap-2.5 mb-6">
+                        <!-- Questões de 1 a 10 geradas dinamicamente via JS -->
+                        <button onclick="scrollToQuestion(0)" id="nav-btn-0" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">01</button>
+                        <button onclick="scrollToQuestion(1)" id="nav-btn-1" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">02</button>
+                        <button onclick="scrollToQuestion(2)" id="nav-btn-2" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">03</button>
+                        <button onclick="scrollToQuestion(3)" id="nav-btn-3" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">04</button>
+                        <button onclick="scrollToQuestion(4)" id="nav-btn-4" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">05</button>
+                        <button onclick="scrollToQuestion(5)" id="nav-btn-5" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">06</button>
+                        <button onclick="scrollToQuestion(6)" id="nav-btn-6" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">07</button>
+                        <button onclick="scrollToQuestion(7)" id="nav-btn-7" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">08</button>
+                        <button onclick="scrollToQuestion(8)" id="nav-btn-8" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">09</button>
+                        <button onclick="scrollToQuestion(9)" id="nav-btn-9" class="w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center">10</button>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex flex-col space-y-2">
+                        <div class="flex items-center space-x-2 text-xs text-slate-500">
+                            <span class="w-3.5 h-3.5 rounded-md bg-indigo-50 border border-indigo-200 block"></span>
+                            <span>Questão Respondida</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs text-slate-500">
+                            <span class="w-3.5 h-3.5 rounded-md bg-emerald-100 block"></span>
+                            <span>Gabarito Correto</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs text-slate-500">
+                            <span class="w-3.5 h-3.5 rounded-md bg-rose-100 block"></span>
+                            <span>Sua Resposta Errada</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Informativo sobre Estilo de Prova -->
+                <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 shadow-xs">
+                    <h4 class="text-sm font-bold text-indigo-900 mb-2">Instruções FAURGS</h4>
+                    <p class="text-xs text-indigo-700 leading-relaxed mb-3">
+                        As provas da FAURGS destacam-se pelo rigor científico, detalhamento geodésico e proposições baseadas em itens de análise (I, II e III). Leia atentamente cada afirmação matemática.
+                    </p>
+                    <div class="text-xs text-indigo-600 font-semibold flex items-center">
+                        <span>Recomendável: 3-4 min por questão</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Coluna Direita: Questões e Formulário -->
+        <section class="flex-grow space-y-8 order-first lg:order-last">
+            
+            <!-- Painel de Resultados do Simulador (Invisível no início) -->
+            <div id="results-panel" class="hidden transform transition-all duration-500 scale-95 opacity-0 bg-white border-2 border-indigo-600 rounded-3xl p-6 sm:p-8 shadow-md">
+                <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+                    <div class="space-y-3 text-center md:text-left">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Simulado Concluído</span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Resultado Oficial</h2>
+                        <p class="text-slate-500 text-sm max-w-md">Sua avaliação foi processada conforme os critérios de correção oficiais da banca. Confira o seu desempenho e revise os conceitos geodésicos nas explicações detalhadas abaixo.</p>
+                    </div>
+                    
+                    <div class="flex items-center space-x-6 shrink-0 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <div class="text-center">
+                            <div class="text-4xl font-black text-indigo-600" id="score-text">0/10</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Acertos</div>
+                        </div>
+                        <div class="h-10 w-px bg-slate-200"></div>
+                        <div class="text-center">
+                            <div class="text-4xl font-black text-slate-800" id="percent-text">0%</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Aproveitamento</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-3">
+                    <button onclick="restartQuiz()" class="px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm transition-all text-center flex-1 sm:flex-initial">
+                        Refazer Simulado
+                    </button>
+                    <a href="#question-0" class="px-5 py-3 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 bg-white font-semibold text-sm transition-all text-center flex-1 sm:flex-initial">
+                        Verificar Resoluções Abaixo
+                    </a>
+                </div>
+            </div>
+
+            <!-- Form Container das Questões -->
+            <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-8">
+                <div id="questions-container" class="space-y-8">
+                    <!-- Gerado dinamicamente via JS para evitar redundâncias no código-fonte e garantir ótima performance -->
+                </div>
+
+                <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-slate-500 text-sm">
+                        Certifique-se de marcar todas as alternativas antes de enviar para correção.
+                    </div>
+                    <button type="submit" id="submit-btn" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 text-white hover:bg-indigo-600 active:scale-95 font-bold text-sm tracking-wide shadow-sm hover:shadow-md transition-all cursor-pointer">
+                        Enviar Respostas e Ver Gabarito
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-slate-200 mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-sm text-slate-400 font-medium">
+                © 2026 Simulado Interativo de Cartografia. Todos os direitos reservados.
+            </div>
+            <div class="text-sm text-slate-400 font-medium flex items-center space-x-2">
+                <span>Criado conforme rigor matemático e geodésico da FAURGS</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Banco de Questões do Simulado
+        const quizData = [
+            {
+                id: 0,
+                num: "01",
+                title: "Questão 01",
+                statement: `No que diz respeito à modelação geométrica da Terra, ao estabelecimento do sistema de coordenadas geográficas e à cinemática da rotação terrestre, analise as seguintes afirmações:<br><br>
+                <div class="space-y-2.5">
+                    <p><strong>I.</strong> A velocidade linear de rotação da superfície terrestre varia de forma inversamente proporcional à latitude, atingindo o seu valor máximo absoluto de aproximadamente $27\\text{ km/min}$ (ou $465\\text{ m/s}$) ao longo do paralelo de $0^\\circ$ (Equador).</p>
+                    <p><strong>II.</strong> No paralelo de $60^\\circ$ (Norte ou Sul), a velocidade linear do movimento de rotação equivale a exactamente metade da velocidade registada na linha do Equador, uma vez que o raio de rotação nesse paralelo é reduzido em função do cosseno da latitude.</p>
+                    <p><strong>III.</strong> Os paralelos geográficos são círculos perpendiculares ao eixo de rotação da Terra cujos planos são paralelos ao Equador geodésico, constituindo todos eles, à excepção do próprio Equador, círculos menores da esfera terrestre.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 3, // D (Apenas II e III)
+                resolution: `<strong>Item I: Incorreto.</strong> Embora o valor numérico de $27\\text{ km/min}$ (ou $465\\text{ m/s}$) esteja correto para a linha do Equador, a relação matemática entre a latitude ($\\phi$) e a velocidade linear de rotação ($v$) não é inversamente proporcional, mas sim diretamente proporcional ao cosseno da latitude. A expressão cinemática que rege este movimento é:
+                $$v(\\phi) = v_{\\text{eq}} \\cdot \\cos(\\phi)$$
+                onde $v_{\\text{eq}}$ é a velocidade linear no Equador ($465\\text{ m/s}$ ou $1670\\text{ km/h}$).<br><br>
+                <strong>Item II: Correto.</strong> Substituindo o valor de $\\phi = 60^\\circ$ na equação cinemática, tem-se que:
+                $$v(60^\\circ) = v_{\\text{eq}} \\cdot \\cos(60^\\circ)$$
+                Como o cosseno de $60^\\circ$ é igual a exatamente $0,5$, a velocidade linear no paralelo de $60^\\circ$ é exatamente metade da velocidade equatorial:
+                $$v(60^\\circ) = v_{\\text{eq}} \\cdot 0,5$$<br>
+                <strong>Item III: Correto.</strong> Por definição geodésica, os paralelos são formados pelo cruzamento de planos paralelos ao Equador geodésico com a superfície do elipsoide ou esfera de referência. Uma vez que estes planos são perpendiculares ao eixo de rotação e não passam pelo centro do planeta (com exceção do paralelo de $0^\\circ$), todos os demais paralelos geográficos constituem círculos menores.`
+            },
+            {
+                id: 1,
+                num: "02",
+                title: "Questão 02",
+                statement: `A transposição de uma realidade tridimensional esférica para um plano bidimensional impõe inevitáveis deformações geométricas, exigindo que o cartógrafo escolha a projeção que melhor se adeque aos objetivos do mapa. Associe adequadamente as projeções cartográficas listadas na coluna da esquerda às respectivas propriedades e características apresentadas na coluna da direita:<br><br>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <span class="font-bold text-indigo-900 block mb-1">Projeções:</span>
+                        <p>1. Projeção de Mercator</p>
+                        <p>2. Projeção de Peters</p>
+                    </div>
+                    <div>
+                        <span class="font-bold text-indigo-900 block mb-1">Características:</span>
+                        <p>( ) Mantém a conformidade das formas e dos ângulos locais, deformando drasticamente a escala das áreas em altas latitudes.</p>
+                        <p>( ) É do tipo equivalente, preservando a proporcionalidade das áreas mas distorcendo as formas e os ângulos.</p>
+                        <p>( ) Apresenta uma distribuição de paralelos com intervalos que decrescem a partir do Equador em direção aos polos.</p>
+                        <p>( ) Foi concebida no século XVI no contexto do mercantilismo e das Grandes Navegações, servindo de base para o traçado de rotas loxodrômicas.</p>
+                    </div>
+                </div><br>
+                A sequência correta de preenchimento dos parênteses, de cima para baixo, é:`,
+                options: [
+                    "1 – 2 – 2 – 1.",
+                    "1 – 1 – 2 – 2.",
+                    "2 – 1 – 1 – 2.",
+                    "2 – 2 – 1 – 1.",
+                    "1 – 2 – 1 – 2."
+                ],
+                correct: 0, // A (1 – 2 – 2 – 1)
+                resolution: `A correspondência sistemática entre as projeções e suas propriedades geométricas e históricas dá-se da seguinte forma:<br><br>
+                <ul>
+                    <li><strong>Associação 1: Projeção de Mercator (1).</strong> Sendo uma projeção cilíndrica conforme de base matemática, o mapa mantém a conformidade dos ângulos em torno de qualquer ponto, preservando a forma das pequenas áreas de forma perfeita. Em contrapartida, deforma severamente as proporções de área à medida que a latitude aumenta em direção aos polos (onde a distorção tende ao infinito).</li>
+                    <li class="mt-2"><strong>Associação 2: Projeção de Peters (2).</strong> Trata-se de uma projeção equivalente desenvolvida para manter rigorosamente a proporcionalidade de escala de área entre as massas continentais. No entanto, para alcançar essa propriedade num cilindro, as formas e os ângulos são amplamente distorcidos.</li>
+                    <li class="mt-2"><strong>Associação 3: Projeção de Peters (2).</strong> Na projeção de Peters, os intervalos entre os paralelos decrescem progressivamente do Equador em direção aos polos, compensando geometricamente o alongamento leste-oeste gerado pelos meridianos paralelos.</li>
+                    <li class="mt-2"><strong>Associação 4: Projeção de Mercator (1).</strong> Apresentada em 1569 por Gerhard Mercator, este modelo revolucionou a navegação marítima. Por ser conforme, as linhas loxodrômicas (linhas que cruzam todos os meridianos sob um mesmo ângulo constante) são representadas por retas no mapa, facilitando o cálculo de azimutes de navegação pelas frotas mercantilistas europeias.</li>
+                </ul>`
+            },
+            {
+                id: 2,
+                num: "03",
+                title: "Questão 03",
+                statement: `Considere a tabela abaixo, que apresenta as coordenadas geográficas de cinco cidades localizadas em diferentes quadrantes do globo terrestre:<br><br>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-slate-200 text-sm text-slate-800">
+                        <thead class="bg-slate-100">
+                            <tr>
+                                <th class="border border-slate-200 px-4 py-2 text-left">Cidade</th>
+                                <th class="border border-slate-200 px-4 py-2 text-left">Latitude</th>
+                                <th class="border border-slate-200 px-4 py-2 text-left">Longitude</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-slate-200 px-4 py-2 font-semibold">Cidade 1</td>
+                                <td class="border border-slate-200 px-4 py-2">$34^\\circ\\text{ N}$</td>
+                                <td class="border border-slate-200 px-4 py-2">$118^\\circ\\text{ O}$</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-200 px-4 py-2 font-semibold">Cidade 2</td>
+                                <td class="border border-slate-200 px-4 py-2">$23^\\circ27'\\text{ S}$</td>
+                                <td class="border border-slate-200 px-4 py-2">$45^\\circ\\text{ L}$</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-200 px-4 py-2 font-semibold">Cidade 3</td>
+                                <td class="border border-slate-200 px-4 py-2">$34^\\circ\\text{ S}$</td>
+                                <td class="border border-slate-200 px-4 py-2">$118^\\circ\\text{ L}$</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-200 px-4 py-2 font-semibold">Cidade 4</td>
+                                <td class="border border-slate-200 px-4 py-2">$0^\\circ$</td>
+                                <td class="border border-slate-200 px-4 py-2">$120^\\circ\\text{ L}$</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-200 px-4 py-2 font-semibold">Cidade 5</td>
+                                <td class="border border-slate-200 px-4 py-2">$45^\\circ\\text{ N}$</td>
+                                <td class="border border-slate-200 px-4 py-2">$60^\\circ\\text{ O}$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div><br>
+                Com base nos dados fornecidos e nos conceitos de localização e orientação geográfica, assinale a alternativa correta:`,
+                options: [
+                    "A Cidade 1 localiza-se na porção oriental do continente americano, situando-se integralmente na zona temperada do norte.",
+                    "A Cidade 2 está localizada exatamente sobre o Trópico de Capricórnio, inserindo-se na zona tropical do hemisfério meridional.",
+                    "O ponto antípoda exato da Cidade 5 situa-se nas coordenadas geográficas de $45^\\circ\\text{ N}$ de latitude e $120^\\circ\\text{ L}$ de longitude.",
+                    "A Cidade 4 localiza-se no hemisfério ocidental e faz parte do território continental sul-americano.",
+                    "O ponto antípoda da Cidade 3 localiza-se nas coordenadas $34^\\circ\\text{ S}$ de latitude e $62^\\circ\\text{ O}$ de longitude."
+                ],
+                correct: 1, // B
+                resolution: `A determinação de coordenadas e pontos antípodas assenta nas seguintes premissas matemáticas:<br><br>
+                1. A latitude de um ponto antípoda possui o mesmo valor angular, porém com sinal oposto (inversão de hemisfério Norte para Sul, ou vice-versa):
+                $$\\phi_{\\text{antípoda}} = -\\phi$$
+                2. A longitude do antípoda é obtida calculando a diferença suplementar em relação a $180^\\circ$ e invertendo o hemisfério longitudinal (de Leste para Oeste, ou de Oeste para Leste):
+                $$\\lambda_{\\text{antípoda}} = 180^\\circ - |\\lambda|$$<br>
+                <strong>Análise das alternativas:</strong><br>
+                <ul>
+                    <li><strong>(A) Incorreta.</strong> A Cidade 1 localiza-se a $118^\\circ\\text{ O}$, correspondendo à porção ocidental do continente americano (região da Califórnia, EUA), e não à oriental.</li>
+                    <li class="mt-2"><strong>(B) Correta.</strong> A latitude $23^\\circ27'\\text{ S}$ corresponde exatamente à definição astronômica do Trópico de Capricórnio, situando a Cidade 2 na zona tropical do hemisfério meridional.</li>
+                    <li class="mt-2"><strong>(C) Incorreta.</strong> A latitude do antípoda da Cidade 5 ($45^\\circ\\text{ N}$) deve ser $45^\\circ\\text{ S}$, e a longitude deve ser $180^\\circ - 60^\\circ = 120^\\circ\\text{ L}$.</li>
+                    <li class="mt-2"><strong>(D) Incorreta.</strong> A longitude $120^\\circ\\text{ L}$ situa-se no hemisfério oriental, compreendendo a Ásia Insular (região da Indonésia/Filipinas), e não a América do Sul.</li>
+                    <li class="mt-2"><strong>(E) Incorreta.</strong> O antípoda da Cidade 3 ($34^\\circ\\text{ S} ; 118^\\circ\\text{ L}$) deve localizar-se a $34^\\circ\\text{ N}$ de latitude e $180^\\circ - 118^\\circ = 62^\\circ\\text{ O}$ de longitude.</li>
+                </ul>`
+            },
+            {
+                id: 3,
+                num: "04",
+                title: "Questão 04",
+                statement: `A análise das projeções cilíndricas revela que as escolhas matemáticas dos cartógrafos também carregam implicações políticas e ideológicas. Sobre as projeções de Mercator e Peters, analise as seguintes afirmações:<br><br>
+                <div class="space-y-2.5">
+                    <p><strong>I.</strong> Na eurocêntrica projeção de Mercator, os paralelos e os meridianos são representados por linhas retas que se cortam em ângulos retos, o que permitiu traçar rotas de navegação em linha reta que auxiliaram os grandes descobridores nas navegações transoceânicas.</p>
+                    <p><strong>II.</strong> A projeção de Peters deforma de maneira acentuada as formas dos territórios na zona intertropical por meio de um alongamento vertical no sentido norte-sul e achatamento leste-oeste, embora mantenha a fidelidade da proporção de suas áreas.</p>
+                    <p><strong>III.</strong> Ambas as projeções são do tipo cilíndrico, o que significa que representam a rede de coordenadas geográficas por meio de uma malha de retas perpendiculares entre si, apresentando menores distorções de escala linear nas altas latitudes.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 2, // C (Apenas I e II)
+                resolution: `<strong>Item I: Correto.</strong> Mercator concebeu um modelo geométrico onde paralelos e meridianos formam uma quadrícula ortogonal. Devido à propriedade de conformidade, qualquer linha reta traçada no mapa representa uma linha de rumo constante (loxodromia). Isto permitia que os navegadores do período ultramarino traçassem rotas seguras mantendo o mesmo rumo magnético na agulha da bússola.<br><br>
+                <strong>Item II: Correto.</strong> Para atingir a equivalência (preservação das proporções de área), a projeção de Peters deforma os comprimentos e os ângulos. Na zona intertropical, esta distorção causa um alongamento no sentido norte-sul e um estreitamento no sentido leste-oeste, dando aos continentes uma aparência alongada ou "estendida".<br><br>
+                <strong>Item III: Incorreto.</strong> Ambas as projeções são, de fato, do tipo cilíndrico equatorial normal, o que gera uma rede ortogonal de retas perpendiculares. Contudo, a escala linear nestas projeções apresenta distorções mínimas nas baixas latitudes (próximas ao Equador), onde a superfície cilíndrica tangencia ou intercepta o elipsoide, e não nas altas latitudes.`
+            },
+            {
+                id: 4,
+                num: "05",
+                title: "Questão 05",
+                statement: `No que diz respeito à classificação das projeções cartográficas quanto à superfície de projeção (cilíndricas, cônicas e azimutais) e às propriedades geométricas (conformes, equivalentes, equidistantes e afiláticas), assinale a alternativa correta:`,
+                options: [
+                    "A projeção cônica é projetada sobre um cone tangente ou secante ao globo, sendo caracterizada por apresentar paralelos formados por arcos concêntricos e meridianos que convergem para os polos, sendo ideal para representar regiões de latitudes intermédias.",
+                    "As projeções azimutais utilizam um plano tangente à esfera terrestre, gerando deformações de área que são nulas na periferia do mapa e máximas no ponto de tangência.",
+                    "Uma projeção conforme (como a de Mercator) e uma projeção equivalente (como a de Peters) preservam de forma simultânea a proporcionalidade das áreas e a fidelidade das formas continentais.",
+                    "A projeção de Robinson é uma representação conforme e cilíndrica pura, na qual os paralelos são retos e os meridianos convergem em arcos parabólicos para os polos, sendo a mais recomendada para rotas aéreas polares.",
+                    "A projeção equidistante é caracterizada por manter a proporcionalidade das áreas e a conservação dos ângulos em todas as direções a partir de qualquer ponto do mapa."
+                ],
+                correct: 0, // A
+                resolution: `<strong>Alternativa (A): Correta.</strong> A projeção cônica é baseada na projeção dos meridianos e paralelos terrestres sobre a superfície de um cone desenvolvido em plano. Os meridianos são representados como linhas retas que convergem radialmente para o vértice do cone, e os paralelos formam arcos circulares concêntricos. Como as deformações são mínimas nas proximidades do paralelo padrão (de tangência ou secância), é a projeção mais indicada para o mapeamento de áreas em latitudes médias.<br><br>
+                <strong>Análise das incorretas:</strong><br>
+                <ul>
+                    <li><strong>(B) Incorreta.</strong> Nas projeções azimutais, a escala e a área apresentam deformação nula exatamente no ponto central de tangência do plano de projeção com o globo terrestre. As deformações aumentam de forma radial à medida que se afasta desse ponto em direção à periferia do mapa.</li>
+                    <li class="mt-2"><strong>(C) Incorreta.</strong> É matematicamente impossível eliminar simultaneamente todas as distorções em uma representação plana. Portanto, uma projeção não pode ser conforme (preservar as formas) e equivalente (preservar as áreas) ao mesmo tempo.</li>
+                    <li class="mt-2"><strong>(D) Incorreta.</strong> A projeção de Robinson é afilática (não preserva totalmente nenhuma das propriedades, mas amortece as deformações conjuntas) e pseudocilíndrica (os meridianos são arcos curvos concêntricos e os paralelos são retos), não sendo uma projeção cilíndrica pura ou conforme.</li>
+                    <li class="mt-2"><strong>(E) Incorreta.</strong> A projeção equidistante é caracterizada por preservar a escala de distância real linear em direções predeterminadas a partir de um ponto central específico, mas deforma as formas e as áreas globais.</li>
+                </ul>`
+            },
+            {
+                id: 5,
+                num: "06",
+                title: "Questão 06",
+                statement: `Um avião de grande porte decola de Los Angeles (EUA), nas coordenadas geográficas de $34^\\circ\\text{ N}$ de latitude e $118^\\circ\\text{ O}$ de longitude, rumo a Tóquio (Japão), localizada a $35^\\circ\\text{ N}$ de latitude e $139^\\circ\\text{ L}$ de longitude. Sabendo que a rota de menor distância segue a linha ortodrômica sobre o Oceano Pacífico Norte, o piloto necessita efetuar uma escala técnica para reabastecimento de emergência a meio caminho do destino.<br><br>
+                Assinale a alternativa que indica as coordenadas geográficas aproximadas de um local viável para essa escala técnica:`,
+                options: [
+                    "$20^\\circ\\text{ N} ; 155^\\circ\\text{ O}$",
+                    "$28^\\circ\\text{ N} ; 16^\\circ\\text{ O}$",
+                    "$51^\\circ\\text{ S} ; 59^\\circ\\text{ O}$",
+                    "$23^\\circ\\text{ S} ; 45^\\circ\\text{ L}$",
+                    "$60^\\circ\\text{ N} ; 60^\\circ\\text{ L}$"
+                ],
+                correct: 0, // A
+                resolution: `A rota de menor distância entre Los Angeles (EUA) e Tóquio (Japão) sobrevoando o Pacífico Norte segue a ortodromia (arco de círculo máximo). O percurso ortodrômico encurva-se em direção ao norte devido à esfericidade do planeta. O ponto intermediário exato desta rota transpacífica aproxima-se do arquipélago do Havaí, no Pacífico Norte, que apresenta coordenadas geográficas próximas a $20^\\circ\\text{ N}$ de latitude e $155^\\circ\\text{ O}$ de longitude.<br><br>
+                As outras coordenadas representam localizações geográficas distantes do trajeto:
+                <ul>
+                    <li class="mt-1">$28^\\circ\\text{ N} ; 16^\\circ\\text{ O}$ localiza-se no Oceano Atlântico (Canárias/Noroeste de África).</li>
+                    <li class="mt-1">$51^\\circ\\text{ S} ; 59^\\circ\\text{ O}$ situa-se no Atlântico Sul (Falklands/Malvinas).</li>
+                    <li class="mt-1">$23^\\circ\\text{ S} ; 45^\\circ\\text{ L}$ situa-se no Oceano Índico (Madagascar).</li>
+                    <li class="mt-1">$60^\\circ\\text{ N} ; 60^\\circ\\text{ L}$ situa-se no interior do continente asiático (Rússia).</li>
+                </ul>`
+            },
+            {
+                id: 6,
+                num: "07",
+                title: "Questão 07",
+                statement: `O Sistema de Projeção Universal Transversa de Mercator (UTM) é amplamente adotado no mapeamento sistemático e em levantamentos cadastrais. Analise as seguintes afirmações sobre o sistema UTM:<br><br>
+                <div class="space-y-2.5">
+                    <p><strong>I.</strong> O globo terrestre é dividido em 60 fusos meridionais de $6^\\circ$ de amplitude em longitude, com a numeração iniciada no fuso 1, compreendido entre $180^\\circ$ e $174^\\circ$ Oeste, progredindo de oeste para leste até o fuso 60.</p>
+                    <p><strong>II.</strong> Trata-se de uma projeção cilíndrica transversa secante e conforme, na qual o fator de escala ($k_0$) no meridiano central de cada fuso é igual a $0,9996$, tornando-se igual a $1,0000$ ao longo das linhas de secância.</p>
+                    <p><strong>III.</strong> Para evitar coordenadas métricas negativas no hemisfério sul, o sistema UTM atribui o valor de $10.000.000\\text{ m}$ de "falso Norte" na linha do Equador e $500.000\\text{ m}$ de "falso Leste" no meridiano central de cada fuso.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // E (I, II e III)
+                resolution: `<strong>Item I: Correto.</strong> O sistema UTM divide a superfície da Terra entre as latitudes de $80^\\circ\\text{ S}$ e $84^\\circ\\text{ N}$ em 60 fusos de longitude de $6^\\circ$ de amplitude. O fuso número 1 inicia a contagem a partir do limite de $180^\\circ$ (antimeridiano de Greenwich), progredindo de oeste para leste.<br><br>
+                <strong>Item II: Correto.</strong> O sistema adota a projeção transversa de Mercator sob a condição de secância. Ao invés de tangenciar o meridiano central, o cilindro interseta o elipsoide de referência ao longo de duas linhas de secância paralelas. Isto faz com que o fator de escala seja menor que a unidade no meridiano central ($k_0 = 0,9996$) e igual a $1,0000$ nas linhas de secância, otimizando a distribuição e minimizando os erros de escala lineares ao longo do fuso.<br><br>
+                <strong>Item III: Correto.</strong> Para que não ocorram coordenadas métricas negativas no mapeamento, realiza-se uma translação dos eixos ortogonais cartesiano-métricos. Atribui-se o valor de $500.000\\text{ m}$ de coordenada Este ($E$) no meridiano central de cada fuso. No hemisfério sul, o Equador assume o valor de $10.000.000\\text{ m}$ de coordenada Norte ($N$), com valores decrescentes no sentido sul.`
+            },
+            {
+                id: 7,
+                num: "08",
+                title: "Questão 08",
+                statement: `A produção de representações cartográficas ao longo da história tem sido objeto de disputas ideológicas e geopolíticas. Sobre as distorções cartográficas e a geopolítica dos mapas, considere as afirmações abaixo:<br><br>
+                <div class="space-y-2.5">
+                    <p><strong>I.</strong> A projeção de Mercator, ao sobredimensionar as áreas das altas latitudes temperadas e polares, reforça visualmente o poder político dos países do Norte desenvolvido frente às nações subdesenvolvidas localizadas nas proximidades da faixa equatorial.</p>
+                    <p><strong>II.</strong> A projeção de Peters (Gall-Peters) foi concebida na década de 1970 sob um discurso de igualdade geopolítica, sendo adotada por movimentos sociais e agências da Organização das Nações Unidas devido à representação fidedigna das proporções territoriais dos países do Sul global.</p>
+                    <p><strong>III.</strong> A anamorfose geográfica consiste numa representação cartográfica destituída de escala linear rígida, na qual os contornos das áreas territoriais são intencionalmente distorcidos de forma proporcional à magnitude de uma variável socioeconômica, como a população ou o Produto Interno Bruto.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // E (I, II e III)
+                resolution: `<strong>Item I: Correto.</strong> A deformação escalar da projeção de Mercator amplia consideravelmente os territórios situados nas latitudes temperadas e polares. Do ponto de vista geopolítico, esta distorção matemática confere centralidade e imponência física às nações do hemisfério Norte (como a Europa Ocidental e a América do Norte), alimentando discursos de superioridade eurocêntrica ao longo dos séculos.<br><br>
+                <strong>Item II: Correto.</strong> Peters propôs sua projeção equivalente cilíndrica em 1973. A sua base conceitual valorizava a justiça cartográfica ao representar os países em desenvolvimento localizados nas faixas intertropicais com o seu tamanho real proporcional, confrontando a distorção mercantilista de Mercator e sendo largamente utilizada em materiais de divulgação institucional do Terceiro Mundo.<br><br>
+                <strong>Item III: Correto.</strong> A anamorfose geográfica prescinde do rigor da escala métrica linear para distorcer as áreas administrativas em função de dados quantitativos estatísticos. Trata-se de um recurso de cartografia temática de forte apelo visual, ideal para revelar disparidades demográficas ou económicas entre as diferentes regiões do globo.`
+            },
+            {
+                id: 8,
+                num: "09",
+                title: "Questão 09",
+                statement: `A modelagem geodésica da Terra exige rigor matemático na conversão de dados angulares e na definição dos parâmetros elipsoidais. No que se refere aos conceitos cartográficos e geodésicos, analise as seguintes afirmações:<br><br>
+                <div class="space-y-2.5">
+                    <p><strong>I.</strong> Devido ao achatamento polar do elipsoide de referência terrestre, o comprimento linear de um grau de latitude não é constante, variando de aproximadamente $110,6\\text{ km}$ nas proximidades do Equador para cerca de $111,7\\text{ km}$ junto aos polos.</p>
+                    <p><strong>II.</strong> A conversão de uma coordenada em graus, minutos e segundos (DMS) para graus decimais (DD) baseia-se na relação sexagesimal. Assim, a longitude de $35^\\circ45'38''\\text{ O}$ corresponde, no formato decimal, a aproximadamente $-35,760556^\\circ$.</p>
+                    <p><strong>III.</strong> O meridiano contrário ou oposto a um meridiano dado denomina-se antimeridiano. O conjunto composto por um meridiano e seu antimeridiano forma um círculo meridiano, correspondendo a um círculo máximo completo na superfície de referência.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e III.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // E (I, II e III)
+                resolution: `<strong>Item I: Correto.</strong> Devido ao achatamento gravitacional e centrífugo do elipsoide terrestre de referência nos polos (onde o semieixo menor polar é menor que o semieixo maior equatorial), o raio de curvatura meridional aumenta do Equador para os polos. Consequentemente, a distância linear correspondente a $1^\\circ$ de arco de latitude expande-se de $110,6\\text{ km}$ no Equador até atingir $111,7\\text{ km}$ nas proximidades polares.<br><br>
+                <strong>Item II: Correto.</strong> O processo matemático de conversão converte a fração sexagesimal de minutos e segundos em base decimal por meio da fórmula:
+                $$\\text{Graus Decimais} = \\text{Graus} + \\frac{\\text{Minutos}}{60} + \\frac{\\text{Segundos}}{3600}$$
+                Para o caso de $\\lambda = 35^\\circ45'38''$:
+                $$\\text{Graus Decimais} = 35 + \\frac{45}{60} + \\frac{38}{3600} \\approx 35,760556^\\circ$$
+                Dado que a coordenada situa-se a Oeste (O), o valor decimal recebe sinal negativo no sistema de referência geodésico, correspondendo a $-35,760556^\\circ$.<br><br>
+                <strong>Item III: Correto.</strong> Por definição, meridianos opostos distam $180^\\circ$ entre si. O círculo meridiano completo, composto pela união de um meridiano e seu antimeridiano correspondente, circunscreve o elipsoide ou esfera de referência passando por ambos os polos, constituindo assim um círculo máximo completo.`
+            },
+            {
+                id: 9,
+                num: "10",
+                title: "Questão 10",
+                statement: `Existem diversas projeções cartográficas alternativas desenvolvidas para representar a totalidade da Terra com deformações mitigadas. Sobre as características dessas projeções, analise as seguintes afirmações:<br><br>
+                <div class="space-y-2.5">
+                    <p><strong>I.</strong> A projeção de Mollweide é uma representação equivalente e elíptica, na qual os paralelos são linhas retas paralelas e os meridianos são representados por linhas curvas, apresentando precisão nas zonas centrais e deformações crescentes nas extremidades.</p>
+                    <p><strong>II.</strong> A projeção cônica conforme de Lambert é muito empregada em cartografia regional de latitudes médias e no mapeamento mundial na escala de 1:1.000.000, seguindo os padrões definidos para a Carta Internacional do Mundo ao Milionésimo (CIM).</p>
+                    <p><strong>III.</strong> A projeção de Goode (projeção descontínua ou interrompida) propõe a fragmentação do planisfério por meio de cortes nas áreas oceânicas, permitindo uma representação equivalente que mantém a forma das massas continentais de maneira extremamente precisa.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e III.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // E (I, II e III)
+                resolution: `<strong>Item I: Correto.</strong> A projeção pseudocilíndrica de Mollweide apresenta contorno elíptico e propriedade equivalente. Os paralelos são retos e os meridianos são representados por elipses curvas que convergem nos polos. Embora distorça as formas nas zonas marginais leste-oeste devido à inclinação dos meridianos, preserva perfeitamente as áreas.<br><br>
+                <strong>Item II: Correto.</strong> A projeção cônica conforme de Lambert projeta a Terra sobre um cone secante ou tangente. Por ser conforme, os ângulos locais são preservados. A escala ao milionésimo (1:1.000.000) adotada pela Carta Internacional do Mundo (CIM) utiliza este sistema por otimizar a escala local em faixas latitudinais temperadas de média amplitude.<br><br>
+                <strong>Item III: Correto.</strong> John Paul Goode desenvolveu a projeção homolosina (descontínua) em 1923 para resolver o problema da deformação de forma nas projeções equivalentes. Ao efetuar interrupções estratégicas nas áreas cobertas pelos oceanos, a projeção permite que cada massa continental seja projetada de modo independente ao longo de seus próprios meridianos centrais, mantendo a equivalência de área com excelente fidelidade de forma para os continentes.`
+            }
+        ];
+
+        let answers = Array(10).fill(null);
+        let submitted = false;
+        let startTime = Date.now();
+        let timerInterval;
+
+        // Inicializador do Cronômetro de Prova
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (submitted) return;
+                const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+                const h = String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0');
+                const m = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0');
+                const s = String(elapsedSeconds % 60).padStart(2, '0');
+                document.getElementById('timer').innerText = `${h}:${m}:${s}`;
+            }, 1000);
+        }
+
+        // Renderizador dinâmico de cartões de questões
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.id = `question-${idx}`;
+                card.className = "bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-xs hover:shadow-md transition-shadow relative scroll-mt-24";
+                
+                let optionsHtml = '';
+                q.options.forEach((opt, optIdx) => {
+                    optionsHtml += `
+                        <label class="flex items-start p-4 rounded-2xl border border-slate-200 hover:border-indigo-500 hover:bg-slate-50 cursor-pointer option-card relative group" id="opt-container-${idx}-${optIdx}">
+                            <div class="flex items-center h-6">
+                                <input type="radio" 
+                                       name="q-${idx}" 
+                                       value="${optIdx}" 
+                                       class="w-4 h-4 text-indigo-600 border-slate-300 focus:ring-indigo-500 cursor-pointer" 
+                                       onchange="selectOption(${idx}, ${optIdx})"
+                                       ${submitted ? 'disabled' : ''}
+                                       ${answers[idx] === optIdx ? 'checked' : ''}>
+                            </div>
+                            <span class="ml-3.5 text-sm sm:text-base text-slate-700 font-medium select-none flex-grow" id="opt-text-${idx}-${optIdx}">
+                                ${opt}
+                            </span>
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center" id="icon-feedback-${idx}-${optIdx}"></span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-wider">FAURGS</span>
+                            <h3 class="text-lg font-bold text-slate-900">${q.title}</h3>
+                        </div>
+                        <span id="badge-status-${idx}" class="text-xs font-semibold px-2.5 py-1 rounded-full text-slate-400 bg-slate-50 border border-slate-200">Não Respondida</span>
+                    </div>
+                    
+                    <div class="prose-custom text-slate-800 text-sm sm:text-base mb-6 font-medium leading-relaxed">
+                        ${q.statement}
+                    </div>
+                    
+                    <div class="space-y-3.5">
+                        ${optionsHtml}
+                    </div>
+
+                    <!-- Bloco de Resolução Oculto Inicialmente -->
+                    <div id="resolution-${idx}" class="hidden mt-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl shadow-inner transform transition-all duration-300 scale-98">
+                        <div class="flex items-center space-x-2 text-indigo-900 font-bold mb-4">
+                            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364.364l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                            <span class="text-sm uppercase tracking-wider">Explicação e Análise Geodésica</span>
+                        </div>
+                        <div class="text-slate-700 text-sm sm:text-base leading-relaxed space-y-3">
+                            ${q.resolution}
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+
+            // Forçar renderização de expressões do KaTeX após adicionar ao DOM
+            renderMathInElement(container, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+
+        // Manipulação de seleção de alternativa
+        function selectOption(qIdx, optIdx) {
+            if (submitted) return;
+            answers[qIdx] = optIdx;
+            
+            // Atualizar classes visuais da opção selecionada
+            const totalOpts = quizData[qIdx].options.length;
+            for (let i = 0; i < totalOpts; i++) {
+                const optEl = document.getElementById(`opt-container-${qIdx}-${i}`);
+                if (i === optIdx) {
+                    optEl.className = "flex items-start p-4 rounded-2xl border border-indigo-600 bg-indigo-50/50 hover:bg-indigo-50/60 cursor-pointer option-card relative group shadow-sm";
+                } else {
+                    optEl.className = "flex items-start p-4 rounded-2xl border border-slate-200 hover:border-indigo-500 hover:bg-slate-50 cursor-pointer option-card relative group";
+                }
+            }
+
+            // Atualizar status da questão na interface
+            const badge = document.getElementById(`badge-status-${qIdx}`);
+            badge.innerText = "Respondida";
+            badge.className = "text-xs font-semibold px-2.5 py-1 rounded-full text-indigo-700 bg-indigo-50 border border-indigo-200";
+
+            // Atualizar indicador visual no painel lateral
+            const navBtn = document.getElementById(`nav-btn-${qIdx}`);
+            navBtn.className = "w-full h-10 rounded-xl bg-indigo-50 border border-indigo-200 font-bold text-indigo-600 text-sm hover:border-indigo-300 hover:bg-indigo-100 transition-all flex items-center justify-center";
+
+            // Atualizar barra de progresso
+            updateProgress();
+        }
+
+        // Atualização da barra de progresso no painel lateral
+        function updateProgress() {
+            const answeredCount = answers.filter(a => a !== null).length;
+            document.getElementById('progress-text').innerText = `${answeredCount} de 10`;
+            const percentage = (answeredCount / 10) * 100;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+
+        // Rolagem de âncora suave para questão específica
+        function scrollToQuestion(idx) {
+            const el = document.getElementById(`question-${idx}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Função de Submissão do Simulado
+        function submitQuiz(event) {
+            event.preventDefault();
+            
+            // Validar se todas as questões foram respondidas antes de prosseguir
+            const unanswered = [];
+            answers.forEach((ans, idx) => {
+                if (ans === null) unanswered.push(idx + 1);
+            });
+
+            if (unanswered.length > 0) {
+                // Criar box de aviso flutuante elegante ao invés do uso de alert() nativo
+                showCustomWarning(`Atenção! Você ainda não respondeu as seguintes questões: ${unanswered.join(', ')}. Responda todas para finalizar a correção.`);
+                return;
+            }
+
+            submitted = true;
+            clearInterval(timerInterval); // Parar cronômetro
+            
+            let score = 0;
+            quizData.forEach((q, idx) => {
+                const userChoice = answers[idx];
+                const isCorrect = userChoice === q.correct;
+                if (isCorrect) score++;
+
+                // Revelar bloco de explicação da questão
+                const resolutionBox = document.getElementById(`resolution-${idx}`);
+                resolutionBox.classList.remove('hidden');
+
+                // Atualizar o badge de status superior da questão
+                const badge = document.getElementById(`badge-status-${idx}`);
+                if (isCorrect) {
+                    badge.innerText = "Correta";
+                    badge.className = "text-xs font-semibold px-2.5 py-1 rounded-full text-emerald-700 bg-emerald-50 border border-emerald-200";
+                } else {
+                    badge.innerText = "Incorreta";
+                    badge.className = "text-xs font-semibold px-2.5 py-1 rounded-full text-rose-700 bg-rose-50 border border-rose-200";
+                }
+
+                // Ajustar estilização das alternativas da questão com cores de feedback
+                q.options.forEach((opt, optIdx) => {
+                    const optContainer = document.getElementById(`opt-container-${idx}-${optIdx}`);
+                    const iconSpan = document.getElementById(`icon-feedback-${idx}-${optIdx}`);
+                    const radioInput = optContainer.querySelector('input[type="radio"]');
+                    radioInput.disabled = true;
+
+                    if (optIdx === q.correct) {
+                        // Resposta correta oficial
+                        optContainer.className = "flex items-start p-4 rounded-2xl border border-emerald-500 bg-emerald-50/60 text-emerald-900 font-semibold relative transition-all";
+                        iconSpan.innerHTML = `
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        `;
+                    } else if (optIdx === userChoice) {
+                        // Escolha errada do usuário
+                        optContainer.className = "flex items-start p-4 rounded-2xl border border-rose-400 bg-rose-50/50 text-rose-900 relative transition-all";
+                        iconSpan.innerHTML = `
+                            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        `;
+                    } else {
+                        // Outras opções incorretas não marcadas
+                        optContainer.className = "flex items-start p-4 rounded-2xl border border-slate-200 text-slate-400 cursor-not-allowed relative transition-all";
+                        iconSpan.innerHTML = '';
+                    }
+                });
+
+                // Atualizar cor dos botões de navegação lateral para feedback instantâneo
+                const navBtn = document.getElementById(`nav-btn-${idx}`);
+                if (isCorrect) {
+                    navBtn.className = "w-full h-10 rounded-xl bg-emerald-100 text-emerald-800 font-bold text-sm border border-emerald-200 flex items-center justify-center transition-all";
+                } else {
+                    navBtn.className = "w-full h-10 rounded-xl bg-rose-100 text-rose-800 font-bold text-sm border border-rose-200 flex items-center justify-center transition-all";
+                }
+            });
+
+            // Apresentar Painel de Resultados
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.remove('hidden');
+            setTimeout(() => {
+                resultsPanel.classList.remove('scale-95', 'opacity-0');
+                resultsPanel.classList.add('scale-100', 'opacity-100');
+            }, 50);
+
+            // Setar textos de performance
+            document.getElementById('score-text').innerText = `${score}/10`;
+            const percentage = Math.round((score / 10) * 100);
+            document.getElementById('percent-text').innerText = `${percentage}%`;
+
+            // Ocultar botão de envio
+            document.getElementById('submit-btn').classList.add('hidden');
+
+            // Scroll suave de volta para o topo para ver o resultado
+            resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Função de Alerta Customizado Seguro (Substituto ao alert nativo)
+        function showCustomWarning(message) {
+            // Verificar se já existe um alerta na tela
+            const existingAlert = document.getElementById('custom-warning-toast');
+            if (existingAlert) existingAlert.remove();
+
+            const toast = document.createElement('div');
+            toast.id = 'custom-warning-toast';
+            toast.className = "fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center space-x-3 border border-slate-700 max-w-sm sm:max-w-md transform transition-all duration-300 translate-y-10 opacity-0";
+            toast.innerHTML = `
+                <div class="bg-amber-500 text-slate-950 p-1.5 rounded-lg shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                </div>
+                <div class="flex-grow">
+                    <p class="text-xs sm:text-sm font-semibold leading-snug">${message}</p>
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-white transition-colors cursor-pointer">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            `;
+            document.body.appendChild(toast);
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+                toast.classList.add('translate-y-0', 'opacity-100');
+            }, 50);
+
+            // Auto-ocultar após 6 segundos
+            setTimeout(() => {
+                if (toast && toast.parentElement) {
+                    toast.classList.add('translate-y-10', 'opacity-0');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 6000);
+        }
+
+        // Função de reinício do Quiz
+        function restartQuiz() {
+            answers = Array(10).fill(null);
+            submitted = false;
+            startTime = Date.now();
+            
+            // Re-renderizar cronômetro na UI
+            document.getElementById('timer').innerText = "00:00:00";
+            startTimer();
+
+            // Ocultar painel de resultados
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                resultsPanel.classList.add('hidden');
+            }, 300);
+
+            // Exibir botão de envio novamente
+            document.getElementById('submit-btn').classList.remove('hidden');
+
+            // Resetar progresso lateral
+            updateProgress();
+            for (let i = 0; i < 10; i++) {
+                const navBtn = document.getElementById(`nav-btn-${i}`);
+                navBtn.className = "w-full h-10 rounded-xl border border-slate-200 font-semibold text-slate-500 text-sm hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center";
+            }
+
+            // Re-renderizar questões
+            renderQuestions();
+            
+            // Rolar de volta suavemente para o início
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Carregar simulado no onload do window garantindo a montagem de todos os scripts
+        window.onload = function() {
+            // Renderizar as questões e iniciar cronômetro
+            renderQuestions();
+            startTimer();
+        }
+    </script>
+</body>
+</html>

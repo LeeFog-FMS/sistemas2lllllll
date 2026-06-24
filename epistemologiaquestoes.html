@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Epistemologia da Geografia - FAURGS</title>
+    <!-- Tailwind CSS para estilização moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para altíssima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones elegantes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sepia: {
+                            50: '#FAF8F5',   /* Fundo principal ultra confortável */
+                            100: '#F3EFE9',  /* Tons neutros secundários */
+                            200: '#E6DEC3',
+                            800: '#3D362E',  /* Texto suave para evitar fadiga visual */
+                            900: '#2C251E',
+                        },
+                        brand: {
+                            primary: '#3B593F',   /* Verde acadêmico / floresta */
+                            primaryLight: '#EAF0EB',
+                            accent: '#D97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAF8F5;
+            color: #2C251E;
+        }
+        /* Ajuste fino para evitar quebras abruptas e dar espaçamento fluido */
+        .prose p {
+            margin-bottom: 1.25rem;
+            line-height: 1.75;
+        }
+        /* Custom scrollbar para estética acadêmica */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E3DEC3;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C4BD9E;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-brand-primaryLight selection:text-brand-primary">
+
+    <!-- Cabeçalho Principal -->
+    <header class="border-b border-sepia-100 bg-white sticky top-0 z-40 shadow-sm backdrop-blur-md bg-opacity-95">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-brand-primary text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-sepia-900 leading-tight">Simulado de Concurso Público</h1>
+                    <p class="text-xs text-stone-500 font-medium tracking-wide uppercase">Banca FAURGS • Geografia</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span id="progress-text" class="text-sm font-semibold text-stone-600 bg-sepia-100 px-3 py-1.5 rounded-full">
+                    Respondidas: 0/10
+                </span>
+                <button onclick="scrollToResults()" id="scroll-to-result-btn" class="hidden text-xs bg-brand-primary text-white font-bold py-1.5 px-3 rounded-full hover:bg-opacity-90 transition-all flex items-center gap-1">
+                    <i class="fa-solid fa-square-poll-vertical"></i> Ver Resultado
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+        <!-- Banner Informativo -->
+        <div class="bg-white border border-sepia-100 rounded-2xl p-6 sm:p-8 mb-8 shadow-sm">
+            <h2 class="text-2xl font-bold text-sepia-900 mb-3">Epistemologia da Geografia e o Espaço Geográfico</h2>
+            <p class="text-stone-600 leading-relaxed text-sm sm:text-base">
+                Este simulado interativo contém exatamente as 10 questões formuladas com base no perfil de provas anteriores da banca **FAURGS**. O foco das questões aborda a evolução científica da ciência geográfica, categorias de análise espacial (território, lugar, região e paisagem) e aplicações contemporâneas.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-4 text-xs font-semibold text-stone-600">
+                <span class="flex items-center gap-1.5 bg-sepia-50 px-3 py-2 rounded-lg border border-sepia-100">
+                    <i class="fa-regular fa-file-lines text-brand-primary"></i> 10 Questões de Múltipla Escolha
+                </span>
+                <span class="flex items-center gap-1.5 bg-sepia-50 px-3 py-2 rounded-lg border border-sepia-100">
+                    <i class="fa-regular fa-lightbulb text-amber-500"></i> Gabaritos Comentados & Tabelas Comparativas
+                </span>
+                <span class="flex items-center gap-1.5 bg-sepia-50 px-3 py-2 rounded-lg border border-sepia-100">
+                    <i class="fa-solid fa-eye-low-contrast text-cyan-600"></i> Interface de Leitura Confortável
+                </span>
+            </div>
+        </div>
+
+        <!-- Modo de Estudo Toggle -->
+        <div class="mb-8 flex justify-end">
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="study-mode-toggle" class="sr-only peer" onchange="toggleStudyMode()">
+                <div class="w-11 h-6 bg-stone-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-primary"></div>
+                <span class="ml-3 text-sm font-semibold text-stone-700 flex items-center gap-1.5">
+                    <i class="fa-solid fa-book-open"></i> Modo de Estudo (Revelar gabarito na hora)
+                </span>
+            </label>
+        </div>
+
+        <!-- Container de Questões -->
+        <section id="questions-container" class="space-y-8">
+            <!-- As questões serão injetadas dinamicamente via JS -->
+        </section>
+
+        <!-- Painel de Controle Final -->
+        <div id="quiz-control-panel" class="bg-white border border-sepia-100 rounded-2xl p-6 sm:p-8 mt-10 shadow-md text-center">
+            <h3 class="text-xl font-bold text-sepia-900 mb-2">Pronto para finalizar?</h3>
+            <p class="text-stone-500 text-sm mb-6">Verifique se respondeu a todas as questões antes de enviar para correção.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="calculateResults()" id="btn-submit-quiz" class="bg-brand-primary text-white font-bold py-3.5 px-8 rounded-xl hover:bg-opacity-95 shadow-md active:scale-95 transition-all text-sm sm:text-base">
+                    <i class="fa-solid fa-circle-check mr-2"></i> Finalizar Simulado
+                </button>
+                <button onclick="resetQuiz()" class="border border-stone-300 text-stone-700 bg-white font-bold py-3.5 px-8 rounded-xl hover:bg-sepia-50 transition-all text-sm sm:text-base">
+                    <i class="fa-solid fa-rotate-left mr-2"></i> Reiniciar Tudo
+                </button>
+            </div>
+        </div>
+
+        <!-- Painel de Resultados (Oculto Inicialmente) -->
+        <div id="quiz-results-panel" class="hidden bg-white border-2 border-brand-primary/20 rounded-2xl p-6 sm:p-8 mt-10 shadow-lg scroll-mt-24">
+            <div class="text-center mb-8">
+                <span class="inline-block bg-brand-primaryLight text-brand-primary text-xs font-bold tracking-widest uppercase px-3 py-1 rounded-full mb-3">Resultado do Simulado</span>
+                <h3 class="text-3xl font-black text-sepia-900">Seu Desempenho</h3>
+                
+                <div class="mt-6 flex justify-center items-center gap-8">
+                    <div class="text-center">
+                        <div class="relative inline-flex items-center justify-center">
+                            <svg class="w-32 h-32 transform -rotate-90">
+                                <circle cx="64" cy="64" r="50" stroke="#f3efe9" stroke-width="12" fill="transparent"/>
+                                <circle id="score-circle" cx="64" cy="64" r="50" stroke="#3B593F" stroke-width="12" fill="transparent" stroke-dasharray="314.16" stroke-dashoffset="314.16" class="transition-all duration-1000 ease-out"/>
+                            </svg>
+                            <span id="score-percentage" class="absolute text-2xl font-extrabold text-sepia-900">0%</span>
+                        </div>
+                    </div>
+                    <div class="text-left space-y-2">
+                        <p class="text-lg font-semibold text-stone-700">Acertos: <span id="correct-count" class="text-brand-primary font-bold">0</span> / 10</p>
+                        <p class="text-sm text-stone-500">Tempo recomendado de prova: 50 min</p>
+                        <p id="performance-feedback" class="text-sm font-medium text-amber-600">Ainda há margem para melhorar seus estudos!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resoluções Detalhadas -->
+            <div class="border-t border-sepia-100 pt-8">
+                <h4 class="text-xl font-bold text-sepia-900 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-list text-brand-primary"></i> Relatório de Erros/Acertos & Justificativas
+                </h4>
+                <div id="results-detailed-container" class="space-y-6">
+                    <!-- Detalhamento de cada questão respondida será injetado aqui -->
+                </div>
+            </div>
+
+            <div class="mt-8 text-center border-t border-sepia-100 pt-6">
+                <button onclick="resetQuiz()" class="bg-brand-primary text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-95 shadow-md transition-all">
+                    <i class="fa-solid fa-rotate-left mr-2"></i> Tentar Novamente
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-sepia-900 text-sepia-100 py-8 border-t border-sepia-800 mt-16 text-center text-sm">
+        <div class="max-w-4xl mx-auto px-4 space-y-3">
+            <p class="font-semibold">Plataforma Interativa de Estudo - Geografia Humana & Física</p>
+            <p class="text-sepia-200 text-xs">Simulados construídos com rigor conceitual baseado na banca FAURGS. Layout adaptado para longas jornadas de leitura sem cansar os olhos.</p>
+            <p class="text-sepia-200 text-xs">&copy; 2026 Concursos Públicos. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Banco de Dados com as Questões Detalhadas da FAURGS na Íntegra
+        const quizData = [
+            {
+                id: 1,
+                questionText: `No âmbito da evolução da epistemologia geográfica, diferentes correntes de pensamento fundamentaram o debate teórico-metodológico da ciência ao longo dos séculos XX e XXI. Sobre a epistemologia geográfica, analisar os itens abaixo:<br><br>
+                <strong>I.</strong> A corrente de pensamento neopositivista exerceu forte influência na Geografia por intermédio do uso da linguagem matemática na busca da clareza e da objetividade na produção dos trabalhos geográficos.<br>
+                <strong>II.</strong> Além da insatisfação com o empirismo da geografia regional, a Geografia Crítica procura estabelecer no campo teórico e metodológico da investigação geográfica o mesmo rigor e a mesma neutralidade que caracterizam as forças políticas e ideológicas em torno de programas e diretrizes de desenvolvimento econômico e ordenamento territorial em países industrializados.<br>
+                <strong>III.</strong> Parece existir um hiato entre o novo temário geográfico e as formas de abordagens metodológicas que orientam os trabalhos de pesquisa.<br>
+                <strong>IV.</strong> A geografia, no século XXI, experimentou mudanças bastante consideráveis em seu temário de pesquisa e nas formas de abordagem das categorias de análise espacial.<br><br>
+                Estão CORRETOS:`,
+                options: [
+                    { key: "A", text: "Somente os itens I e II." },
+                    { key: "B", text: "Somente os itens I e III." },
+                    { key: "C", text: "Somente os itens I, III e IV." },
+                    { key: "D", text: "Somente os itens II, III e IV." },
+                    { key: "E", text: "Somente os itens III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <ul class="list-disc pl-5 mb-4 space-y-2">
+                        <li><strong>O item I está correto.</strong> O neopositivismo (Geografia Quantitativa ou Teorética) buscou superar a abordagem puramente descritiva da Geografia regional tradicional por meio do uso da linguagem matemática, estatística e de modelos abstratos de localização espacial, visando atingir o rigor de ciências consideradas duras.</li>
+                        <li><strong>O item II está incorreto.</strong> A Geografia Crítica, de fundamentação marxista, de fato surgiu como reação ao empirismo regional e ao formalismo abstrato do neopositivismo. No entanto, a vertente crítica refuta veementemente a "neutralidade" científica. Para os geógrafos críticos, a ciência não é neutra; a pretensa neutralidade técnica do neopositivismo servia, na realidade, como ferramenta de planejamento a serviço da reprodução do capital e do controle territorial estatal em países industrializados. A Geografia Crítica busca uma ciência engajada e politizada para denunciar as contradições do espaço capitalista.</li>
+                        <li><strong>O item III está correto.</strong> Historicamente, aponta-se que a aceleração das dinâmicas socioespaciais contemporâneas gerou novas temáticas (gênero, identidades, fluxos financeiros globais), ocorrendo muitas vezes uma defasagem ou hiato metodológico para dar conta de investigar essas novas realidades complexas com o instrumental clássico.</li>
+                        <li><strong>O item IV está correto.</strong> No século XXI, as novas demandas da sociedade provocaram profundas transformações no temário geográfico e nas abordagens das categorias tradicionais de análise espacial (como território, lugar, região e paisagem).</li>
+                    </ul>
+                    <div class="overflow-x-auto my-4 rounded-xl border border-sepia-200">
+                        <table class="w-full text-left border-collapse bg-sepia-50 text-sm">
+                            <thead>
+                                <tr class="bg-brand-primary text-white">
+                                    <th class="p-3 font-semibold">Corrente Epistemológica</th>
+                                    <th class="p-3 font-semibold">Postura frente à Neutralidade</th>
+                                    <th class="p-3 font-semibold">Instrumental de Análise</th>
+                                    <th class="p-3 font-semibold">Definição de Espaço</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">Neopositivismo</td>
+                                    <td class="p-3">Defende a neutralidade axiomática e a objetividade pura.</td>
+                                    <td class="p-3">Modelos estatísticos, matemática aplicada, geometria espacial.</td>
+                                    <td class="p-3">Estrutura espacial geométrica, passível de modelagem e previsão de fluxos.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold">Geografia Crítica</td>
+                                    <td class="p-3 text-red-800 font-medium">Rejeita categoricamente a neutralidade (Marxismo).</td>
+                                    <td class="p-3">Materialismo histórico-dialético, economia política.</td>
+                                    <td class="p-3">Produto social historicamente determinado pelas contradições das classes.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                questionText: `A sistematização da Geografia como conhecimento científico na segunda metade do século XIX ocorreu em um contexto marcado por disputas geopolíticas na Europa e pela emergência de referenciais filosóficos de base positivista e historicista. Duas importantes escolas nacionais de pensamento — a alemã e a francesa — lideraram esse processo inicial.<br><br>
+                A respeito dessa trajetória histórica de consolidação científica, assinale a alternativa correta:`,
+                options: [
+                    { key: "A", text: "Friedrich Ratzel formulou os fundamentos da escola francesa de Geografia, defendendo que o homem possui ampla liberdade de escolha diante dos limites físicos da natureza, conceito expresso na tese do possibilismo." },
+                    { key: "B", text: "Paul Vidal de la Blache estruturou o determinismo geográfico alemão, associando o progresso das sociedades ao conceito de espaço vital, que determinava a necessidade orgânica de expansão territorial do Estado." },
+                    { key: "C", text: "O método empírico-indutivo, herdado do positivismo clássico de Auguste Comte, influenciou as fases iniciais da Geografia Humana ao priorizar a observação direta e a descrição exaustiva de fenômenos concretos sobre a superfície terrestre." },
+                    { key: "D", text: "A busca por regularidades espaciais e a formulação de modelos matemáticos abstratos foram as principais metodologias desenvolvidas por Vidal de la Blache para classificar as diferentes paisagens regionais." },
+                    { key: "E", text: "A corrente francesa refutou o conceito de gênero de vida por considerá-lo excessivamente focado na técnica industrial moderna, priorizando em seu lugar a análise matemática dos fluxos financeiros urbanos." }
+                ],
+                correct: "C",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <ul class="list-disc pl-5 mb-4 space-y-2">
+                        <li><strong>Alternativa (C) é a Correta.</strong> A institucionalização acadêmica da Geografia no século XIX esteve sob os influxos do positivismo comteano, que valorizava o método empírico-indutivo. Esse método fundamentava-se no pressuposto de que o conhecimento geográfico deveria construir suas premissas teóricas a partir da observação direta, do registro cuidadoso e da catalogação de dados concretos do território, estabelecendo inferências gerais a partir desses elementos particulares.</li>
+                        <li><strong>Alternativa (A) está incorreta</strong> porque Friedrich Ratzel foi o sistematizador da escola de Geografia alemã (e não francesa), sendo conhecido por formular o determinismo geográfico.</li>
+                        <li><strong>Alternativa (B) está incorreta</strong> porque Paul Vidal de la Blache liderou a escola de Geografia francesa, estruturando o "possibilismo" em oposição ao determinismo rígido alemão de Ratzel.</li>
+                        <li><strong>Alternativa (D) está incorreta</strong> porque a busca por regularidades espaciais abstratas e formulação de leis matemáticas pertence ao paradigma do neopositivismo do pós-Segunda Guerra Mundial, e não ao historicismo de Vidal de la Blache.</li>
+                        <li><strong>Alternativa (E) está incorreta</strong> porque a escola francesa clássica consagrou o conceito de "gênero de vida" como pilar explicativo da harmonia regional entre o homem e a natureza.</li>
+                    </ul>
+                    <div class="overflow-x-auto my-4 rounded-xl border border-sepia-200">
+                        <table class="w-full text-left border-collapse bg-sepia-50 text-sm">
+                            <thead>
+                                <tr class="bg-brand-primary text-white">
+                                    <th class="p-3 font-semibold">Critério Teórico</th>
+                                    <th class="p-3 font-semibold">Escola Alemã (Ratzel)</th>
+                                    <th class="p-3 font-semibold">Escola Francesa (Vidal de la Blache)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">Matriz Conceitual</td>
+                                    <td class="p-3">Determinismo Geográfico / Espaço Vital (*Lebensraum*)</td>
+                                    <td class="p-3">Possibilismo Geográfico / Gênero de Vida</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold">Relação Homem-Meio</td>
+                                    <td class="p-3">O meio natural condiciona e orienta o desenvolvimento social.</td>
+                                    <td class="p-3">A natureza fornece opções que o homem manipula pela técnica.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                questionText: `No âmbito do Ensino e da pesquisa em Geografia, a definição do objeto de estudo é um divisor de águas entre as correntes tradicionais e as teorias críticas pós-década de 1970. No que se refere ao conceito de espaço geográfico, as diretrizes teóricas contemporâneas consideram que este é:`,
+                options: [
+                    { key: "A", text: "concebido por um quadro único, formado por objetos exclusivamente naturais e intocados pela ação antrópica." },
+                    { key: "B", text: "formado por um conjunto de sistemas de objetos e sistema de ações, refletindo a indissociabilidade entre a materialidade técnica e as dinâmicas sociais." },
+                    { key: "C", text: "estabelecido por relações sociais de produção que geram arranjos espaciais com propósitos estritamente deterministas." },
+                    { key: "D", text: "constituído por um sistema de relações interdependentes em que os sistemas naturais se sobrepõem e anulam a ação das forças políticas." },
+                    { key: "E", text: "uma projeção abstrata e geométrica desprovida de contradições históricas e de conflitos de classes." }
+                ],
+                correct: "B",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (B) está correta</strong> e reproduz com precisão teórica o conceito central formulado por <strong>Milton Santos</strong>.</p>
+                    <p class="mb-3">O espaço geográfico é definido pela união dialética e indissociável de:</p>
+                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                        <li><strong>Sistemas de Objetos:</strong> elementos físicos, fixos territoriais, infraestrutura urbana e produtiva.</li>
+                        <li><strong>Sistemas de Ações:</strong> fluxos, relações de trabalho, forças políticas e sociais que animam a materialidade do espaço.</li>
+                    </ul>
+                    <p class="italic text-stone-600 bg-sepia-50 p-3 rounded-lg border-l-4 border-brand-primary">Algebricamente, essa totalidade dinâmica pode ser pensada como a correspondência funcional S = f(O, A).</p>
+                `
+            },
+            {
+                id: 4,
+                questionText: `A paisagem é uma categoria analítica crucial na ciência geográfica, traduzindo visualmente a acumulação de intervenções sociais ao longo do tempo. Ao analisar as transformações nas funções espaciais por meio de processos políticos e econômicos, o geógrafo Milton Santos recorre a um conceito específico que denomina de "rugosidades da paisagem".<br><br>
+                Considerando essa concepção teórica, assinale a alternativa que define corretamente a dinâmica das rugosidades na paisagem:`,
+                options: [
+                    { key: "A", text: "As rugosidades constituem barreiras geomorfológicas naturais que impedem de forma absoluta o avanço científico-tecnológico-informacional sobre determinados territórios nacionais." },
+                    { key: "B", text: "As rugosidades referem-se à substituição total e imediata de todas as formas espaciais antigas por novas infraestruturas digitais de alta velocidade." },
+                    { key: "C", text: "As rugosidades representam as heranças físicas do passado — formas espaciais herdadas — que permanecem no presente e passam a abrigar novas funções socioeconômicas e processos políticos." },
+                    { key: "D", text: "As rugosidades correspondem à degradação ambiental irreversível provocada pela poluição sonora e pelo ruído urbano nas metrópoles contemporâneas." },
+                    { key: "E", text: "As rugosidades definem-se como áreas de preservação ambiental permanente desprovidas de qualquer intervenção humana pretérita." }
+                ],
+                correct: "C",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (C) está correta</strong>. O conceito de rugosidade representa as formas materiais do passado (infraestruturas antigas, edifícios históricos, sistemas de transporte ultrapassados) que resistiram ao processo de destruição criativa do capital.</p>
+                    <p class="mb-3">Elas persistem na paisagem atual como "heranças materiais" e são forçadas a desempenhar novas funções econômicas ou a responder a novas demandas sociais e de mobilidade sob os influxos do período técnico-científico-informacional.</p>
+                `
+            },
+            {
+                id: 5,
+                questionText: `A evolução do conceito de território na Geografia contemporânea tem incorporado ricas perspectivas plurais sobre as dimensões culturais, a soberania e a mística dos movimentos sociais de resistência. Sob a ótica da Educação do Campo e da Agroecologia, o território deixa de ser visto apenas como uma delimitação estatal ou econômica para ser compreendido em sua complexidade biocultural.<br><br>
+                A partir desse contexto conceitual, assinale a alternativa correta:`,
+                options: [
+                    { key: "A", text: "O território é uma categoria estritamente econômica e homogênea, desvinculada de símbolos identitários, de memória cultural ou de saberes tradicionais das comunidades camponesas." },
+                    { key: "B", text: "Os territórios ancestrais de comunidades camponesas, indígenas e tradicionais podem ser compreendidos como etnoecossistemas que guardam um acervo expressivo de conhecimento sobre o patrimônio biocultural cultivado." },
+                    { key: "C", text: "A construção de territórios contra-hegemônicos apoia-se exclusivamente no uso intensivo de insumos químicos industriais fornecidos pelas grandes transnacionais do agronegócio." },
+                    { key: "D", text: "No meio rural, os limites territoriais operam de forma fixa e permanente, impedindo qualquer tipo de \"diálogo de saberes\" ou hibridização cultural entre os povos da floresta." },
+                    { key: "E", text: "O conceito de etnoecossistema aplica-se exclusivamente a áreas urbanas adensadas de alta vulnerabilidade social e degradação ambiental." }
+                ],
+                correct: "B",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (B) está correta</strong> e dialoga de forma direta com as dimensões atuais da categoria território, especialmente na interface entre a Geografia Cultural, a Educação do Campo e a Agroecologia.</p>
+                    <p class="mb-4">Os territórios das comunidades tradicionais funcionam como <strong>etnoecossistemas</strong>: guardam um expressivo acervo de patrimônio cultural, manejo agroecológico sustentável e o chamado "diálogo de saberes".</p>
+                    <div class="overflow-x-auto my-4 rounded-xl border border-sepia-200">
+                        <table class="w-full text-left border-collapse bg-sepia-50 text-sm">
+                            <thead>
+                                <tr class="bg-brand-primary text-white">
+                                    <th class="p-3 font-semibold">Concepção</th>
+                                    <th class="p-3 font-semibold">Agente Foco</th>
+                                    <th class="p-3 font-semibold">Mecanismo de Apropriação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">Estatal / Jurídica</td>
+                                    <td class="p-3">Estado-Nação</td>
+                                    <td class="p-3">Exercício da soberania, fronteiras rígidas, leis.</td>
+                                </tr>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">Econômico-Corporativa</td>
+                                    <td class="p-3">Grandes Corporações</td>
+                                    <td class="p-3">Exploração de recursos, controle fiduciário da terra.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-emerald-800">Biocultural</td>
+                                    <td class="p-3 font-semibold">Povos Tradicionais</td>
+                                    <td class="p-3">Identidade, ancestralidade, etnoecossistemas de cultivo.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                questionText: `A partir da década de 1970, os currículos acadêmicos de Geografia passaram a incorporar novas abordagens filosóficas contemporâneas que diversificaram as formas de leitura e ensino da dinâmica do espaço. Estas novas propostas pedagógicas e discursos docentes utilizam-se das premissas do campo hipotético-dedutivo, do campo dialético e do campo fenomenológico-hermenêutico.<br><br>
+                Assinale a alternativa que apresenta corretamente uma característica metodológica da abordagem fenomenológico-hermenêutica aplicada à categoria de lugar:`,
+                options: [
+                    { key: "A", text: "Defesa da neutralidade absoluta do pesquisador por meio do uso de técnicas exclusivamente quantitativas de modelagem cartográfica digital." },
+                    { key: "B", text: "Compreensão do lugar a partir da experiência existencial dos sujeitos, valorizando os circuitos recursivos entre o espírito e o mundo, a subjetividade, os afetos e os limites de sua percepção cotidiana." },
+                    { key: "C", text: "Redução do lugar a uma subdivisão jurídica da propriedade fundiária privada, conforme regulamentado pelas leis civis estatais." },
+                    { key: "D", text: "Explicação das relações espaciais camponesas a partir de premissas deterministas de causa e efeito baseadas na aptidão agrícola dos solos." },
+                    { key: "E", text: "Desprezo pelos discursos e narrativas dos sujeitos locais sob o argumento de que a subjetividade impede a validação científica do espaço vivido." }
+                ],
+                correct: "B",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (B) está correta</strong>. A fenomenologia foca na vivência subjetiva dos indivíduos em relação ao seu espaço geográfico circundante.</p>
+                    <p class="mb-3">O <strong>Lugar</strong>, sob esta lente, é o espaço do afeto, do enraizamento, da identidade, da experiência existencial cotidiana, afastando-se de números frios ou determinismos espaciais rígidos.</p>
+                `
+            },
+            {
+                id: 7,
+                questionText: `Numere a segunda coluna de acordo com a primeira, associando adequadamente as principais formações espaciais urbanas do Rio Grande do Sul às suas respectivas características estruturais e socioeconômicas.<br><br>
+                <strong>Primeira Coluna</strong><br>
+                (1) Região Metropolitana de Porto Alegre<br>
+                (2) Aglomeração Urbana do Nordeste<br>
+                (3) Aglomeração Urbana do Sul<br>
+                (4) Aglomeração Urbana do Litoral Norte<br><br>
+                <strong>Segunda Coluna</strong><br>
+                ( ) Apresenta um conjunto pequeno de municípios vinculados a uma economia diversificada e recentemente dinamizada por grandes investimentos do Governo Federal.<br>
+                ( ) Concentra o maior número de unidades de conservação do Estado, além de ser considerada a de maior vulnerabilidade ambiental.<br>
+                ( ) Concentra cerca de 1/3 da população do Estado e vários municípios constituintes apresentam densidades demográficas superiores a 1.000 hab/km².<br>
+                ( ) Apresenta uma economia baseada no setor secundário vinculado à produção de bens de capital duráveis e de consumo, como nos ramos de bebidas, alimentício e mobiliário.<br><br>
+                A sequência correta de preenchimento dos parênteses, de cima para baixo, é:`,
+                options: [
+                    { key: "A", text: "3 – 4 – 1 – 2" },
+                    { key: "B", text: "1 – 3 – 4 – 2" },
+                    { key: "C", text: "4 – 2 – 3 – 1" },
+                    { key: "D", text: "2 – 3 – 1 – 4" },
+                    { key: "E", text: "3 – 2 – 1 – 4" }
+                ],
+                correct: "A",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (A) é a Correta (Sequência 3 – 4 – 1 – 2)</strong>. Análise de cada correspondência no RS:</p>
+                    <ul class="list-disc pl-5 mb-4 space-y-2">
+                        <li><strong>(3) Aglomeração Urbana do Sul:</strong> Pequeno conjunto de municípios de economia dinâmica portuária/naval (foco Pelotas e Rio Grande), impulsionado historicamente por recursos federais.</li>
+                        <li><strong>(4) Aglomeração Urbana do Litoral Norte:</strong> Região de extrema sensibilidade ambiental, abrigando ecossistemas de lagoas e dunas, com recorde de unidades de conservação.</li>
+                        <li><strong>(1) Região Metropolitana de Porto Alegre:</strong> Principal polo econômico, 1/3 da população estadual conurbada e densidades acima de 1.000 hab/km².</li>
+                        <li><strong>(2) Aglomeração Urbana do Nordeste:</strong> Polo metalmecânico, moveleiro e vitivinícola (Bento Gonçalves, Caxias do Sul), voltado ao setor secundário de bens de consumo.</li>
+                    </ul>
+                    <div class="overflow-x-auto my-4 rounded-xl border border-sepia-200">
+                        <table class="w-full text-left border-collapse bg-sepia-50 text-sm">
+                            <thead>
+                                <tr class="bg-brand-primary text-white">
+                                    <th class="p-3 font-semibold">Código</th>
+                                    <th class="p-3 font-semibold">Aglomeração Gaúcha</th>
+                                    <th class="p-3 font-semibold">Principal Atributo Foco</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">3</td>
+                                    <td class="p-3">Sul (Pelotas/Rio Grande)</td>
+                                    <td class="p-3">Economia diversificada com grandes aportes portuários federais.</td>
+                                </tr>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">4</td>
+                                    <td class="p-3">Litoral Norte</td>
+                                    <td class="p-3">Extrema vulnerabilidade e presença de unidades de conservação.</td>
+                                </tr>
+                                <tr class="border-b border-sepia-200">
+                                    <td class="p-3 font-bold">1</td>
+                                    <td class="p-3">Metropolitana de POA</td>
+                                    <td class="p-3">Concentração de 1/3 do contingente populacional total do RS.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold">2</td>
+                                    <td class="p-3">Nordeste (Caxias/Bento)</td>
+                                    <td class="p-3">Industrialização consolidada (bebidas, móveis, metalmecânico).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                questionText: `Na ciência geográfica contemporânea, a representação cartográfica e o geoprocessamento deixaram de ser ferramentas meramente ilustrativas para se constituírem em linguagens técnicas de alta relevância metodológica para a investigação espacial. No Ensino de Geografia e nas análises de impacto urbano, a cartografia utiliza uma semiologia própria.<br><br>
+                A esse respeito, assinale a alternativa correta sobre as técnicas de representação de dados espaciais:`,
+                options: [
+                    { key: "A", text: "O mapa é um recurso didático que utiliza uma linguagem própria, com textos e símbolos que indicam uma correspondência direta com o espaço real." },
+                    { key: "B", text: "Em cartografia temática, a representação de fenômenos quantitativos absolutos (como a população total de diferentes municípios) deve ser realizada por meio da variável visual \"Cor\" e do método de figuras geométricas proporcionais divididas." },
+                    { key: "C", text: "Investigações sistemáticas sobre impactos urbanos contemporâneos dispensam o uso de análise estatística e produção cartográfica, apoiando-se unicamente em metodologias de observação casual e assistêmica." },
+                    { key: "D", text: "Os Sistemas de Informação Geográfica (SIG) operam de forma isolada das redes globais de informação, sendo tecnicamente incapazes de processar dados cartográficos dinâmicos em tempo real." },
+                    { key: "E", text: "A variável visual \"Tamanho\" é inadequada para a confecção de cartogramas com figuras geométricas proporcionais, sendo restrita à representação de dados qualitativos ordinais." }
+                ],
+                correct: "A",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (A) está correta</strong>. O mapa funciona como um sistema de signos altamente estruturado (semiologia cartográfica) que serve de mediação cognitiva entre o estudante/pesquisador e as coordenadas e dados do terreno real.</p>
+                    <p class="mb-3"><strong>Erros comuns nas outras alternativas:</strong></p>
+                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                        <li><strong>Alternativa B está incorreta:</strong> Dados quantitativos absolutos pedem a variável <strong>Tamanho</strong> (círculos de diâmetros proporcionais) e não Cor de fundo pura (que se adequa mais a valores qualitativos ou razões/densidades).</li>
+                        <li><strong>Alternativas C e D</strong> reduzem absurdamente a utilidade metodológica moderna e tecnológica dos SIGs e dados estatísticos integrados.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 9,
+                questionText: `A evolução dos estudos climáticos no seio da Geografia produziu debates cruciais acerca da inserção social e prática das análises da atmosfera. Críticos apontam que, por vezes, os progressos aplicados da Climatologia Geográfica na sociedade e a consideração do homem como produtor ativo de seu território foram modestos.<br><br>
+                Para superar essa lacuna metodológica em estudos contemporâneos de impacto socioambiental, a análise do clima deve priorizar:`,
+                options: [
+                    { key: "A", text: "o monitoramento puramente estatístico de médias históricas de temperatura e precipitação isoladas do contexto social das cidades." },
+                    { key: "B", text: "a desconsideração da ação antrópica sobre os microclimas urbanos, dado que os fatores solares e cósmicos controlam de forma absoluta a atmosfera terrestre." },
+                    { key: "C", text: "a construção de modelos de avaliação de vulnerabilidade social a riscos naturais e tecnológicos, articulando a dinâmica climática com as condições de habitação e saneamento da população." },
+                    { key: "D", text: "a eliminação de zoneamentos ambientais para liberar o crescimento desordenado das franjas urbanas periféricas metropolitanas." },
+                    { key: "E", text: "o uso exclusivo de dados de estações meteorológicas de meados do século XIX para orientar as políticas públicas de habitação contemporâneas." }
+                ],
+                correct: "C",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (C) está correta</strong>. Para que o conhecimento climatológico adquira relevância prática aplicada ao bem-estar e planejamento humano, ele não deve limitar-se à compilação mecânica de médias térmicas e pluviométricas (isso é tarefa estritamente meteorológica).</p>
+                    <p class="mb-3">A <strong>Climatologia Geográfica</strong> analisa os fenômenos atmosféricos de forma indissociável da vida social, estudando as vulnerabilidades urbanas, riscos de deslizamento, inundações em favelas e formação de ilhas de calor devido à impermeabilização do solo.</p>
+                `
+            },
+            {
+                id: 10,
+                questionText: `As redes geográficas constituem importantes elos de integração e estruturação das diferentes frações do espaço geográfico no período contemporâneo. Sob as condições técnicas atuais, a articulação em redes revela dinâmicas espaciais complexas.<br><br>
+                Sobre o funcionamento das redes geográficas e seus rebatimentos territoriais, assinale a alternativa correta:`,
+                options: [
+                    { key: "A", text: "A expansão das redes de informação e comunicação produz a democratização imediata e a homogeneização absoluta das condições socioeconômicas em todo o território nacional." },
+                    { key: "B", text: "As redes geográficas expressam tanto a articulação de fluxos quanto as assimetrias de poder, uma vez que a seletividade espacial das redes globais pode aprofundar processos de exclusão e marginalização de pontos e regiões desconectados." },
+                    { key: "C", text: "As redes virtuais contemporâneas superaram completamente a necessidade de fixos geográficos materiais (como cabos de fibra ótica, portos e subestações de energia) para a sua circulação global." },
+                    { key: "D", text: "A estrutura das redes geográficas contemporâneas é imune à ação e regulação do Estado-Nação, operando sob uma lógica puramente abstrata e sem conexões físicas territoriais." },
+                    { key: "E", text: "A rede de transportes terrestres de cargas no Brasil superou o modelo rodoviarista graças à substituição integral da frota por canais de circulação virtuais de mercadorias." }
+                ],
+                correct: "B",
+                resolution: `
+                    <p class="mb-4"><strong>Justificativa da Banca:</strong></p>
+                    <p class="mb-3">A <strong>Alternativa (B) está correta</strong>. A distribuição geográfica das redes globais de fibra ótica, portos e aeroportos é extremamente desigual.</p>
+                    <p class="mb-3">Ela atende prioritariamente às áreas de alta rentabilidade para as transnacionais e para o capital financeiro, marginalizando povoados inteiros (seletividade espacial) e aprofundando as desigualdades territoriais.</p>
+                `
+            }
+        ];
+
+        // Estado do Aplicativo (State)
+        let userAnswers = {};
+        let studyMode = false;
+        let submitted = false;
+
+        // Função para Renderizar todas as Questões na Inicialização
+        function renderQuiz() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, idx) => {
+                const qNum = idx + 1;
+                
+                // Card Principal da Questão
+                const qCard = document.createElement('div');
+                qCard.className = `bg-white border border-sepia-100 rounded-2xl p-6 sm:p-8 shadow-sm transition-all duration-300 scroll-mt-24 question-card`;
+                qCard.id = `question-card-${qNum}`;
+
+                // Estrutura Interna do Card
+                qCard.innerHTML = `
+                    <div class="flex items-start gap-4 mb-5">
+                        <span class="bg-sepia-100 text-sepia-900 font-extrabold px-3 py-1.5 rounded-lg text-sm shrink-0">
+                            Q${qNum}
+                        </span>
+                        <div class="prose max-w-none text-sepia-900 font-medium leading-relaxed text-sm sm:text-base">
+                            ${q.questionText}
+                        </div>
+                    </div>
+
+                    <!-- Lista de Opções -->
+                    <div class="space-y-3 pl-0 sm:pl-11" id="options-group-${qNum}">
+                        ${q.options.map(opt => `
+                            <label class="flex items-center gap-4 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-sepia-50 transition-all duration-200 text-stone-700 option-label active:scale-[0.99] relative" id="label-${qNum}-${opt.key}">
+                                <input type="radio" name="q-${qNum}" value="${opt.key}" class="w-4 h-4 text-brand-primary border-stone-300 focus:ring-brand-primary cursor-pointer hidden" onchange="selectAnswer(${qNum}, '${opt.key}')">
+                                <span class="flex items-center justify-center w-7 h-7 rounded-lg border-2 border-stone-300 text-xs font-bold shrink-0 option-indicator bg-white">
+                                    ${opt.key}
+                                </span>
+                                <span class="text-sm leading-relaxed font-medium">${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+
+                    <!-- Feedback Visual Exclusivo do Modo de Estudo / Correção -->
+                    <div id="feedback-${qNum}" class="hidden mt-6 pl-0 sm:pl-11">
+                        <!-- Será preenchido ao corrigir/selecionar resposta -->
+                    </div>
+                `;
+
+                container.appendChild(qCard);
+            });
+
+            updateProgress();
+        }
+
+        // Função para Capturar e Estilizar Escolhas
+        function selectAnswer(questionNum, optionKey) {
+            if (submitted && !studyMode) return; // Trava seleção pós-envio comum
+
+            userAnswers[questionNum] = optionKey;
+            updateProgress();
+
+            // Reseta estilos das opções desta questão específica
+            const optionsGroup = document.getElementById(`options-group-${questionNum}`);
+            const labels = optionsGroup.querySelectorAll('.option-label');
+            
+            labels.forEach(lbl => {
+                lbl.classList.remove('border-brand-primary', 'bg-brand-primaryLight/30', 'text-brand-primary');
+                lbl.querySelector('.option-indicator').classList.remove('border-brand-primary', 'bg-brand-primary', 'text-white');
+                lbl.querySelector('.option-indicator').classList.add('bg-white', 'text-stone-700');
+            });
+
+            // Aplica estilo focado na selecionada
+            const selectedLabel = document.getElementById(`label-${questionNum}-${optionKey}`);
+            selectedLabel.classList.add('border-brand-primary', 'bg-brand-primaryLight/30', 'text-brand-primary');
+            const indicator = selectedLabel.querySelector('.option-indicator');
+            indicator.classList.remove('bg-white', 'text-stone-700');
+            indicator.classList.add('border-brand-primary', 'bg-brand-primary', 'text-white');
+
+            // Caso o Modo de Estudo esteja ativado, já exibe na hora
+            if (studyMode) {
+                showImmediateFeedback(questionNum);
+            }
+        }
+
+        // Atualizar Contagem de Respondidas no Header
+        function updateProgress() {
+            const count = Object.keys(userAnswers).length;
+            document.getElementById('progress-text').innerText = `Respondidas: ${count}/10`;
+        }
+
+        // Exibição Imediata (Modo de Estudo)
+        function showImmediateFeedback(qNum) {
+            const q = quizData[qNum - 1];
+            const userAns = userAnswers[qNum];
+            const feedbackDiv = document.getElementById(`feedback-${qNum}`);
+            
+            feedbackDiv.classList.remove('hidden');
+
+            const isCorrect = userAns === q.correct;
+            
+            feedbackDiv.innerHTML = `
+                <div class="p-5 rounded-2xl border ${isCorrect ? 'bg-emerald-50/50 border-emerald-200 text-emerald-900' : 'bg-red-50/50 border-red-200 text-red-900'}">
+                    <p class="font-bold flex items-center gap-2 text-sm sm:text-base mb-3">
+                        ${isCorrect 
+                            ? '<i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i> Resposta Correta!' 
+                            : `<i class="fa-solid fa-circle-xmark text-red-500 text-xl"></i> Sua resposta: (${userAns}) • Gabarito Correto: (${q.correct})`
+                        }
+                    </p>
+                    <div class="text-sm leading-relaxed prose prose-stone max-w-none border-t border-stone-200/50 pt-3">
+                        ${q.resolution}
+                    </div>
+                </div>
+            `;
+            
+            // Colore a borda externa do card do exercício
+            const card = document.getElementById(`question-card-${qNum}`);
+            card.classList.remove('border-emerald-200', 'border-red-200');
+            card.classList.add(isCorrect ? 'border-emerald-200' : 'border-red-200');
+        }
+
+        // Toggle do Modo de Estudo
+        function toggleStudyMode() {
+            studyMode = document.getElementById('study-mode-toggle').checked;
+            
+            // Limpa as visualizações de feedback se alternar no meio do caminho
+            for (let i = 1; i <= 10; i++) {
+                const feedbackDiv = document.getElementById(`feedback-${i}`);
+                if (!submitted) {
+                    feedbackDiv.classList.add('hidden');
+                    const card = document.getElementById(`question-card-${i}`);
+                    card.classList.remove('border-emerald-200', 'border-red-200');
+                }
+            }
+
+            // Se ativado e já houver respostas, processa feedbacks delas na hora
+            if (studyMode) {
+                Object.keys(userAnswers).forEach(qNum => {
+                    showImmediateFeedback(Number(qNum));
+                });
+            }
+        }
+
+        // Cálculo e Exibição de Gabarito Geral de Fim de Teste
+        function calculateResults() {
+            const unanswered = [];
+            for (let i = 1; i <= 10; i++) {
+                if (!userAnswers[i]) unanswered.push(i);
+            }
+
+            if (unanswered.length > 0) {
+                // Notificação de erro elegante customizada ao invés de alert()
+                showToast(`Por favor, responda a todas as questões antes de finalizar. Pendentes: ${unanswered.join(', ')}`, 'warning');
+                
+                // Rola suave até a primeira não respondida
+                document.getElementById(`question-card-${unanswered[0]}`).scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            submitted = true;
+            document.getElementById('study-mode-toggle').disabled = true;
+            document.getElementById('btn-submit-quiz').disabled = true;
+            document.getElementById('btn-submit-quiz').classList.add('opacity-50', 'cursor-not-allowed');
+
+            let score = 0;
+            const detailedContainer = document.getElementById('results-detailed-container');
+            detailedContainer.innerHTML = '';
+
+            // Processa pontuação e constrói resumo final no painel inferior
+            quizData.forEach((q, idx) => {
+                const qNum = idx + 1;
+                const userAns = userAnswers[qNum];
+                const isCorrect = userAns === q.correct;
+                
+                if (isCorrect) score++;
+
+                // Constrói cards espelho de feedback para o container inferior unificado
+                const resultCard = document.createElement('div');
+                resultCard.className = `p-6 rounded-2xl border ${isCorrect ? 'bg-emerald-50/40 border-emerald-200' : 'bg-red-50/40 border-red-200'} transition-all duration-300`;
+                resultCard.innerHTML = `
+                    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                        <span class="font-bold text-sepia-900 flex items-center gap-2">
+                            Questão ${qNum}: 
+                            ${isCorrect 
+                                ? '<span class="text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full text-xs font-semibold">Acertou</span>' 
+                                : '<span class="text-red-700 bg-red-100 px-2.5 py-0.5 rounded-full text-xs font-semibold">Errou</span>'
+                            }
+                        </span>
+                        <div class="text-xs text-stone-500 font-semibold">
+                            Sua escolha: <span class="${isCorrect ? 'text-emerald-700' : 'text-red-700'} font-bold">(${userAns})</span> | Gabarito: <span class="text-emerald-700 font-bold">(${q.correct})</span>
+                        </div>
+                    </div>
+                    <div class="prose max-w-none text-sepia-900/80 text-sm mb-4">
+                        ${q.questionText}
+                    </div>
+                    <div class="border-t border-stone-200 pt-4 text-sepia-900">
+                        ${q.resolution}
+                    </div>
+                `;
+                detailedContainer.appendChild(resultCard);
+
+                // Também ativa o feedback embutido em cada questão acima na página
+                showImmediateFeedback(qNum);
+            });
+
+            // Configurações do painel do resultado global
+            const resultsPanel = document.getElementById('quiz-results-panel');
+            resultsPanel.classList.remove('hidden');
+            
+            const pct = (score / 10) * 100;
+            document.getElementById('score-percentage').innerText = `${pct}%`;
+            document.getElementById('correct-count').innerText = score;
+
+            // Animação do círculo de progresso em SVG
+            const circle = document.getElementById('score-circle');
+            const circumference = 2 * Math.PI * 50; // r=50 -> ~314.16
+            const offset = circumference - (pct / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            // Feedback por escrito de desempenho
+            const feedbackText = document.getElementById('performance-feedback');
+            if (score >= 9) {
+                feedbackText.innerText = 'Excelente desempenho! Você domina plenamente os conteúdos da FAURGS!';
+                feedbackText.className = 'text-sm font-semibold text-emerald-700';
+            } else if (score >= 7) {
+                feedbackText.innerText = 'Bom desempenho! Você possui base teórica consistente, mas atente aos pequenos detalhes.';
+                feedbackText.className = 'text-sm font-semibold text-blue-700';
+            } else {
+                feedbackText.innerText = 'Ainda há margem para melhorar! Revise as correntes e tabelas para consolidar o aprendizado.';
+                feedbackText.className = 'text-sm font-semibold text-amber-600';
+            }
+
+            // Exibe botão flutuante rápido para o gabarito
+            document.getElementById('scroll-to-result-btn').classList.remove('hidden');
+
+            // Rola suavemente até o container de notas
+            setTimeout(() => {
+                resultsPanel.scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        // Rolagem de Atalho para o painel de resultados
+        function scrollToResults() {
+            document.getElementById('quiz-results-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Função de Reset Geral do Simulado
+        function resetQuiz() {
+            userAnswers = {};
+            submitted = false;
+            studyMode = false;
+            
+            document.getElementById('study-mode-toggle').checked = false;
+            document.getElementById('study-mode-toggle').disabled = false;
+            document.getElementById('btn-submit-quiz').disabled = false;
+            document.getElementById('btn-submit-quiz').classList.remove('opacity-50', 'cursor-not-allowed');
+            
+            document.getElementById('quiz-results-panel').classList.add('hidden');
+            document.getElementById('scroll-to-result-btn').classList.add('hidden');
+
+            renderQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast('Simulado resetado com sucesso. Bons estudos!', 'success');
+        }
+
+        // Sistema Simples e Bonito de Notificações tipo Toast (Sem usar alert)
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-5 right-5 z-50 px-6 py-3.5 rounded-xl shadow-lg text-sm font-medium flex items-center gap-3 transition-all duration-300 transform translate-y-10 opacity-0`;
+            
+            const colors = {
+                success: 'bg-emerald-800 text-white',
+                warning: 'bg-amber-800 text-white',
+                info: 'bg-stone-800 text-white'
+            };
+
+            const icons = {
+                success: '<i class="fa-solid fa-circle-check text-lg"></i>',
+                warning: '<i class="fa-solid fa-triangle-exclamation text-lg"></i>',
+                info: '<i class="fa-solid fa-circle-info text-lg"></i>'
+            };
+
+            toast.className += ` ${colors[type]}`;
+            toast.innerHTML = `${icons[type]} <span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            // Anima entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 50);
+
+            // Anima saída e remove
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4500);
+        }
+
+        // Inicialização automática do App ao Carregar Página
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>

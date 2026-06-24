@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Memorização Acelerada: Cartografia - IFSC/FAURGS</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for Beautiful Math Formula Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom highlighting overlay */
+        .highlight-yellow {
+            background-color: rgba(254, 243, 199, 0.85);
+            border-bottom: 2px solid rgba(245, 158, 11, 0.4);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.125rem;
+            color: #78350f;
+            font-weight: 500;
+        }
+        .highlight-blue {
+            background-color: rgba(224, 242, 254, 0.9);
+            border-bottom: 2px solid rgba(14, 165, 233, 0.4);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.125rem;
+            color: #0369a1;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-900 min-h-screen selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Sticky Floating Audio Player & Navigation -->
+    <header class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 py-3 shadow-xs">
+        <div class="max-w-4xl mx-auto px-4 md:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <div class="p-2 bg-slate-100 rounded-lg text-slate-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+                </div>
+                <div class="flex-1 sm:flex-initial">
+                    <h1 class="text-xs font-bold uppercase tracking-wider text-slate-500">Player de Áudio da Aula</h1>
+                    <!-- Dynamic File Name Input -->
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                        <label class="text-[10px] text-slate-400 font-mono">Arquivo:</label>
+                        <input id="audio-filename" type="text" value="aula_cartografia.mp3" class="text-xs bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-slate-700 font-mono focus:outline-none focus:border-slate-400 w-44" placeholder="Ex: audio.mp3" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Built Controls -->
+            <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto justify-end">
+                <audio id="lesson-audio" src="aula_cartografia.mp3" preload="none"></audio>
+                
+                <!-- Playback & Time controls -->
+                <div class="flex items-center gap-3">
+                    <button id="btn-play-pause" class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-900 text-white hover:bg-slate-800 transition shadow-xs focus:outline-none">
+                        <!-- Play Icon -->
+                        <svg id="svg-play" class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                        <!-- Pause Icon (hidden by default) -->
+                        <svg id="svg-pause" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
+                    </button>
+                    
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-2 text-xs font-mono text-slate-600">
+                            <span id="audio-current-time">00:00</span>
+                            <span class="text-slate-300">/</span>
+                            <span id="audio-duration">00:00</span>
+                        </div>
+                        <input id="audio-slider" type="range" min="0" max="100" value="0" class="w-28 sm:w-36 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900">
+                    </div>
+                </div>
+
+                <!-- Playback Speed Controls -->
+                <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                    <button data-speed="0.75" class="btn-speed text-xs px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium">0.75x</button>
+                    <button data-speed="1.0" class="btn-speed text-xs px-2 py-1 rounded-md bg-white text-slate-900 font-semibold shadow-xs">1x</button>
+                    <button data-speed="1.25" class="btn-speed text-xs px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium">1.25x</button>
+                    <button data-speed="1.5" class="btn-speed text-xs px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium">1.5x</button>
+                    <button data-speed="2.0" class="btn-speed text-xs px-2 py-1 rounded-md text-slate-600 hover:text-slate-900 font-medium">2x</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 md:px-6 py-10">
+        
+        <!-- Header / Banner Section -->
+        <section class="text-center border-b border-slate-100 pb-10 mb-10">
+            <span class="text-xs font-bold tracking-widest text-blue-600 uppercase">Foco de Banca: FAURGS / IFSC (EBTT)</span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mt-2 mb-4 leading-tight">
+                GUIA DE MEMORIZAÇÃO ACELERADA:<br><span class="text-slate-700">CARTOGRAFIA</span>
+            </h1>
+            <p class="text-slate-600 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+                Este guia foi elaborado para servir como material de revisão de véspera e memorização ativa. Ele reúne os tópicos mais cobrados pela banca <span class="highlight-blue">FAURGS</span> em cargos docentes e técnicos de Geografia, divididos didaticamente em duas páginas de estudo direcionado.
+            </p>
+        </section>
+
+        <!-- PÁGINA 1 -->
+        <article class="space-y-12">
+            <div class="flex items-center gap-3 border-l-4 border-slate-900 pl-4">
+                <span class="text-3xl font-black text-slate-300">PÁGINA 1</span>
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-wide">Rede Geográfica e Geometria das Projeções</h2>
+            </div>
+
+            <!-- Geodésia Prática -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">1</span>
+                    Geodésia Prática para a Prova
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Para representar a Terra, a cartografia utiliza diferentes modelos de superfície que você precisa diferenciar sem hesitação no momento do exame:
+                </p>
+                <div class="grid md:grid-cols-2 gap-4 mt-2">
+                    <div class="border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition">
+                        <h4 class="font-bold text-slate-900 flex items-center gap-1.5 mb-2">
+                            <span class="w-2.5 h-2.5 bg-amber-500 rounded-full"></span> Geoide
+                        </h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Modelo <span class="highlight-yellow">físico</span> que considera a <span class="highlight-yellow">gravidade</span> e o nível médio dos mares. É a superfície <span class="highlight-blue">real e irregular</span> do planeta.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-5 hover:border-slate-300 transition">
+                        <h4 class="font-bold text-slate-900 flex items-center gap-1.5 mb-2">
+                            <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Elipsoide de Referência
+                        </h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Modelo <span class="highlight-yellow">matemático perfeito</span> (uma esfera achatada nos polos) criado para <span class="highlight-blue">viabilizar os cálculos</span> cartográficos.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Paralelos, Meridianos, Latitude e Longitude -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">2</span>
+                    Paralelos, Meridianos, Latitude e Longitude
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    As coordenadas geográficas utilizam o sistema sexagesimal para localização direta. Memorize este quadro comparativo extremamente cobrado:
+                </p>
+
+                <!-- Responsive Table (Hiding table on mobile, showing as clean cards) -->
+                <!-- Desktop Table View (>= 768px) -->
+                <div class="hidden md:block overflow-hidden border border-slate-200 rounded-xl">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-600 w-1/5">Elemento</th>
+                                <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-600 w-1/4">Definição Geométrica</th>
+                                <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-600 w-1/5">Distância Angular</th>
+                                <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-600 w-1/6">Variação</th>
+                                <th class="p-4 text-xs font-bold uppercase tracking-wider text-slate-600 w-1/5">Divisão do Globo</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-4 align-top">
+                                    <strong class="text-slate-950 font-bold block">Paralelos</strong>
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top">
+                                    Círculos paralelos ao Equador (único <span class="highlight-blue">círculo máximo</span>).
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top">
+                                    <strong class="text-slate-800 font-semibold block">Latitude:</strong> distância angular medida a partir do Equador.
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top font-mono font-medium">
+                                    0° a 90° Norte (N) ou Sul (S).
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top">
+                                    Hemisfério <span class="highlight-yellow">Norte</span> (Setentrional/Boreal) e <span class="highlight-yellow">Sul</span> (Meridional/Austral).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 align-top">
+                                    <strong class="text-slate-950 font-bold block">Meridianos</strong>
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top">
+                                    Semicírculos máximos que ligam os <span class="highlight-blue">polos geográficos</span>.
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top">
+                                    <strong class="text-slate-800 font-semibold block">Longitude:</strong> distância angular medida a partir de Greenwich.
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top font-mono font-medium">
+                                    0° a 180° Leste (L/E) ou Oeste (O/W).
+                                </td>
+                                <td class="p-4 text-sm text-slate-600 align-top">
+                                    Hemisfério <span class="highlight-yellow">Oriental</span> (Leste) e <span class="highlight-yellow">Ocidental</span> (Oeste).
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Card View (< 768px) - Absolutely Zero Scroll Horizontal -->
+                <div class="block md:hidden space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50/50">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                            <span class="text-base font-bold text-slate-900">Paralelos</span>
+                            <span class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-sm">0° a 90° N / S</span>
+                        </div>
+                        <div class="text-xs space-y-2 text-slate-700">
+                            <p><strong>Definição:</strong> Círculos paralelos ao Equador (único círculo máximo).</p>
+                            <p><strong>Distância Angular:</strong> <span class="highlight-yellow">Latitude</span>, medida a partir do Equador.</p>
+                            <p><strong>Divisão do Globo:</strong> Hemisfério Norte (Setentrional/Boreal) e Sul (Meridional/Austral).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50/50">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                            <span class="text-base font-bold text-slate-900">Meridianos</span>
+                            <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-sm">0° a 180° L / O</span>
+                        </div>
+                        <div class="text-xs space-y-2 text-slate-700">
+                            <p><strong>Definição:</strong> Semicírculos máximos que ligam os polos geográficos.</p>
+                            <p><strong>Distância Angular:</strong> <span class="highlight-yellow">Longitude</span>, medida a partir de Greenwich.</p>
+                            <p><strong>Divisão do Globo:</strong> Hemisfério Oriental (Leste) e Ocidental (Oeste).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alerta de Pegadinha -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-5 mt-4 space-y-2">
+                    <h4 class="text-amber-900 font-bold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                        ⚠️ Alerta de Pegadinha (Polos da Terra)
+                    </h4>
+                    <p class="text-sm text-amber-800 leading-relaxed">
+                        A banca <span class="highlight-yellow">FAURGS</span> costuma explorar rigorosamente a diferença de localização geométrica dos polos:
+                    </p>
+                    <ul class="list-disc pl-5 text-sm text-amber-800 space-y-1">
+                        <li><strong>Polo Norte Geográfico:</strong> O ponto real de convergência absoluta dos meridianos (eixo físico de rotação).</li>
+                        <li><strong>Polo Norte Magnético:</strong> Ponto flutuante gerado pelo campo dinâmico do núcleo externo da Terra. A diferença angular entre o Norte geográfico e o magnético é classificada como <span class="highlight-yellow">declinação magnética</span>.</li>
+                    </ul>
+                </div>
+
+                <!-- GPS/GNSS na Prova -->
+                <div class="bg-blue-50/50 border-l-4 border-blue-600 rounded-r-xl p-5 mt-4 space-y-2">
+                    <h4 class="text-blue-900 font-bold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                        🛰️ GPS/GNSS na Prova
+                    </h4>
+                    <p class="text-sm text-blue-800 leading-relaxed">
+                        Para determinar as coordenadas tridimensionais (latitude, longitude e altitude), o receptor de GPS precisa captar o sinal de, no mínimo, <strong class="text-blue-950">4 satélites</strong> de órbita fixa simultaneamente:
+                    </p>
+                    <ul class="list-disc pl-5 text-sm text-blue-800 space-y-1">
+                        <li><strong>3 satélites</strong> são usados para calcular a posição espacial 3D por trilateração/triangulação.</li>
+                        <li><strong>1 satélite</strong> atua de forma exclusiva para corrigir o erro de tempo (sincronização do relógio atômico interno).</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Geometria das Projeções Cartográficas -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">3</span>
+                    Geometria das Projeções Cartográficas
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Toda projeção de uma superfície esférica em um plano gera distorções incontornáveis. Elas são classificadas por dois critérios centrais:
+                </p>
+
+                <!-- Sub-items for Projections classification -->
+                <div class="space-y-6 mt-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-6">
+                        <h4 class="text-base font-bold text-slate-900 mb-3 uppercase tracking-wider text-xs">A) Quanto à Superfície de Projeção</h4>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Cilíndrica</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Projeta as coordenadas sobre um cilindro envolvente. Forma uma rede ortogonal (linhas retas se cruzando a 90°). <span class="highlight-blue">Excelente para regiões equatoriais</span>.
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Cônica</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Projeta sobre um cone. Os meridianos são retas convergentes ao polo e paralelos são arcos concêntricos. <span class="highlight-blue">Ideal para médias latitudes</span> (países temperados).
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Azimutal / Planar</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Projeta sobre um plano tangente a um único ponto. Distorções aumentam radialmente a partir do centro. <span class="highlight-blue">Ideal para regiões polares</span> e rotas de aviação.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-6">
+                        <h4 class="text-base font-bold text-slate-900 mb-3 uppercase tracking-wider text-xs">B) Quanto à Propriedade Métrica (O que é preservado?)</h4>
+                        <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Conformes</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Preservam as <span class="highlight-yellow">formas</span> e os <span class="highlight-yellow">ângulos</span> locais, mas distorcem as áreas. (Exemplo: Mercator).
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Equivalentes</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Preservam as <span class="highlight-yellow">proporções de área</span>, mas distorcem severamente as formas. (Exemplo: Peters).
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Equidistantes</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Preservam a fidelidade das <span class="highlight-yellow">distâncias</span> a partir de um ponto de origem.
+                                </p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-slate-100">
+                                <h5 class="font-bold text-sm text-slate-900 mb-1.5">Afiláticas</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Não preservam nenhuma propriedade de forma exata, mas atenuam as distorções para fins didáticos (Exemplo: Robinson).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caso Prático: Lambert -->
+                <div class="border border-slate-200 rounded-xl p-5 mt-4">
+                    <h4 class="font-bold text-slate-900 flex items-center gap-2 text-sm mb-3">
+                        <span class="w-2 h-2 bg-slate-900 rounded-full"></span> 📍 Caso Prático de Memorização: Projeção Cônica Conforme de Lambert
+                    </h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Muito adotada no mapeamento contínuo do Bioma Pampa para evitar as quebras de fusos UTM. É uma projeção <strong class="text-slate-800">cônica</strong> e <strong class="text-slate-800">conforme</strong> secante, parametrizada especificamente para o Rio Grande do Sul com as seguintes especificações:
+                    </p>
+                    <div class="flex flex-wrap gap-4 mt-3">
+                        <span class="text-xs font-mono bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200">Meridiano Central: <strong class="text-slate-900">-54°</strong></span>
+                        <span class="text-xs font-mono bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200">Paralelo Padrão 1: <strong class="text-slate-900">-27°</strong></span>
+                        <span class="text-xs font-mono bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg border border-slate-200">Paralelo Padrão 2: <strong class="text-slate-900">-33°</strong></span>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- PÁGINA 2 -->
+        <article class="space-y-12 mt-16 pt-12 border-t border-slate-200">
+            <div class="flex items-center gap-3 border-l-4 border-slate-900 pl-4">
+                <span class="text-3xl font-black text-slate-300">PÁGINA 2</span>
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-wide">UTM, Geopolítica Cartográfica e Matemática de Prova</h2>
+            </div>
+
+            <!-- O Sistema UTM -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">1</span>
+                    O Sistema UTM (Universal Transversa de Mercator)
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Diferente das coordenadas geográficas (angulares), o UTM é um sistema de coordenadas plano-retangulares (<span class="highlight-yellow">métricas</span>). Grave seus fatores estruturantes:
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-4 mt-2">
+                    <div class="border border-slate-200 rounded-xl p-5">
+                        <h4 class="font-bold text-sm text-slate-900 mb-1.5">Tipo e Propriedade</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Projeção cilíndrica, transversa e secante. Mantém de forma estrita a propriedade <span class="highlight-blue">conforme</span>.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-5">
+                        <h4 class="font-bold text-sm text-slate-900 mb-1.5">Divisão Global</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            O planeta é dividido em <strong class="text-slate-800">60 fusos de 6°</strong> de longitude, numerados de 1 a 60 a partir do meridiano de 180° W rumo ao leste.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-5">
+                        <h4 class="font-bold text-sm text-slate-900 mb-1.5">Coordenadas (X, Y)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Definem posições bidimensionais horizontais expressas puramente em <span class="highlight-blue">metros</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Alerta de Pegadinha: Falsa Origem UTM -->
+                <div class="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-5 mt-4 space-y-2">
+                    <h4 class="text-amber-900 font-bold flex items-center gap-2">
+                        <svg class="w-5 h-5 text-amber-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        ⚠️ Alerta de Pegadinha (Falsa Origem UTM)
+                    </h4>
+                    <p class="text-sm text-amber-800 leading-relaxed">
+                        Para evitar coordenadas negativas na prova, memorize rigorosamente as constantes de acréscimo fictício:
+                    </p>
+                    <ul class="list-disc pl-5 text-sm text-amber-800 space-y-1">
+                        <li><strong>Coordenada Este (Eixo X):</strong> O Meridiano Central (MC) de qualquer fuso recebe o valor fictício de <span class="highlight-yellow">500.000 m</span>. Deslocamentos para Oeste diminuem esse valor; para Leste, aumentam.</li>
+                        <li><strong>Coordenada Norte (Eixo Y):</strong> 
+                            <ul class="list-circle pl-5 mt-1 space-y-1">
+                                <li>No Hemisfério Norte: O Equador é a origem com <strong class="text-amber-950">0 m</strong>.</li>
+                                <li>No Hemisfério Sul: Atribui-se ao Equador o valor de <span class="highlight-yellow">10.000.000 m</span>, decrescendo em direção ao polo Sul.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Fator de Escala (k0) no UTM -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5">
+                    <h4 class="font-bold text-slate-900 text-sm mb-2">📈 Fator de Escala (\(k_0\)) no UTM</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Devido à secância do cilindro, o fator de escala no Meridiano Central de cada fuso é reduzido para <strong class="text-slate-800">0,9996</strong> (\(k_0 = 0,9996\)) para atenuar as deformações nas bordas do fuso.
+                    </p>
+                    <p class="text-xs text-slate-600 leading-relaxed mt-2 italic border-l-2 border-slate-300 pl-2">
+                        *Aplicação de Prova:* Se uma linha reta tem 1.000 m no terreno medidos exatamente sobre o Meridiano Central, a sua medida no fuso UTM (com escala 1:1.000) será representada graficamente por <strong>99,96 cm</strong> no papel (e não por 100 cm).
+                    </p>
+                </div>
+            </section>
+
+            <!-- O Embate Político-Ideológico -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">2</span>
+                    O Embate Político-Ideológico da Cartografia
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Os mapas são representações discursivas carregadas de poder político. A banca FAURGS frequentemente aborda a oposição ideológica clássica:
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                    <!-- Mercator -->
+                    <div class="border border-slate-200 rounded-xl p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-base text-slate-900">Projeção de Mercator (1569)</h4>
+                            <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full">Cil. Conforme</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Criada no contexto da expansão marítima europeia. Mantém as direções loxodrômicas (linhas de rumo constante) como linhas retas.
+                        </p>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800 block mb-0.5">Ideologia de Poder:</strong> Distorce as áreas nas altas latitudes, agigantando a Europa e a América do Norte. Consolidou visualmente o <span class="highlight-yellow">Eurocentrismo colonial</span> e a superioridade física das metrópoles.
+                        </p>
+                    </div>
+
+                    <!-- Peters -->
+                    <div class="border border-slate-200 rounded-xl p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-base text-slate-900">Projeção de Peters (1973)</h4>
+                            <span class="text-xs font-semibold bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full">Cil. Equivalente</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Criada em meio à Guerra Fria e às lutas de descolonização. Mantém a proporção exata do tamanho das áreas terrestres.
+                        </p>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800 block mb-0.5">Ideologia de Poder:</strong> Alonga verticalmente as formas continentais. Tem como foco central a valorização geopolítica do <span class="highlight-yellow">Terceiro Mundo</span>, dando à África e à América Latina o devido destaque proporcional.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Anamorfose Cartográfica -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 mt-4">
+                    <h4 class="font-bold text-slate-900 text-sm mb-1.5">Outras Representações Ideológicas: Anamorfose Cartográfica</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Técnica de representação espacial sem precisão geométrica onde os limites dos territórios são <span class="highlight-blue">distorcidos e redimensionados de forma proporcional</span> ao valor de uma variável temática específica (ex: população, PIB, emissão de carbono ou hotspots de fome).
+                    </p>
+                </div>
+            </section>
+
+            <!-- Fórmulas Matemáticas Críticas -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">3</span>
+                    Fórmulas Matemáticas Críticas (Garantia de Acertos)
+                </h3>
+                <p class="text-slate-700 leading-relaxed">
+                    Para gabaritar as questões de cálculo matemático aplicadas à cartografia, domine estas três construções:
+                </p>
+
+                <!-- Formulas Cards -->
+                <div class="space-y-4 mt-4">
+                    <!-- A -->
+                    <div class="border border-slate-200 rounded-xl p-6 bg-white space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider">A) Conversão de Áreas Gráficas para Áreas Reais</h4>
+                        <p class="text-xs text-slate-600">A conversão de áreas exige elevar a escala linear ao quadrado:</p>
+                        
+                        <!-- Mathematical representation -->
+                        <div class="text-center py-4 bg-slate-50 rounded-lg font-mono text-base text-slate-800">
+                            $$A_{\text{real}} = a_{\text{gráfica}} \cdot E^2$$
+                        </div>
+                        
+                        <p class="text-xs text-slate-500">
+                            Onde \(A_{\text{real}}\) é a área no terreno, \(a_{\text{gráfica}}\) é a área medida no mapa e \(E\) é o denominador da escala linear.
+                        </p>
+
+                        <!-- Exemplo de Prova -->
+                        <div class="bg-blue-50/40 p-4 rounded-lg border border-blue-100">
+                            <h5 class="text-xs font-bold text-blue-900 uppercase mb-1">Exemplo de Questão Real (FAURGS - SES):</h5>
+                            <p class="text-xs text-blue-800 leading-relaxed">
+                                Um mapa epidemiológico na escala de <strong class="text-blue-950">1:50.000</strong> apresenta uma área de mancha de inundação de <strong class="text-blue-950">30 cm²</strong> no papel. Qual a área real correspondente?
+                            </p>
+                            <ol class="list-decimal pl-5 text-xs text-blue-900 mt-2 space-y-1">
+                                <li>Escala linear: 1 cm = 50.000 cm reais (0,5 km).</li>
+                                <li>Escala de área ao quadrado: \(1\text{ cm}^2 = (0,5\text{ km})^2 = 0,25\text{ km}^2\).</li>
+                                <li>Multiplicação final: \(A_{\text{real}} = 30 \cdot 0,25\text{ km}^2 = \mathbf{7,5\text{ km}^2}\) (ou 750 hectares).</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <!-- B -->
+                    <div class="border border-slate-200 rounded-xl p-6 bg-white space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider">B) Cálculo de Declividade / Inclinação de Encostas</h4>
+                        <p class="text-xs text-slate-600">Cobrado em questões de geomorfologia e engenharia:</p>
+                        
+                        <!-- Mathematical representation -->
+                        <div class="text-center py-4 bg-slate-50 rounded-lg font-mono text-base text-slate-800">
+                            $$i = \frac{h \cdot 100}{c}$$
+                        </div>
+                        
+                        <p class="text-xs text-slate-500">
+                            Onde \(i\) é a inclinação (em \(\%\)), \(h\) é a diferença de altitude (desnível vertical em metros) e \(c\) é o comprimento real horizontal do terreno (calculado a partir da escala linear do mapa).
+                        </p>
+                    </div>
+
+                    <!-- C -->
+                    <div class="border border-slate-200 rounded-xl p-6 bg-white space-y-4">
+                        <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider">C) Linhas de Rumo na Navegação (Ortodromia vs. Loxodromia)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Confronto direto entre as propriedades das projeções Mercator e Gnomônica (Azimutal):
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-4 mt-2">
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <h5 class="text-xs font-bold text-slate-800 mb-1">Ortodromia (menor distância entre dois pontos)</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Representada por uma linha <strong class="text-slate-900">reta</strong> na Projeção Gnomônica e por uma linha <span class="highlight-yellow">curva</span> na Projeção de Mercator.
+                                </p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                                <h5 class="text-xs font-bold text-slate-800 mb-1">Loxodromia (rumo constante por bússola)</h5>
+                                <p class="text-xs text-slate-600 leading-relaxed">
+                                    Representada por uma linha <strong class="text-slate-900">reta</strong> na Projeção de Mercator e por uma linha <span class="highlight-yellow">curva</span> na Gnomônica.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resumo de Propriedades para Memorização Rápida -->
+            <section class="space-y-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="flex items-center justify-center w-6 h-6 text-xs bg-slate-900 text-white rounded-full">4</span>
+                    Resumo de Propriedades para Memorização Rápida
+                </h3>
+                
+                <!-- Responsive Table 2 -->
+                <!-- Desktop View (>= 768px) -->
+                <div class="hidden md:block overflow-hidden border border-slate-200 rounded-xl">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200">
+                                <th class="p-3 font-bold uppercase tracking-wider text-slate-600">Sistema</th>
+                                <th class="p-3 font-bold uppercase tracking-wider text-slate-600">Superfície</th>
+                                <th class="p-3 font-bold uppercase tracking-wider text-slate-600">Propriedade</th>
+                                <th class="p-3 font-bold uppercase tracking-wider text-slate-600">Distorção Área</th>
+                                <th class="p-3 font-bold uppercase tracking-wider text-slate-600">Rumo / Retas</th>
+                                <th class="p-3 font-bold uppercase tracking-wider text-slate-600">Geopolítica / Aplicação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-3 font-bold text-slate-950">Mercator</td>
+                                <td class="p-3 text-slate-600">Cilíndrica Normal</td>
+                                <td class="p-3 text-slate-600">Conforme</td>
+                                <td class="p-3 text-slate-600">Infinita nos polos</td>
+                                <td class="p-3 text-slate-600">Loxodromia é reta</td>
+                                <td class="p-3 text-slate-600">Navegação; Discurso Eurocêntrico</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-950">Peters</td>
+                                <td class="p-3 text-slate-600">Cilíndrica Normal</td>
+                                <td class="p-3 text-slate-600">Equivalente</td>
+                                <td class="p-3 text-slate-600">Nula nos paralelos</td>
+                                <td class="p-3 text-slate-600">Distorce ângulos</td>
+                                <td class="p-3 text-slate-600">Geopolítica Terceiro-Mundista</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-950">Gnomônica</td>
+                                <td class="p-3 text-slate-600">Azimutal / Planar</td>
+                                <td class="p-3 text-slate-600">Não Conforme/Equiv.</td>
+                                <td class="p-3 text-slate-600">Cresce pras bordas</td>
+                                <td class="p-3 text-slate-600">Ortodromia é reta</td>
+                                <td class="p-3 text-slate-600">Navegação aérea a longa distância</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-950">UTM</td>
+                                <td class="p-3 text-slate-600">Cilíndrica Transversa</td>
+                                <td class="p-3 text-slate-600">Conforme</td>
+                                <td class="p-3 text-slate-600">Fator \(k_0 = 0,9996\)</td>
+                                <td class="p-3 text-slate-600">Coordenadas métricas</td>
+                                <td class="p-3 text-slate-600">Cartografia nacional e SIG</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Cards View for Summary Table (< 768px) - Absolutely Zero Scroll Horizontal -->
+                <div class="block md:hidden space-y-4">
+                    <!-- Mercator card -->
+                    <div class="border border-slate-200 rounded-xl p-4 space-y-2 bg-slate-50/50">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                            <span class="text-sm font-bold text-slate-950">Mercator</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded-sm">Conforme</span>
+                        </div>
+                        <div class="text-[11px] space-y-1 text-slate-700">
+                            <p><strong>Superfície:</strong> Cilíndrica Normal</p>
+                            <p><strong>Área:</strong> Nula no Equador; Infinita nos polos</p>
+                            <p><strong>Rumo:</strong> Loxodromia é linha reta</p>
+                            <p><strong>Contexto:</strong> Expansão Marítima; Eurocentrismo</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Peters card -->
+                    <div class="border border-slate-200 rounded-xl p-4 space-y-2 bg-slate-50/50">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                            <span class="text-sm font-bold text-slate-950">Peters</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded-sm">Equivalente</span>
+                        </div>
+                        <div class="text-[11px] space-y-1 text-slate-700">
+                            <p><strong>Superfície:</strong> Cilíndrica Normal</p>
+                            <p><strong>Área:</strong> Nula nos paralelos secantes; deforma formas</p>
+                            <p><strong>Rumo:</strong> Distorce ângulos e direções</p>
+                            <p><strong>Contexto:</strong> Descolonização; Terceiro-Mundismo</p>
+                        </div>
+                    </div>
+
+                    <!-- Gnomônica card -->
+                    <div class="border border-slate-200 rounded-xl p-4 space-y-2 bg-slate-50/50">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                            <span class="text-sm font-bold text-slate-950">Gnomônica</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded-sm">Não Conforme/Equiv.</span>
+                        </div>
+                        <div class="text-[11px] space-y-1 text-slate-700">
+                            <p><strong>Superfície:</strong> Azimutal / Planar</p>
+                            <p><strong>Área:</strong> Cresce radialmente a partir do centro</p>
+                            <p><strong>Rumo:</strong> Ortodromia é representada por linha reta</p>
+                            <p><strong>Contexto:</strong> Navegação de longa distância / Aviação</p>
+                        </div>
+                    </div>
+
+                    <!-- UTM card -->
+                    <div class="border border-slate-200 rounded-xl p-4 space-y-2 bg-slate-50/50">
+                        <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                            <span class="text-sm font-bold text-slate-950">UTM</span>
+                            <span class="text-[10px] bg-slate-200 text-slate-800 font-bold px-2 py-0.5 rounded-sm">Conforme</span>
+                        </div>
+                        <div class="text-[11px] space-y-1 text-slate-700">
+                            <p><strong>Superfície:</strong> Cilíndrica Transversa</p>
+                            <p><strong>Área:</strong> Controlada pelo fator de escala \(k_0 = 0,9996\) no MC</p>
+                            <p><strong>Rumo:</strong> Coordenadas plano-retangulares métricas</p>
+                            <p><strong>Contexto:</strong> Topografia, cartografia militar e SIG</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- Footer / CTA -->
+        <footer class="mt-16 pt-8 border-t border-slate-200 text-center space-y-6">
+            <div class="space-y-1">
+                <p class="text-sm font-semibold text-slate-800">Fim do Guia de Memorização Ativa</p>
+                <p class="text-xs text-slate-500">Construído especificamente para o concurso do IFSC - Banca FAURGS</p>
+            </div>
+            
+            <!-- Questions Button -->
+            <div>
+                <a href="coordenadasquestoes.html" class="inline-flex items-center justify-center gap-2 bg-slate-900 text-white font-semibold text-sm px-6 py-3.5 rounded-xl hover:bg-slate-800 transition shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 group">
+                    Iniciar Simulado de Questões
+                    <svg class="w-4 h-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Audio Player Logic Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('lesson-audio');
+            const playPauseBtn = document.getElementById('btn-play-pause');
+            const svgPlay = document.getElementById('svg-play');
+            const svgPause = document.getElementById('svg-pause');
+            const audioSlider = document.getElementById('audio-slider');
+            const currentTimeEl = document.getElementById('audio-current-time');
+            const durationEl = document.getElementById('audio-duration');
+            const filenameInput = document.getElementById('audio-filename');
+            const speedBtns = document.querySelectorAll('.btn-speed');
+
+            // Synchronize input audio file path
+            filenameInput.addEventListener('change', () => {
+                const newFile = filenameInput.value.trim();
+                if (newFile) {
+                    audio.src = newFile;
+                    audio.load();
+                    resetPlayerUI();
+                }
+            });
+
+            // Play / Pause toggle
+            playPauseBtn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play().catch(e => {
+                        console.error("Audio playback error: ", e);
+                        // Subtle warning notification inside the DOM instead of alert
+                        showPlayerError("Não foi possível carregar o arquivo de áudio. Verifique o caminho.");
+                    });
+                    showPauseIcon();
+                } else {
+                    audio.pause();
+                    showPlayIcon();
+                }
+            });
+
+            // Update range slider and current time counter as audio plays
+            audio.addEventListener('timeupdate', () => {
+                if (!isNaN(audio.duration)) {
+                    const percent = (audio.currentTime / audio.duration) * 100;
+                    audioSlider.value = percent;
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            // Handle scrubbing using the slider
+            audioSlider.addEventListener('input', () => {
+                if (!isNaN(audio.duration)) {
+                    const seekTime = (audioSlider.value / 100) * audio.duration;
+                    audio.currentTime = seekTime;
+                }
+            });
+
+            // Audio Metadata Loaded (get total duration)
+            audio.addEventListener('loadedmetadata', () => {
+                durationEl.textContent = formatTime(audio.duration);
+            });
+
+            // Audio Playback Finished
+            audio.addEventListener('ended', () => {
+                showPlayIcon();
+                audioSlider.value = 0;
+                currentTimeEl.textContent = "00:00";
+            });
+
+            // Playback Speed Controller
+            speedBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const speed = parseFloat(btn.dataset.speed);
+                    audio.playbackRate = speed;
+                    
+                    // Toggle active classes on buttons
+                    speedBtns.forEach(b => {
+                        b.classList.remove('bg-white', 'text-slate-900', 'font-semibold', 'shadow-xs');
+                        b.classList.add('text-slate-600', 'hover:text-slate-900', 'font-medium');
+                    });
+                    
+                    btn.classList.add('bg-white', 'text-slate-900', 'font-semibold', 'shadow-xs');
+                    btn.classList.remove('text-slate-600', 'hover:text-slate-900', 'font-medium');
+                });
+            });
+
+            // Format raw seconds to MM:SS
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            function showPlayIcon() {
+                svgPlay.classList.remove('hidden');
+                svgPause.classList.add('hidden');
+            }
+
+            function showPauseIcon() {
+                svgPlay.classList.add('hidden');
+                svgPause.classList.remove('hidden');
+            }
+
+            function resetPlayerUI() {
+                showPlayIcon();
+                audioSlider.value = 0;
+                currentTimeEl.textContent = "00:00";
+                durationEl.textContent = "00:00";
+            }
+
+            function showPlayerError(message) {
+                let errorContainer = document.getElementById('player-error');
+                if (!errorContainer) {
+                    errorContainer = document.createElement('div');
+                    errorContainer.id = 'player-error';
+                    errorContainer.className = 'absolute top-full mt-2 left-0 right-0 mx-auto max-w-sm bg-red-50 border border-red-200 text-red-800 text-xs px-3 py-2 rounded-lg text-center transition shadow-md z-50';
+                    document.querySelector('header').appendChild(errorContainer);
+                }
+                errorContainer.textContent = message;
+                setTimeout(() => {
+                    errorContainer.remove();
+                }, 4000);
+            }
+        });
+    </script>
+</body>
+</html>

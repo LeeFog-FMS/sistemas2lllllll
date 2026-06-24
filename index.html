@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> IFSC Geografia - Menu de Estudos</title>
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para ícones temáticos nas aulas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos Duolingo Customizados */
+        .duo-btn {
+            transition: all 0.15s cubic-bezier(0, 0, 0, 1);
+            transform: translateY(0);
+        }
+        .duo-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 0 rgba(0,0,0,0) !important;
+        }
+        /* Efeito de sombra 3D característico do Duolingo */
+        .shadow-3d-emerald { box-shadow: 0 4px 0 0 #059669; }
+        .shadow-3d-emerald:active { box-shadow: 0 0px 0 0 #059669; }
+        
+        .shadow-3d-blue { box-shadow: 0 4px 0 0 #2563eb; }
+        .shadow-3d-blue:active { box-shadow: 0 0px 0 0 #2563eb; }
+
+        .shadow-3d-purple { box-shadow: 0 4px 0 0 #7c3aed; }
+        .shadow-3d-purple:active { box-shadow: 0 0px 0 0 #7c3aed; }
+
+        .shadow-3d-amber { box-shadow: 0 4px 0 0 #d97706; }
+        .shadow-3d-amber:active { box-shadow: 0 0px 0 0 #d97706; }
+
+        .shadow-3d-rose { box-shadow: 0 4px 0 0 #e11d48; }
+        .shadow-3d-rose:active { box-shadow: 0 0px 0 0 #e11d48; }
+
+        .shadow-3d-cyan { box-shadow: 0 4px 0 0 #0891b2; }
+        .shadow-3d-cyan:active { box-shadow: 0 0px 0 0 #0891b2; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen font-sans">
+
+    <!-- CABEÇALHO / HEADER -->
+    <header class="bg-white border-b-2 border-slate-200 sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-500 text-white p-2.5 rounded-2xl shadow-md">
+                    <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-slate-900 tracking-tight">Rumo ao IFSC</h1>
+                    <p class="text-xs text-slate-500 font-semibold tracking-wide uppercase">Menu de Geografia</p>
+                </div>
+            </div>
+
+            <!-- BARRA DE PROGRESSO GLOBAL -->
+            <div class="w-full md:w-72 bg-slate-100 rounded-full h-5 relative border-2 border-slate-200 overflow-hidden flex items-center">
+                <div id="global-progress" class="bg-emerald-500 h-full rounded-full transition-all duration-500 w-0"></div>
+                <span id="progress-text" class="absolute w-full text-center text-[10px] font-extrabold text-slate-700 select-none">0% Concluído</span>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="openResetModal()" class="px-4 py-2 text-xs font-bold text-rose-600 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition duration-150">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Limpar Progresso
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTAINER PRINCIPAL -->
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- DIVISÃO DOS BLOCOS (Unidades Estilo Duolingo) -->
+        <div id="blocos-container" class="space-y-12">
+            <!-- Os blocos serão gerados dinamicamente via Javascript -->
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t-2 border-slate-200 mt-20 py-8 text-center text-slate-500 text-sm">
+        <p class="font-semibold text-slate-600">Prepare-se com foco e disciplina para o IFSC!</p>
+        <p class="text-xs mt-2">Clique em qualquer módulo para iniciar a aula e registrar seu progresso.</p>
+    </footer>
+
+    <!-- MODAL CUSTOMIZADO PARA RESETAR INFORMAÇÕES (Sem usar alert/confirm) -->
+    <div id="reset-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full mx-4 shadow-2xl border-2 border-slate-200 transform scale-95 transition-transform duration-200">
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-rose-100 text-rose-600 mb-4">
+                    <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-extrabold text-slate-900">Zerar Histórico?</h3>
+                <p class="text-slate-500 text-sm mt-2">Isso redefinirá todos os contadores de acessos e progresso das aulas de volta a zero. Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeResetModal()" class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition duration-150 text-sm">
+                    Cancelar
+                </button>
+                <button onclick="confirmReset()" class="flex-1 py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow-md transition duration-150 text-sm">
+                    Sim, zerar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE CONFIGURAÇÃO DO MENU -->
+    <script>
+        /************************************************************************
+         * MAPEAMENTO EXPLÍCITO DAS PÁGINAS HTML DE CADA AULA DO EDITAL
+         * Altere os valores da propriedade 'arquivo' caso queira outros nomes.
+         ************************************************************************/
+        const aulasData = [
+            // BLOCO 1
+            { id: 1, bloco: 1, numero: "1", titulo: "Epistemologia da Geografia e o Espaço Geográfico", arquivo: "aula01_epistemologia_geografia.html", icone: "fa-earth-americas" },
+            { id: 2, bloco: 1, numero: "2", titulo: "Fundamentos da Cartografia e Orientação", arquivo: "aula02_fundamentos_cartografia.html", icone: "fa-compass" },
+            { id: 3, bloco: 1, numero: "3", titulo: "Coordenadas Geográficas e Projeções Cartográficas", arquivo: "aula03_coordenadas_projecoes.html", icone: "fa-map" },
+            { id: 4, bloco: 1, numero: "4", titulo: "Escalas Cartográficas e Fusos Horários", arquivo: "aula04_escalas_fusos.html", icone: "fa-clock" },
+            
+            // BLOCO 2
+            { id: 5, bloco: 2, numero: "5", titulo: "O Planeta Terra no Cosmos", arquivo: "aula05_terra_cosmos.html", icone: "fa-user-astronaut" },
+            { id: 6, bloco: 2, numero: "6", titulo: "Geologia e Estrutura Interna da Terra", arquivo: "aula06_geologia_estrutura.html", icone: "fa-layer-group" },
+            { id: 7, bloco: 2, numero: "7", titulo: "Dinâmica Endógena e o Relevo Terrestre", arquivo: "aula07_dinamica_endogena.html", icone: "fa-volcano" },
+            { id: 8, bloco: 2, numero: "8", titulo: "Dinâmica Exógena, Rochas e Pedogênese", arquivo: "aula08_dinamica_exogena.html", icone: "fa-mountain-sun" },
+            { id: 9, bloco: 2, numero: "9", titulo: "Compartimentação do Relevo e Geomorfologia", arquivo: "aula09_compartimentacao_relevo.html", icone: "fa-mountain" },
+            { id: 10, bloco: 2, numero: "10", titulo: "Atmosfera Terrestre e Climatologia", arquivo: "aula10_atmosfera_climatologia.html", icone: "fa-cloud-sun-rain" },
+            { id: 11, bloco: 2, numero: "11", titulo: "Recursos Hídricos e Hidrografia Mundial", arquivo: "aula11_recursos_hidricos.html", icone: "fa-droplet" },
+            
+            // BLOCO 3
+            { id: 12, bloco: 3, numero: "12", titulo: "Biomas Terrestres e Formações Vegetais", arquivo: "aula12_biomas_vegetais.html", icone: "fa-tree" },
+            { id: 13, bloco: 3, numero: "13", titulo: "A Relação Natureza-Sociedade e Impactos Ambientais", arquivo: "aula13_natureza_sociedade.html", icone: "fa-hands-holding-circle" },
+            { id: 14, bloco: 3, numero: "14", titulo: "Mudanças Climáticas Globais e Desertificação", arquivo: "aula14_mudancas_climaticas.html", icone: "fa-temperature-arrow-up" },
+            
+            // BLOCO 4
+            { id: 15, bloco: 4, numero: "15", titulo: "Modos de Produção e a Evolução do Espaço", arquivo: "aula15_modos_producao.html", icone: "fa-industry" },
+            { id: 16, bloco: 4, numero: "16", titulo: "Geopolítica e Matrizes de Energia", arquivo: "aula16_geopolitica_energia.html", icone: "fa-charging-station" },
+            { id: 17, bloco: 4, numero: "17", titulo: "Dinâmicas do Espaço Industrial Mundial", arquivo: "aula17_espaco_industrial.html", icone: "fa-gears" },
+            { id: 18, bloco: 4, numero: "18", titulo: "Espaço Agrário e Geopolítica dos Alimentos", arquivo: "aula18_espaco_agrario.html", icone: "fa-wheat-awn" },
+            { id: 19, bloco: 4, numero: "19", titulo: "Setor Terciário e Redes de Fluxos", arquivo: "aula19_setor_terciario.html", icone: "fa-truck-fast" },
+            { id: 20, bloco: 4, numero: "20", titulo: "Novas Dinâmicas Espaciais no Mundo do Trabalho", arquivo: "aula20_novas_dinamicas_trabalho.html", icone: "fa-laptop-code" },
+            
+            // BLOCO 5
+            { id: 21, bloco: 5, numero: "21", titulo: "Demografia Mundial e Desigualdades", arquivo: "aula21_demografia_mundial.html", icone: "fa-users" },
+            { id: 22, bloco: 5, numero: "22", titulo: "Migrações Internacionais e Espaço Urbano Global", arquivo: "aula22_migracoes_urbanizacao.html", icone: "fa-person-walking-luggage" },
+            { id: 23, bloco: 5, numero: "23", titulo: "Globalização e a Ordem Geopolítica Mundial", arquivo: "aula23_globalizacao_geopolitica.html", icone: "fa-globe" },
+            { id: 24, bloco: 5, numero: "24", titulo: "O Mundo Contemporâneo e Conflitos Armados", arquivo: "aula24_mundo_contemporaneo_conflitos.html", icone: "fa-shield-halved" },
+            
+            // BLOCO 6
+            { id: 25, bloco: 6, numero: "25", titulo: "O Quadro Natural Brasileiro", arquivo: "aula25_quadro_natural_brasil.html", icone: "fa-seedling" },
+            { id: 26, bloco: 6, numero: "26", titulo: "População Brasileira: Dinâmica e Estrutura", arquivo: "aula26_populacao_brasileira.html", icone: "fa-people-group" },
+            { id: 27, bloco: 6, numero: "27", titulo: "Urbanização e Movimentos Sociais no Brasil", arquivo: "aula27_urbanizacao_movimentos_brasil.html", icone: "fa-city" },
+            { id: 28, bloco: 6, numero: "28", titulo: "Industrialização, Energia e Circulação no Brasil", arquivo: "aula28_industrializacao_energia_brasil.html", icone: "fa-bolt" },
+            { id: 29, bloco: 6, numero: "29", titulo: "O Espaço Agrário Brasileiro: Potência e Contradições", arquivo: "aula29_espaco_agrario_brasil.html", icone: "fa-tractor" },
+            { id: 30, bloco: 6, numero: "30", titulo: "Organização Regional e Geografia de SC", arquivo: "aula30_organizacao_regional_sc.html", icone: "fa-map-location-dot" }
+        ];
+
+        // Definição dos Blocos / Capítulos Temáticos com cores e descrições estilo Duolingo
+        const blocosDefinicao = {
+            1: { titulo: "Bloco 1: Epistemologia e Linguagem Cartográfica", descricao: "A evolução do pensamento geográfico, orientação e leitura de mapas.", cor: "emerald", sombra: "shadow-3d-emerald", bgIcone: "bg-emerald-500", borda: "border-emerald-200", texto: "text-emerald-600" },
+            2: { titulo: "Bloco 2: Geografia Física e Dinâmicas Naturais", descricao: "O planeta no cosmos, geologia, relevo, atmosfera e recursos hídricos.", cor: "blue", sombra: "shadow-3d-blue", bgIcone: "bg-blue-500", borda: "border-blue-200", texto: "text-blue-600" },
+            3: { titulo: "Bloco 3: Biogeografia e Questão Ambiental Global", descricao: "Os grandes biomas terrestres, a ação humana e os impactos no meio ambiente.", cor: "purple", sombra: "shadow-3d-purple", bgIcone: "bg-purple-500", borda: "border-purple-200", texto: "text-purple-600" },
+            4: { titulo: "Bloco 4: Espaço Econômico, Trabalho e Matrizes", descricao: "Modos de produção, energia, espaço agrário e industrial e dinâmicas trabalhistas.", cor: "amber", sombra: "shadow-3d-amber", bgIcone: "bg-amber-500", borda: "border-amber-200", texto: "text-amber-600" },
+            5: { titulo: "Bloco 5: População, Urbanização e Geopolítica", descricao: "Demografia global, fluxos migratórios, globalização e conflitos no século XXI.", cor: "rose", sombra: "shadow-3d-rose", bgIcone: "bg-rose-500", borda: "border-rose-200", texto: "text-rose-600" },
+            6: { titulo: "Bloco 6: O Espaço Geográfico Brasileiro", descricao: "O quadro natural brasileiro, dinâmica populacional, agronegócio e a Geografia de Santa Catarina.", cor: "cyan", sombra: "shadow-3d-cyan", bgIcone: "bg-cyan-500", borda: "border-cyan-200", texto: "text-cyan-600" }
+        };
+
+        // Chave para armazenamento de dados no localStorage
+        const STORAGE_KEY = "ifsc_geografia_estudos_stats";
+
+        // Inicializa ou recupera dados de acesso
+        function getStats() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            return data ? JSON.parse(data) : {};
+        }
+
+        // Atualiza estatísticas e redireciona imediatamente (sem alert ou interrupção)
+        function acessarAula(aulaId, url) {
+            const stats = getStats();
+            if (!stats[aulaId]) {
+                stats[aulaId] = { acessos: 0, ultimoAcesso: null };
+            }
+            stats[aulaId].acessos += 1;
+            stats[aulaId].ultimoAcesso = new Date().toISOString();
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+            
+            // Redireciona diretamente para o arquivo html da aula
+            window.location.href = url;
+        }
+
+        // Calcula e exibe a barra de progresso global baseada em aulas acessadas pelo menos 1 vez
+        function atualizarProgressoVisual() {
+            const stats = getStats();
+            const totalAulas = aulasData.length;
+            let aulasConcluidas = 0;
+
+            aulasData.forEach(aula => {
+                if (stats[aula.id] && stats[aula.id].acessos > 0) {
+                    aulasConcluidas++;
+                }
+            });
+
+            const porcentagem = totalAulas > 0 ? Math.round((aulasConcluidas / totalAulas) * 100) : 0;
+            const progressoDiv = document.getElementById("global-progress");
+            const textoDiv = document.getElementById("progress-text");
+
+            progressoDiv.style.width = `${porcentagem}%`;
+            textoDiv.textContent = `${porcentagem}% Concluído (${aulasConcluidas}/${totalAulas} aulas)`;
+        }
+
+        // Renderiza todos os blocos e as aulas organizadas em exatamente 4 botões por linha (no desktop)
+        function renderizarGradeEstudos() {
+            const container = document.getElementById("blocos-container");
+            container.innerHTML = "";
+            const stats = getStats();
+
+            // Iterar por cada um dos 6 blocos
+            for (let b = 1; b <= 6; b++) {
+                const config = blocosDefinicao[b];
+                const aulasDoBloco = aulasData.filter(a => a.bloco === b);
+
+                // Cabeçalho do Bloco Estilo Duolingo
+                const blocoHtml = document.createElement("section");
+                blocoHtml.className = "bg-white border-2 border-slate-200 rounded-3xl p-6 shadow-sm overflow-hidden";
+                
+                let headerColorBg = "bg-emerald-500";
+                if(config.cor === 'blue') headerColorBg = "bg-blue-600";
+                if(config.cor === 'purple') headerColorBg = "bg-purple-600";
+                if(config.cor === 'amber') headerColorBg = "bg-amber-500";
+                if(config.cor === 'rose') headerColorBg = "bg-rose-500";
+                if(config.cor === 'cyan') headerColorBg = "bg-cyan-500";
+
+                blocoHtml.innerHTML = `
+                    <div class="flex flex-col md:flex-row items-start md:items-center justify-between border-b-2 border-slate-100 pb-4 mb-6 gap-3">
+                        <div>
+                            <span class="inline-block ${headerColorBg} text-white font-extrabold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider mb-2">Unidade ${b}</span>
+                            <h2 class="text-xl font-extrabold text-slate-900">${config.titulo}</h2>
+                            <p class="text-slate-500 text-sm mt-1">${config.descricao}</p>
+                        </div>
+                    </div>
+                    <!-- Linhas de exatamente 4 botões por linha no desktop -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-2">
+                        ${aulasDoBloco.map(aula => {
+                            const dadosAula = stats[aula.id] || { acessos: 0, ultimoAcesso: null };
+                            const acessou = dadosAula.acessos > 0;
+                            
+                            // Formatação amigável da última visita
+                            let trackerTexto = "Nunca acessada";
+                            if (acessou) {
+                                const data = new Date(dadosAula.ultimoAcesso);
+                                const horaStr = String(data.getHours()).padStart(2, '0') + ':' + String(data.getMinutes()).padStart(2, '0');
+                                const dataStr = String(data.getDate()).padStart(2, '0') + '/' + String(data.getMonth() + 1).padStart(2, '0');
+                                trackerTexto = `Acessos: ${dadosAula.acessos}x <span class="block text-[10px] text-slate-400 font-normal">Último: ${dataStr} às ${horaStr}</span>`;
+                            }
+
+                            return `
+                                <div class="flex flex-col items-center text-center group">
+                                    <!-- Botão de Acesso Redondo estilo Duolingo -->
+                                    <button 
+                                        onclick="acessarAula(${aula.id}, '${aula.arquivo}')" 
+                                        class="duo-btn w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white ${config.bgIcone} ${config.sombra} border-b-4 hover:brightness-110 active:scale-95 duration-100 relative group-hover:scale-105"
+                                        title="${aula.titulo}"
+                                    >
+                                        <span class="absolute -top-1.5 -right-1.5 bg-slate-800 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full border border-white">
+                                            ${aula.numero}
+                                        </span>
+                                        <i class="fa-solid ${aula.icone} text-xl md:text-2xl"></i>
+                                    </button>
+
+                                    <!-- Nome/Título Curto da Aula -->
+                                    <p class="mt-4 text-xs font-bold text-slate-700 max-w-[150px] line-clamp-2 h-8 leading-tight group-hover:text-slate-950 transition duration-150">
+                                        ${aula.titulo}
+                                    </p>
+
+                                    <!-- Marcador de Acessos Dinâmico abaixo do botão -->
+                                    <div class="mt-2 text-[11px] font-extrabold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full border border-slate-200/60 min-w-[110px]">
+                                        ${trackerTexto}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(blocoHtml);
+            }
+        }
+
+        // Funções para controle do modal customizado (para evitar pop-ups nativos desagradáveis)
+        function openResetModal() {
+            const modal = document.getElementById("reset-modal");
+            modal.classList.remove("hidden");
+            setTimeout(() => {
+                modal.querySelector('div').classList.remove("scale-95");
+                modal.querySelector('div').classList.add("scale-100");
+            }, 10);
+        }
+
+        function closeResetModal() {
+            const modal = document.getElementById("reset-modal");
+            modal.querySelector('div').classList.remove("scale-100");
+            modal.querySelector('div').classList.add("scale-95");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+            }, 150);
+        }
+
+        function confirmReset() {
+            localStorage.removeItem(STORAGE_KEY);
+            closeResetModal();
+            renderizarGradeEstudos();
+            atualizarProgressoVisual();
+        }
+
+        // Inicialização na montagem da página
+        window.addEventListener("DOMContentLoaded", () => {
+            renderizarGradeEstudos();
+            atualizarProgressoVisual();
+        });
+    </script>
+</body>
+</html>
