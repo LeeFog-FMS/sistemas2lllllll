@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo FAURGS: O Planeta Terra no Cosmos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Paleta de cores focada em leitura prolongada (warm light mode) */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcf9; /* Fundo creme quente, reduz fadiga ocular */
+            color: #1e2022; /* Texto cinza escuro de alto contraste suave */
+        }
+        
+        .serif-title {
+            font-family: 'Playfair Display', Georgia, serif;
+        }
+
+        /* Estilização customizada das alternativas */
+        .option-card {
+            transition: all 0.2s ease-in-out;
+            border: 1.5px solid #e5e5e0;
+        }
+        
+        .option-card:hover:not(.disabled) {
+            border-color: #d4af37; /* Dourado suave para foco */
+            background-color: #faf8f2;
+        }
+
+        input[type="radio"]:checked + .option-content {
+            font-weight: 500;
+        }
+
+        /* Classes de correção pós-envio */
+        .correct-answer {
+            background-color: #ecfdf5 !important; /* Verde menta suave */
+            border-color: #10b981 !important;
+            color: #065f46 !important;
+        }
+
+        .incorrect-answer {
+            background-color: #fef2f2 !important; /* Vermelho suave */
+            border-color: #ef4444 !important;
+            color: #991b1b !important;
+        }
+
+        .correct-badge {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .incorrect-badge {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-yellow-100 selection:text-yellow-900">
+
+    <header class="border-b border-stone-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider px-2.5 py-1.5 rounded-md">FAURGS</span>
+                <h1 class="font-medium text-stone-800 hidden sm:block text-sm sm:text-base">Simulado Especializado: Geografia e Dinâmica Terrestre</h1>
+            </div>
+            <div id="progress-container" class="flex items-center gap-3">
+                <span class="text-xs text-stone-500 font-medium">Respondidas: <span id="answered-counter">0</span>/10</span>
+                <div class="w-24 bg-stone-100 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-amber-500 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+        
+        <section class="mb-10 text-center sm:text-left bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200">
+            <span class="text-amber-600 font-semibold text-xs tracking-widest uppercase block mb-2">Treinamento de Alto Nível</span>
+            <h2 class="serif-title text-3xl sm:text-4xl font-semibold text-stone-900 mb-4 leading-tight">O Planeta Terra no Cosmos e a Dinâmica Terrestre</h2>
+            <p class="text-stone-600 leading-relaxed text-sm sm:text-base max-w-3xl">
+                Este simulado interativo reúne 10 questões inéditas elaboradas no estilo analítico e rigoroso da banca <strong>FAURGS</strong>. Cada questão aborda temas cruciais como astronomia de posição, coordenadas geográficas, fusos horários e as dinâmicas de rotação e translação terrestre. 
+            </p>
+            <div class="mt-6 flex flex-wrap gap-4 text-xs text-stone-500">
+                <div class="flex items-center gap-2"><i class="fa-solid fa-list-check text-amber-600"></i> 10 Questões de Múltipla Escolha</div>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-graduation-cap text-amber-600"></i> Gabaritos Comentados</div>
+                <div class="flex items-center gap-2"><i class="fa-solid fa-eye text-amber-600"></i> Layout de Leitura Fluida</div>
+            </div>
+        </section>
+
+        <form id="quiz-form" onsubmit="submitQuiz(event)">
+            
+            <!-- Questão 01 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="1">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 01</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    As discussões científicas acerca da origem e formação do planeta Terra, bem como de sua evolução estrutural primordial, baseiam-se em modelos astrofísicos e geofísicos consolidados. Considere as seguintes afirmações sobre a origem e a diferenciação geoquímica do planeta Terra.
+                </p>
+                <div class="bg-stone-50/80 p-5 rounded-xl border border-stone-150 mb-6 space-y-3 text-stone-700 text-sm sm:text-base">
+                    <p><strong>I -</strong> A condensação da nebulosa solar primordial originou uma estrutura homogênea que se resfriou lentamente, mantendo a distribuição uniforme de seus elementos químicos primitivos desde a acreção até o presente período geológico.</p>
+                    <p><strong>II -</strong> O processo de diferenciação geoquímica da Terra primitiva ocorreu pela ação combinada do aquecimento por decaimento radioativo e dos impactos gravitacionais de asteroides, o que forçou a migração de elementos siderófilos de alta densidade, como ferro e níquel, para o núcleo planetário.</p>
+                    <p><strong>III -</strong> A crosta continental silática, de menor densidade, consolidou-se na porção externa do planeta como resultado da flutuação de silicatos enriquecidos com alumínio e potássio durante o resfriamento do manto superior.</p>
+                </div>
+                <p class="text-stone-800 font-medium mb-4">Quais estão corretas?</p>
+                
+                <div class="space-y-3" data-options-for="1">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q1" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q1" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q1" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) Apenas III.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q1" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) Apenas I e II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q1" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) Apenas II e III.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 02 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="2">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 02</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-4">
+                    A coluna da esquerda apresenta os dois movimentos principais da dinâmica terrestre; a da direita, fenômenos físico-geográficos decorrentes dessas dinâmicas.
+                </p>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    Associe adequadamente a coluna da direita à da esquerda.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6 text-stone-700 text-sm sm:text-base">
+                    <div class="md:col-span-4 bg-stone-50 p-4 rounded-xl border border-stone-150 h-fit space-y-2">
+                        <p class="font-semibold text-stone-800 mb-2 border-b pb-1">Movimentos:</p>
+                        <p><strong>1</strong> - Rotação</p>
+                        <p><strong>2</strong> - Translação</p>
+                    </div>
+                    <div class="md:col-span-8 bg-stone-50/50 p-4 rounded-xl border border-stone-150 space-y-3">
+                        <p class="font-semibold text-stone-800 mb-2 border-b pb-1">Fenômenos:</p>
+                        <p>( &nbsp; ) Desvio direcional das correntes atmosféricas globais sob influência do efeito de Coriolis.</p>
+                        <p>( &nbsp; ) Variação estacional na intensidade da radiação térmica recebida na superfície terrestre.</p>
+                        <p>( &nbsp; ) Movimento aparente da abóbada celeste e alternância diurna da radiação solar.</p>
+                        <p>( &nbsp; ) Posicionamento da Terra nos pontos extremos denominados afélio e periélio.</p>
+                    </div>
+                </div>
+
+                <p class="text-stone-800 font-medium mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                
+                <div class="space-y-3" data-options-for="2">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q2" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) 1 – 2 – 1 – 2.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q2" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) 1 – 1 – 2 – 2.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q2" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) 2 – 1 – 2 – 1.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q2" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) 2 – 2 – 1 – 1.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q2" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) 1 – 2 – 2 – 1.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 03 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="3">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 03</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    Considere as afirmações abaixo sobre a obliquidade do eixo terrestre e sua relação com a gênese das estações do ano.
+                </p>
+                <div class="bg-stone-50/80 p-5 rounded-xl border border-stone-150 mb-6 space-y-3 text-stone-700 text-sm sm:text-base">
+                    <p><strong>I -</strong> A obliquidade do eixo de rotação em relação à eclíptica impede que ambos os hemisférios recebam a mesma quantidade de radiação solar ao longo de toda a translação orbital, exceto nas posições de equinócio.</p>
+                    <p><strong>II -</strong> Se o eixo terrestre fosse perfeitamente ortogonal ao plano de sua órbita heliocêntrica, a insolação seria constante ao longo de todo o ano em cada latitude específica, extinguindo o ciclo estacional térmico que rege os biomas terrestres.</p>
+                    <p><strong>III -</strong> A alternância das estações do ano é decorrência exclusiva da variação da distância entre a Terra e o Sol ao longo da órbita elíptica, sendo o verão correspondente ao periélio e o inverno ao afélio.</p>
+                </div>
+                <p class="text-stone-800 font-medium mb-4">Quais estão corretas?</p>
+                
+                <div class="space-y-3" data-options-for="3">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q3" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q3" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q3" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q3" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q3" value="E" class="I, II e III.">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) I, II e III.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 04 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="4">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 04</span>
+                </div>
+                <div class="mb-4 text-xs font-semibold text-amber-700 bg-amber-50 rounded-lg p-3 inline-block border border-amber-200">
+                    <i class="fa-solid fa-clock mr-1"></i> Foco Temático: Cálculo Prático de Fuso Horário
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    Um pesquisador parte de Porto Alegre (localizada a aproximadamente 51° W de longitude, sob o fuso de 45° W / UTC-3) com destino a Benjamin Constant, município do Amazonas na fronteira com o Peru (localizado a aproximadamente 70° W de longitude, sob o fuso de 75° W / UTC-5). O avião decola de Porto Alegre às 06h00min do dia 20 de junho (horário local). O itinerário de viagem prevê um voo com escala em Manaus (fuso de 60° W / UTC-4), totalizando 8 horas de tempo de trânsito absoluto até Benjamin Constant.
+                </p>
+                <p class="text-stone-800 font-medium mb-4">Assinale a alternativa que indica corretamente o dia e a hora local em Benjamin Constant no momento do desembarque do pesquisador.</p>
+                
+                <div class="space-y-3" data-options-for="4">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q4" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) 20 de junho, às 10h00min.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q4" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) 20 de junho, às 12h00min.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q4" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) 20 de junho, às 14h00min.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q4" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) 21 de junho, às 12h00min.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q4" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) 19 de junho, às 22h00min.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 05 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="5">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 05</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    Considere as afirmações abaixo sobre as variações no ângulo de incidência da luz solar e na duração do fotoperíodo nos diferentes hemisférios, conforme a latitude ao longo do ano.
+                </p>
+                <div class="bg-stone-50/80 p-5 rounded-xl border border-stone-150 mb-6 space-y-3 text-stone-700 text-sm sm:text-base">
+                    <p><strong>I -</strong> No solstício de dezembro, correspondente ao dia mais longo do ano no Hemisfério Sul, ocorre o fenômeno da iluminação contínua de 24 horas (dia polar) nas latitudes situadas ao sul do Círculo Polar Antártico.</p>
+                    <p><strong>II -</strong> A duração da exposição solar diária no solstício de verão de cada hemisfério aumenta progressivamente do Equador em direção ao respectivo polo iluminado, superando a duração diária registrada no Equador durante os equinócios.</p>
+                    <p><strong>III -</strong> Porto Alegre, por situar-se na zona temperada meridional, registra uma variação na duração do dia solar ao longo do ano que ultrapassa as doze horas de diferença entre o dia mais longo (solstício de verão) e o dia mais curto (solstício de inverno).</p>
+                </div>
+                <p class="text-stone-800 font-medium mb-4">Quais estão corretas?</p>
+                
+                <div class="space-y-3" data-options-for="5">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q5" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q5" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q5" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q5" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q5" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) I, II e III.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 06 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="6">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 06</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    O movimento de rotação terrestre é o giro que o planeta realiza em torno do seu próprio eixo imaginário, condicionando processos biogeográficos vitais. Assinale a alternativa correta sobre o movimento de rotação da Terra e suas consequências geográficas.
+                </p>
+                
+                <div class="space-y-3" data-options-for="6">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q6" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) O sentido de rotação terrestre ocorre de Leste para Oeste, determinando que os fusos horários situados a oeste do meridiano de referência de Greenwich apresentem horas adiantadas.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q6" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) A velocidade linear de rotação da superfície terrestre é uniforme em todas as latitudes, atingindo seu valor mínimo no Equador geográfico e seu valor máximo nas regiões polares.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q6" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) O desvio dos ventos alísios que sopram em direção às baixas latitudes deve-se à aceleração de Coriolis, que direciona as massas de ar para a esquerda no Hemisfério Norte e para a direita no Hemisfério Sul.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q6" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) A sucessão dos dias e das noites constitui uma consequência direta da rotação terrestre, viabilizando o equilíbrio térmico da biosfera ao impedir a exposição solar permanente de uma única face do planeta.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q6" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) O fuso horário de referência internacional baseia-se na rotação da Terra e possui limites teóricos definidos exclusivamente pela latitude das regiões temperadas.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 07 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="7">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 07</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    Considere as seguintes afirmações sobre o movimento de translação da Terra e a geometria de sua órbita.
+                </p>
+                <div class="bg-stone-50/80 p-5 rounded-xl border border-stone-150 mb-6 space-y-3 text-stone-700 text-sm sm:text-base">
+                    <p><strong>I -</strong> A excentricidade da órbita elíptica terrestre faz com que a Terra atinja o periélio, ponto de maior proximidade com o Sol, durante o mês de janeiro, período em que a velocidade orbital do planeta é máxima.</p>
+                    <p><strong>II -</strong> O afélio representa o ponto orbital de maior afastamento físico entre a Terra e o Sol, ocorrendo sistematicamente em julho, quando o Hemisfério Sul vivencia sua estação hibernal.</p>
+                    <p><strong>III -</strong> A diferença de distância entre a Terra e o Sol verificada no afélio e no periélio constitui o fator climatológico preponderante para a variação térmica anual que define as estações do ano em médias latitudes.</p>
+                </div>
+                <p class="text-stone-800 font-medium mb-4">Quais estão corretas?</p>
+                
+                <div class="space-y-3" data-options-for="7">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q7" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q7" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q7" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q7" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q7" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) I, II e III.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 08 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="8">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 08</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    O sistema de fusos horários consiste em uma convenção internacional projetada para organizar a contagem do tempo civil com base na rotação terrestre. Assinale a alternativa correta sobre a organização dos fusos horários no território brasileiro e suas bases cartográficas.
+                </p>
+                
+                <div class="space-y-3" data-options-for="8">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q8" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) O Brasil é abrangido por quatro fusos horários práticos, todos situados a leste do meridiano de Greenwich, resultando em acréscimo de horas em relação ao meridiano de referência.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q8" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) O fuso de 45° W (UTC-3) abriga a Hora Oficial de Brasília e serve de referência horária para estados da Região Sul, Sudeste e Nordeste.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q8" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) O terceiro fuso brasileiro engloba os estados do Acre, Amazonas e Roraima, mantendo as mesmas horas em relação ao fuso de Greenwich.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q8" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) Os limites práticos ou políticos dos fusos horários brasileiros acompanham rigorosamente os meridianos teóricos de 15°, impedindo desvios para adequação às divisas estaduais.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q8" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) O arquipélago de Fernando de Noronha e as ilhas de Trindade e Martim Vaz constituem o segundo fuso brasileiro (UTC-3), integrando-se ao horário de Brasília.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 09 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="9">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 09</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    O geomagnetismo é uma propriedade física intrínseca ao planeta, gerando um campo de forças que atua na proteção da biosfera. Assinale a alternativa correta a respeito da dinâmica geomagnética e dos polos geográficos e magnéticos da Terra.
+                </p>
+                
+                <div class="space-y-3" data-options-for="9">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q9" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) O Polo Norte magnético e o Polo Norte geográfico estão situados exatamente na mesma coordenada geográfica, mantendo uma estabilidade espacial absoluta ao longo das eras geológicas.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q9" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) O campo magnético terrestre origina-se do decaimento radioativo de elementos pesados presentes na crosta terrestre e no manto superior sólido.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q9" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) Sob o ponto de vista da física do magnetismo, a agulha imantada de uma bússola é atraída em direção ao Polo Norte geográfico porque este comporta-se, na presente era geológica, como um polo magnético de polaridade sul.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q9" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) A inversão periódica dos polos magnéticos da Terra é causada pela alteração no sentido de rotação axial do planeta.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q9" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) O campo magnético terrestre não interfere nas dinâmicas atmosféricas e na proteção do planeta contra a radiação cósmica de alta energia.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <!-- Questão 10 -->
+            <div class="question-container bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-stone-200 mb-8" data-question="10">
+                <div class="flex justify-between items-start gap-4 mb-4">
+                    <span class="text-xs font-semibold bg-stone-100 text-stone-600 px-3 py-1 rounded-full uppercase tracking-wider">Questão 10</span>
+                </div>
+                <p class="text-stone-800 leading-relaxed text-base mb-6">
+                    Considere as seguintes afirmações sobre a dinâmica do movimento aparente do Sol e as consequências geográficas da inclinação do eixo terrestre na projeção de sombras em território gaúcho e brasileiro.
+                </p>
+                <div class="bg-stone-50/80 p-5 rounded-xl border border-stone-150 mb-6 space-y-3 text-stone-700 text-sm sm:text-base">
+                    <p><strong>I -</strong> Ao meio-dia solar do solstício de verão no Hemisfério Sul, o Sol atinge o zênite em Porto Alegre (latitude aproximada de 30° S), fazendo com que edifícios e postes verticais não projetem sombras na superfície horizontal.</p>
+                    <p><strong>II -</strong> Para um observador posicionado em Porto Alegre, a trajetória aparente diurna do Sol ao longo de todo o ano realiza-se predominantemente no quadrante norte do céu, fazendo com que as sombras projetadas ao meio-dia solar apontem invariavelmente para a direção Sul geográfico.</p>
+                    <p><strong>III -</strong> Na cidade de Macapá (latitude 0°), o Sol cruza o zênite solar ao meio-dia em apenas duas datas do ano (equinócios), projetando sombras perfeitamente ortogonais em relação ao observador nesses instantes específicos.</p>
+                </div>
+                <p class="text-stone-800 font-medium mb-4">Quais estão corretas?</p>
+                
+                <div class="space-y-3" data-options-for="10">
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q10" value="A" class="mt-1 accent-amber-600" required>
+                        <span class="option-content text-stone-700 text-sm sm:text-base">A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q10" value="B" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q10" value="C" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">C) Apenas I e III.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q10" value="D" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left">
+                        <input type="radio" name="q10" value="E" class="mt-1 accent-amber-600">
+                        <span class="option-content text-stone-700 text-sm sm:text-base">E) I, II e III.</span>
+                    </label>
+                </div>
+                
+                <div class="resolution-container hidden mt-6 pt-6 border-t border-stone-200"></div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-12 mb-16 p-6 bg-white border border-stone-200 rounded-2xl">
+                <div class="text-stone-600 text-sm text-center sm:text-left">
+                    <p class="font-medium text-stone-800">Verifique todas as suas respostas!</p>
+                    <p class="text-xs">Ao finalizar, você verá imediatamente o gabarito comentado e sua pontuação.</p>
+                </div>
+                <div class="flex gap-4 w-full sm:w-auto">
+                    <button type="button" onclick="resetQuiz()" class="px-6 py-3 border border-stone-300 text-stone-700 hover:bg-stone-50 font-medium rounded-xl transition duration-200 text-sm w-1/2 sm:w-auto">
+                        Limpar Respostas
+                    </button>
+                    <button type="submit" class="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl shadow-md shadow-amber-600/10 hover:shadow-lg transition duration-200 text-sm w-1/2 sm:w-auto">
+                        Finalizar Simulado
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <section id="results-panel" class="hidden scroll-mt-24 mb-16 p-6 sm:p-8 bg-white rounded-2xl shadow-lg border-2 border-stone-200">
+            <div class="text-center max-w-xl mx-auto">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" id="score-icon-bg">
+                    <i class="fa-solid text-2xl" id="score-icon"></i>
+                </div>
+                <h2 class="serif-title text-3xl font-bold text-stone-900 mb-2">Resultado Geral</h2>
+                <p class="text-stone-500 text-sm mb-6">Desempenho no simulado "O Planeta Terra no Cosmos".</p>
+                
+                <div class="bg-stone-50 rounded-2xl p-6 border border-stone-150 mb-8 grid grid-cols-2 gap-4">
+                    <div class="border-r border-stone-200">
+                        <span class="text-stone-500 text-xs uppercase tracking-wider block mb-1">Acertos</span>
+                        <span class="text-4xl font-extrabold text-stone-800" id="correct-count">0</span><span class="text-stone-400 font-semibold text-lg">/10</span>
+                    </div>
+                    <div>
+                        <span class="text-stone-500 text-xs uppercase tracking-wider block mb-1">Aproveitamento</span>
+                        <span class="text-4xl font-extrabold text-amber-600" id="score-percentage">0%</span>
+                    </div>
+                </div>
+
+                <div id="feedback-text" class="text-stone-700 font-medium mb-6 leading-relaxed"></div>
+                
+                <button onclick="resetQuiz()" class="px-6 py-3 bg-stone-900 hover:bg-stone-800 text-white font-semibold rounded-xl shadow-md transition duration-200 text-sm inline-flex items-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> Refazer Simulado
+                </button>
+            </div>
+        </section>
+
+        <section class="bg-stone-100/60 p-6 sm:p-8 rounded-2xl border border-stone-200 mb-16">
+            <h3 class="serif-title text-xl font-semibold text-stone-800 mb-4">Estrutura Comparativa de Suporte</h3>
+            <p class="text-stone-600 text-xs sm:text-sm mb-6 leading-relaxed">
+                Tabela conceitual de apoio sobre os parâmetros cinemáticos e geográficos dos principais movimentos da Terra.
+            </p>
+            <div class="overflow-x-auto rounded-xl border border-stone-200 bg-white">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-stone-50 border-b border-stone-200">
+                            <th class="p-3 sm:p-4 font-semibold text-stone-700 w-1/3">Parâmetro</th>
+                            <th class="p-3 sm:p-4 font-semibold text-stone-700">Movimento de Rotação</th>
+                            <th class="p-3 sm:p-4 font-semibold text-stone-700">Movimento de Translação</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-stone-100 text-stone-600">
+                        <tr>
+                            <td class="p-3 sm:p-4 font-medium text-stone-800 bg-stone-50/30">Referencial Geométrico</td>
+                            <td class="p-3 sm:p-4">Eixo inclinado a 23°27' em relação à eclíptica.</td>
+                            <td class="p-3 sm:p-4">Órbita elíptica ao redor do Sol.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-medium text-stone-800 bg-stone-50/30">Velocidade Linear</td>
+                            <td class="p-3 sm:p-4">~1.670 km/h na linha do Equador.</td>
+                            <td class="p-3 sm:p-4">~30 km/s (108.000 km/h) no espaço.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-medium text-stone-800 bg-stone-50/30">Duração</td>
+                            <td class="p-3 sm:p-4">23h 56min 04s (Dia Sidéreo) / 24h (Solar).</td>
+                            <td class="p-3 sm:p-4">365 dias, 5h 48min 46s (Ano Trópico).</td>
+                        </tr>
+                        <tr>
+                            <td class="p-3 sm:p-4 font-medium text-stone-800 bg-stone-50/30">Consequências</td>
+                            <td class="p-3 sm:p-4">Coriolis, sucessão de dias e noites, fusos horários.</td>
+                            <td class="p-3 sm:p-4">Estações do ano, variação do fotoperíodo.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Mapeamento dos gabaritos corretos conforme documento oficial
+        const ANSWERS = {
+            1: "E",
+            2: "A",
+            3: "C",
+            4: "B",
+            5: "C",
+            6: "D",
+            7: "C",
+            8: "B",
+            9: "C",
+            10: "D"
+        };
+
+        // Resoluções textuais completas e explicativas para injeção dinâmica pós-submissão
+        const RESOLUTIONS = {
+            1: `<strong>Gabarito Correto: E (Apenas II e III).</strong><br><br>
+                A análise geológica clássica demonstra que o planeta Terra não se consolidou como um corpo homogêneo estável. Logo, a <strong>afirmação I está incorreta</strong>, pois a acresção inicial de poeira e planetesimais foi seguida por um estado de fusão quase total devido ao calor gerado pelo bombardeamento meteorítico e pelo decaimento de elementos radioativos primordiais. Essa fluidez generalizada permitiu a diferenciação geoquímica, processo pelo qual os materiais mais densos migraram para o interior, constituindo o núcleo metálico enriquecido.<br><br>
+                Por outro lado, a <strong>afirmação II está perfeitamente correta</strong> ao descrever que os elementos siderófilos de alta densidade, como o ferro e o níquel, decantaram em direção ao centro de gravidade planetário por força da diferenciação gravitacional. A <strong>afirmação III também se mostra correta</strong>, dado que os silicatos leves de alumínio, potássio e sódio (materiais félsicos) flutuaram em direção à superfície, consolidando uma crosta continental menos densa sobrejacente ao manto superior.`,
+            
+            2: `<strong>Gabarito Correto: A (1 – 2 – 1 – 2).</strong><br><br>
+                O preenchimento adequado dos parênteses exige a correlação unívoca entre os movimentos e os efeitos geofísicos associados:<br><br>
+                • O primeiro parêntese refere-se ao desvio direcional de massas fluidas em escala global, conhecido como força ou efeito de Coriolis. Esse desvio resulta da variação da velocidade linear de rotação em função da latitude, constituindo uma consequência inercial da rotação <strong>(1)</strong>.<br>
+                • O segundo parêntese descreve a oscilação térmica estacional, cuja causa principal reside no movimento orbital heliocêntrico (Translação, <strong>2</strong>) conjugado com a inclinação axial do planeta.<br>
+                • O terceiro parêntese indica o movimento diurno aparente do Sol e a alternância diária de insolação, efeitos imediatos da rotação planetária <strong>(1)</strong>.<br>
+                • O quarto parêntese faz referência direta aos limites geométricos da órbita elíptica terrestre, caracterizando o afélio (maior afastamento) e o periélio (maior proximidade), fenômenos derivados da translação <strong>(2)</strong>.`,
+            
+            3: `<strong>Gabarito Correto: C (Apenas I e II).</strong><br><br>
+                A obliquidade do eixo terrestre, atualmente mensurada em cerca de 23°27' em relação à perpendicular do plano da eclíptica, é o parâmetro fundamental que dita a assimetria na recepção de energia solar entre as latitudes norte e sul ao longo do ano. Por isso, a <strong>afirmação I está correta</strong> ao destacar que essa inclinação geométrica impede uma partilha igualitária de radiação ao longo da translação orbital, restabelecendo a simetria apenas nos pontos geométricos correspondentes aos equinócios, quando o Sol cruza o plano equatorial celeste.<br><br>
+                A <strong>afirmação II também está correta</strong>, pois a anulação completa da obliquidade eliminaria a componente estacional da radiação. Cada paralelo receberia um fluxo idêntico de fótons ao longo de todo o período orbital de 365 dias, tornando o clima estático e abolindo as estações do ano.<br><br>
+                A <strong>afirmação III é incorreta</strong> porque a sutil variação da distância entre a Terra e o Sol ao longo da órbita elíptica (excentricidade) gera flutuações de irradiância demasiado tênues para comandar as estações climáticas. A inclinação do eixo terrestre é o fator dominante na gênese das estações do ano.`,
+            
+            4: `<strong>Gabarito Correto: B (20 de junho, às 12h00min).</strong><br><br>
+                O cálculo rigoroso de fusos horários exige a determinação da hora de partida convertida para o tempo de referência universal (UTC) e a posterior aplicação do tempo de viagem. O ponto de partida, Porto Alegre, adota a hora oficial de Brasília, inserida no fuso de 45° W, equivalente a UTC-3. O ponto de destino, Benjamin Constant, localiza-se no extremo oeste do território nacional, adotando o fuso de 75° W, correspondente a UTC-5. A diferença horária estrita estabelece que Benjamin Constant está duas horas atrasada em relação a Porto Alegre.<br><br>
+                Quando os relógios marcam 06h00min do dia 20 de junho em Porto Alegre (momento da decolagem), o horário local em Benjamin Constant é exatamente 04h00min do mesmo dia. Adicionando as 8 horas correspondentes ao tempo absoluto de deslocamento e trânsito aéreo, o pesquisador desembarcará no destino às <strong>12h00min (meio-dia) do próprio dia 20 de junho</strong>.`,
+            
+            5: `<strong>Gabarito Correto: C (Apenas I e II).</strong><br><br>
+                A <strong>primeira afirmação está correta</strong> porque, no solstício de dezembro, o Hemisfério Sul experimenta sua inclinação máxima em direção ao Sol. Isso faz com que o círculo de iluminação tangencie o Círculo Polar Antártico (66°33' S), mantendo toda a região polar ao sul desse limite constantemente exposta à luz solar durante a rotação diária de 24 horas.<br><br>
+                A <strong>segunda afirmação também está correta</strong>. No solstício de verão de qualquer hemisfério, o fotoperíodo (tempo de exposição solar) cresce progressivamente do Equador (onde se mantém em 12 horas) em direção ao polo iluminado (onde atinge o teto de 24 horas), o que supera a duração uniforme de 12 horas registrada em todo o globo nos equinócios.<br><br>
+                A <strong>terceira afirmação é incorreta</strong> porque Porto Alegre, situada a 30° S, possui uma amplitude estacional de fotoperíodo moderada. O dia mais longo (verão) alcança cerca de 14 horas de sol e o dia mais curto (inverno) registra cerca de 10 horas. A amplitude térmica estacional ocorre, mas a diferença máxima entre a duração do dia no verão e no inverno é de aproximadamente 4 horas, distante do limite de doze horas sugerido pela assertiva.`,
+            
+            6: `<strong>Gabarito Correto: D (A sucessão dos dias e das noites...).</strong><br><br>
+                A sucessão diurna de insolação decorrente da rotação evita que uma face do planeta permaneça em congelamento perpétuo enquanto a outra é submetida a um aquecimento extremo e contínuo. Esse ciclo contínuo de rotação equilibra o balanço de energia térmica da atmosfera e da hidrosfera, viabilizando a manutenção de água líquida e o desenvolvimento da vida.<br><br>
+                • A <strong>opção A</strong> é incorreta porque o sentido de rotação é de Oeste para Leste, o que gera o acréscimo de horas para o Oriente e o atraso para o Ocidente.<br>
+                • A <strong>opção B</strong> está errada pois a velocidade linear de rotação varia com o cosseno da latitude, decrescendo de 1.670 km/h no Equador até zero absoluto nos polos geométricos.<br>
+                • A <strong>opção C</strong> inverte a regra de Coriolis, que desvia fluxos para a direita no Hemisfério Norte e para a esquerda no Hemisfério Sul.<br>
+                • A <strong>opção E</strong> é incorreta uma vez que os limites teóricos dos fusos são definidos por meridianos de longitude (15°), sem qualquer correlação regulatória com a latitude.`,
+            
+            7: `<strong>Gabarito Correto: C (Apenas I e II).</strong><br><br>
+                A <strong>primeira afirmação está correta</strong> ao assinalar que a órbita da Terra possui excentricidade orbital de baixa intensidade. Conforme postula a Primeira Lei de Kepler, o Sol ocupa um dos focos da elipse, gerando uma variação de distância que atinge seu ponto mínimo (periélio, com aproximadamente 147 milhões de quilômetros) no início de janeiro. Nesse ponto, a velocidade translacional do planeta é máxima, respeitando a Segunda Lei de Kepler (lei das áreas).<br><br>
+                A <strong>afirmação II também se mostra correta</strong>, visto que o afélio (distância máxima de cerca de 152 milhões de quilômetros) ocorre anualmente no início de julho, período em que o Hemisfério Sul de fato vivencia seu inverno astronômico.<br><br>
+                A <strong>afirmação III é incorreta</strong>, pois, conforme detalhado na dinâmica das estações do ano, a variação na distância orbital desempenha um papel térmico negligenciável quando comparado à influência decisiva do ângulo de inclinação do eixo terrestre (obliquidade) em relação à incidência solar.`,
+            
+            8: `<strong>Gabarito Correto: B (O fuso de 45° W (UTC-3) abriga a Hora Oficial...).</strong><br><br>
+                O território nacional brasileiro utiliza o fuso de 45° W (GMT/UTC-3) como padrão legal para a Hora Oficial de Brasília, regulando o tempo civil nas regiões de maior concentração populacional e econômica do país.<br><br>
+                • A <strong>opção A</strong> está incorreta porque o Brasil localiza-se integralmente a oeste do Meridiano de Greenwich, situando todos os seus fusos no Hemisfério Ocidental com atraso de horas em relação ao meridiano de referência.<br>
+                • A <strong>opção C</strong> é errada porque o terceiro fuso brasileiro corresponde a UTC-4 (60° W), abrangendo Roraima, Rondônia, Mato Grosso, Mato Grosso do Sul e a maior parte do Amazonas, enquanto o Acre e o extremo oeste amazonense constituem o quarto fuso (UTC-5).<br>
+                • A <strong>opção D</strong> é falsa visto que os limites práticos e políticos dos fusos são flexibilizados e adaptados às fronteiras estaduais e municipais para fins de integração administrativa.<br>
+                • A <strong>opção E</strong> é incorreta porque Fernando de Noronha e demais ilhas oceânicas pertencem ao primeiro fuso do país, correspondente a UTC-2 (30° O).`,
+            
+            9: `<strong>Gabarito Correto: C (agulha imantada... comporta-se como polo de polaridade sul).</strong><br><br>
+                Na física clássica do magnetismo, polos magnéticos de natureza oposta se atraem mutuamente. Sendo assim, se a ponta imantada que representa o polo norte da agulha magnética de uma bússola aponta em direção ao Polo Norte geográfico terrestre, deduz-se que a região polar setentrional comporta-se como um gigantesco sumidouro de linhas de indução, atuando, sob o aspecto estritamente físico, como o Polo Sul magnético do planeta.<br><br>
+                • A <strong>opção A</strong> está incorreta porque os polos geográficos e os polos magnéticos não coincidem no espaço tridimensional e apresentam um deslocamento constante e dinâmico ao longo do tempo (deriva secular).<br>
+                • A <strong>opção B</strong> é incorreta pois o campo magnético origina-se da dinâmica convectiva do ferro fundido no núcleo externo líquido da Terra, sob a ação do efeito dínamo.<br>
+                • A <strong>opção D</strong> é errada porque a reversão geomagnética decorre de instabilidades hidrodinâmicas no núcleo, sem relação com o sentido de rotação planetária.<br>
+                • A <strong>opção E</strong> é incorreta já que a magnetosfera atua como um escudo protetor blindando a atmosfera contra os efeitos nocivos dos ventos solares e raios cósmicos.`,
+            
+            10: `<strong>Gabarito Correto: D (Apenas II e III).</strong><br><br>
+                A <strong>primeira afirmação é incorreta</strong> porque a posição limite do zênite solar ao meio-dia no Hemisfério Sul restringe-se à latitude máxima do Trópico de Capricórnio (23°27' S) no solstício de dezembro. Como Porto Alegre situa-se além dessa linha limitante (latitude de aproximadamente 30° S), os raios solares nunca incidirão de forma vertical na cidade, fazendo com que postes e objetos verticais projetem sombras mesmo no dia mais ensolarado do verão astronômico.<br><br>
+                A <strong>afirmação II está perfeitamente correta</strong>. Por estar localizada inteiramente ao sul do Trópico de Capricórnio, a cidade de Porto Alegre sempre verá o Sol passar ao meio-dia solar posicionado no quadrante norte do céu. Assim, a sombra projetada de qualquer obstáculo vertical estará obrigatoriamente apontada em direção ao sul.<br><br>
+                A <strong>afirmação III também se mostra correta</strong>, visto que Macapá situa-se sobre a linha equatorial, e a passagem do Sol pelo zênite ocorre exclusivamente nos dois equinócios anuais, gerando o fenômeno da ausência de sombra lateral ao meio-dia solar.`
+        };
+
+        const form = document.getElementById('quiz-form');
+        const totalQuestions = 10;
+        
+        form.addEventListener('change', () => {
+            const answered = getAnsweredCount();
+            document.getElementById('answered-counter').textContent = answered;
+            
+            const progressPercent = (answered / totalQuestions) * 100;
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = `${progressPercent}%`;
+        });
+
+        function getAnsweredCount() {
+            let answered = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (form.elements[`q${i}`] && [...form.elements[`q${i}`]].some(radio => radio.checked)) {
+                    answered++;
+                }
+            }
+            return answered;
+        }
+
+        function submitQuiz(event) {
+            event.preventDefault();
+
+            let correctCount = 0;
+            const results = {};
+
+            // 1. Processamento e correção de cada uma das questões
+            for (let i = 1; i <= totalQuestions; i++) {
+                const radios = form.elements[`q${i}`];
+                let selectedVal = "";
+                
+                for (const radio of radios) {
+                    radio.disabled = true; // Desabilita para evitar nova alteração pós-gabarito
+                    if (radio.checked) {
+                        selectedVal = radio.value;
+                    }
+                    
+                    // Encontra o container correspondente à opção para estilização
+                    const optionCard = radio.closest('.option-card');
+                    optionCard.classList.add('disabled');
+                    
+                    // Aplica cores com base nas respostas corretas e incorretas
+                    if (radio.value === ANSWERS[i]) {
+                        optionCard.classList.add('correct-answer');
+                    } else if (radio.checked && radio.value !== ANSWERS[i]) {
+                        optionCard.classList.add('incorrect-answer');
+                    }
+                }
+
+                const isCorrect = (selectedVal === ANSWERS[i]);
+                if (isCorrect) correctCount++;
+                results[i] = { isCorrect, selectedVal };
+
+                // 2. Injeção e ativação da caixa de resolução comentada
+                const questionContainer = document.querySelector(`.question-container[data-question="${i}"]`);
+                const resolutionBox = questionContainer.querySelector('.resolution-container');
+                
+                // Badge de Certo / Errado na caixa
+                const badgeHtml = isCorrect 
+                    ? `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold correct-badge mb-3"><i class="fa-solid fa-circle-check"></i> Você Acertou</span>`
+                    : `<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold incorrect-badge mb-3"><i class="fa-solid fa-circle-xmark"></i> Você Errou (Sua resposta: ${selectedVal || 'Nenhuma'})</span>`;
+
+                resolutionBox.innerHTML = `
+                    <div class="p-5 rounded-xl bg-amber-50/40 border border-amber-200/60 leading-relaxed text-sm sm:text-base">
+                        ${badgeHtml}
+                        <h4 class="font-bold text-stone-900 mb-2">Resolução Comentada da Banca:</h4>
+                        <div class="text-stone-700">${RESOLUTIONS[i]}</div>
+                    </div>
+                `;
+                resolutionBox.classList.remove('hidden');
+            }
+
+            const scorePercent = (correctCount / totalQuestions) * 100;
+            document.getElementById('correct-count').textContent = correctCount;
+            document.getElementById('score-percentage').textContent = `${scorePercent}%`;
+
+            const resultsPanel = document.getElementById('results-panel');
+            const scoreIcon = document.getElementById('score-icon');
+            const scoreIconBg = document.getElementById('score-icon-bg');
+            const feedbackText = document.getElementById('feedback-text');
+
+            // Ajuste do ícone e feedback de acordo com a nota
+            if (correctCount >= 8) {
+                scoreIcon.className = "fa-solid fa-trophy text-emerald-600";
+                scoreIconBg.className = "inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 bg-emerald-100";
+                feedbackText.innerHTML = `Excelente aproveitamento! Seu nível de domínio geográfico e analítico das questões de astronomia e dinâmica espacial está alinhado ao rigor exigido nas provas oficiais da <strong>FAURGS</strong>. Continue assim!`;
+            } else if (correctCount >= 5) {
+                scoreIcon.className = "fa-solid fa-star-half-stroke text-amber-600";
+                scoreIconBg.className = "inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 bg-amber-100";
+                feedbackText.innerHTML = `Bom desempenho! Você possui um bom domínio sobre a rotação e a translação, contudo vale revisar com precisão o cálculo de fusos horários e as sombras do zênite para garantir excelência absoluta nos certames da banca.`;
+            } else {
+                scoreIcon.className = "fa-solid fa-triangle-exclamation text-rose-600";
+                scoreIconBg.className = "inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 bg-rose-100";
+                feedbackText.innerHTML = `Aproveitamento regular. Sugerimos a leitura atenta das resoluções comentadas abaixo de cada questão. O estudo aprofundado dos fenômenos de Coriolis e das variações estacionais do fotoperíodo ajudará a consolidar esta base.`;
+            }
+
+            resultsPanel.classList.remove('hidden');
+            
+            // Scroll suave até a seção de resultado global
+            resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            form.reset();
+            
+            // Limpa as classes de acerto/erro aplicadas às alternativas
+            const optionCards = document.querySelectorAll('.option-card');
+            optionCards.forEach(card => {
+                card.className = "option-card flex items-start gap-3 p-4 rounded-xl cursor-pointer w-full text-left";
+            });
+
+            // Reabilita todos os inputs de rádio
+            const radios = form.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.disabled = false;
+            });
+
+            // Oculta todas as caixas de resolução
+            const resolutionBoxes = document.querySelectorAll('.resolution-container');
+            resolutionBoxes.forEach(box => {
+                box.classList.add('hidden');
+                box.innerHTML = '';
+            });
+
+            // Reinicia progresso e barras
+            document.getElementById('answered-counter').textContent = "0";
+            document.getElementById('progress-bar').style.width = "0%";
+
+            // Oculta painel de resultado
+            document.getElementById('results-panel').classList.add('hidden');
+            
+            // Scroll de volta ao topo de forma suave
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

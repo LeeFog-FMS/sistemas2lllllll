@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparatório Geografia IFSC — Banca FAURGS</title>
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones elegantes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #0f172a; /* Slate 900 */
+        }
+        /* Custom highlight styling */
+        .highlight-yellow {
+            background-color: #fef08a; /* Yellow 200 */
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .highlight-blue {
+            background-color: #dbeafe; /* Blue 100 */
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24 antialiased">
+
+    <!-- Top Header & Audio Player Container -->
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm py-4 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-lg font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-indigo-600"></i>
+                    IFSC — Professor de Geografia
+                </h1>
+                <p class="text-xs text-slate-500">Guia de Memorização Ativa • Banca FAURGS</p>
+            </div>
+            
+            <!-- Custom MP3 Player Box -->
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-2 w-full md:w-auto md:min-w-[400px]">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-semibold text-slate-600">Arquivo:</span>
+                    <input type="text" id="audio-filename" value="aula_geografia.mp3" 
+                        class="text-xs bg-white border border-slate-300 rounded px-2 py-1 flex-grow outline-none focus:border-indigo-500 transition-colors"
+                        placeholder="Nome do arquivo.mp3">
+                    <button id="btn-load-audio" class="text-xs bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-2 py-1 rounded transition-colors" title="Carregar áudio">
+                        Carregar
+                    </button>
+                </div>
+                
+                <!-- Audio Controls -->
+                <div class="flex items-center justify-between gap-3 mt-1">
+                    <button id="btn-play-pause" class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 transition-colors focus:outline-none shadow-sm">
+                        <i id="play-icon" class="fa-solid fa-play text-xs ml-0.5"></i>
+                    </button>
+                    
+                    <div class="flex-grow flex flex-col">
+                        <input type="range" id="audio-progress" min="0" value="0" step="0.1" class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span id="time-current">0:00</span>
+                            <span id="time-total">0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Speed Controller Button -->
+                    <button id="btn-speed" class="text-xs font-bold px-2 py-1 border border-slate-300 rounded bg-white hover:bg-slate-100 transition-all text-slate-700 w-16 text-center">
+                        1.0x
+                    </button>
+                </div>
+                
+                <audio id="main-audio" src="aula_geografia.mp3" preload="metadata" class="hidden"></audio>
+                <div id="audio-status" class="text-[10px] text-emerald-600 font-semibold hidden text-center mt-1">
+                    <i class="fa-solid fa-circle-check"></i> Áudio carregado com sucesso!
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 mt-8">
+        
+        <!-- Document Title Card -->
+        <div class="border-b-4 border-indigo-600 pb-6 mb-8">
+            <span class="bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full">FOCO TOTAL EM EBTT</span>
+            <h2 class="text-3xl font-extrabold text-slate-900 mt-3">O Planeta Terra no Cosmos e Dinâmicas Orbitais</h2>
+            <p class="text-slate-600 mt-2 text-base leading-relaxed">
+                Este material foi projetado especificamente para as peculiaridades conceituais e o rigor terminológico exigido pela banca <strong class="text-indigo-600">FAURGS</strong>. Revise-o com atenção antes da prova.
+            </p>
+        </div>
+
+        <!-- SEÇÃO 1: GÊNESE, GEOMETRIA E MOVIMENTOS FUNDAMENTAIS -->
+        <section class="space-y-8">
+            
+            <div class="border-l-4 border-amber-500 pl-4 py-1">
+                <h3 class="text-xl font-bold text-slate-900">PÁGINA 1: Gênese, Geometria e os Movimentos Fundamentais</h3>
+            </div>
+
+            <!-- CARD 1.1: COSMOLOGIA -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i class="fa-solid fa-user-astronaut text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">1. Cosmologia e Origem da Terra</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <span class="highlight-yellow">O Big Bang (há 13,8 Ga):</span> Expansão inicial que deu origem ao tecido do espaço-tempo.
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Acreção Nebular (há 4,56 Ga):</span> Processo de aglomeração mecânica de poeira cósmica e planetesimais primitivos sob constante e progressivo efeito da atração gravitacional.
+                    </p>
+                    <p>
+                        • <strong class="text-slate-900 font-semibold">Diferenciação por Densidade (O "Decantamento" da Terra):</strong> À medida que o calor primordial aumentava através de colisões e desintegração radioativa, o planeta fundiu-se parcialmente. Os elementos mais densos (<span class="highlight-blue">siderófilos</span>), como o <strong class="font-bold">ferro</strong> e o <strong class="font-bold">níquel</strong>, decantaram (afundaram) para o centro geométrico, originando o <span class="font-bold underline text-slate-900">núcleo terrestre</span>. Simultaneamente, os elementos quimicamente mais leves (<span class="highlight-blue">litófilos</span>), tais como os <strong class="font-bold">silicatos de alumínio</strong> e <strong class="font-bold">magnésio</strong>, flutuaram em direção à superfície, gerando o <span class="font-bold underline text-slate-900">manto</span> e a <span class="font-bold underline text-slate-900">crosta primitiva</span>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CARD 1.2: GEOMETRIA TERRESTRE -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i class="fa-solid fa-earth-americas text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">2. Geometria Terrestre: A forma real do planeta</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <span class="highlight-yellow">Elipsoide de Revolução (Esferoide Oblato):</span> Modelo geométrico e matemático de referência idealizado. Devido à rotação da Terra em torno do próprio eixo, surge uma força centrífuga que expande a zona equatorial e achata os polos. Isso faz com que o <strong class="text-slate-900 font-semibold">diâmetro equatorial seja aproximadamente 21 km maior que o diâmetro polar</strong>.
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Geóide:</span> A representação física real, irregular e de alta fidelidade do planeta. É a superfície equipotencial do campo gravitacional que coincide com o nível médio dos mares em repouso absoluto. <strong class="text-slate-900">É o referencial altimétrico base para o SIRGAS2000</strong> (Sistema de Referência Geocêntrico para as Américas), adotado oficialmente pelo Brasil.
+                    </p>
+
+                    <!-- Esquema Visual Integrado -->
+                    <div class="my-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                        <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
+                            <span class="text-xs font-bold text-indigo-600 block mb-2 uppercase">Modelo Matemático Ideal</span>
+                            <div class="text-xl font-semibold text-slate-800 mb-1">Elipsoide de Revolução</div>
+                            <div class="text-slate-500 text-xs">(Esfera achatada nos polos pela força centrífuga)</div>
+                            <div class="text-slate-400 font-mono text-2xl my-3">⬭</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
+                            <span class="text-xs font-bold text-emerald-600 block mb-2 uppercase">Superfície Física Real</span>
+                            <div class="text-xl font-semibold text-slate-800 mb-1">Geóide</div>
+                            <div class="text-slate-500 text-xs">(Superfície equipotencial influenciada pela gravidade)</div>
+                            <div class="text-slate-400 font-mono text-2xl my-3">⎰⎱</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 1.3: COORDENADAS -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-sky-50 text-sky-600 rounded-lg"><i class="fa-solid fa-compass text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">3. Sistemas de Coordenadas (Terrestres vs. Celestes)</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <strong class="font-semibold text-slate-900">Coordenadas Geográficas:</strong> Determinadas sobre a superfície esférica terrestre. Baseiam-se na <span class="highlight-yellow">Latitude</span> (arco angular medido do Equador aos polos, variando de 0° a 90° N/S) e na <span class="highlight-yellow">Longitude</span> (arco medido do Meridiano de Greenwich para as direções laterais, de 0° a 180° E/W).
+                    </p>
+                    <p>
+                        • <strong class="font-semibold text-slate-900">Coordenadas Celestes Locais:</strong> Referem-se ao campo de observação local a partir de um observador. Incluem o <span class="font-bold underline">Azimute</span> (ângulo horizontal medido no sentido horário a partir do ponto cardeal Norte, de 0° a 360°) e a <span class="font-bold underline">Altura</span> (ângulo vertical do astro acima do plano do horizonte local, de 0° a 90°). O ponto máximo no topo da cabeça é o <strong class="text-slate-900">Zênite</strong>; o oposto gravitacional, abaixo dos pés, é o <strong class="text-slate-900">Nadir</strong>.
+                    </p>
+                    <p>
+                        • <strong class="font-semibold text-slate-900">Coordenadas Celestes Equatoriais:</strong> Sistema geocêntrico projetado indefinidamente no espaço cósmico. Utiliza a <span class="font-bold underline">Declinação</span> (equivalente à projeção espacial da latitude terrestre, de 0° a 90° N/S) e a <span class="font-bold underline">Ascensão Reta</span> (paralela cósmica da longitude, medida a partir do Ponto Vernal em horas, minutos e segundos, variando de 0h a 24h).
+                    </p>
+                </div>
+            </div>
+
+            <!-- CARD 1.4: ROTAÇÃO -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-violet-50 text-violet-600 rounded-lg"><i class="fa-solid fa-rotate-right text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">4. Movimento de Rotação (Giro no próprio eixo)</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <span class="highlight-yellow">Sentido de Rotação:</span> Sempre de <strong class="font-bold">Oeste para Leste</strong> (com sentido anti-horário se visualizado diretamente de cima do Polo Norte). Essa trajetória causa o <strong class="text-slate-900 font-semibold underline">movimento aparente do Sol e dos corpos celestes de Leste para Oeste</strong>.
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Velocidade Angular:</span> Rigorosamente uniforme e idêntica para qualquer ponto de latitude do globo: <strong class="font-bold">15° por hora</strong> (derivada de 360° divididos pelas 24 horas do dia).
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Velocidade Linear:</span> Variável em razão direta da distância radial ao eixo rotacional. É <strong class="font-bold">máxima no Equador</strong> (~1.674 km/h) e reduz-se progressivamente até se tornar <strong class="font-bold">completamente nula nos polos geométricos</strong> (0 km/h). 
+                        <span class="block bg-slate-50 border border-slate-100 p-2 mt-2 rounded font-mono text-xs text-center">Fórmula matemática da velocidade linear: v(φ) = v_eq × cos(φ)</span>
+                    </p>
+                    <p>
+                        • <strong class="font-semibold text-slate-900">Dia Sideral (23h 56min 4s):</strong> Tempo exato que o planeta gasta para completar uma rotação completa de 360° em relação a estrelas infinitamente distantes que atuam como ponto fixo de fundo.
+                    </p>
+                    <p>
+                        • <strong class="font-semibold text-slate-900">Dia Solar (24h):</strong> Intervalo de tempo para o Sol retornar à projeção do meridiano de observação inicial. Pelo fato de a Terra estar se movendo paralelamente em translação, é necessário girar um adicional aproximado de 59 segundos de arco celeste (360°59') para realinhar o Sol no céu do observador.
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Efeito / Força de Coriolis:</span> Força aparente (pseudoforça) decorrente do sistema de referencial não inercial rotatório. Provoca o desvio lateral de objetos livres ou fluidos em movimento: <span class="highlight-blue">para a direita no Hemisfério Norte</span> e <span class="highlight-blue">para a esquerda no Hemisfério Sul</span>. <strong class="text-slate-900 font-semibold">O desvio é nulo sobre a linha equatorial</strong> e cresce progressivamente até atingir intensidade máxima nos polos geográficos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CARD 1.5: TRANSLAÇÃO -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i class="fa-solid fa-arrows-spin text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">5. Movimento de Translação, Obliquidade e Estações</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <span class="highlight-yellow">Translação Terrestre:</span> Órbita de geometria elíptica executada ao redor da estrela solar. O ciclo completo dura aproximadamente 365 dias, 5 horas e 48 minutos.
+                    </p>
+                    <p>
+                        • <span class="highlight-blue">Periélio (Janeiro):</span> Momento orbital de máxima aproximação com a estrela solar (cerca de 147 milhões de km), onde a velocidade de translação orbital é máxima devido às dinâmicas gravitacionais (Segunda Lei de Kepler).
+                    </p>
+                    <p>
+                        • <span class="highlight-blue">Afélio (Julho):</span> Momento orbital de máximo afastamento relativo (cerca de 152 milhões de km), resultando na menor velocidade orbital registrada.
+                    </p>
+                    <div class="bg-slate-50 border-l-4 border-amber-500 p-4 rounded-r-lg my-2">
+                        <strong class="text-amber-800 text-xs block uppercase mb-1"><i class="fa-solid fa-triangle-exclamation"></i> Pegadinha Crucial de Prova</strong>
+                        <p class="text-xs text-slate-700">
+                            A variação de distância solar entre periélio e afélio <strong class="font-bold underline text-slate-900">NÃO tem qualquer relevância na determinação climática das estações do ano</strong>. Em pleno periélio (janeiro), o Hemisfério Norte está enfrentando seu inverno rigoroso devido apenas à inclinação do eixo planetário.
+                        </p>
+                    </div>
+                    <p>
+                        • <strong class="font-semibold text-slate-900">A Causa das Estações do Ano:</strong> É gerada unicamente pela associação direta e integrada entre a <strong class="text-indigo-600">Obliquidade do eixo de rotação</strong> (inclinação de ~23°27' em relação à perpendicular do plano orbital da eclíptica) e a <strong class="text-indigo-600">Translação</strong>. Essa combinação assegura uma alternância periódica e desigual na insolação dos hemisférios.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SEÇÃO 2: CARTOGRAFIA DO TEMPO, CICLOS ORBITAIS E ESTRATÉGIA -->
+        <section class="space-y-8 mt-12">
+            
+            <div class="border-l-4 border-amber-500 pl-4 py-1">
+                <h3 class="text-xl font-bold text-slate-900">PÁGINA 2: Cartografia do Tempo, Ciclos Orbitais e Estratégia de Prova</h3>
+            </div>
+
+            <!-- CARD 2.1: SOLSTÍCIOS E EQUINÓCIOS -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-yellow-50 text-yellow-600 rounded-lg"><i class="fa-solid fa-sun text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">1. Solstícios e Equinócios: Memorize a Iluminação Global</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <span class="highlight-yellow">Solstício de Junho:</span> Raios do sol incidem verticalmente no zênite exato sobre o <strong class="text-slate-900">Trópico de Câncer (23°27' N)</strong>. Marca o início do Verão no Hemisfério Norte (HN) e Inverno no Hemisfério Sul (HS). O <span class="underline font-semibold">Círculo Polar Ártico permanece 24 horas consecutivas iluminado</span> ("Sol da Meia-Noite").
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Solstício de Dezembro:</span> Raios solares atingem o zênite no <strong class="text-slate-900">Trópico de Capricórnio (23°27' S)</strong>. Início do Verão no Hemisfério Sul (HS) e Inverno no Hemisfério Norte (HN). O <span class="underline font-semibold">Círculo Polar Antártico permanece sob 24 horas contínuas de luz solar</span>.
+                    </p>
+                    <p>
+                        • <span class="highlight-yellow">Equinócios (Março e Setembro):</span> Os raios solares atingem verticalmente no meio-dia a linha do <strong class="text-slate-900">Equador (0°)</strong>. A projeção solar divide os polos simetricamente, fazendo com que <strong class="font-bold text-indigo-600">todos os locais do planeta tenham o dia e a noite com duração idêntica de 12 horas</strong>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CARD 2.2: FUSOS HORÁRIOS -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i class="fa-solid fa-clock text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">2. Fusos Horários Globais e do Brasil</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        • <span class="highlight-yellow">Regra dos Fusos Práticos:</span> Cada fuso teórico corresponde a <strong class="font-bold">15° de amplitude longitudinal</strong>. Ao viajar em direção a <strong class="text-slate-900 font-semibold">Leste (+), as horas aumentam</strong>; ao caminhar na direção <strong class="text-slate-900 font-semibold">Oeste (-), as horas diminuem</strong>.
+                    </p>
+                    <p>
+                        • <strong class="font-semibold text-slate-900 text-base block mt-2">Os Fusos Brasileiros Atuais (Todos a Oeste de Greenwich, ou seja, negativos):</strong>
+                    </p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-3 my-4">
+                        <div class="border border-slate-200 p-3 rounded-lg bg-white text-center">
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">1º FUSO</span>
+                            <div class="text-lg font-bold text-slate-900">UTC-2</div>
+                            <p class="text-[11px] text-slate-500 mt-1">Ilhas Oceânicas (ex: Fernando de Noronha)</p>
+                        </div>
+                        <div class="border border-slate-200 p-3 rounded-lg bg-white text-center">
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">2º FUSO</span>
+                            <div class="text-lg font-bold text-slate-900">UTC-3</div>
+                            <p class="text-[11px] text-slate-500 mt-1">Horário de Brasília (Sul, Sudeste, Nordeste, DF, GO, TO, PA, AP)</p>
+                        </div>
+                        <div class="border border-slate-200 p-3 rounded-lg bg-white text-center">
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">3º FUSO</span>
+                            <div class="text-lg font-bold text-slate-900">UTC-4</div>
+                            <p class="text-[11px] text-slate-500 mt-1">MS, MT, RO, RR e porção central/leste do Amazonas</p>
+                        </div>
+                        <div class="border border-slate-200 p-3 rounded-lg bg-white text-center">
+                            <span class="text-xs font-bold text-indigo-600 block mb-1">4º FUSO</span>
+                            <div class="text-lg font-bold text-slate-900">UTC-5</div>
+                            <p class="text-[11px] text-slate-500 mt-1">Acre e extremo oeste do Amazonas (13 municípios específicos)</p>
+                        </div>
+                    </div>
+
+                    <p>
+                        • <span class="highlight-yellow">Linha Internacional de Data (LID - Meridiano 180°):</span> 
+                        Se cruzar no sentido <strong class="text-indigo-600">América para Ásia (Leste para Oeste)</strong>, você deve <strong class="font-bold">avançar 1 dia inteiro</strong> no calendário. 
+                        Se cruzar no sentido oposto <strong class="text-indigo-600">Ásia para América (Oeste para Leste)</strong>, deve <strong class="font-bold">atrasar (retornar) 1 dia inteiro</strong> no calendário.
+                    </p>
+                </div>
+            </div>
+
+            <!-- CARD 2.3: CICLOS DE MILANKOVITCH -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-purple-50 text-purple-600 rounded-lg"><i class="fa-solid fa-snowflake text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">3. Os 14 Movimentos e os Ciclos de Milankovitch (Glaciações)</h4>
+                </div>
+                <div class="space-y-4 text-sm text-slate-700 leading-relaxed">
+                    <p>
+                        A ciência geográfica mapeia 14 movimentos concomitantes da Terra no espaço sideral (como a precessão dos equinócios, nutação lunar, revolução galáctica e a oscilação polar de Chandler). Para o IFSC/FAURGS, o foco se concentra nos <span class="highlight-yellow">Ciclos de Milankovitch</span>, fundamentais para explicar as grandes glaciações pretéritas através de alterações na insolação das latitudes temperadas e polares:
+                    </p>
+                    
+                    <div class="space-y-3 pl-2 border-l-2 border-purple-200">
+                        <p>
+                            1. <strong class="text-slate-900">Excentricidade (~100 mil anos):</strong> A variação gradual e geométrica da órbita da Terra, oscilando entre uma elipse bastante alongada e uma elipse quase perfeitamente circular.
+                        </p>
+                        <p>
+                            2. <strong class="text-slate-900">Obliquidade (~41 mil anos):</strong> A alteração angular sistemática da inclinação rotacional em relação ao plano do caminho orbital, oscilando periodicamente de <strong class="font-bold">22,0° a 24,5°</strong>. Quanto maior o ângulo, mais pronunciado é o contraste térmico sazonal.
+                        </p>
+                        <p>
+                            3. <strong class="text-slate-900">Precessão dos Equinócios (~26 mil anos):</strong> O movimento circular e rotativo do próprio eixo planetário como se fosse o bamboleio de um pião que desacelera, mudando a direção do eixo de inclinação no cosmos em relação ao periélio e afélio.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2.4: DICIONÁRIO DE SOBREVIVÊNCIA FAURGS -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-rose-50 text-rose-600 rounded-lg"><i class="fa-solid fa-shield-halved text-lg"></i></div>
+                    <h4 class="text-lg font-bold text-slate-900">💡 O "Dicionário de Sobrevivência" da FAURGS: Pegadinhas Frequentes</h4>
+                </div>
+                
+                <p class="text-sm text-slate-600 mb-4">
+                    Abaixo está a consolidação das armadilhas semânticas mais frequentes da banca em provas de Geografia Física de nível superior e EBTT.
+                </p>
+
+                <!-- Responsive Table Wrapper - NO Horizontal Scrollbar -->
+                <!-- Desktop Table: Visible on Medium screens and up -->
+                <div class="hidden md:block overflow-hidden border border-slate-200 rounded-lg">
+                    <table class="min-w-full divide-y divide-slate-200 text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left font-bold text-slate-700 w-[25%]">Conceito</th>
+                                <th scope="col" class="px-4 py-3 text-left font-bold text-slate-700 w-[35%]">A Armadilha da Banca</th>
+                                <th scope="col" class="px-4 py-3 text-left font-bold text-slate-700 w-[40%]">A Verdade Geográfica Exigida</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 bg-white">
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-slate-900">Polo Geográfico vs. Magnético</td>
+                                <td class="px-4 py-3 text-slate-600">Afirma categoricamente que coincidem em posição espacial e são fisicamente estáticos.</td>
+                                <td class="px-4 py-3 text-slate-700">O Polo Geográfico é fixo (determinado pela rotação). O Polo Magnético varia e migra ao longo do tempo geológico em função da mobilidade térmica de ferro líquido no núcleo exterior. A diferença é a <strong class="text-indigo-600 font-medium">declinação magnética</strong>.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-slate-900">Velocidade de Rotação</td>
+                                <td class="px-4 py-3 text-slate-600">Diz que a velocidade angular da rotação diminui progressivamente nos polos.</td>
+                                <td class="px-4 py-3 text-slate-700">A velocidade angular é a mesma em toda a Terra (<strong class="font-semibold text-emerald-600">15° por hora</strong>). É apenas a velocidade linear que diminui latitudinalmente até zerar sobre os polos.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-slate-900">Causa das Estações</td>
+                                <td class="px-4 py-3 text-slate-600">Atribui as estações à distância física instantânea do planeta ao Sol (periélio/afélio).</td>
+                                <td class="px-4 py-3 text-slate-700">A causa é somente a <strong class="text-indigo-600 font-medium">obliquidade do eixo</strong> aliada ao movimento de <strong class="text-indigo-600 font-medium">translação</strong>. A distância absoluta ao Sol não interfere de maneira representativa nas estações.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-slate-900">Divisão do Amazonas</td>
+                                <td class="px-4 py-3 text-slate-600">Afirma que o imenso estado do Amazonas situa-se integralmente no fuso UTC-4.</td>
+                                <td class="px-4 py-3 text-slate-700">Treze municípios localizados na porção mais ocidental do estado do Amazonas acompanham o fuso oficial do estado do Acre (<strong class="font-semibold text-emerald-600">UTC-5</strong>).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-slate-900">Efeito Coriolis</td>
+                                <td class="px-4 py-3 text-slate-600">Sustenta que Coriolis provoca o desvio de fluidos para a esquerda no Hemisfério Norte.</td>
+                                <td class="px-4 py-3 text-slate-700">O desvio lateral é sempre <strong class="text-emerald-600 font-semibold">para a direita no Hemisfério Norte</strong> e <strong class="text-emerald-600 font-semibold">para a esquerda no Hemisfério Sul</strong>. É totalmente nulo no Equador.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mobile Cards: Rendered dynamically in block format for screens under 768px -->
+                <div class="md:hidden space-y-4">
+                    <!-- Row Card 1 -->
+                    <div class="border border-slate-200 rounded-lg p-4 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">Conceito</div>
+                        <div class="font-bold text-slate-900 text-sm">Polo Geográfico vs. Magnético</div>
+                        <div class="text-xs text-rose-700 bg-rose-50 p-2 rounded">
+                            <strong class="font-bold block">A Armadilha da Banca:</strong> Afirma categoricamente que coincidem em posição espacial e são fisicamente estáticos.
+                        </div>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                            <strong class="font-bold block text-slate-900">A Verdade Geográfica:</strong> O Polo Geográfico é fixo (determinado pela rotação). O Polo Magnético varia e migra ao longo do tempo geológico em função da mobilidade térmica de ferro líquido no núcleo exterior. A diferença é a <strong class="text-indigo-600 font-semibold">declinação magnética</strong>.
+                        </div>
+                    </div>
+
+                    <!-- Row Card 2 -->
+                    <div class="border border-slate-200 rounded-lg p-4 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">Conceito</div>
+                        <div class="font-bold text-slate-900 text-sm">Velocidade de Rotação</div>
+                        <div class="text-xs text-rose-700 bg-rose-50 p-2 rounded">
+                            <strong class="font-bold block">A Armadilha da Banca:</strong> Diz que a velocidade angular da rotação diminui progressivamente nos polos.
+                        </div>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                            <strong class="font-bold block text-slate-900">A Verdade Geográfica:</strong> A velocidade angular é a mesma em toda a Terra (<strong class="font-semibold text-emerald-600">15° por hora</strong>). É apenas a velocidade linear que diminui latitudinalmente até zerar sobre os polos.
+                        </div>
+                    </div>
+
+                    <!-- Row Card 3 -->
+                    <div class="border border-slate-200 rounded-lg p-4 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">Conceito</div>
+                        <div class="font-bold text-slate-900 text-sm">Causa das Estações</div>
+                        <div class="text-xs text-rose-700 bg-rose-50 p-2 rounded">
+                            <strong class="font-bold block">A Armadilha da Banca:</strong> Atribui as estações à distância física instantânea do planeta ao Sol (periélio/afélio).
+                        </div>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                            <strong class="font-bold block text-slate-900">A Verdade Geográfica:</strong> A causa é somente a <strong class="text-indigo-600 font-semibold">obliquidade do eixo</strong> aliada ao movimento de <strong class="text-indigo-600 font-semibold">translação</strong>. A distância absoluta ao Sol não interfere de maneira representativa nas estações.
+                        </div>
+                    </div>
+
+                    <!-- Row Card 4 -->
+                    <div class="border border-slate-200 rounded-lg p-4 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">Conceito</div>
+                        <div class="font-bold text-slate-900 text-sm">Divisão do Amazonas</div>
+                        <div class="text-xs text-rose-700 bg-rose-50 p-2 rounded">
+                            <strong class="font-bold block">A Armadilha da Banca:</strong> Afirma que o imenso estado do Amazonas situa-se integralmente no fuso UTC-4.
+                        </div>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                            <strong class="font-bold block text-slate-900">A Verdade Geográfica:</strong> Treze municípios localizados na porção mais ocidental do estado do Amazonas acompanham o fuso oficial do estado do Acre (<strong class="font-semibold text-emerald-600">UTC-5</strong>).
+                        </div>
+                    </div>
+
+                    <!-- Row Card 5 -->
+                    <div class="border border-slate-200 rounded-lg p-4 space-y-2">
+                        <div class="text-xs font-bold uppercase tracking-wider text-indigo-600">Conceito</div>
+                        <div class="font-bold text-slate-900 text-sm">Efeito Coriolis</div>
+                        <div class="text-xs text-rose-700 bg-rose-50 p-2 rounded">
+                            <strong class="font-bold block">A Armadilha da Banca:</strong> Sustenta que Coriolis provoca o desvio de fluidos para a esquerda no Hemisfério Norte.
+                        </div>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-2 rounded">
+                            <strong class="font-bold block text-slate-900">A Verdade Geográfica:</strong> O desvio lateral é sempre <strong class="text-emerald-600 font-semibold">para a direita no Hemisfério Norte</strong> e <strong class="text-emerald-600 font-semibold">para a esquerda no Hemisfério Sul</strong>. É totalmente nulo no Equador.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- BOTTOM CALL TO ACTION -->
+        <div class="mt-16 p-6 border border-indigo-200 bg-indigo-50/50 rounded-2xl text-center space-y-4">
+            <h4 class="text-lg font-bold text-slate-900">Teoria memorizada? É hora de testar os conhecimentos!</h4>
+            <p class="text-sm text-slate-600 max-w-xl mx-auto">
+                Para consolidar as dinâmicas de rotação, translação, fusos horários e as particularidades da FAURGS, pratique respondendo a questões direcionadas para concursos.
+            </p>
+            <div class="pt-2">
+                <a href="cosmosquestoes.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-md hover:shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-indigo-300">
+                    <i class="fa-solid fa-circle-question"></i>
+                    Ir para Simulado de Questões
+                </a>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts interativos para o Reprodutor de Áudio -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('main-audio');
+            const btnPlayPause = document.getElementById('btn-play-pause');
+            const playIcon = document.getElementById('play-icon');
+            const progress = document.getElementById('audio-progress');
+            const timeCurrent = document.getElementById('time-current');
+            const timeTotal = document.getElementById('time-total');
+            const btnSpeed = document.getElementById('btn-speed');
+            const audioFilenameInput = document.getElementById('audio-filename');
+            const btnLoadAudio = document.getElementById('btn-load-audio');
+            const audioStatus = document.getElementById('audio-status');
+
+            // Array de velocidades suportadas
+            const speeds = [1.0, 1.25, 1.5, 1.75, 2.0];
+            let currentSpeedIndex = 0;
+
+            // Função para formatar o tempo do áudio (ex: 03:45)
+            function formatTime(secs) {
+                if (isNaN(secs)) return '0:00';
+                const minutes = Math.floor(secs / 60);
+                const seconds = Math.floor(secs % 60);
+                const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+                return `${minutes}:${returnedSeconds}`;
+            }
+
+            // Ação de carregar um novo arquivo MP3 dinamicamente
+            function loadAudioFile() {
+                const filename = audioFilenameInput.value.trim();
+                if (filename) {
+                    audio.src = filename;
+                    audio.load();
+                    audioStatus.textContent = `Carregando: ${filename}`;
+                    audioStatus.classList.remove('hidden');
+                    audioStatus.classList.remove('text-emerald-600');
+                    audioStatus.classList.add('text-amber-600');
+                }
+            }
+
+            btnLoadAudio.addEventListener('click', loadAudioFile);
+
+            // Carregamento de metadados bem-sucedido
+            audio.addEventListener('loadedmetadata', () => {
+                timeTotal.textContent = formatTime(audio.duration);
+                progress.max = audio.duration;
+                audioStatus.innerHTML = `<i class="fa-solid fa-circle-check"></i> Áudio '${audioFilenameInput.value}' carregado com sucesso!`;
+                audioStatus.classList.remove('text-amber-600');
+                audioStatus.classList.add('text-emerald-600');
+                audioStatus.classList.remove('hidden');
+            });
+
+            // Erro ao carregar arquivo de áudio
+            audio.addEventListener('error', () => {
+                audioStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Arquivo de áudio não encontrado no diretório.`;
+                audioStatus.classList.remove('text-emerald-600');
+                audioStatus.classList.add('text-rose-600');
+                audioStatus.classList.remove('hidden');
+            });
+
+            // Play / Pause toggle
+            btnPlayPause.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play()
+                        .then(() => {
+                            playIcon.className = 'fa-solid fa-pause text-xs';
+                        })
+                        .catch(err => {
+                            console.warn("Áudio não reproduzido automaticamente devido às restrições do navegador ou ausência do arquivo:", err);
+                        });
+                } else {
+                    audio.pause();
+                    playIcon.className = 'fa-solid fa-play text-xs ml-0.5';
+                }
+            });
+
+            // Atualização da barra de progresso durante a reprodução
+            audio.addEventListener('timeupdate', () => {
+                progress.value = audio.currentTime;
+                timeCurrent.textContent = formatTime(audio.currentTime);
+            });
+
+            // Interação direta com a barra de progresso pelo estudante
+            progress.addEventListener('input', () => {
+                audio.currentTime = progress.value;
+                timeCurrent.textContent = formatTime(audio.currentTime);
+            });
+
+            // Alteração cíclica de velocidade (1x -> 1.25x -> 1.5x -> 1.75x -> 2x)
+            btnSpeed.addEventListener('click', () => {
+                currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
+                const newSpeed = speeds[currentSpeedIndex];
+                audio.playbackRate = newSpeed;
+                btnSpeed.textContent = `${newSpeed.toFixed(2)}x`;
+            });
+
+            // Reinicia o ícone caso o áudio finalize
+            audio.addEventListener('ended', () => {
+                playIcon.className = 'fa-solid fa-play text-xs ml-0.5';
+                progress.value = 0;
+                timeCurrent.textContent = '0:00';
+            });
+        });
+    </script>
+</body>
+</html>
