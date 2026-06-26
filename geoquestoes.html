@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Geologia e Tectônica - Padrão FAURGS</title>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f7fa',
+                            100: '#eaeef4',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        // Paleta quente e relaxante para reduzir fadiga visual
+                        warmbg: '#FAF9F6', // Alabaster suave
+                        warmcard: '#FFFFFF',
+                        warmtext: '#1C1917', // Stone escuro, menos agressivo que preto puro
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons para vetores leves -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Transições suaves globais */
+        .smooth-transition {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Efeito de foco de leitura */
+        .question-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body class="bg-warmbg text-warmtext min-h-screen font-sans selection:bg-amber-100 antialiased leading-relaxed">
+
+    <!-- Top Barra de Progresso de Leitura Fixa -->
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-slate-200 z-50">
+        <div id="readingProgress" class="h-full bg-amber-600 w-0 smooth-transition"></div>
+    </div>
+
+    <!-- Cabeçalho Acadêmico -->
+    <header class="border-b border-stone-200 bg-white py-8 md:py-12 px-4 shadow-sm">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200 mb-4">
+                <i data-lucide="graduation-cap" class="w-3.5 h-3.5"></i> CONCURSOS & SELEÇÕES
+            </span>
+            <h1 class="text-2xl md:text-4xl font-extrabold text-stone-900 tracking-tight">
+                Simulado de Geologia e Estrutura Interna da Terra
+            </h1>
+            <p class="mt-3 text-base md:text-lg text-stone-600 max-w-2xl mx-auto font-light">
+                Treinamento avançado baseado no perfil de cobrança da banca <span class="font-medium text-stone-900">FAURGS</span>. Questões completas com resoluções analíticas integradas.
+            </p>
+            
+            <div class="mt-6 flex flex-wrap justify-center gap-4 text-xs md:text-sm text-stone-500">
+                <span class="flex items-center gap-1.5 bg-stone-50 px-3 py-1.5 rounded-md border border-stone-100">
+                    <i data-lucide="book-open" class="w-4 h-4 text-amber-600"></i> 10 Questões Inéditas/Adaptadas
+                </span>
+                <span class="flex items-center gap-1.5 bg-stone-50 px-3 py-1.5 rounded-md border border-stone-100">
+                    <i data-lucide="clock" class="w-4 h-4 text-amber-600"></i> Tempo estimado: 45 min
+                </span>
+                <span class="flex items-center gap-1.5 bg-stone-50 px-3 py-1.5 rounded-md border border-stone-100">
+                    <i data-lucide="award" class="w-4 h-4 text-amber-600"></i> Foco: Dinâmica Global & Tectônica
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+        
+        <!-- Bloco de Dicas de Produtividade/Estudo -->
+        <div class="mb-10 p-5 rounded-xl bg-amber-50/50 border border-amber-100 text-stone-700 text-sm flex items-start gap-3.5 shadow-sm">
+            <div class="p-1.5 bg-amber-100 text-amber-800 rounded-lg shrink-0">
+                <i data-lucide="lightbulb" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-stone-900 mb-0.5">Dica de Leitura Eficiente</h3>
+                <p>As questões reproduzem o rigor conceitual da FAURGS, exigindo atenção minuciosa aos termos técnicos (ex: reologia, equipotencial, descompressão adiabática). Responda com calma antes de submeter o gabarito.</p>
+            </div>
+        </div>
+
+        <!-- Formulário do Quiz -->
+        <form id="quizForm" class="space-y-8 md:space-y-12">
+            <!-- As questões serão injetadas dinamicamente aqui pelo JavaScript para manter excelente manutenção e modularidade -->
+            <div id="questionsContainer" class="space-y-8">
+                <!-- Loader Placeholder -->
+                <div class="text-center py-12">
+                    <div class="animate-spin inline-block w-8 h-8 border-[3px] border-current border-t-transparent text-amber-600 rounded-full" role="status" aria-label="loading">
+                        <span class="sr-only">Carregando Questões...</span>
+                    </div>
+                    <p class="mt-2 text-stone-500 text-sm">Estruturando o ambiente de testes...</p>
+                </div>
+            </div>
+
+            <div class="pt-6 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-stone-500 text-sm font-medium" id="completionStatus">
+                    0 de 10 respondidas
+                </div>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button type="button" id="resetBtn" class="flex-1 sm:flex-initial px-6 py-3 border border-stone-300 text-stone-700 font-medium rounded-lg text-sm bg-white hover:bg-stone-50 hover:text-stone-950 active:scale-95 smooth-transition shadow-sm flex items-center justify-center gap-2">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Limpar Respostas
+                    </button>
+                    <button type="submit" id="submitBtn" class="flex-1 sm:flex-initial px-8 py-3 bg-stone-900 hover:bg-stone-800 active:bg-stone-950 text-white font-semibold rounded-lg text-sm active:scale-95 smooth-transition shadow-md flex items-center justify-center gap-2">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> Finalizar Simulado
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- O painel de resultados começará oculto e será exibido de forma elegante após o envio -->
+        <section id="resultsSection" class="hidden mt-12 pt-12 border-t border-stone-300 space-y-10 scroll-mt-6">
+            
+            <!-- Card de Placar Global -->
+            <div class="p-6 md:p-8 rounded-2xl bg-white border border-stone-200 shadow-xl overflow-hidden relative">
+                <!-- Elemento decorativo sutil -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full -mr-8 -mt-8"></div>
+                
+                <h2 class="text-xl md:text-2xl font-bold text-stone-900 mb-6 flex items-center gap-2">
+                    <i data-lucide="bar-chart-3" class="text-amber-600"></i> Desempenho Geral
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    
+                    <!-- Círculo de porcentagem -->
+                    <div class="flex flex-col items-center justify-center text-center p-4">
+                        <div class="relative flex items-center justify-center">
+                            <!-- SVG Progress Ring -->
+                            <svg class="w-32 h-32 transform -rotate-90">
+                                <circle cx="64" cy="64" r="54" stroke="#F1F5F9" stroke-width="8" fill="transparent" />
+                                <circle id="scoreRing" cx="64" cy="64" r="54" stroke="#D97706" stroke-width="8" fill="transparent" 
+                                        stroke-dasharray="339.29" stroke-dashoffset="339.29" class="smooth-transition" />
+                            </svg>
+                            <div class="absolute text-center">
+                                <span id="scorePercentage" class="text-3xl font-black text-stone-900">0%</span>
+                            </div>
+                        </div>
+                        <span class="text-xs text-stone-500 mt-2 uppercase tracking-wider font-semibold">Aproveitamento</span>
+                    </div>
+
+                    <!-- Métricas textuais -->
+                    <div class="space-y-4 md:col-span-2">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-stone-50 p-4 rounded-xl border border-stone-100 text-center md:text-left">
+                                <span class="text-stone-500 text-xs block mb-1">Acertos</span>
+                                <span id="correctCount" class="text-2xl md:text-3xl font-bold text-emerald-600">0 / 10</span>
+                            </div>
+                            <div class="bg-stone-50 p-4 rounded-xl border border-stone-100 text-center md:text-left">
+                                <span class="text-stone-500 text-xs block mb-1">Status Final</span>
+                                <span id="performanceStatus" class="text-sm font-semibold text-stone-800">Processando...</span>
+                            </div>
+                        </div>
+                        
+                        <p id="feedbackMessage" class="text-sm text-stone-600 italic">
+                            Excelente esforço! Revise cada um dos tópicos abaixo para consolidar sua base para o concurso.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Gabarito Técnico Consolidador -->
+            <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
+                <div class="p-5 border-b border-stone-100 bg-stone-50/80">
+                    <h3 class="font-bold text-stone-900 text-base flex items-center gap-2">
+                        <i data-lucide="table-properties" class="text-amber-600 w-5 h-5"></i> Tabela Gabarito & Referências Rápidas
+                    </h3>
+                    <p class="text-xs text-stone-500 mt-1">Comparativo de suas respostas com o gabarito oficial da banca.</p>
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-stone-100/60 border-b border-stone-200 text-stone-600 text-xs font-semibold uppercase tracking-wider">
+                                <th class="py-3 px-4 text-center">Nº</th>
+                                <th class="py-3 px-4">Tema Central</th>
+                                <th class="py-3 px-4 text-center">Sua Resp.</th>
+                                <th class="py-3 px-4 text-center">Gabarito</th>
+                                <th class="py-3 px-4 text-center">Situação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gabaritoTableBody" class="divide-y divide-stone-150">
+                            <!-- Gerado pelo JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Aviso de revisão detalhada -->
+            <div class="text-center py-4">
+                <h3 class="text-lg font-bold text-stone-900">Análise e Resolução Item por Item</h3>
+                <p class="text-sm text-stone-500 mt-1">As resoluções detalhadas foram reveladas logo abaixo de cada bloco de questão para sua consulta estruturada.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé Estético -->
+    <footer class="bg-stone-900 text-stone-400 py-12 px-4 mt-20 border-t border-stone-800">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-white font-bold text-base">Banco de Questões FAURGS</p>
+                <p class="text-stone-400 text-xs mt-1">Geologia e Geodinâmica Interna da Terra © 2026. Todos os direitos reservados.</p>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <span class="hover:text-amber-500 cursor-pointer transition">Termos de Uso</span>
+                <span class="text-stone-700">|</span>
+                <span class="hover:text-amber-500 cursor-pointer transition">Política de Privacidade</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Banco de Dados das Questões na íntegra conforme documento fornecido
+        const questionsDB = [
+            {
+                id: 1,
+                theme: "Estrutura interna e propriedades das camadas terrestres",
+                reference: "Composição química e física",
+                question: "A Terra possui uma estrutura interna caracterizada por camadas que se diferenciam física e quimicamente [cite: 1, 2, 3]. Assinale a afirmação correta sobre a estrutura interna da Terra e suas propriedades físicas e químicas [cite: 2, 3].",
+                options: [
+                    "(A) O núcleo interno é líquido [cite: 2, 3].",
+                    "(B) O núcleo externo é sólido [cite: 2, 3].",
+                    "(C) A litosfera é plástica [cite: 2, 3].",
+                    "(D) A astenosfera é rígida [cite: 2, 3].",
+                    "(E) O manto é dividido em manto superior e manto inferior [cite: 2, 3]."
+                ],
+                correctIndex: 4, // Opção E (índice 4)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(E)</strong>. A diferenciação composicional do planeta, consolidada durante o processo de acreção e decaimento radioativo primordial, segmentou a Terra em três macrocamadas químicas: crosta, manto e núcleo.</p>
+                    <p class="mb-3">O manto terrestre estende-se desde a base da crosta até a descontinuidade de Gutenberg, a cerca de 2.900 km de profundidade. Fisicamente, o manto é subdividido em manto superior e manto inferior. Essa compartimentação fundamenta-se na presença de uma zona de transição interna, situada aproximadamente entre os limites de 410 km e 660 km de profundidade, gerada pelo rearranjo da estrutura cristalina dos minerais olivina e piroxênio sob efeito de compressão isostática severa.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Por que as outras alternativas estão incorretas?</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) O núcleo interno é líquido:</em> Incorreto. O núcleo interno é sólido devido à pressão confinante extrema.</li>
+                            <li><em>(B) O núcleo externo é sólido:</em> Incorreto. O núcleo externo é líquido, pois a temperatura supera o ponto de fusão da liga metálica de Fe-Ni nessa profundidade.</li>
+                            <li><em>(C) A litosfera é plástica:</em> Incorreto. A litosfera possui comportamento mecânico rígido e quebradiço.</li>
+                            <li><em>(D) A astenosfera é rígida:</em> Incorreto. A astenosfera comporta-se de maneira plástica e dúctil a esforços de longo termo.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                theme: "Teoria da Tectônica de Placas e Deriva Continental",
+                reference: "Dinâmica global e cinemática",
+                question: "A teoria da tectônica de placas revolucionou as geociências e permitiu esclarecer de forma robusta e consistente os processos da dinâmica interna da Terra [cite: 4, 5]. Assinale a afirmação correta sobre a teoria da tectônica de placas [cite: 4, 5].",
+                options: [
+                    "(A) Surgiu na última década do século XX [cite: 5].",
+                    "(B) A deriva continental ocorre por causa de deslocamentos laterais das placas litosféricas [cite: 2, 4, 5].",
+                    "(C) As placas litosféricas são estáticas [cite: 2, 5].",
+                    "(D) A América do Sul e a África nunca estiveram unidas formando um só continente [cite: 2, 5].",
+                    "(E) A América do Sul está se aproximando da África devido ao consumo do assoalho do Oceano Atlântico [cite: 2, 5]."
+                ],
+                correctIndex: 1, // Opção B (índice 1)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(B)</strong>. A hipótese original de Alfred Wegener postulava a movimentação das massas continentais de forma isolada sobre o assoalho oceânico basáltico rígido, um mecanismo que se provou fisicamente impossível.</p>
+                    <p class="mb-3">Com a unificação conceitual propiciada pela Teoria da Tectônica de Placas na década de 1960, compreendeu-se que os continentes não flutuam isoladamente, mas fazem parte integrante de placas litosféricas rígidas de grande escala. Assim, o deslocamento lateral dessas placas litosféricas sobre a astenosfera plástica é o verdadeiro responsável pelo distanciamento ou aproximação histórica dos blocos continentais.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Por que as outras alternativas estão incorretas?</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) Surgiu na última década do século XX:</em> Incorreto. Foi consolidada nos anos 1960.</li>
+                            <li><em>(C) As placas litosféricas são estáticas:</em> Incorreto. O dinamismo e mobilidade lateral contínuos são a base da teoria.</li>
+                            <li><em>(D) América do Sul e África nunca estiveram unidas:</em> Incorreto. Formaram o supercontinente Gondwana.</li>
+                            <li><em>(E) A América do Sul está se aproximando da África...:</em> Incorreto. Os dois continentes se afastam pela divergência na Cordilheira Meso-Atlântica.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                theme: "Forma da Terra, Geodesia e Gravimetria",
+                reference: "Modelagem geoidal e elipsoidal",
+                question: "A determinação da forma real da Terra evoluiu historicamente com o avanço dos métodos geodésicos e geofísicos de alta precisão. No que concerne à forma do planeta, ao campo gravitacional e às suas superfícies de referência, assinale a alternativa correta.",
+                options: [
+                    "(A) O geoide é uma superfície geométrica perfeitamente regular que desconsidera as anomalias gravimétricas causadas pela distribuição heterogênea de massa no interior terrestre.",
+                    "(B) O elipsoide de revolução consiste em uma superfície física equipotencial definida pelo nível médio dos mares em repouso absoluto, prolongado de forma contínua sob os continentes.",
+                    "(C) O geoide é definido como a superfície equipotencial do campo de gravidade da Terra que melhor se ajusta ao nível médio global dos oceanos homogeneizados e em repouso.",
+                    "(D) Devido à força centrípeta gerada pela rotação planetária, o raio polar da Terra excede o raio equatorial em aproximadamente 21 km, configurando um esferoide prolato.",
+                    "(E) A aceleração da gravidade registrada na superfície terrestre é uniforme em toda a sua extensão, sendo independente de variações latitudinais ou de altitude."
+                ],
+                correctIndex: 2, // Opção C (índice 2)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(C)</strong>. O estudo matemático e físico da forma da Terra exige a separação entre superfícies físicas, modelos gravimétricos e superfícies matemáticas puras. O geoide representa a superfície física real equipotencial do campo de gravidade da Terra, definida de forma que seja perpendicular à direção da força de gravidade local em todos os seus pontos. Como a água em repouso busca espontaneamente uma superfície equipotencial, o nível médio dos oceanos em repouso, quando projetado de forma contínua e idealizada sob os continentes, atua como o traçado do geoide terrestre.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Por que as outras alternativas estão incorretas?</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) Geoide perfeitamente regular:</em> Incorreto. O geoide é altamente irregular, refletindo anomalias de distribuição de massa e densidade interna.</li>
+                            <li><em>(B) Elipsoide como superfície física equipotencial:</em> Incorreto. O elipsoide de revolução é uma abstração geométrica/matemática perfeita, não física.</li>
+                            <li><em>(D) Raio polar excede o equatorial, esferoide prolato:</em> Incorreto. O formato é oblato (achatado nos polos). O raio equatorial é maior que o polar em 21 km.</li>
+                            <li><em>(E) Gravidade uniforme:</em> Incorreto. A aceleração da gravidade varia conforme a latitude (menor no equador devido à rotação e ao raio maior) e altitude.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                theme: "Propriedades mecânicas, reologia e isostasia",
+                reference: "Litosfera, astenosfera e flutuação mecânica",
+                question: "O comportamento mecânico das camadas internas da Terra determina as respostas de deformação das rochas frente a esforços tectônicos prolongados. Considere as seguintes afirmações sobre a reologia e a dinâmica da litosfera e da astenosfera:<br><br>" +
+                           "I. A litosfera compreende a totalidade da crosta terrestre aliada à porção mais externa e rígida do manto superior, respondendo sob regime dominantemente frágil a tensões de curto e médio prazo.<br>" +
+                           "II. A astenosfera situa-se sob a litosfera e apresenta um comportamento mecânico essencialmente plástico e dúctil, sendo constituída por rochas em estado sólido sob condições de temperatura e pressão limítrofes ao seu ponto de fusão parcial.<br>" +
+                           "III. O equilíbrio isostático consiste no ajuste vertical de flutuação da litosfera rígida sobre a astenosfera de comportamento plástico, ocorrendo em resposta a acréscimos ou decréscimos de carga tectônica, sedimentar ou glacial na superfície.<br><br>" +
+                           "Quais estão corretas?",
+                options: [
+                    "(A) Apenas I.",
+                    "(B) Apenas II.",
+                    "(C) Apenas I e III.",
+                    "(D) Apenas II e III.",
+                    "(E) I, II e III."
+                ],
+                correctIndex: 2, // Opção C (índice 2)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(C)</strong>. O modelo físico da estrutura interna do planeta avalia as propriedades mecânicas das rochas quando submetidas a gradientes térmicos e barométricos de escala planetária.</p>
+                    <ul class="list-decimal pl-5 space-y-2 mb-3">
+                        <li><strong>Afirmação I (Correta):</strong> A litosfera consiste na junção física entre toda a crosta e a seção rígida superior do manto superior (denominada manto litosférico), as quais agem solidariamente como uma casca quebradiça que se fragmenta sob tensões tectônicas.</li>
+                        <li><strong>Afirmação II (Incorreta):</strong> Embora seu comportamento mecânico seja predominantemente plástico/dúctil, a astenosfera <strong>não é líquida</strong> nem constituída por rochas amplamente fundidas. É uma camada essencialmente sólida, onde as rochas estão sob altas pressões e temperaturas muito próximas ao seu ponto de fusão. Isso permite fluxo viscoso lento (fluência de estado sólido), apresentando fusão parcial mínima (geralmente abaixo de 1% a 2% em volume).</li>
+                        <li><strong>Afirmação III (Correta):</strong> A isostasia é o estado de compensação gravitacional e hidrostática que governa a flutuação vertical das placas litosféricas rígidas sobre a base plástica e mais densa da astenosfera.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 5,
+                theme: "Diferenciação e características da crosta terrestre",
+                reference: "Evolução crustal e subducção",
+                question: "A crosta terrestre constitui o invólucro rochoso mais externo do planeta, subdividindo-se em domínios continentais e oceânicos com propriedades químicas, densidades e idades evolutivas distintas [cite: 6]. Assinale a afirmação correta acerca das características comparativas dessas duas unidades crustais.",
+                options: [
+                    "(A) A crosta oceânica apresenta maior espessura média que a crosta continental, atingindo valores superiores a 70 km sob as bacias abissais.",
+                    "(B) A crosta continental possui composição predominantemente máfica e basáltica, o que eleva sua densidade média acima da densidade registrada na crosta oceânica.",
+                    "(C) A crosta oceânica é geologicamente muito jovem em relação à continental, raramente ultrapassando a idade limite de 200 milhões de anos em virtude de sua reciclagem contínua nas zonas de subducção [cite: 6].",
+                    "(D) O limite inferior da crosta com o manto é delimitado pela descontinuidade de Gutenberg, zona caracterizada pela perda completa de rigidez mecânica e interrupção das ondas S.",
+                    "(E) A crosta continental apresenta estabilidade tectônica absoluta, sendo isenta de dobramentos, falhamentos ou qualquer atividade magmática desde o início do éon Arqueano."
+                ],
+                correctIndex: 2, // Opção C (índice 2)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(C)</strong>. A diferenciação evolutiva entre a crosta continental e a oceânica é um dos aspectos mais significativos da geodinâmica terrestre.</p>
+                    <p class="mb-3">A crosta oceânica é gerada constantemente no topo das dorsais meso-oceânicas através da fusão por descompressão adiabática do peridotito mantélico. Por possuir uma densidade relativamente elevada (&approx; 3,0 g/cm³) e composição dominantemente basáltica (máfica), essa crosta torna-se gravitacionalmente instável à medida que se resfria e afasta de sua dorsal originária, sofrendo subducção sistemática sob placas continentais ou placas oceânicas mais jovens. Esse processo contínuo de reciclagem e destruição no manto faz com que nenhuma porção do assoalho oceânico profundo apresente idade superior a cerca de 200 milhões de anos.</p>
+                    
+                    <p class="font-semibold text-stone-900 mt-4 mb-2">Tabela Comparativa Estrutural:</p>
+                    <div class="overflow-x-auto border border-stone-200 rounded-lg mb-4">
+                        <table class="w-full text-xs text-left text-stone-600">
+                            <thead class="bg-stone-50 text-stone-800 font-bold border-b border-stone-200">
+                                <tr>
+                                    <th class="p-2.5">Característica</th>
+                                    <th class="p-2.5">Crosta Continental</th>
+                                    <th class="p-2.5">Crosta Oceânica</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-200">
+                                <tr>
+                                    <td class="p-2.5 font-medium">Espessura Média</td>
+                                    <td class="p-2.5">30 km a 40 km (até 70 km sob orógenos)</td>
+                                    <td class="p-2.5">5 km a 10 km (altamente homogênea)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-medium">Densidade Média</td>
+                                    <td class="p-2.5">&approx; 2,7 g/cm³</td>
+                                    <td class="p-2.5">&approx; 3,0 g/cm³</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-medium">Composição</td>
+                                    <td class="p-2.5">Fálsica/Intermediária (Granitos/Andesitos)</td>
+                                    <td class="p-2.5">Máfica (Basaltos/Gabros)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-medium">Limite na Base</td>
+                                    <td class="p-2.5">Descontinuidade de Mohorovičić (Moho)</td>
+                                    <td class="p-2.5">Descontinuidade de Mohorovičić (Moho)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                theme: "Sismologia e descontinuidades do interior profundo",
+                reference: "Propagação de ondas elásticas",
+                question: "A sismologia constitui a principal ferramenta de investigação indireta do interior terrestre, baseando-se no comportamento geométrico e cinemático das ondas mecânicas geradas por sismos naturais ou artificiais. No que diz respeito às descontinuidades sísmicas globais e à propagação de ondas no interior do planeta, assinale a alternativa INCORRETA.",
+                options: [
+                    "(A) A descontinuidade de Mohorovičić (Moho) marca o limite de transição entre a base da crosta e o topo do manto superior, caracterizando-se pelo aumento abrupto da velocidade das ondas P e S.",
+                    "(B) A descontinuidade de Gutenberg situa-se a aproximadamente 2.900 km de profundidade, assinalando a passagem do manto inferior silicatado para o núcleo externo metálico [cite: 2, 7].",
+                    "(C) As ondas secundárias (S), de natureza cisalhante, aumentam de velocidade ao ingressarem no núcleo externo por este ser composto de metais pesados de alta densidade como o ferro e o níquel [cite: 2, 3].",
+                    "(D) A existência de zonas de sombra sísmica na superfície terrestre para as ondas P e S constitui uma evidência geofísica direta da presença de um núcleo diferenciado com propriedades físicas distintas das do manto superior e inferior.",
+                    "(E) A descontinuidade de Lehmann representa a transição entre o núcleo externo líquido e o núcleo interno sólido, localizada a aproximadamente 5.150 km de profundidade."
+                ],
+                correctIndex: 2, // Opção C (índice 2)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(C)</strong> (exigido marcar a INCORRETA). As ondas secundárias (S, cisalhantes ou transversais) propagam-se exclusivamente em meios sólidos que apresentam rigidez mecânica (&mu; > 0). Nos fluidos e líquidos, a resistência à deformação tangencial é nula (&mu; = 0), o que impede completamente a transmissão de perturbações cisalhantes.</p>
+                    <p class="mb-3">Como o núcleo externo da Terra é composto de ferro e níquel em estado fundido (líquido), as ondas S sofrem interrupção total na descontinuidade de Gutenberg, não penetrando no núcleo externo e gerando uma ampla zona de sombra sísmica global que se projeta além de distâncias angulares de 103&deg;.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Veracidade das outras opções:</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) Correta:</em> A Moho registra um aumento brusco de velocidade sísmica em razão de transição petrológica da crosta para peridotitos mantélicos rígidos.</li>
+                            <li><em>(B) Correta:</em> Gutenberg delimita o topo do núcleo a 2.900 km de profundidade.</li>
+                            <li><em>(D) Correta:</em> As zonas de sombra foram essenciais para mapear o diâmetro do núcleo e provar a fluidez do núcleo externo.</li>
+                            <li><em>(E) Correta:</em> Lehmann (a 5.150 km) marca a transição do núcleo líquido para o núcleo interno cristalino sólido.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                theme: "Limites tectônicos e fronteiras geodinâmicas",
+                reference: "Tipologia de bordas e tectonismo",
+                question: "As bordas ou limites entre as diferentes placas tectônicas representam regiões de intensa instabilidade geodinâmica, onde se concentram de forma expressiva o vulcanismo, a sismicidade e os processos orogênicos. Sobre os limites de placas, assinale a alternativa correta.",
+                options: [
+                    "(A) Os limites divergentes são regidos por forças compressivas que aproximam as massas continentais, promovendo a formação de fossas oceânicas profundas.",
+                    "(B) As cordilheiras meso-oceânicas atuam como limites divergentes marcados pela geração contínua de nova litosfera oceânica por meio de processos magmáticos e descompressão do manto.",
+                    "(C) Os limites transformantes ocorrem exclusivamente no interior de escudos cristalinos estáveis nos continentes, caracterizando-se por deslocamento vertical expressivo sem atividade sísmica associada.",
+                    "(D) A Cordilheira dos Andes representa um exemplo típico de orógeno gerado em limite de placa puramente divergente, condicionado pela expansão crustal simétrica.",
+                    "(E) Nas zonas de convergência com processo ativo de subducção, a sismicidade limita-se à crosta superior, sendo fisicamente impossível a ocorrência de sismos com focos profundos no manto [cite: 6]."
+                ],
+                correctIndex: 1, // Opção B (índice 1)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(B)</strong>. Os limites divergentes são gerados por campos de esforços de tração horizontal (extensionais) que provocam a separação de blocos litosféricos.</p>
+                    <p class="mb-3">Abaixo das zonas oceânicas de divergência, as cordilheiras meso-oceânicas sustentam a ascensão convectiva do manto astensférico. A descompressão adiabática que este material sofre induz à sua fusão parcial, culminando no magmatismo basáltico de grande volume que cristaliza nas fendas axiais da dorsal, gerando continuamente nova litosfera oceânica.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Por que as outras alternativas estão incorretas?</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) Limites divergentes regidos por forças compressivas:</em> Errado. Limites divergentes são extensionais; limites convergentes são compressivos.</li>
+                            <li><em>(C) Transformantes ocorrem exclusivamente em continentes...:</em> Errado. Ocorrem predominantemente seccionando e deslocando lateralmente os segmentos das dorsais no oceano, com sismicidade horizontal rasa ativa.</li>
+                            <li><em>(D) Andes em limite divergente:</em> Errado. A Cordilheira dos Andes é orógeno limítrofe convergente (margem ativa pela subducção da placa de Nazca sob a placa Sul-Americana).</li>
+                            <li><em>(E) Sismicidade restrita à crosta superior:</em> Errado. A placa fria e rígida que afunda (placa subduzida) continua quebrando e gerando terremotos em profundidades mantélicas elevadas na Zona de Wadati-Benioff, chegando a até 700 km de profundidade.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                theme: "Teoria da Deriva Continental e registros pretéritos",
+                reference: "Evidências geológicas históricas",
+                question: "A formulação da hipótese da Deriva Continental em 1912 pelo cientista alemão Alfred Wegener lançou as bases conceituais para a compreensão do dinamismo superficial da Terra [cite: 2, 5]. Em relação às evidências científicas apresentadas por Wegener para sustentar sua proposta, assinale a alternativa correta [cite: 2, 5].",
+                options: [
+                    "(A) Wegener demonstrou que as correntes de convecção do manto superior eram mecanicamente capazes de arrastar os blocos continentais graníticos através do assoalho oceânico basáltico.",
+                    "(B) A evidência paleoclimática fundamentou-se na identificação de depósitos glaciais (tilitos) do Paleozoico tardio distribuídos em regiões atualmente localizadas em latitudes tropicais e equatoriais, tais como o centro-sul da África, Índia e América do Sul [cite: 2, 5].",
+                    "(C) Os dados paleontológicos apresentados restringiram-se a organismos de hábito voador e de ampla distribuição cosmopolita, incapazes de comprovar conexões terrestres pretéritas entre as massas austrais.",
+                    "(D) O encaixe morfológico e geológico perfeito entre as linhas de costa atuais da América do Norte e da Antártida Ocidental serviu como principal evidência geométrica para propor a existência da Pangeia.",
+                    "(E) A hipótese de Wegener foi imediatamente incorporada à geofísica e à geologia globais, sem sofrer contestações ou resistência por parte dos cientistas da época."
+                ],
+                correctIndex: 1, // Opção B (índice 1)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(B)</strong>. Wegener reuniu dados geológicos, morfológicos, paleontológicos e paleoclimáticos de múltiplos continentes austrais.</p>
+                    <p class="mb-3">Como os depósitos sedimentares glaciais (tilitos e estrias glaciais em substrato rochoso) de idade Permo-Carbonífera ocorrem na América do Sul, África, Índia e Austrália, e estes hoje estão em zonas de clima tropical a árido, a única explicação coerente e unificada era admitir que essas porções continentais estiveram posicionadas em latitudes polares e interconectadas no supercontinente de Gondwana/Pangeia.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Por que as outras alternativas estão incorretas?</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) Convecção explicada por Wegener:</em> Errado. Wegener propôs forças fracas e equivocadas (fuga polar, forças de maré), sendo este o calcanhar de Aquiles de sua teoria.</li>
+                            <li><em>(C) Organismos voadores na paleontologia:</em> Errado. Ele usou fósseis de animais não voadores de água doce (<em>Mesosaurus</em>) e samambaias de sementes pesadas (<em>Glossopteris</em>).</li>
+                            <li><em>(D) Encaixe América do Norte e Antártida:</em> Errado. O encaixe clássico inicial foi entre as margens da América do Sul e o continente africano.</li>
+                            <li><em>(E) Aceitação imediata:</em> Errado. Houve violenta rejeição da comunidade científica geológica da época pela falta de um motor dinâmico mecânico explicativo.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                theme: "Forças propulsoras e dinâmica do manto",
+                reference: "Convecção mantélica e gravidade",
+                question: "A movimentação das placas tectônicas é condicionada por um system de transferência de calor do interior da Terra para o espaço, modulado por convecção térmica e forças gravitacionais. Considere as seguintes afirmações acerca das forças motoras atuantes na dinâmica tectônica global:<br><br>" +
+                           "I. O arraste mantélico refere-se ao acoplamento friccional e cisalhante exercido pelas células de convecção do manto sobre a base da litosfera sobrejacente, transferindo-lhe energia cinética.<br>" +
+                           "II. A força de tração da placa subduzida (<em>slab pull</em>) decorre da gravidade atuando sobre a extremidade da litosfera oceânica antiga, fria e densa que afunda no manto astenosférico, sendo considerada o principal motor do movimento tectônico.<br>" +
+                           "III. A força de empuxo lateral da dorsal (<em>ridge push</em>) é uma força gravitacional decorrente da topografia elevada das cordilheiras meso-oceânicas, a qual impulsiona a litosfera recém-formada lateralmente em direção às planícies abissais.<br><br>" +
+                           "Quais estão corretas?",
+                options: [
+                    "(A) Apenas I.",
+                    "(B) Apenas II.",
+                    "(C) Apenas I e II.",
+                    "(D) Apenas II e III.",
+                    "(E) I, II e III."
+                ],
+                correctIndex: 4, // Opção E (índice 4)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(E)</strong> (Todas as afirmações estão perfeitamente corretas).</p>
+                    <ul class="list-decimal pl-5 space-y-2">
+                        <li><strong>Afirmação I (Correta):</strong> O arraste mantélico é a transferência clássica de momento friccional na base da placa litosférica sólida devido ao movimento de circulação viscosa do manto na astenosfera.</li>
+                        <li><strong>Afirmação II (Correta):</strong> O <em>Slab Pull</em> é atualmente catalogado pela geofísica como o motor primário dominante. A borda mergulhante da placa oceânica velha tornou-se mais fria, espessa e densa do que o manto circundante. Sob ação da gravidade, este bloco \"afunda\" e atua de modo contínuo tracionando o restante da placa superficial acoplada a ela.</li>
+                        <li><strong>Afirmação III (Correta):</strong> O <em>Ridge Push</em> ocorre pois a dorsal é sustentada e erguida termicamente, posicionando-se quilômetros acima do relevo da bacia abissal. Essa topografia acidentada cria uma força de componente gravitacional paralela à encosta, gerando um vetor que empurra a placa lateralmente.</li>
+                    </ul>
+                `
+            },
+            {
+                id: 10,
+                theme: "Núcleo terrestre, estado físico e geomagnetismo",
+                reference: "Campo dipolar e pressões internas",
+                question: "O núcleo terrestre representa a porção mais interna e densa do planeta, exercendo papel fundamental na geração e manutenção do campo geomagnético global. Assinale a alternativa correta acerca das características geofísicas e da dinâmica do núcleo da Terra.",
+                options: [
+                    "(A) O campo magnético terrestre (geodinamo) origina-se por meio de correntes de convecção térmica geradas no interior do núcleo interno sólido, constituído por magnetita pura.",
+                    "(B) O núcleo interno mantém-se no estado sólido devido às extremas pressões confinantes lá existentes, as quais elevam o ponto de fusão da liga metálica acima das elevadas temperaturas locais.",
+                    "(C) O núcleo externo é constituído por uma rocha silicatada de altíssima viscosidade que impede a passagem de ondas de cisalhamento S e estabiliza o polo magnético terrestre.",
+                    "(D) O magnetismo planetário é um fenômeno puramente estático, cujas linhas de força geomagnéticas permaneceram inalteradas em intensidade e polaridade ao longo de toda a história geológica da Terra.",
+                    "(E) A densidade anômala do núcleo é explicada pela presença maciça de elementos leves de baixo peso atômico, como o silício e o alumínio, os quais sofreram diferenciação gravimétrica centrípeta."
+                ],
+                correctIndex: 1, // Opção B (índice 1)
+                resolution: `
+                    <p class="mb-3">O gabarito correto é a alternativa <strong>(B)</strong>. O estado do núcleo terrestre é determinado pela competição contínua entre energia térmica e pressão geostática.</p>
+                    <p class="mb-3">No núcleo interno (profundidades de 5.150 km até 6.371 km), a pressão confinante alcança marcas extremas (entre 3,3 e 3,6 milhões de atmosferas / GPa equivalentes). Esta compressão intensa força a cristalização e aproximação dos átomos metálicos da liga de ferro-níquel de forma estruturada. Consequentemente, o ponto de fusão da liga metálica se eleva para patamares superiores à imensa temperatura local (&approx; 6.000 K), preservando o núcleo central em estado físico sólido.</p>
+                    <div class="p-3 bg-stone-50 rounded-lg border border-stone-200 mt-2 text-xs text-stone-600">
+                        <strong>Por que as outras alternativas estão incorretas?</strong>
+                        <ul class="list-disc pl-4 mt-1 space-y-1">
+                            <li><em>(A) Magnetismo originado no núcleo interno sólido:</em> Errado. O geodinamo requer convecção de fluido condutor elétrico em turbulência no núcleo externo líquido.</li>
+                            <li><em>(C) Núcleo externo de rochas silicatadas:</em> Errado. O núcleo é metálico (Fe-Ni). As rochas silicatadas compõem o manto e a crosta.</li>
+                            <li><em>(D) Magnetismo planetário estático:</em> Errado. O campo varia constantemente (variação secular) e inverte sua polaridade periodicamente ao longo das eras.</li>
+                            <li><em>(E) Elementos leves no núcleo:</em> Errado. Elementos leves como silício e alumínio concentraram-se na crosta durante a diferenciação. O núcleo é ultradenso devido à abundância de metais pesados.</li>
+                        </ul>
+                    </div>
+                `
+            }
+        ];
+
+        let userAnswers = Array(questionsDB.length).fill(null);
+        let quizSubmitted = false;
+
+        // Renderizador das Questões
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = ''; // Limpar loader
+
+            questionsDB.forEach((q, idx) => {
+                const questionElement = document.createElement('div');
+                questionElement.className = "question-card bg-white rounded-xl border border-stone-200 p-6 md:p-8 smooth-transition shadow-sm relative";
+                questionElement.id = `q-card-${idx}`;
+
+                let optionsHTML = '';
+                q.options.forEach((opt, optIdx) => {
+                    optionsHTML += `
+                        <label class="block cursor-pointer group mt-3">
+                            <input type="radio" name="question-${idx}" value="${optIdx}" 
+                                   class="sr-only peer" ${quizSubmitted ? 'disabled' : ''}>
+                            <div class="smooth-transition flex items-start gap-3.5 p-4 rounded-lg border border-stone-200 text-stone-700 bg-stone-50/40 hover:bg-stone-50 group-hover:border-stone-400 peer-checked:bg-amber-50 peer-checked:border-amber-500 peer-checked:text-amber-950 peer-disabled:cursor-default"
+                                 id="opt-container-${idx}-${optIdx}"
+                                 onclick="selectOption(${idx}, ${optIdx})">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full border border-stone-400 shrink-0 text-xs mt-0.5 peer-checked:border-amber-600 peer-checked:bg-amber-600 peer-checked:text-white smooth-transition"
+                                      id="opt-circle-${idx}-${optIdx}">
+                                    ${String.fromCharCode(65 + optIdx)}
+                                </span>
+                                <span class="text-sm font-medium leading-relaxed">${opt.substring(4)}</span>
+                            </div>
+                        </label>
+                    `;
+                });
+
+                questionElement.innerHTML = `
+                    <div class="flex items-center justify-between gap-4 mb-4 border-b border-stone-100 pb-3">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-amber-600">Questão 0${q.id}</span>
+                        <span class="text-xs text-stone-400 font-medium bg-stone-50 px-2 py-1 rounded border border-stone-100">${q.theme}</span>
+                    </div>
+                    
+                    <p class="text-stone-900 font-semibold text-base mb-6 leading-relaxed">${q.question}</p>
+                    
+                    <div class="space-y-1">
+                        ${optionsHTML}
+                    </div>
+
+                    <!-- Div de Resolução Oculta -->
+                    <div id="resolution-${idx}" class="hidden mt-6 pt-6 border-t border-stone-200 smooth-transition">
+                        <div class="p-5 rounded-xl bg-amber-50/40 border border-amber-200/60">
+                            <h4 class="flex items-center gap-2 font-bold text-amber-900 text-sm mb-3">
+                                <i data-lucide="help-circle" class="w-4 h-4 text-amber-600"></i> Resolução Comentada da Questão
+                            </h4>
+                            <div class="text-xs md:text-sm text-stone-800 leading-relaxed">
+                                ${q.resolution}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(questionElement);
+            });
+
+            // Atualizar ícones do lucide após renderização
+            lucide.createIcons();
+        }
+
+        window.selectOption = function(qIdx, optIdx) {
+            if (quizSubmitted) return;
+            
+            userAnswers[qIdx] = optIdx;
+            
+            // Limpa seleções visuais anteriores da mesma questão
+            for (let i = 0; i < 5; i++) {
+                const container = document.getElementById(`opt-container-${qIdx}-${i}`);
+                const circle = document.getElementById(`opt-circle-${qIdx}-${i}`);
+                if (container && circle) {
+                    container.classList.remove('bg-amber-50', 'border-amber-500', 'text-amber-950');
+                    container.classList.add('bg-stone-50/40', 'border-stone-200', 'text-stone-700');
+                    circle.classList.remove('border-amber-600', 'bg-amber-600', 'text-white');
+                    circle.classList.add('border-stone-400');
+                    circle.innerHTML = String.fromCharCode(65 + i);
+                }
+            }
+
+            // Ativa nova seleção visualmente
+            const activeContainer = document.getElementById(`opt-container-${qIdx}-${optIdx}`);
+            const activeCircle = document.getElementById(`opt-circle-${qIdx}-${optIdx}`);
+            if (activeContainer && activeCircle) {
+                activeContainer.classList.remove('bg-stone-50/40', 'border-stone-200', 'text-stone-700');
+                activeContainer.classList.add('bg-amber-50', 'border-amber-500', 'text-amber-950');
+                activeCircle.classList.remove('border-stone-400');
+                activeCircle.classList.add('border-amber-600', 'bg-amber-600', 'text-white');
+                activeCircle.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i>';
+                lucide.createIcons();
+            }
+
+            updateProgressStatus();
+        }
+
+        function updateProgressStatus() {
+            const total = questionsDB.length;
+            const answered = userAnswers.filter(ans => ans !== null).length;
+            document.getElementById('completionStatus').innerText = `${answered} de ${total} respondidas`;
+            
+            // Progresso superior
+            const pct = (answered / total) * 100;
+            document.getElementById('readingProgress').style.width = `${pct}%`;
+        }
+
+        document.getElementById('quizForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Verificar preenchimento parcial
+            const answeredCount = userAnswers.filter(ans => ans !== null).length;
+            if (answeredCount < questionsDB.length) {
+                // Notificar usuário sem usar alert() nativo
+                showToastNotification("Atenção! Por favor, responda todas as 10 questões antes de enviar.");
+                return;
+            }
+
+            quizSubmitted = true;
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').classList.add('opacity-50', 'cursor-not-allowed');
+
+            let score = 0;
+            const gabaritoBody = document.getElementById('gabaritoTableBody');
+            gabaritoBody.innerHTML = '';
+
+            // Processar cada questão e exibir gabarito
+            questionsDB.forEach((q, idx) => {
+                const userAnsIdx = userAnswers[idx];
+                const isCorrect = userAnsIdx === q.correctIndex;
+                if (isCorrect) score++;
+
+                const card = document.getElementById(`q-card-${idx}`);
+                
+                // Exibe resolução correspondente
+                document.getElementById(`resolution-${idx}`).classList.remove('hidden');
+
+                // Colorir alternativas no Card da Questão
+                for (let i = 0; i < 5; i++) {
+                    const container = document.getElementById(`opt-container-${idx}-${i}`);
+                    const circle = document.getElementById(`opt-circle-${idx}-${i}`);
+                    
+                    if (container && circle) {
+                        // Resposta correta oficial
+                        if (i === q.correctIndex) {
+                            container.className = "smooth-transition flex items-start gap-3.5 p-4 rounded-lg border-2 border-emerald-500 bg-emerald-50/50 text-emerald-950 font-medium";
+                            circle.className = "flex items-center justify-center w-5 h-5 rounded-full bg-emerald-600 border border-emerald-600 text-white shrink-0 text-xs mt-0.5";
+                            circle.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i>';
+                        } 
+                        // Resposta errada do usuário
+                        else if (i === userAnsIdx && !isCorrect) {
+                            container.className = "smooth-transition flex items-start gap-3.5 p-4 rounded-lg border-2 border-rose-500 bg-rose-50/40 text-rose-950";
+                            circle.className = "flex items-center justify-center w-5 h-5 rounded-full bg-rose-600 border border-rose-600 text-white shrink-0 text-xs mt-0.5";
+                            circle.innerHTML = '<i data-lucide="x" class="w-3.5 h-3.5"></i>';
+                        } 
+                        // Outras opções incorretas não marcadas
+                        else {
+                            container.className = "smooth-transition flex items-start gap-3.5 p-4 rounded-lg border border-stone-200 text-stone-400 bg-stone-50/10 pointer-events-none";
+                            circle.className = "flex items-center justify-center w-5 h-5 rounded-full border border-stone-300 text-stone-300 shrink-0 text-xs mt-0.5";
+                        }
+                    }
+                }
+
+                // Inserir linha na tabela de resultados de forma dinâmica
+                const userLetter = userAnsIdx !== null ? String.fromCharCode(65 + userAnsIdx) : '-';
+                const correctLetter = String.fromCharCode(65 + q.correctIndex);
+                
+                const tr = document.createElement('tr');
+                tr.className = isCorrect ? "bg-emerald-50/20 hover:bg-emerald-50/40 transition" : "bg-rose-50/10 hover:bg-rose-50/25 transition";
+                tr.innerHTML = `
+                    <td class="py-3.5 px-4 text-center font-bold text-stone-700">${q.id}</td>
+                    <td class="py-3.5 px-4">
+                        <span class="font-medium text-stone-800 block">${q.theme}</span>
+                        <span class="text-xs text-stone-400 font-light block">${q.reference}</span>
+                    </td>
+                    <td class="py-3.5 px-4 text-center font-bold ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}">${userLetter}</td>
+                    <td class="py-3.5 px-4 text-center font-bold text-emerald-700">${correctLetter}</td>
+                    <td class="py-3.5 px-4 text-center">
+                        ${isCorrect 
+                            ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800"><i data-lucide="check" class="w-3 h-3"></i> Correto</span>' 
+                            : '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-100 text-rose-800"><i data-lucide="alert-circle" class="w-3 h-3"></i> Incorreto</span>'}
+                    </td>
+                `;
+                gabaritoBody.appendChild(tr);
+            });
+
+            // Exibir Painel de Resultados
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+
+            // Atualizar placar textual
+            document.getElementById('correctCount').innerText = `${score} / 10`;
+            const percentage = (score / 10) * 100;
+            document.getElementById('scorePercentage').innerText = `${percentage}%`;
+
+            // Atualizar anel de progresso SVG
+            const ring = document.getElementById('scoreRing');
+            const circumference = 2 * Math.PI * 54; // 339.29
+            const offset = circumference - (percentage / 100) * circumference;
+            ring.style.strokeDashoffset = offset;
+            
+            // Alterar cor do anel conforme desempenho
+            if (percentage >= 80) {
+                ring.setAttribute('stroke', '#059669'); // emerald-600
+                document.getElementById('correctCount').className = 'text-2xl md:text-3xl font-bold text-emerald-600';
+            } else if (percentage >= 50) {
+                ring.setAttribute('stroke', '#D97706'); // amber-600
+                document.getElementById('correctCount').className = 'text-2xl md:text-3xl font-bold text-amber-600';
+            } else {
+                ring.setAttribute('stroke', '#DC2626'); // rose-600
+                document.getElementById('correctCount').className = 'text-2xl md:text-3xl font-bold text-rose-600';
+            }
+
+            // Gerar status de desempenho coerente
+            let status = "";
+            let fbMsg = "";
+            if (score === 10) {
+                status = "Excelente! Gabaritou!";
+                fbMsg = "Incrível! Você demonstrou domínio total do edital de Geologia e Tectônica de Placas no padrão FAURGS.";
+            } else if (score >= 8) {
+                status = "Aprovado com Louvor";
+                fbMsg = "Excelente desempenho. Sua preparação está em nível avançado, pronta para disputar as primeiras posições.";
+            } else if (score >= 6) {
+                status = "Aproveitamento Mediano";
+                fbMsg = "Bom resultado! Porém, revise as questões que errou para garantir segurança total na prova oficial.";
+            } else {
+                status = "Necessita de Revisão";
+                fbMsg = "A Geologia possui conceitos complexos e termos específicos. Use as resoluções abaixo como base de estudos.";
+            }
+            document.getElementById('performanceStatus').innerText = status;
+            document.getElementById('feedbackMessage').innerText = fbMsg;
+
+            // Recriar ícones do lucide gerados dinamicamente na tabela
+            lucide.createIcons();
+
+            // Rolar suavemente até os resultados
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            if (quizSubmitted) {
+                // Se já submeteu, reseta estado completo
+                quizSubmitted = false;
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+                document.getElementById('resultsSection').classList.add('hidden');
+            }
+            
+            userAnswers = Array(questionsDB.length).fill(null);
+            renderQuestions();
+            updateProgressStatus();
+            
+            // Rolar suavemente ao topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToastNotification("Gabarito limpo. Simulador pronto para recomeçar!");
+        });
+
+        // Componente simples de Toast para avisos
+        function showToastNotification(msg) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 right-5 z-50 px-5 py-3.5 rounded-xl bg-stone-900 text-white text-xs md:text-sm font-semibold shadow-2xl flex items-center gap-2 transform translate-y-10 opacity-0 transition duration-300";
+            toast.innerHTML = `<i data-lucide="info" class="w-4 h-4 text-amber-500"></i> ${msg}`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            
+            // Animar entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 50);
+
+            // Animar saída e remover
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Inicialização
+        window.onload = function() {
+            renderQuestions();
+            updateProgressStatus();
+        }
+    </script>
+</body>
+</html>
