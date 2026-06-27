@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFSC Geografia - Dinâmica Endógena e Relevo</title>
+    <!-- Tailwind CSS para um design elegante, responsivo e limpo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ajustes finos para garantir legibilidade e impedir fadiga ocular */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #1e293b; /* Slate 800 */
+        }
+        /* Garantia de que tabelas não quebrem o layout ou necessitem de scroll lateral */
+        .responsive-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .responsive-table td, .responsive-table th {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- CABEÇALHO FIXO COM CONTROLE DE ÁUDIO -->
+    <header class="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-sm px-4 py-4 backdrop-blur-md bg-white/95">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full">IFSC (Banca FAURGS)</span>
+                <h1 class="text-lg font-bold text-slate-900 mt-1">Geografia: Dinâmica Endógena e Relevo</h1>
+            </div>
+            
+            <!-- PLAYER DE ÁUDIO INTELIGENTE -->
+            <div class="w-full md:w-auto bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-2 shadow-inner">
+                <!-- Controle de Origem do Áudio -->
+                <div class="flex items-center gap-2 text-xs text-slate-500">
+                    <span class="font-medium whitespace-nowrap">Arquivo:</span>
+                    <input type="text" id="audio-src-input" value="aula-dinamica-endogena.mp3" class="w-full bg-white border border-slate-300 rounded px-2 py-0.5 text-slate-800 font-mono text-[11px] focus:outline-none focus:ring-1 focus:ring-amber-500" placeholder="Nome do arquivo.mp3">
+                </div>
+
+                <!-- Painel do Player -->
+                <div class="flex items-center gap-3">
+                    <!-- Botão Play/Pause -->
+                    <button id="btn-play-pause" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white p-2 rounded-lg transition-all focus:outline-none flex items-center justify-center w-9 h-9" title="Reproduzir/Pausar">
+                        <!-- Play Icon -->
+                        <svg id="icon-play" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <!-- Pause Icon (oculto por padrão) -->
+                        <svg id="icon-pause" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </button>
+
+                    <!-- Barra de Progresso e Tempo -->
+                    <div class="flex flex-col flex-1 min-w-[120px] md:min-w-[180px]">
+                        <input type="range" id="progress-bar" value="0" min="0" max="100" class="w-full accent-amber-500 cursor-pointer h-1.5 rounded-lg bg-slate-200">
+                        <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                            <span id="current-time">00:00</span>
+                            <span id="duration">00:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Seletor de Velocidade -->
+                    <div class="relative">
+                        <select id="speed-selector" class="appearance-none bg-white border border-slate-300 rounded px-2.5 py-1 text-xs font-semibold text-slate-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-amber-500 pr-6">
+                            <option value="0.5">0.5x</option>
+                            <option value="1.0" selected>1.0x</option>
+                            <option value="1.25">1.25x</option>
+                            <option value="1.5">1.5x</option>
+                            <option value="1.75">1.75x</option>
+                            <option value="2.0">2.0x</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-slate-500">
+                            <svg class="fill-current h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- SISTEMA DE NOTIFICAÇÃO (TOAST) PARA SUBSTITUIR ALERTS DO NAVEGADOR -->
+    <div id="toast" class="fixed top-24 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-xs px-4 py-2.5 rounded-lg shadow-xl opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-2">
+        <span id="toast-message"></span>
+    </div>
+
+    <!-- ELEMENTO DE ÁUDIO REAL -->
+    <!-- ========================================================================================= -->
+    <!--  ATENÇÃO: VOCÊ PODE ALTERAR O NOME DO SEU ARQUIVO MP3 DIRETAMENTE NO ATRIBUTO "src" ABAIXO -->
+    <!-- ========================================================================================= -->
+    <audio id="audio-element" src="aula-dinamica-endogena.mp3"></audio>
+    <!-- ========================================================================================= -->
+
+    <!-- CONTEÚDO DA AULA E RESUMO DE MEMORIZAÇÃO -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+        
+        <!-- INTRODUÇÃO E ESQUEMA DE MEMORIZAÇÃO DE VÉSPERA -->
+        <div class="mb-10 text-center md:text-left border-l-4 border-amber-500 pl-4 py-2 bg-amber-50/50 rounded-r-xl">
+            <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">RESUMO ESTRUTURADO DE MEMORIZAÇÃO ATIVA</h2>
+            <p class="text-slate-600 text-sm mt-1">Foco absoluto nas diretrizes da Banca FAURGS para Concursos EBTT.</p>
+        </div>
+
+        <section class="space-y-8">
+            
+            <!-- SEÇÃO 1: DEFINIÇÃO DO TEMA E CARACTERÍSTICAS ESSENCIAIS -->
+            <article class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center bg-amber-100 text-amber-800 font-bold rounded-lg w-8 h-8 text-sm">1</span>
+                    <h3 class="text-xl font-bold text-slate-900">Dinâmica Endógena: O Motor Interno da Terra</h3>
+                </div>
+                
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    Os <span class="bg-amber-100 font-semibold px-1 rounded text-slate-950">processos endógenos</span> são gerados pela energia térmica proveniente do interior do planeta (decaimento radioativo e calor residual de formação). Eles atuam como <span class="bg-amber-100 font-semibold px-1 rounded text-slate-950">agentes criadores ou construtores do relevo</span>, estabelecendo as grandes altitudes e as feições primordiais da crosta terrestre que, posteriormente, serão esculpidas pelos agentes exógenos (intempéries, água, vento).
+                </p>
+
+                <h4 class="font-bold text-slate-900 text-md mt-6 mb-3">Tríade Endógena Crucial para a Prova:</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-amber-700">Tectonismo</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Deformações na crosta através de forças horizontais (<span class="font-semibold text-slate-900">orogênese</span>) ou verticais (<span class="font-semibold text-slate-900">epirogênese</span>).
+                        </p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-amber-700">Vulcanismo</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Ascensão de magma à superfície. Divide-se em <span class="font-semibold text-slate-900">efusivo</span> (magma básico, fluido) e <span class="font-semibold text-slate-900">explosivo</span> (magma ácido, viscoso).
+                        </p>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-amber-700">Abalos Sísmicos</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Propagação de ondas mecânicas geradas pela liberação abrupta de tensões acumuladas em falhas geológicas tectônicas.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- SEÇÃO 2: DEFINIÇÕES BÁSICAS PARA O DIA DA PROVA (TABELA RESPONSIVA) -->
+            <article class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center bg-amber-100 text-amber-800 font-bold rounded-lg w-8 h-8 text-sm">2</span>
+                    <h3 class="text-xl font-bold text-slate-900">Conceitos Chave & Distinções Terminológicas</h3>
+                </div>
+                
+                <p class="text-slate-700 leading-relaxed mb-6">
+                    Muitos candidatos perdem questões fáceis por misturar nomenclaturas correlatas. Memorize a tabela abaixo. Ela foi estruturada sem rolagem horizontal para que você possa ler cada linha de ponta a ponta sem qualquer distração visual.
+                </p>
+
+                <!-- TABELA INTELIGENTE (RESPONSIVA POR GRID EM CELULARES E TABELA TRADICIONAL EM TELAS MAIORES) -->
+                <div class="hidden sm:block overflow-hidden border border-slate-200 rounded-xl">
+                    <table class="responsive-table min-w-full divide-y divide-slate-200">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider w-1/4">Conceito</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider w-1/2">Definição Técnica e Atuação</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-700 uppercase tracking-wider w-1/4">Associação em Prova</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-slate-200 text-sm">
+                            <tr>
+                                <td class="px-4 py-3.5 font-bold text-slate-900">Orogênese</td>
+                                <td class="px-4 py-3.5 text-slate-600 leading-relaxed">Movimentos <span class="bg-amber-100 px-1 rounded font-semibold text-slate-900">horizontais</span> rápidos na escala geológica. Causa forte compressão e dobramento ou falhamento das rochas nas bordas de placas.</td>
+                                <td class="px-4 py-3.5 text-amber-800 font-medium bg-amber-50/30">Cadeias montanhosas / Dobramentos Modernos.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3.5 font-bold text-slate-900">Epirogênese</td>
+                                <td class="px-4 py-3.5 text-slate-600 leading-relaxed">Movimentos <span class="bg-amber-100 px-1 rounded font-semibold text-slate-900">verticais</span> extremamente lentos de soerguimento ou subsidência em áreas continentais estáveis. Não gera dobras.</td>
+                                <td class="px-4 py-3.5 text-amber-800 font-medium bg-amber-50/30">Transgressão / Regressão marinha; falésias fósseis.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3.5 font-bold text-slate-900">Epicentro vs Hipocentro</td>
+                                <td class="px-4 py-3.5 text-slate-600 leading-relaxed"><span class="font-semibold text-slate-950">Hipocentro</span> (foco) é o local exato da ruptura no interior da Terra. <span class="font-semibold text-slate-950">Epicentro</span> é o ponto na superfície verticalmente acima do hipocentro.</td>
+                                <td class="px-4 py-3.5 text-amber-800 font-medium bg-amber-50/30">Onda superficial destrutiva ocorre no Epicentro.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3.5 font-bold text-slate-900">Richter vs Mercalli</td>
+                                <td class="px-4 py-3.5 text-slate-600 leading-relaxed"><span class="font-semibold text-slate-950">Richter</span> mede a <span class="bg-amber-100 px-1 rounded font-semibold text-slate-900">magnitude</span> (energia liberada, escala quantitativa logarítmica). <span class="font-semibold text-slate-950">Mercalli</span> mede a <span class="bg-amber-100 px-1 rounded font-semibold text-slate-900">intensidade</span> (danos causados, qualitativa, I a XII).</td>
+                                <td class="px-4 py-3.5 text-amber-800 font-medium bg-amber-50/30">Richter não tem limite máximo; Mercalli sim.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- VERSÃO PARA CELULAR: EXIBIÇÃO EM FORMA DE CARDS PARA EVITAR SCROLL -->
+                <div class="block sm:hidden space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-amber-600 uppercase">Tectonismo</span>
+                        <h4 class="text-base font-bold text-slate-950 mb-1">Orogênese</h4>
+                        <p class="text-xs text-slate-600 mb-2">Movimentos <span class="bg-amber-100 px-0.5 rounded font-semibold text-slate-950">horizontais</span> rápidos. Deforma rochas.</p>
+                        <span class="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded block w-fit">Associação: Cordilheiras / Dobramentos</span>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-amber-600 uppercase">Tectonismo</span>
+                        <h4 class="text-base font-bold text-slate-950 mb-1">Epirogênese</h4>
+                        <p class="text-xs text-slate-600 mb-2">Movimentos <span class="bg-amber-100 px-0.5 rounded font-semibold text-slate-950">verticais</span> lentos. Sem dobras.</p>
+                        <span class="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded block w-fit">Associação: Transgressão e Regressão Marinha</span>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-amber-600 uppercase">Abalos Sísmicos</span>
+                        <h4 class="text-base font-bold text-slate-950 mb-1">Epicentro vs Hipocentro</h4>
+                        <p class="text-xs text-slate-600 mb-2"><span class="font-semibold text-slate-950">Hipocentro</span> (interno / fratura). <span class="font-semibold text-slate-950">Epicentro</span> (superficial / projeção vertical direto acima).</p>
+                        <span class="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded block w-fit">Associação: Epicentro é onde ocorrem os maiores danos</span>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-amber-600 uppercase">Abalos Sísmicos</span>
+                        <h4 class="text-base font-bold text-slate-950 mb-1">Richter vs Mercalli</h4>
+                        <p class="text-xs text-slate-600 mb-2"><span class="font-semibold text-slate-950">Richter</span>: Magnitude quantitativa (energia). <span class="font-semibold text-slate-950">Mercalli</span>: Intensidade qualitativa (danos).</p>
+                        <span class="text-xs font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded block w-fit">Associação: Escalas fundamentais em provas de Geografia</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- SEÇÃO 3: ANÁLISE DE TENDÊNCIAS DE COBRANÇA E 'PEGUINHAS' RECORRENTES DA FAURGS -->
+            <article class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center bg-amber-100 text-amber-800 font-bold rounded-lg w-8 h-8 text-sm">3</span>
+                    <h3 class="text-xl font-bold text-slate-900">O Mapa da Mina FAURGS: Pegadinhas Críticas</h3>
+                </div>
+
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    A banca FAURGS costuma focar no rigor terminológico e em relações de causa-efeito geológico. Fique atento às armadilhas montadas para eliminar concorrentes:
+                </p>
+
+                <div class="space-y-4 mt-6">
+                    <div class="p-4 border-l-4 border-amber-500 bg-slate-50 rounded-r-xl">
+                        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2 mb-1">
+                            <span class="text-amber-600 font-extrabold text-xs">⚠️ PEGUINHA 1:</span> Dobramentos Modernos no Brasil
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A banca pode tentar afirmar que o relevo brasileiro possui Dobramentos Modernos nos seus pontos culminantes (como a Serra do Mar ou o Pico da Neblina). <strong class="text-slate-900">Gabarito Errado!</strong> O Brasil é caracterizado pela <span class="bg-amber-100 font-semibold px-1 rounded text-slate-950">estabilidade tectônica no centro da Placa Sul-Americana</span>, apresentando apenas Crátons (Escudos Cristalinos) e Bacias Sedimentares antigos.
+                        </p>
+                    </div>
+
+                    <div class="p-4 border-l-4 border-amber-500 bg-slate-50 rounded-r-xl">
+                        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2 mb-1">
+                            <span class="text-amber-600 font-extrabold text-xs">⚠️ PEGUINHA 2:</span> Teor de Sílica e Comportamento Vulcânico
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A FAURGS costuma explorar a correlação entre composição química do magma e seu comportamento eruptivo:
+                            <br><span class="font-semibold text-slate-900">• Magma Ácido (Alto teor de sílica):</span> Mais viscoso, dificulta a liberação de gases. <strong class="text-slate-900">Gera erupções violentas e explosivas</strong>.
+                            <br><span class="font-semibold text-slate-900">• Magma Básico (Baixo teor de sílica):</span> Muito fluido, libera gases com facilidade. <strong class="text-slate-900">Gera escoamento efusivo calmo (ex. Basalto)</strong>.
+                        </p>
+                    </div>
+
+                    <div class="p-4 border-l-4 border-amber-500 bg-slate-50 rounded-r-xl">
+                        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2 mb-1">
+                            <span class="text-amber-600 font-extrabold text-xs">⚠️ PEGUINHA 3:</span> Teoria da Isostasia na Epirogênese
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A epirogênese responde ao <span class="bg-amber-100 font-semibold px-1 rounded text-slate-950">equilíbrio isostático</span> (compensação do peso sobre a crosta flutuante no manto). Quando grandes volumes de gelo derretem (deglaciação) ou há erosão intensa de um topo montanhoso, o peso diminui e a crosta sofre <span class="font-semibold text-slate-900">soerguimento (rebound isostático)</span>. O acúmulo de sedimentos pesados causa o oposto (<span class="font-semibold text-slate-900">subsidência</span>).
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- SEÇÃO 4: ESTRUTURAS GEOLÓGICAS INICIAIS DA CROSTA -->
+            <article class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center bg-amber-100 text-amber-800 font-bold rounded-lg w-8 h-8 text-sm">4</span>
+                    <h3 class="text-xl font-bold text-slate-900">Grandes Estruturas Geológicas da Crosta</h3>
+                </div>
+
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    O relevo atual desenvolveu-se em cima de três províncias estruturais principais, cuja gênese inicial resulta das forças endógenas e das origens tectônicas do planeta:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm">1. Escudos Cristalinos (Crátons ou Plataformas)</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            Formados no <span class="bg-amber-100 font-semibold px-1 rounded text-slate-950">Arqueozoico e Proterozoico</span>. São as rochas mais antigas e rígidas do planeta (metamórficas e ígneas intrusivas). Estáveis tectonicamente e altamente desgastadas pela erosão ao longo de bilhões de anos. <strong class="text-slate-900">Associação econômica crucial:</strong> Ricos em depósitos minerais metálicos (ferro, manganês, ouro).
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm">2. Bacias Sedimentares</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            Depressões na crosta preenchidas pelo acúmulo sucessivo de fragmentos minerais e matéria orgânica ao longo das eras Paleozoica, Mesozoica e Cenozoica. <strong class="text-slate-900">Associação econômica crucial:</strong> Única estrutura geológica propícia à existência de combustíveis fósseis (petróleo, carvão mineral e gás natural), além de água subterrânea em aquíferos.
+                        </p>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm">3. Dobramentos Modernos</h4>
+                        <p class="text-xs text-slate-600 mt-1 leading-relaxed">
+                            Cadeias montanhosas formadas no período <span class="bg-amber-100 font-semibold px-1 rounded text-slate-950">Terciário da Era Cenozoica</span> decorrentes do choque de placas tectônicas (orogênese). Apresentam elevadas altitudes, instabilidade tectônica ativa (terremotos e vulcões) e encostas íngremes. Ex: Cordilheira dos Andes e Himalaia. <strong class="text-slate-900">Atenção extrema:</strong> Ausentes no território brasileiro.
+                        </p>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- SEÇÃO DE REVISÃO ATIVA & CRITÉRIOS DE SUCESSO -->
+        <section class="mt-8 bg-slate-50 border border-slate-200 rounded-2xl p-6">
+            <h4 class="font-bold text-slate-900 text-md mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Critérios de Memorização de Véspera
+            </h4>
+            <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+                <li><strong class="text-slate-800">Orogênese</strong> = Pressão Horizontal = Dobras e Falhas Rápidas = Montanhas.</li>
+                <li><strong class="text-slate-800">Epirogênese</strong> = Movimento Vertical = Lento = Equilíbrio Isostático = Sem dobras.</li>
+                <li><strong class="text-slate-800">Basalto</strong> = Rocha Ígnea Extrusiva (vulcânica) de erupção efusiva calmas.</li>
+                <li><strong class="text-slate-800">Granito</strong> = Rocha Ígnea Intrusiva (plutônica) cristalizada lentamente no subsolo.</li>
+                <li><strong class="text-slate-800">Richter</strong> = Mede Energia (magnitude); <strong class="text-slate-800">Mercalli</strong> = Mede Efeito/Destruição (intensidade).</li>
+            </ul>
+        </section>
+
+        <!-- BOTÃO PARA QUESTÕES (CONFORME REQUISITADO) -->
+        <div class="mt-12 mb-16 text-center">
+            <a href="endogenaquestoes.html" class="inline-flex items-center gap-3 bg-slate-900 hover:bg-slate-800 active:scale-95 text-white font-semibold text-sm px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all border border-slate-700">
+                <span>Praticar com Questões da FAURGS</span>
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER MANTENDO CONTRASTE E SIMPLICIDADE -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-6 mt-auto">
+        <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500">
+            <p>© 2026 IFSC Concursos - Material Didático de Alta Performance.</p>
+            <p class="mt-1">Desenvolvido com foco em aprendizagem ativa e acessibilidade.</p>
+        </div>
+    </footer>
+
+    <!-- LÓGICA DO AUDIO PLAYER E CONTROLE DE VELOCIDADE -->
+    <script>
+        const audio = document.getElementById('audio-element');
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const iconPlay = document.getElementById('icon-play');
+        const iconPause = document.getElementById('icon-pause');
+        const progressBar = document.getElementById('progress-bar');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+        const speedSelector = document.getElementById('speed-selector');
+        const audioSrcInput = document.getElementById('audio-src-input');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        // Função para disparar mensagens amigáveis na tela
+        function showNotification(message) {
+            toastMessage.textContent = message;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Formatação de segundos para MM:SS
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Sincroniza a entrada de texto do arquivo de áudio com o elemento real
+        audioSrcInput.addEventListener('change', () => {
+            const fileName = audioSrcInput.value.trim();
+            if (fileName) {
+                const wasPlaying = !audio.paused;
+                audio.src = fileName;
+                audio.load();
+                if (wasPlaying) {
+                    audio.play().catch(err => {
+                        showNotification("Arquivo não encontrado localmente.");
+                        resetPlayState();
+                    });
+                }
+                showNotification(`Áudio configurado para: ${fileName}`);
+            }
+        });
+
+        // Toggle Play / Pause com validação de erros robusta
+        function resetPlayState() {
+            iconPause.classList.add('hidden');
+            iconPlay.classList.remove('hidden');
+        }
+
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        iconPlay.classList.add('hidden');
+                        iconPause.classList.remove('hidden');
+                    })
+                    .catch(err => {
+                        showNotification("Por favor, verifique se o arquivo MP3 está na mesma pasta desta página.");
+                        resetPlayState();
+                    });
+            } else {
+                audio.pause();
+                resetPlayState();
+            }
+        });
+
+        // Atualização da barra de progresso durante a reprodução
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percentage = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percentage;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
+        });
+
+        // Carrega a duração total assim que os metadados estão prontos
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        // Permite ao usuário deslizar pela barra de tempo do áudio
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                const newTime = (progressBar.value / 100) * audio.duration;
+                audio.currentTime = newTime;
+            }
+        });
+
+        // Gerenciamento e controle da velocidade de reprodução
+        speedSelector.addEventListener('change', () => {
+            const speed = parseFloat(speedSelector.value);
+            audio.playbackRate = speed;
+            showNotification(`Velocidade de reprodução: ${speed}x`);
+        });
+
+        // Quando o áudio termina, restaura o visual do botão
+        audio.addEventListener('ended', () => {
+            resetPlayState();
+            progressBar.value = 0;
+            currentTimeEl.textContent = "00:00";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Geografia - Dinâmica Endógena (FAURGS)</title>
+    <!-- Google Fonts: Inter para UI e Merriweather para o texto acadêmico da prova -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        paper: {
+                            50: '#fdfdfc',
+                            100: '#fbfaf7',
+                            200: '#f5f2eb',
+                            900: '#1c1917'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- MathJax para renderização de fórmulas matemáticas e químicas -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es6/tex-mml-chtml.js"></script>
+    <style>
+        /* Estilos personalizados para transições suaves e leitura limpa */
+        body {
+            background-color: #fbfaf7;
+            color: #1c1917;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Ocultar barra de rolagem padrão para manter design minimalista */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f2eb;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d6d3d1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: white !important;
+                color: black !important;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-stone-200 selection:text-stone-900">
+
+    <!-- CABEÇALHO DO PORTAL -->
+    <header class="border-b border-stone-200 bg-paper-100/80 backdrop-blur-md sticky top-0 z-50 transition-all">
+        <div class="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-stone-900 text-paper-100 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-sm font-semibold tracking-wider text-stone-500 uppercase">Simulador de Alta Performance</h1>
+                    <p class="text-lg font-bold text-stone-900 font-serif">Padrão Geocientífico FAURGS</p>
+                </div>
+            </div>
+            
+            <!-- Indicadores de Progresso e Timer -->
+            <div class="flex items-center gap-4 text-sm w-full sm:w-auto justify-between sm:justify-end">
+                <div id="timerContainer" class="flex items-center gap-1.5 px-3 py-1.5 bg-stone-100 rounded-full text-stone-700 font-mono font-medium">
+                    <svg class="w-4 h-4 text-stone-500 animate-spin-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span id="timer">00:00:00</span>
+                </div>
+                <div id="progressBadge" class="px-3 py-1.5 bg-stone-900 text-stone-100 rounded-full font-medium text-xs tracking-wider uppercase">
+                    Respondido: <span id="progressCount">0</span>/10
+                </div>
+            </div>
+        </div>
+        <!-- Barra de Progresso Visual -->
+        <div class="w-full bg-stone-200 h-1">
+            <div id="progressBar" class="bg-stone-950 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-4xl mx-auto px-4 py-8 pb-24">
+        <!-- Capa Acadêmica / Instruções -->
+        <div id="instructionCard" class="bg-paper-50 border border-stone-200 rounded-xl p-6 sm:p-8 mb-8 shadow-sm">
+            <div class="border-b border-stone-200 pb-4 mb-4">
+                <span class="text-xs font-semibold uppercase tracking-widest text-amber-800">Concurso Público de Admissão</span>
+                <h2 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900 mt-1">Geografia Física: Dinâmica Endógena e o Relevo Terrestre</h2>
+                <p class="text-stone-500 text-sm mt-1">Foco de Pesquisa: Tectonismo, Vulcanismo, Abalos Sísmicos e Formações Estruturais Iniciais</p>
+            </div>
+            <div class="space-y-3 text-stone-600 text-sm leading-relaxed">
+                <p><strong>Prezado(a) Candidato(a),</strong> leia atentamente as instruções abaixo para a realização deste simulado interativo:</p>
+                <ul class="list-disc pl-5 space-y-1.5 text-stone-600">
+                    <li>Esta prova contém <strong>10 questões de múltipla escolha</strong>, formuladas sob o rigor conceitual exigido pela banca <strong>FAURGS</strong>.</li>
+                    <li>Cada questão apresenta 5 alternativas (A, B, C, D, E), sendo apenas uma correta.</li>
+                    <li>Sua seleção será gravada de forma dinâmica. Você pode alterar a sua resposta a qualquer momento antes do envio definitivo.</li>
+                    <li>Ao clicar no botão <strong>"Finalizar Simulado e Ver Gabarito"</strong> ao fim da página, seu score será calculado e todas as <strong>resoluções detalhadas</strong> serão exibidas imediatamente na mesma página para fins de estudo sistemático.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- CONTAINER DE QUESTÕES -->
+        <form id="quizForm" onsubmit="event.preventDefault();" class="space-y-8">
+            <div id="questionsContainer" class="space-y-8">
+                <!-- As questões serão injetadas dinamicamente aqui pelo JavaScript para manter excelente arquitetura de dados e fidelidade textual -->
+            </div>
+
+            <!-- BOTÃO DE ENVIO DO SIMULADO -->
+            <div id="submitPanel" class="flex flex-col items-center justify-center p-8 bg-paper-50 border border-stone-200 rounded-xl shadow-sm text-center">
+                <h3 class="font-serif font-bold text-lg text-stone-900 mb-2">Concluiu sua análise técnica?</h3>
+                <p class="text-stone-500 text-sm mb-6 max-w-md">Verifique se respondeu a todas as questões para obter um resultado estatístico fidedigno. Ao finalizar, as explicações pedagógicas estarão liberadas.</p>
+                <button type="button" onclick="submitQuiz()" class="px-8 py-3 bg-stone-900 text-paper-100 font-semibold rounded-lg hover:bg-stone-800 focus:ring-4 focus:ring-stone-300 transition-all shadow hover:shadow-md transform hover:-translate-y-0.5 text-sm uppercase tracking-wider">
+                    Finalizar Simulado e Ver Gabarito
+                </button>
+                <p id="missingWarning" class="text-rose-600 text-xs font-semibold mt-3 hidden">Atenção: Você ainda possui questões sem resposta. Recomendamos responder a todas.</p>
+            </div>
+        </form>
+
+        <!-- SEÇÃO DE RESULTADOS (OCULTA INICIALMENTE) -->
+        <section id="resultsSection" class="hidden mt-12 space-y-8 scroll-mt-24">
+            <!-- Painel Geral de Desempenho -->
+            <div class="bg-stone-900 text-paper-100 rounded-xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-y-1/4 translate-x-1/4">
+                    <svg class="w-96 h-96" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                    </svg>
+                </div>
+                
+                <div class="relative z-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-stone-400">Desempenho Geral Obtido</span>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold mt-1">Relatório Técnico Individual</h2>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+                        <div class="bg-stone-800/60 p-4 rounded-lg border border-stone-700/50">
+                            <span class="text-xs text-stone-400 block uppercase">Taxa de Acertos</span>
+                            <span id="scorePercent" class="text-3xl font-bold font-mono">0%</span>
+                        </div>
+                        <div class="bg-stone-800/60 p-4 rounded-lg border border-stone-700/50">
+                            <span class="text-xs text-stone-400 block uppercase">Questões Corretas</span>
+                            <span id="scoreFraction" class="text-3xl font-bold font-mono">0 / 10</span>
+                        </div>
+                        <div class="bg-stone-800/60 p-4 rounded-lg border border-stone-700/50">
+                            <span class="text-xs text-stone-400 block uppercase">Tempo Utilizado</span>
+                            <span id="timeTaken" class="text-3xl font-bold font-mono">00:00</span>
+                        </div>
+                        <div class="bg-stone-800/60 p-4 rounded-lg border border-stone-700/50">
+                            <span class="text-xs text-stone-400 block uppercase">Classificação Geral</span>
+                            <span id="performanceBadge" class="text-sm font-semibold inline-block mt-2 px-2 py-1 bg-stone-700 rounded uppercase">Abaixo da Média</span>
+                        </div>
+                    </div>
+
+                    <div id="feedbackText" class="mt-6 text-sm text-stone-300 leading-relaxed max-w-2xl border-t border-stone-800 pt-4">
+                        <!-- Texto adaptável de acordo com o score -->
+                    </div>
+
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        <button onclick="window.print()" class="px-4 py-2 bg-stone-800 hover:bg-stone-700 border border-stone-700 rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                            </svg>
+                            Imprimir ou Salvar PDF
+                        </button>
+                        <button onclick="restartQuiz()" class="px-4 py-2 bg-amber-800 hover:bg-amber-700 text-stone-100 rounded-lg text-xs font-semibold uppercase tracking-wider transition-colors">
+                            Refazer Simulado
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Banco de Dados das 10 Questões extraídas do documento de Geografia FAURGS
+        const questionsDB = [
+            {
+                id: 1,
+                title: "Questão 1",
+                text: "Considere as seguintes afirmações sobre a Teoria da Tectônica de Placas e as bases teóricas que explicam a dinâmica interna da Terra:",
+                items: [
+                    "A litosfera, camada rígida externa da Terra composta pela crosta e pela porção superior do manto, encontra-se fragmentada em blocos denominados placas tectônicas, que se movem continuamente sobre a astenosfera, uma porção do manto caracterizada por sua ductilidade e comportamento plástico.",
+                    "A Teoria da Deriva Continental, formulada por Alfred Wegener no início do século XX, postulava que os continentes estiveram outrora unidos em um supercontinente denominado Pangeia, tendo sido imediatamente aceita pela comunidade geocientífica por apresentar de forma quantitativa e incontestável o mecanismo das correntes de convecção mantélica.",
+                    "As correntes de convecção térmica ocorrem no manto terrestre e constituem o principal motor mecânico por trás da movimentação das placas litosféricas, sendo impulsionadas pelo gradiente de temperatura gerado pelo calor interno residual do planeta e pelo decaimento radioativo de elementos de longa meia-vida."
+                ],
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e III.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 2, // Alternativa C
+                resolution: `A alternativa correta é a <strong>(C)</strong>, estando corretas apenas as afirmações I e III.<br><br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> A definição física da litosfera apoia-se em critérios de rigidez mecânica. Ela engloba a crosta terrestre e a porção mais externa e fria do manto superior, comportando-se como um sólido elástico e frágil fragmentado em placas tectônicas. Estas placas flutuam e movimentam-se sobre a astenosfera, que possui uma viscosidade menor devido a condições de temperatura próximas ao ponto de fusão parcial das suas rochas peridotíticas, conferindo-lhe um comportamento plástico sob tensões de longa duração geológica.</li><br>
+                    <li><strong>Afirmação II (Incorreta):</strong> Embora Alfred Wegener tenha formulado a Teoria da Deriva Continental em 1912 e postulado a união original dos continentes na Pangeia, a sua hipótese foi rejeitada por décadas pela comunidade científica internacional. O principal fator para essa rejeição foi a falta de um mecanismo físico coerente que explicasse a força motora capaz de deslocar massas siálicas continentais através do assoalho oceânico basáltico mais denso; Wegener sugeriu forças gravitacionais e de marés, que foram demonstradas matematicamente como insuficientes. O conceito de correntes de convecção do manto e a expansão do assoalho oceânico só foram validados a partir da década de 1960.</li><br>
+                    <li><strong>Afirmação III (Correta):</strong> O motor fundamental do tectonismo terrestre reside nas células de convecção do manto. O calor interno do planeta, oriundo tanto do processo primordial de acreção planetária quanto do decaimento radioativo contínuo de isótopos instáveis como $^{238}\\text{U}$, $^{232}\\text{Th}$ e $^{40}\\text{K}$, gera um forte gradiente geotérmico. Esse gradiente faz com que o material profundo, aquecido e menos denso, ascenda lentamente em direção à litosfera, enquanto o material mais frio e denso da porção superior descende em direção ao manto profundo, estabelecendo as correntes de convecção que arrastam as placas litosféricas por forças de cisalhamento em sua base e por gravidade nas zonas de subducção.</li>
+                </ul>`
+            },
+            {
+                id: 2,
+                title: "Questão 2",
+                text: "Os limites entre as placas tectônicas representam zonas de elevada instabilidade mecânica e intensa atividade geológica, nas quais ocorrem os fenômenos responsáveis pela modelagem inicial das grandes estruturas geológicas do planeta. Considere as afirmações abaixo a respeito das interações que se processam nesses limites:",
+                items: [
+                    "O limite convergente marcado pelo choque entre uma placa oceânica e uma placa continental resulta na subducção da placa oceânica (mais densa) sob a placa continental (menos densa), originando fossas submarinas profundas e cadeias montanhosas associadas a vulcanismo ativo, como a Cordilheira dos Andes.",
+                    "Nos limites divergentes localizados em bacias oceânicas, o afastamento recíproco de placas propicia o alívio de pressão sobre a astenosfera e a ascensão de magma basáltico, consolidando sistemas de dorsais mesoceânicas responsáveis pela contínua expansão do assoalho marinho.",
+                    "A Falha de San Andreas, na América do Norte, constitui um exemplo de limite transformante gerado pelo deslizamento horizontal lateral entre as placas Pacífica e Norte-Americana, resultando em deformação mecânica expressa por falhamentos geológicos de grande extensão, com sismicidade de foco raso e ausência de vulcanismo ativo significativo."
+                ],
+                options: [
+                    "Apenas I.",
+                    "Apenas III.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // Alternativa E
+                resolution: `A alternativa correta é a <strong>(E)</strong>, indicando que todas as três afirmações estão cientificamente corretas.<br><br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> O limite convergente entre a placa oceânica de Nazca e a placa continental Sul-Americana é um exemplo clássico de zona de subducção. A placa oceânica, composta predominantemente por basalto e gabro, é mais densa do que a crosta continental granítica, mergulhando sob esta em direção à astenosfera. Na zona de curvatura da placa que afunda, forma-se a fossa oceânica Peru-Chile. A introdução de sedimentos hidratados e água no manto adjacente reduz a temperatura de fusão das rochas locais, gerando magmas que ascendem, alimentando o arco vulcânico continental e gerando o encurtamento orogenético que originou a Cordilheira dos Andes.</li><br>
+                    <li><strong>Afirmação II (Correta):</strong> Nos limites divergentes marinhos, a divergência mecânica das placas causa a descompressão adiabática do manto superior astenoferítico, induzindo a fusão parcial das rochas ultramáficas sem a necessidade de fornecimento externo de calor. O magma basáltico altamente fluido gerado migra para cima através das fissuras tectônicas axiais, solidificando-se ao entrar em contato com a água do mar fria para formar basaltos em almofada (<em>pillow lavas</em>) e construir progressivamente as dorsais mesoceânicas e novas porções de crosta oceânica.</li><br>
+                    <li><strong>Afirmação III (Correta):</strong> Os limites transformantes ou transcorrentes realizam o deslocamento puramente lateral e horizontal de duas placas ao longo de grandes zonas de cisalhamento. Uma vez que o plano de movimento é paralelo ao vetor de deslocamento relativo das placas, não ocorrem processos significativos de subducção ou de abertura crustal que permitam a descompressão adiabática ou a hidratação mantélica necessárias para gerar magmatismo, o que explica a ausência de vulcanismo ativo. O acúmulo contínuo de tensão elástica devido ao atrito lateral ao longo do plano da falha gera, ao se romper de forma súbita, terremotos frequentes e rasos, como se observa ao longo da Falha de San Andreas.</li>
+                </ul>`
+            },
+            {
+                id: 3,
+                title: "Questão 3",
+                text: "Os movimentos tectônicos que afetam a crosta terrestre são classicamente divididos, com base na direção das forças atuantes e na escala espacial e temporal de ocorrência, em processos orogenéticos e epirogenéticos. Sobre essas forças e suas respectivas consequências morfoestruturais, assinale a alternativa correta.",
+                options: [
+                    "A orogênese é caracterizada por movimentos tectônicos verticais de grande amplitude regional e longa duração geológica, que provocam o soerguimento ou a subsidência de grandes blocos continentais sem gerar dobramentos nas camadas rochosas.",
+                    "Os movimentos epirogenéticos verticais produzem deformações plásticas rápidas conhecidas como dobramentos modernos, restritos às faixas limítrofes ativas de placas tectônicas.",
+                    "A epirogênese compreende forças essencialmente horizontais e de curta duração em escala geológica, as quais enrugam rochas maleáveis nas bordas convergentes de placas e dão origem às grandes cadeias montanhosas.",
+                    "Os movimentos orogenéticos horizontais decorrem de pressões compressivas laterais que geram o encurtamento crustal e o dobramento de sequências sedimentares e metamórficas, sendo os principais responsáveis pela formação inicial de cadeias montanhosas.",
+                    "A subsidência epirogenética é um processo de rebaixamento crustal rápido e catastrófico que ocorre associado a abalos sísmicos de magnitude destrutiva no interior de escudos cristalinos tectonicamente instáveis."
+                ],
+                correct: 3, // Alternativa D
+                resolution: `A alternativa correta é a <strong>(D)</strong>.<br><br>
+                <ul>
+                    <li><strong>Análise da Alternativa Correta (D):</strong> Os processos orogenéticos operam na direção horizontal (tangencial à superfície terrestre) e são desencadeados por tensões compressivas em limites convergentes de placas. Sob condições de alta temperatura e pressão em níveis profundos da crosta, as rochas sofrem deformação dúctil e plástica, originando amplos dobramentos modernos. Esse encurtamento horizontal da crosta força o material rochoso a sofrer dobramento e empilhamento vertical (espesamento crustal), gerando o soerguimento morfológico de grandes cordilheiras orogênicas ativas de elevada altitude.</li><br>
+                    <li><strong>Análise das Alternativas Incorretas:</strong><br>
+                        - <em>(A) Incorreta:</em> Os movimentos verticais e de longa duração que soerguem ou rebaixam porções continentais estáveis pertencem à categoria da epirogênese, e não da orogênese.<br>
+                        - <em>(B) Incorreta:</em> A epirogênese não causa dobramentos modernos nem deformações plásticas rápidas, tratando-se de deformações elásticas e lentas que se expressam por arqueamentos continentais de grande raio de curvatura.<br>
+                        - <em>(C) Incorreta:</em> Forças horizontais e de curta duração que originam cadeias montanhosas são típicas de processos orogenéticos, não epirogenéticos.<br>
+                        - <em>(E) Incorreta:</em> A subsidência epirogenética é lenta e gradual, estendendo-se por dezenas de milhões de anos geológicos, permitindo que bacias sedimentares acomodem espessas camadas de sedimentos de forma contínua, sem gerar catástrofes sísmicas instantâneas em escudos estáveis.
+                    </li>
+                </ul>`
+            },
+            {
+                id: 4,
+                title: "Questão 4",
+                text: "O vulcanismo e o magmatismo atuam como importantes agentes endógenos na diferenciação petrográfica da crosta e na consolidação de estruturas de relevo específicas. Considere as afirmações abaixo a respeito da dinâmica magmática e da formação de rochas:",
+                items: [
+                    "O magma basáltico (básico) apresenta baixo teor de sílica ($\\text{SiO}_2 < 52\\%$), menor viscosidade e temperaturas de extrusão mais elevadas, condições físico-químicas que favorecem erupções de estilo predominantemente efusivo, com lavas que fluem por longas distâncias.",
+                    "O magma ácido ou intermediário, rico em sílica ($\\text{SiO}_2 > 65\\%$), caracteriza-se por sua elevada viscosidade, o que dificulta o escape de gases voláteis e induz erupções vulcânicas de caráter altamente explosivo, marcadas pela ejeção de piroclastos e formação de caldeiras de colapso.",
+                    "O basalto é uma rocha magmática plutônica (intrusiva) formada pelo resfriamento lento do magma no interior da crosta terrestre, apresentando textura fanerítica; já o granito é uma rocha vulcânica (extrusiva) formada pelo resfriamento rápido da lava na superfície, caracterizando-se por textura afanítica."
+                ],
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 2, // Alternativa C
+                resolution: `A alternativa correta é a <strong>(C)</strong>, com as afirmações I e II corretas.<br><br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> O teor de sílica ($\\text{SiO}_2$) é o fator primordial que governa a viscosidade de um magma. Magmas basálticos (básicos) apresentam teores baixos de sílica, o que limita o desenvolvimento de cadeias polimerizadas de tetraedros de silício-oxigênio. Essa estrutura simplificada confere alta fluidez ao fluido magmático. Em associação com altas temperaturas ($1000^\\circ\\text{C}$ a $1200^\\circ\\text{C}$), as lavas basálticas extravasam de forma mansa e efusiva, percorrendo grandes distâncias geográficas e gerando planaltos vulcânicos planos de grande extensão lateral.</li><br>
+                    <li><strong>Afirmação II (Correta):</strong> Magmas ricos em sílica (ácidos ou félsicos) contêm elevados níveis de polimerização interna, o que eleva exponencialmente a viscosidade do fluido e impede o escoamento rápido. Essa alta viscosidade atua aprisionando os gases voláteis dissolvidos ($\\text{H}_2\\text{O}$, $\\text{CO}_2$, $\\text{SO}_2$) à medida que o magma ascende à superfície e perde pressão. Quando a pressão interna dos gases supera a resistência de coesão do magma viscoso, ocorre uma fragmentação explosiva catastrófica, ejetando cinzas, bombas vulcânicas e fluxos piroclásticos de alta densidade e temperatura.</li><br>
+                    <li><strong>Afirmação III (Incorreta):</strong> Os conceitos petrográficos estão invertidos. O basalto é uma rocha magmática extrusiva (vulcânica) que se cristaliza rapidamente na superfície sob baixas pressões e resfriamento brusco, gerando textura afanítica (cristais microscópicos). O granito é uma rocha magmática intrusiva (plutônica) que se solidifica lentamente em profundidade, isolada termicamente por quilômetros de rochas sobrejacentes, o que propicia tempo geológico para o crescimento de cristais visíveis a olho nu, conferindo-lhe textura fanerítica.</li>
+                </ul>`
+            },
+            {
+                id: 5,
+                title: "Questão 5",
+                text: "Os abalos sísmicos refletem a liberacão repentina de energia mecânica acumulada nas rochas sob tensões tectônicas na litosfera. A respeito dos parâmetros sismológicos e do comportamento das ondas sísmicas, assinale a alternativa correta.",
+                options: [
+                    "O hipocentro (ou foco) corresponde à projeção vertical na superfície terrestre do ponto de ruptura rochosa, enquanto o epicentro é o local exato no interior da crosta onde ocorre a liberação inicial de energia.",
+                    "A escala de Mercalli Modificada quantifica de forma objetiva a magnitude de um abalo sísmico por meio do cálculo logarítmico da energia liberada em sua fonte, sendo obtida a partir de sismogramas e sem limite superior definido.",
+                    "A escala Richter mede a intensidade de um terremoto com base na observação empírica dos danos provocados nas estruturas humanas e nas modificações visíveis causadas na paisagem local.",
+                    "As ondas primárias ($P$) são ondas longitudinais de compressão e expansão que se propagam tanto em meios sólidos quanto fluidos com velocidade superior à das ondas secundárias ($S$), as quais são transversais e propagam-se estritamente através de meios sólidos.",
+                    "Os sismos de elevada magnitude distribuem-se de maneira espacialmente homogênea e uniforme por toda a crosta terrestre, independentemente da proximidade de bordas de placas ou de falhamentos geológicos ativos."
+                ],
+                correct: 3, // Alternativa D
+                resolution: `A alternativa correta é a <strong>(D)</strong>.<br><br>
+                <ul>
+                    <li><strong>Análise da Alternativa Correta (D):</strong> As ondas sísmicas dividem-se em ondas de corpo (que se propagam no interior da Terra) e ondas de superfície. Entre as ondas de corpo, as ondas primárias ($P$) são longitudinais e atuam comprimindo e dilatando a rocha na mesma direção de propagação da energia, conseguindo atravessar tanto materiais sólidos quanto fluidos (gases e líquidos) por envolverem variações volumétricas. Elas são as mais velozes do espectro sísmico. As ondas secundárias ($S$) são ondas de cisalhamento transversais, cujas partículas vibram perpendicularmente à trajetória de propagação da onda. Como os fluidos não possuem resistência mecânica ao cisalhamento (rigidez nula), as ondas $S$ propagam-se estritamente através de meios sólidos, sofrendo extinção ao atingirem interfaces líquidas, como o limite entre o manto sólido e o núcleo externo líquido da Terra.</li><br>
+                    <li><strong>Análise das Alternativas Incorretas:</strong><br>
+                        - <em>(A) Incorreta:</em> Os conceitos de hipocentro e epicentro estão invertidos. O hipocentro (foco) é o ponto tridimensional exato no interior da crosta ou manto superior onde ocorre a fratura rochosa e consequente liberação de energia; o epicentro é o ponto na superfície terrestre localizado exatamente na projeção vertical acima do hipocentro.<br>
+                        - <em>(B) Incorreta:</em> A escala de Mercalli Modificada é de natureza puramente qualitativa e subjetiva, medindo a intensidade do sismo a partir da observação de danos estruturais e da sensibilidade humana no local afetado, variando de I a XII. A escala Richter é que mensura quantitativamente a magnitude com base em dados mecânicos registrados por sismógrafos.<br>
+                        - <em>(C) Incorreta:</em> A escala Richter quantifica de forma instrumental a magnitude energética, ao passo que a intensidade e os estragos físicos na superfície são avaliados pela escala de Mercalli Modificada.<br>
+                        - <em>(E) Incorreta:</em> A atividade sísmica global está fortemente correlacionada com a dinâmica de placas, concentrando-se de forma acentuada nas bordas convergentes, divergentes e transformantes. Áreas intraplaca, embora possam registrar sismos de menor intensidade devido ao alívio de tensões locais, apresentam estabilidade mecânica relativa expressiva.
+                    </li>
+                </ul>`
+            },
+            {
+                id: 6,
+                title: "Questão 6",
+                text: "A configuração morfoestrutural do território brasileiro está diretamente associada à sua evolução tectônica e à estabilidade de seu embasamento geológico. Considere as seguintes afirmações sobre a estrutura geológica brasileira:",
+                items: [
+                    "O Brasil localiza-se na porção central da Placa Sul-Americana, caracterizando-se por uma estabilidade tectônica relativa que explica a ausência de dobramentos modernos ativos, de vulcanismo ativo e de terremotos de grande magnitude no período contemporâneo.",
+                    "Os escudos cristalinos, estruturados em ambiente de cinturões orogênicos antigos nos éons Arqueano e Proterozoico, são compostos por rochas magmáticas e metamórficas altamente resistentes, encontrando-se atualmente cratonizados e profundamente desgastados pelos agentes de intemperismo e erosão.",
+                    "As bacias sedimentares brasileiras ocupam sinclinais do embasamento geológico, apresentando deposição de camadas sedimentares cujas espessuras crescem de forma sistemática das bordas em direção ao centro da bacia."
+                ],
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 4, // Alternativa E
+                resolution: `A alternativa correta é a <strong>(E)</strong>, indicando que todas as três afirmações estão corretas.<br><br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> O território brasileiro ocupa a porção central cratônica da Placa Sul-Americana, distante milhares de quilômetros de suas bordas ativas (o limite convergente andino a oeste e o limite divergente mesoatlântico a leste). Essa localização afasta o país de zonas de subducção ativa e falhamentos transcorrentes de escala litosférica, resultando em estabilidade geotectônica relativa expressiva, marcada pela ausência de vulcões ativos e orogêneses recentes (dobramentos modernos) do período Cenozoico.</li><br>
+                    <li><strong>Afirmação II (Correta):</strong> Os escudos cristalinos representam os núcleos estruturais mais antigos do relevo do Brasil, consolidados através de intensos processos tectono-magmáticos ocorridos no Pré-Cambriano. Esses cinturões de dobramentos pré-cambrianos passaram por processos sucessivos de resfriamento, recristalização mineralógica e cratonização. Atualmente isentos de atividade interna ativa, encontram-se expostos e submetidos a ciclos erosivos profundos, resultando em relevos rebaixados e dissecados.</li><br>
+                    <li><strong>Afirmação III (Correta):</strong> As bacias sedimentares são depressões de escala regional geradas pela subsidência epirogenética do embasamento cristalino. No processo de sedimentação, as camadas de sedimentos acumulam-se de forma progressiva e integrada, apresentando uma geometria deposicional característica em que a espessura das camadas é menor e mais delgada próximo às bordas de contato com o cristalino e máxima em direção ao centro geométrico da bacia, refletindo o padrão de subsidência de longo prazo da estrutura sedimentar.</li>
+                </ul>`
+            },
+            {
+                id: 7,
+                title: "Questão 7",
+                text: "A fisionomia do relevo do estado do Rio Grande do Sul reflete a atuação de intensos processos endógenos ocorridos durante a evolução geológica regional da Bacia do Paraná e do Escudo Sul-Riograndense. Associe os elementos estruturais da esquerda com as respectivas origens e descrições na direita:<br><br>" +
+                     "<div class='pl-4 space-y-1 mb-4 text-stone-700 font-serif text-sm'>" +
+                     "1. Planalto Basáltico (Planalto da Campanha e da Serra)<br>" +
+                     "2. Escarpas do Planalto (como a foz e encostas da Serra Geral)<br>" +
+                     "3. Escudo Sul-Riograndense (Serras do Sudeste)<br>" +
+                     "4. Coxilhas do Pampa Gaúcho" +
+                     "</div>" +
+                     "<div class='space-y-2 text-stone-700 text-sm'>" +
+                     "( &nbsp; ) Colinas suaves e arredondadas de baixa altitude esculpidas predominantemente sobre coberturas sedimentares pouco consolidadas e rochas do embasamento expostas pelo intemperismo.<br>" +
+                     "( &nbsp; ) Estrutura de relevo cristalino pré-cambriano de geologia complexa, intensamente dissecada, composta por gnaisses, granitos e migmatitos resultantes de orogêneses antigas.<br>" +
+                     "( &nbsp; ) Formação geomorfológica originada por extensos derrames de lavas basálticas mesozoicas da Província Paraná-Etendeka durante o rifteamento que separou a América do Sul da África.<br>" +
+                     "( &nbsp; ) Encostas abruptas formadas por recuo erosivo controlado por linhas de falhas e fraturas tectônicas verticais, que limitam o planalto em contato com a Depressão Periférica." +
+                     "</div><br>" +
+                     "A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    "4 – 3 – 1 – 2",
+                    "1 – 3 – 4 – 2",
+                    "4 – 1 – 3 – 2",
+                    "3 – 4 – 1 – 2",
+                    "2 – 3 – 1 – 4"
+                ],
+                correct: 0, // Alternativa A
+                resolution: `A alternativa correta é a <strong>(A)</strong>.<br><br>
+                <ul>
+                    <li><strong>Análise da Associação de Colunas:</strong><br>
+                        - <em>(4) Coxilhas do Pampa Gaúcho (1ª lacuna):</em> As coxilhas correspondem a uma fisionomia geomorfológica típica do bioma Pampa no sul do Rio Grande do Sul. Caracterizam-se por colinas suaves, de vertentes arredondadas e baixa altitude, modeladas sobre coberturas sedimentares ou rochas do embasamento cristalino desgastadas pelo intemperismo químico e físico.<br>
+                        - <em>(3) Escudo Sul-Riograndense (2ª lacuna):</em> Também conhecido como Serras do Sudeste, é composto pelas rochas mais antigas expostas no estado. Representa um fragmento cratônico pré-cambriano formado por rochas ígneas intrusivas (como granitos) e metamórficas de alto grau (gneisses e migmatitos) fortemente deformadas em eventos orogenéticos pré-cambrianos.<br>
+                        - <em>(1) Planalto Basáltico (3ª lacuna):</em> Esta grande unidade do relevo, situada no centro-norte do estado, originou-se a partir do magmatismo fissural basáltico ocorrido durante o período Mesozoico (Cretáceo) associado à Província Paraná-Etendeka. O extravasamento massivo de lava basáltica formou estratos horizontais espessos de alta resistência, gerando planaltos elevados conhecidos regionalmente como Planalto da Campanha e da Serra.<br>
+                        - <em>(2) Escarpas do Planalto (4ª lacuna):</em> As escarpas abruptas limitam o Planalto Basáltico. Esse limite morfológico verticalizado foi gerado por recuo erosivo diferencial, frequentemente controlado por fraturas tectônicas e antigas linhas de falhas associadas à abertura do Atlântico Sul, marcando o contato abrupto entre o planalto basáltico elevado e a Depressão Periférica Sul-Riograndense.
+                    </li><br>
+                    <li><strong>Determinação da Sequência Correta:</strong> A sequência lógica de preenchimento dos parênteses, de cima para baixo, é <strong>4 – 3 – 1 – 2</strong>, correspondendo à alternativa <strong>(A)</strong>.</li>
+                </ul>`
+            },
+            {
+                id: 8,
+                title: "Questão 8",
+                text: "As diferenças químicas, físicas e de espessura entre a crosta continental e a crosta oceânica desempenham um papel primordial na dinâmica de tectônica de placas e no desenvolvimento de cinturões montanhosos. A respeito dessas diferenças e suas consequências mecânicas, assinale a alternativa correta.",
+                options: [
+                    "A crosta oceânica apresenta densidade média inferior à da crosta continental devido ao seu enriquecimento em sílica e alumínio, o que impede que sofra subducção nas bordas convergentes.",
+                    "A crosta continental possui menor densidade média e maior espessura que a crosta oceânica, sendo composta predominantemente por rochas de afinidade granítica ricos em silício e alumínio (Sial).",
+                    "O encontro de duas placas oceânicas com densidades muito similares resulta em obducção generalizada, processo no qual ambas flutuam sobre a astenosfera sem que ocorra sismicidade ou formação de fossas submarinas.",
+                    "A colisão entre duas placas de crosta exclusivamente oceânica e densidades equivalentes gera o soerguimento simétrico de arcos de ilhas vulcânicas e o desenvolvimento de fossas oceânicas marginais, como se constata no arquipélago do Japão.",
+                    "O processo de subducção da crosta continental sob a crosta oceânica ocorre de forma sistemática nas zonas de divergência ativa de placas, sendo a fonte principal dos magmas basálticos fluidos."
+                ],
+                correct: 1, // Alternativa B
+                resolution: `A alternativa correta é a <strong>(B)</strong>.<br><br>
+                <ul>
+                    <li><strong>Análise da Alternativa Correta (B):</strong> A crosta continental possui espessura média variando de $30\\text{ km}$ a mais de $70\\text{ km}$ nas regiões sob grandes cinturões montanhosos, apresentando densidade média de aproximadamente $2,7\\text{ g/cm}^3$. Sua composição média é caracterizada por rochas ricas em quartzo e feldspatos (Sial, silício e alumínio), representadas petrograficamente pelo granito e gnaisse. A crosta oceânica, por outro lado, é significativamente mais delgada ($5$ a $10\\text{ km}$ de espessura) e consideravelmente mais densa ($\\approx 3,0\\text{ g/cm}^3$), sendo composta por minerais ricos em ferro e magnésio (Sima), expressos pelo basalto e gabro.</li><br>
+                    <li><strong>Análise das Alternativas Incorretas:</strong><br>
+                        - <em>(A) Incorreta:</em> A crosta oceânica possui densidade média superior à da continental e composição máfica enriquecida em ferro e magnésio (Sima), o que facilita de forma direta o seu mergulho no manto.<br>
+                        - <em>(C) Incorreta:</em> O choque entre duas placas de crosta predominantemente oceânica resulta obrigatoriamente na subducção de uma delas (aquela que for mais antiga, mais fria e, consequentemente, mais densa), gerando intensa atividade sismológica e fossas marinhas de extrema profundidade.<br>
+                        - <em>(D) Incorreta:</em> Embora a afirmação descreva o mecanismo físico de formação de arcos de ilhas vulcânicas (como as Ilhas Marianas e o Japão) pela colisão e subducção de placas oceânicas, a crosta que sofre subducção nesses sistemas é basáltica e gabroica, e não exclusivamente oceânica no topo do arco vulcânico, que se diferencia quimicamente em direção a magmas mais silícicos com o tempo.<br>
+                        - <em>(E) Incorreta:</em> A crosta continental não sofre subducção de forma sistemática por ser muito leve e flutuante em relação ao manto astenoferítico subjacente; em limites convergentes, a crosta continental tende a sofrer obducção ou espessamento crustal na colisão continente-continente. Além disso, a subducção ocorre em limites convergentes, e não divergentes.
+                    </li>
+                </ul>`
+            },
+            {
+                id: 9,
+                title: "Questão 9",
+                text: "La fragmentação inicial de massas continentais é impulsionada por processos de rifteamento ativos, que controlam a estruturação de novos limites de placas e bacias sedimentares. Sobre a formação de vales em rifte (<i>rift valleys</i>) na crosta continental, assinale a alternativa correta.",
+                options: [
+                    "Trata-se de depressões formadas por forças compressivas horizontais que empurram os blocos crustais laterais para cima, produzindo dobras simétricas isentas de atividade sísmica.",
+                    "São gerados pela atuação de esforços tectônicos distensivos que estiram e afinam a litosfera continental, promovendo a queda de blocos crustais centrais (grabens) ao longo de falhas normais, com vulcanismo basáltico e sismos associados.",
+                    "Correspondem a fossas de colisão formadas pelo cavalgamento de placas tectônicas sobre cratons estáveis de idade arqueana, bloqueando a ascensão de materiais magmáticos.",
+                    "São feições morfológicas de origem exclusivamente exógena, esculpidas pela erosão eólica e hidráulica sobre rochas ígneas intrusivas imunes ao tectonismo.",
+                    "Representam a fase terminal do processo de fechamento de oceanos antigos, caracterizados por espessamento crustal extremo e dobramentos sedimentares reversos."
+                ],
+                correct: 1, // Alternativa B
+                resolution: `A alternativa correta é a <strong>(B)</strong>.<br><br>
+                <ul>
+                    <li><strong>Análise da Alternativa Correta (B):</strong> O processo de rifteamento continental marca o início da fragmentação de uma massa continental estável e a gênese de um futuro oceano. Forças distensivas horizontais estiram e afinam a litosfera, gerando deformação frágil expressa por falhas geológicas normais paralelas. O bloco crustal central desliza verticalmente para baixo sob o efeito da gravidade, formando uma fossa tectônica ou graben (o vale em rifte), enquanto as margens laterais elevam-se de forma isostática, constituindo os horsts. O afinamento litosférico reduz a pressão confinante sobre a astenosfera quente, desencadeando a fusão parcial e gerando magmas basálticos que ascendem ao longo dos planos de falhas, alimentando erupções vulcânicas associadas a abalos sísmicos rasos.</li><br>
+                    <li><strong>Análise das Alternativas Incorretas:</strong><br>
+                        - <em>(A) Incorreta:</em> Os vales em rifte são gerados por tensões distensivas (tração), e não compressivas, e as estruturas resultantes são falhas normais de gravidade, não dobramentos simétricos.<br>
+                        - <em>(C) Incorreta:</em> Grabens e vales em rifte não são gerados por colisão ou cavalgamento de placas, mas sim pela separação mecânica destas.<br>
+                        - <em>(D) Incorreta:</em> O relevo de riftes possui gênese puramente endógena (tectônica estrutural), embora as forças exógenas passem a atuar imediatamente erodindo as bordas elevadas e preenchendo a calha central com sedimentos.<br>
+                        - <em>(E) Incorreta:</em> O rifteamento representa a fase inicial de abertura de novas bacias oceânicas, oposta ao fechamento oceânico por convergência.
+                    </li>
+                </ul>`
+            },
+            {
+                id: 10,
+                title: "Questão 10",
+                text: "Os processos endógenos causam a deformação de materiais rochosos e governaram a evolução das rochas metamórficas e das feições estruturais da crosta desde a história geológica primitiva da Terra. Considere as seguintes afirmações sobre esses processos e produtos petrogenéticos:",
+                items: [
+                    "As rochas metamórficas originam-se da transformação mineralógica e estrutural de rochas preexistentes em estado sólido, impulsionada por variações bruscas de temperatura e pressão induzidas por processos geológicos endógenos, tais como intrusões magmáticas ou tectonismo ativo.",
+                    "Os dobramentos representam deformações de caráter plástico que ocorrem em estratos rochosos submetidos a pressões compressivas contínuas em profundidade, onde as condições de pressão confinante e temperatura impedem a ruptura frágil dos materiais.",
+                    "A crosta primitiva da Terra consolidou-se inicialmente através da formação de rochas sedimentares clásticas, as quais se originaram diretamente do resfriamento rápido e da solidificação do magma na superfície do planeta."
+                ],
+                options: [
+                    "Apenas I.",
+                    "Apenas II.",
+                    "Apenas I e II.",
+                    "Apenas II e III.",
+                    "I, II e III."
+                ],
+                correct: 2, // Alternativa C
+                resolution: `A alternativa correta é a <strong>(C)</strong>, com as afirmações I e II corretas.<br><br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> O metamorfismo compreende o conjunto de modificações minerais, texturais e estruturais que ocorrem em rochas preexistentes (sejam elas sedimentares, magmáticas ou mesmo outras metamórficas) quando submetidas a condições termodinâmicas de temperatura, pressão confinante e atividade de fluidos distintas daquelas em que se formaram originalmente. Um fator determinante do metamorfismo é que todo o processo de reorganização cristalina ocorre estritamente no estado sólido, sem que a rocha sofra fusão macroscópica completa; se houver fusão total, ingressa-se no campo do magmatismo e petrogênese ígnea.</li><br>
+                    <li><strong>Afirmação II (Correta):</strong> Os dobramentos são feições geológicas que expressam deformação dúctil. Embora na superfície as rochas frias reajam de forma rígida e frágil (falhamentos), em níveis crustais profundos sob pressões confinantes colossais e temperaturas elevadas, os minerais sofrem deformação plástica. Sob a atuação de tensões compressivas contínuas e lentas em escala geológica, as camadas rochosas dobram-se de forma plástica sem se romperem, estruturando anticlinais e sinclinais que servem de base para feições montanhosas.</li><br>
+                    <li><strong>Afirmação III (Incorreta):</strong> A afirmação inverte as relações lógicas da geologia primitiva da Terra. A crosta primitiva formou-se necessariamente a partir de rochas magmáticas (ígneas), consolidadas pela cristalização e solidificação direta do oceano de magma global primitivo. As rochas sedimentares clásticas necessitam, de forma obrigatória, da existência prévia de uma rocha exposta para sofrer intemperismo, erosão, transporte e posterior deposição sedimentar, constituindo, portanto, um processo secundário subsequente à consolidação ígnea da litosfera.</li>
+                </ul>`
+            }
+        ];
+
+        let userAnswers = Array(10).fill(null);
+        let secondsElapsed = 0;
+        let timerInterval = null;
+        let isSubmitted = false;
+
+        // Inicializador do Simulado
+        window.onload = function() {
+            renderQuestions();
+            startTimer();
+        };
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questionsDB.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.id = `q-card-${index}`;
+                questionElement.className = "bg-paper-50 border border-stone-200 rounded-xl p-6 sm:p-8 transition-all duration-300 shadow-sm relative";
+
+                // Construção do corpo da questão
+                let itemsHTML = '';
+                if (q.items) {
+                    itemsHTML = `<ol class="list-none space-y-2 mb-6 font-serif text-stone-700 pl-2 leading-relaxed text-sm">`;
+                    q.items.forEach((item, idx) => {
+                        const romanNumerals = ["I", "II", "III", "IV"];
+                        itemsHTML += `<li class="flex items-start gap-2">
+                            <span class="font-bold text-stone-900">${romanNumerals[idx]} -</span>
+                            <span>${item}</span>
+                        </li>`;
+                    });
+                    itemsHTML += `</ol>`;
+                }
+
+                // Opções de Múltipla Escolha
+                let optionsHTML = `<div class="space-y-3 mt-4" id="options-group-${index}">`;
+                q.options.forEach((opt, optIdx) => {
+                    const letter = String.fromCharCode(65 + optIdx); // A, B, C, D, E
+                    optionsHTML += `
+                        <label onclick="selectOption(${index}, ${optIdx})" class="option-card block p-4 border border-stone-200 hover:border-stone-400 bg-paper-100/50 rounded-lg cursor-pointer text-sm font-sans flex items-center gap-3 select-none" id="label-${index}-${optIdx}">
+                            <input type="radio" name="question-${index}" value="${optIdx}" class="hidden" ${userAnswers[index] === optIdx ? 'checked' : ''}>
+                            <span class="w-7 h-7 flex items-center justify-center rounded-full bg-stone-200 text-stone-800 font-bold text-xs shrink-0 transition-colors" id="badge-${index}-${optIdx}">
+                                ${letter}
+                            </span>
+                            <span class="text-stone-800 leading-relaxed font-sans" id="opt-text-${index}-${optIdx}">${opt}</span>
+                        </label>
+                    `;
+                });
+                optionsHTML += `</div>`;
+
+                // Layout Interno do Card da Questão
+                questionElement.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-stone-200 pb-3 mb-4">
+                        <span class="text-xs font-bold text-stone-500 tracking-wider uppercase">${q.title}</span>
+                        <div id="status-icon-${index}" class="hidden"></div>
+                    </div>
+                    <div class="font-serif text-stone-900 leading-relaxed text-base mb-4">
+                        ${q.text}
+                    </div>
+                    ${itemsHTML}
+                    ${optionsHTML}
+                    
+                    <!-- Container da Resolução Detalhada (Escondida Inicialmente) -->
+                    <div id="resolution-${index}" class="hidden mt-6 pt-6 border-t border-stone-200 bg-stone-50 rounded-lg p-5 border-l-4 border-stone-700 animate-fadeIn">
+                        <h4 class="text-xs font-bold text-stone-900 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Gabarito Comentado e Resolução Oficial
+                        </h4>
+                        <div class="font-sans text-stone-700 text-sm leading-relaxed">
+                            ${q.resolution}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionElement);
+            });
+        }
+
+        function selectOption(questionIdx, optionIdx) {
+            if (isSubmitted) return; // Desativa cliques após submissão
+
+            userAnswers[questionIdx] = optionIdx;
+            updateProgressBar();
+
+            // Atualiza visualmente as opções selecionadas
+            const optionsCount = questionsDB[questionIdx].options.length;
+            for (let i = 0; i < optionsCount; i++) {
+                const label = document.getElementById(`label-${questionIdx}-${i}`);
+                const badge = document.getElementById(`badge-${questionIdx}-${i}`);
+                
+                if (i === optionIdx) {
+                    label.classList.remove('bg-paper-100/50', 'border-stone-200');
+                    label.classList.add('bg-stone-900', 'border-stone-950', 'shadow-sm');
+                    label.querySelector('span:last-child').classList.remove('text-stone-800');
+                    label.querySelector('span:last-child').classList.add('text-paper-100', 'font-medium');
+                    
+                    badge.classList.remove('bg-stone-200', 'text-stone-800');
+                    badge.classList.add('bg-amber-600', 'text-paper-100');
+                } else {
+                    label.classList.add('bg-paper-100/50', 'border-stone-200');
+                    label.classList.remove('bg-stone-900', 'border-stone-950', 'shadow-sm');
+                    label.querySelector('span:last-child').classList.add('text-stone-800');
+                    label.querySelector('span:last-child').classList.remove('text-paper-100', 'font-medium');
+                    
+                    badge.classList.add('bg-stone-200', 'text-stone-800');
+                    badge.classList.remove('bg-amber-600', 'text-paper-100');
+                }
+            }
+        }
+
+        function updateProgressBar() {
+            const answeredCount = userAnswers.filter(ans => ans !== null).length;
+            document.getElementById('progressCount').innerText = answeredCount;
+            
+            const progressPercent = (answeredCount / 10) * 100;
+            document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+            if (answeredCount === 10) {
+                document.getElementById('missingWarning').classList.add('hidden');
+            }
+        }
+
+        function startTimer() {
+            secondsElapsed = 0;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const hrs = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+                const mins = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                document.getElementById('timer').innerText = `${hrs}:${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function submitQuiz() {
+            if (isSubmitted) return;
+
+            const unanswered = userAnswers.map((ans, idx) => ans === null ? idx : null).filter(val => val !== null);
+            if (unanswered.length > 0) {
+                document.getElementById('missingWarning').classList.remove('hidden');
+                // Rola até a primeira não respondida
+                const firstUnansweredCard = document.getElementById(`q-card-${unanswered[0]}`);
+                firstUnansweredCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                firstUnansweredCard.classList.add('ring-2', 'ring-rose-500');
+                setTimeout(() => {
+                    firstUnansweredCard.classList.remove('ring-2', 'ring-rose-500');
+                }, 2000);
+                return;
+            }
+
+            stopTimer();
+            isSubmitted = true;
+            document.getElementById('missingWarning').classList.add('hidden');
+            document.getElementById('submitPanel').classList.add('hidden');
+
+            let score = 0;
+            questionsDB.forEach((q, index) => {
+                const userAns = userAnswers[index];
+                const isCorrect = userAns === q.correct;
+                if (isCorrect) score++;
+
+                // Revelação de Status da Questão
+                const card = document.getElementById(`q-card-${index}`);
+                const statusIcon = document.getElementById(`status-icon-${index}`);
+                statusIcon.classList.remove('hidden');
+
+                if (isCorrect) {
+                    card.classList.add('border-emerald-500', 'bg-emerald-50/10');
+                    statusIcon.innerHTML = `
+                        <span class="flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Correta
+                        </span>
+                    `;
+                } else {
+                    card.classList.add('border-rose-300', 'bg-rose-50/5');
+                    statusIcon.innerHTML = `
+                        <span class="flex items-center gap-1.5 text-xs font-bold text-rose-700 uppercase">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                            Incorreta
+                        </span>
+                    `;
+                }
+
+                // Estilização das Opções Baseada no Gabarito
+                q.options.forEach((opt, optIdx) => {
+                    const label = document.getElementById(`label-${index}-${optIdx}`);
+                    const badge = document.getElementById(`badge-${index}-${optIdx}`);
+
+                    // Resetar estilos anteriores para aplicar o resultado oficial
+                    label.classList.remove('bg-stone-900', 'border-stone-950', 'bg-paper-100/50', 'border-stone-200');
+                    label.querySelector('span:last-child').classList.remove('text-stone-800', 'text-paper-100', 'font-medium');
+                    badge.classList.remove('bg-stone-200', 'text-stone-800', 'bg-amber-600', 'text-paper-100');
+
+                    if (optIdx === q.correct) {
+                        // Resposta Correta: Sempre destaca em Verde
+                        label.classList.add('bg-emerald-50', 'border-emerald-500', 'border-2');
+                        label.querySelector('span:last-child').classList.add('text-emerald-900', 'font-semibold');
+                        badge.classList.add('bg-emerald-600', 'text-paper-100');
+                    } else if (optIdx === userAns) {
+                        // Resposta do Usuário Incorreta: Destaca em Vermelho
+                        label.classList.add('bg-rose-50', 'border-rose-400', 'border-2');
+                        label.querySelector('span:last-child').classList.add('text-rose-900', 'line-through');
+                        badge.classList.add('bg-rose-600', 'text-paper-100');
+                    } else {
+                        // Demais alternativas neutras desabilitadas
+                        label.classList.add('bg-stone-100/40', 'border-stone-200', 'opacity-60');
+                        label.querySelector('span:last-child').classList.add('text-stone-500');
+                        badge.classList.add('bg-stone-200/60', 'text-stone-400');
+                    }
+                    // Desabilitar cliques na folha de estilos
+                    label.classList.remove('hover:border-stone-400', 'cursor-pointer');
+                    label.style.pointerEvents = 'none';
+                });
+
+                // Mostrar a Resolução Comentada de cada uma das questões
+                document.getElementById(`resolution-${index}`).classList.remove('hidden');
+            });
+
+            // Gerar Relatório de Estatísticas
+            displayResults(score);
+            
+            // Recarrega o MathJax para processar a matemática nos novos blocos de resolução revelados
+            if (typeof MathJax !== 'undefined' && MathJax.typesetPromise) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        function displayResults(score) {
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+
+            const scorePercent = (score / 10) * 100;
+            document.getElementById('scorePercent').innerText = `${scorePercent}%`;
+            document.getElementById('scoreFraction').innerText = `${score} / 10`;
+
+            // Formatação do tempo decorrido
+            const hrs = Math.floor(secondsElapsed / 3600);
+            const mins = Math.floor((secondsElapsed % 3600) / 60);
+            const secs = secondsElapsed % 60;
+            let timeString = "";
+            if (hrs > 0) timeString += `${hrs}h `;
+            timeString += `${mins}m ${secs}s`;
+            document.getElementById('timeTaken').innerText = timeString;
+
+            // Classificação Baseada no Score
+            const badge = document.getElementById('performanceBadge');
+            const feedbackText = document.getElementById('feedbackText');
+            
+            badge.className = "text-xs font-bold inline-block mt-2 px-2.5 py-1 rounded uppercase tracking-wider text-paper-100 ";
+            
+            if (score === 10) {
+                badge.innerText = "Excelente (Aprovado)";
+                badge.classList.add("bg-emerald-600");
+                feedbackText.innerHTML = `<strong>Desempenho de Elite!</strong> Você gabaritou o simulado. Seu nível de preparação teórica sobre a dinâmica endógena da Terra está totalmente alinhado aos critérios de rigor conceitual da banca FAURGS. Domínio perfeito sobre tectônica de placas, vulcanologia e petrogênese.`;
+            } else if (score >= 8) {
+                badge.innerText = "Altíssimo Rendimento";
+                badge.classList.add("bg-teal-600");
+                feedbackText.innerHTML = `<strong>Parabéns!</strong> Excelente nível de preparação. Você demonstrou sólida fundamentação teórica em geomorfologia estrutural. Revise detalhadamente as questões que errou para consolidar sua aprovação nas primeiras colocações.`;
+            } else if (score >= 6) {
+                badge.innerText = "Médio / Competitivo";
+                badge.classList.add("bg-amber-600");
+                feedbackText.innerHTML = `<strong>Bom desempenho!</strong> Você possui uma base conceitual consistente, mas a banca FAURGS exige precisão cirúrgica em detalhes textuais e terminologias de orogênese, epirogênese e sismologia. Leia atentamente as resoluções comentadas para sanar as lacunas teóricas.`;
+            } else {
+                badge.innerText = "Abaixo da Média";
+                badge.classList.add("bg-rose-600");
+                feedbackText.innerHTML = `<strong>Atenção!</strong> Este tema exige bastante rigor conceitual e memorização de classificações petrográficas e geotectônicas. Utilize as resoluções comentadas abaixo como material didático principal. Refaça o simulado após uma revisão teórica completa dos processos internos da Terra.`;
+            }
+
+            // Rola suavemente até os resultados
+            setTimeout(() => {
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        function restartQuiz() {
+            userAnswers = Array(10).fill(null);
+            isSubmitted = false;
+            
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('submitPanel').classList.remove('hidden');
+            
+            renderQuestions();
+            updateProgressBar();
+            startTimer();
+
+            // Rolar de volta ao topo de forma suave
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
