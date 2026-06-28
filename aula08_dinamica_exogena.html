@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutor de Geografia IFSC - Dinâmica Exógena, Rochas e Pedogênese</title>
+    <!-- Tailwind CSS para Estilização Rápida e Limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter para Leitura Confortável -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+        /* Estilo personalizado de marca-texto/grifo realista */
+        .grifo-amarelo {
+            background: linear-gradient(104deg, rgba(254, 240, 138, 0.8) 0%, rgba(254, 240, 138, 0.65) 100%);
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+        }
+        .grifo-verde {
+            background: linear-gradient(104deg, rgba(187, 247, 208, 0.8) 0%, rgba(187, 247, 208, 0.6) 100%);
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+        }
+        .grifo-vermelho {
+            background: linear-gradient(104deg, rgba(254, 202, 202, 0.8) 0%, rgba(254, 202, 202, 0.6) 100%);
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen antialiased">
+
+    <!-- AUDIO PLAYER SECÇÃO (Fixado no topo para navegação contínua) -->
+    <div class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm py-4 px-4 sm:px-6">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            
+            <!-- Elemento de Áudio Oculto -->
+            <!-- COMENTÁRIO IMPORTANTE: ALTERE ABAIXO O NOME PADRÃO DO SEU ARQUIVO MP3 -->
+            <audio id="main-audio" src="aula_geografiaexogena.mp3"></audio>
+
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-slate-100 rounded-full text-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-slate-800 leading-none">Audioguia de Revisão</h3>
+                    <p class="text-xs text-slate-500 mt-1">Oiça a aula enquanto estuda os resumos abaixo</p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                <!-- Controle de Caminho do Áudio -->
+                <div class="flex items-center gap-2 flex-grow md:flex-grow-0">
+                    <span class="text-xs font-semibold text-slate-500 uppercase whitespace-nowrap">Ficheiro:</span>
+                    <!-- COMENTÁRIO IMPORTANTE: COLOQUE AQUI O NOME PADRÃO NO VALOR DO INPUT -->
+                    <input type="text" id="audio-src-input" value="aula_geografia.mp3" 
+                        class="text-xs bg-slate-50 border border-slate-200 rounded px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-slate-400 w-full md:w-48 text-slate-700 font-mono" 
+                        title="Introduza o nome do ficheiro MP3 local" placeholder="Ex: aula.mp3">
+                </div>
+
+                <!-- Controlos do Player -->
+                <div class="flex items-center gap-2">
+                    <button id="btn-play" class="bg-slate-900 hover:bg-slate-800 text-white rounded px-4 py-1.5 text-xs font-semibold flex items-center gap-1.5 transition-all">
+                        <span id="play-icon">▶</span> <span id="play-text">Iniciar</span>
+                    </button>
+                    
+                    <button id="btn-speed" class="border border-slate-200 hover:bg-slate-50 text-slate-700 rounded px-3 py-1.5 text-xs font-semibold transition-all">
+                        Velocidade: <span id="speed-label" class="font-mono">1.0x</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barra de Progresso do Áudio -->
+        <div class="max-w-5xl mx-auto mt-3">
+            <div class="w-full bg-slate-100 rounded-full h-1.5 cursor-pointer relative" id="progress-container">
+                <div id="progress-bar" class="bg-slate-800 h-1.5 rounded-full w-0 transition-all duration-75"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+                <span id="time-current">00:00</span>
+                <span id="time-total">00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="max-w-4xl mx-auto px-4 py-8 sm:px-6 sm:py-12">
+        
+        <!-- Cabeçalho de Boas-Vindas e Metas -->
+        <header class="text-center mb-12">
+            <span class="text-xs font-bold tracking-wider text-slate-500 uppercase bg-slate-100 px-3 py-1 rounded-full">Foco de Edital IFSC • Banca FAURGS</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 tracking-tight leading-tight">
+                Dinâmica Exógena, Rochas e Pedogénese
+            </h1>
+            <p class="text-base sm:text-lg text-slate-600 mt-3 max-w-2xl mx-auto font-normal">
+                Resumo estratégico de duas páginas focado em memorização de alta performance para o cargo de Professor de Geografia.
+            </p>
+        </header>
+
+        <!-- SECÇÃO 1: DINÂMICA EXÓGENA DO RELEVO -->
+        <section class="mb-12 border-b border-slate-100 pb-10">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm">1</span>
+                <h2 class="text-2xl font-bold text-slate-900">Fatores Exógenos do Relevo</h2>
+            </div>
+            
+            <p class="text-slate-700 leading-relaxed mb-4">
+                A dinâmica externa ou exógena é responsável pela <span class="grifo-amarelo">escultura e modelagem do relevo</span> terrestre, actuando de forma contínua em oposição às forças endógenas (criadoras). Este ciclo divide-se em três etapas indissociáveis: <span class="font-semibold text-slate-800">meteorização (ou intemperismo)</span>, <span class="font-semibold text-slate-800">erosão (transporte)</span> e <span class="font-semibold text-slate-800">sedimentação (deposição)</span>.
+            </p>
+
+            <div class="space-y-6 mt-6">
+                <!-- Bloco de Conteúdo: Intemperismo -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+                        Tipos de Intemperismo / Meteorização
+                    </h3>
+                    
+                    <ul class="space-y-4 text-slate-700 text-sm">
+                        <li>
+                            <strong class="text-slate-900">1. Intemperismo Físico (Mecânico):</strong> É a desagregação da rocha em fragmentos menores <span class="grifo-verde">sem alteração da sua composição química</span>. Ocorre predominantemente por:
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-slate-600">
+                                <li><strong class="text-slate-800">Termoclastia:</strong> Expansão e contração térmica diferencial dos minerais devido à amplitude térmica diária (comum em desertos e climas semiáridos).</li>
+                                <li><strong class="text-slate-800">Crioclastia (Gelifração):</strong> Congelamento da água nas fendas das rochas, gerando pressões expansivas extremas.</li>
+                                <li><strong class="text-slate-800">Descompressão Aliviada:</strong> Expansão de rochas formadas sob alta pressão profunda ao atingirem a superfície por erosão.</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">2. Intemperismo Químico (Decomposição):</strong> Envolve a <span class="grifo-amarelo">alteração mineralógica e química</span> da rocha mãe. A <span class="font-bold text-slate-900">água</span> é o principal agente catalisador, atuando através de:
+                            <ul class="list-disc list-inside ml-4 mt-2 space-y-1 text-slate-600">
+                                <li><strong class="text-slate-800">Hidrólise:</strong> Reacção química que destrói a rede de silicatos das rochas primárias (transformando-as em argilominerais). É a reação mais importante do intemperismo químico.</li>
+                                <li><strong class="text-slate-800">Oxidação:</strong> Reação de iões metálicos (como ferro e manganês) com o oxigénio dissolvido, originando óxidos.</li>
+                                <li><strong class="text-slate-800">Dissolução/Carbonatação:</strong> Reação da água com gás carbónico formando ácido carbónico, que dissolve minerais carbonáticos (típico de paisagens cársticas).</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">3. Intemperismo Biológico:</strong> Ação direta de organismos vivos (raízes de árvores que alargam fraturas, produção de ácidos húmicos por bactérias, fungos e líquenes). Age como <span class="grifo-amarelo">potencializador mecânico e químico</span> simultaneamente.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bloco de Conteúdo: Erosão e Sedimentação -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+                        Erosão e Sedimentação
+                    </h3>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        A <span class="font-semibold text-slate-900">erosão</span> consiste no desgaste ativo seguido do transporte de partículas rochosas soltas. Os seus principais agentes estruturadores são a água corrente (erosão pluvial e fluvial), o vento (erosão eólica), o gelo (glaciária) e o mar (marinha). <br><br>
+                        A <span class="font-semibold text-slate-900">sedimentação</span> ocorre nas bacias sedimentares quando a energia do agente transportador diminui, promovendo a deposição dos clastos, precipitados químicos ou detritos orgânicos, iniciando o processo de <span class="grifo-verde">diagénese (compactação e cimentação)</span>.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECÇÃO 2: O CICLO DAS ROCHAS -->
+        <section class="mb-12 border-b border-slate-100 pb-10">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm">2</span>
+                <h2 class="text-2xl font-bold text-slate-900">O Ciclo das Rochas</h2>
+            </div>
+            
+            <p class="text-slate-700 leading-relaxed mb-6">
+                As rochas representam agregados naturais sólidos de um ou mais minerais. O <span class="grifo-amarelo">Ciclo das Rochas</span> ilustra a dinâmica de transformação recíproca entre os três grandes grupos petrográficos (Ígneas, Sedimentares e Metamórficas), impulsionado pela tectónica de placas e pelo intemperismo na superfície da Terra.
+            </p>
+
+            <div class="space-y-6">
+                <!-- Divisão de Grupos de Rochas -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="border border-slate-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-slate-900 text-base mb-2">1. Ígneas (Magmáticas)</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Formadas pelo arrefecimento e solidificação do magma. 
+                            <br><strong class="text-slate-800">Intrusivas/Plutónicas:</strong> Lento resfriamento em subsuperfície com cristais visíveis (ex: <span class="font-medium text-slate-900">Granito</span>). 
+                            <br><strong class="text-slate-800">Extrusivas/Vulcânicas:</strong> Resfriamento rápido em superfície (ex: <span class="font-medium text-slate-900">Basalto</span>).
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-slate-900 text-base mb-2">2. Sedimentares</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Resultam da litificação de detritos de outras rochas ou precipitação de solutos.
+                            <br><strong class="text-slate-800">Detríticas (Clásticas):</strong> Arenito, folhelho.
+                            <br><strong class="text-slate-800">Químicas:</strong> Calcário, gesso.
+                            <br><strong class="text-slate-800">Orgânicas:</strong> Carvão mineral.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-slate-900 text-base mb-2">3. Metamórficas</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Rochas pré-existentes alteradas por alta pressão e temperatura em estado sólido.
+                            <br><strong class="text-slate-800">Foliadas:</strong> Gnaisse (origem granítica), xisto.
+                            <br><strong class="text-slate-800">Não-foliadas:</strong> Mármore (origem calcária), quartzito (origem arenítica).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- SÉRIE DE ESTABILIDADE DE GOLDICH (Crucial para FAURGS!) -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 mt-6">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-slate-600"></span>
+                        Série de Estabilidade Mineral de Goldich vs Bowen
+                    </h3>
+                    <p class="text-slate-700 text-xs sm:text-sm mb-4">
+                        A <span class="grifo-amarelo">Série de Goldich</span> estabelece que os primeiros minerais que cristalizam na Série de Bowen (alta temperatura) são os menos estáveis à superfície e, portanto, <span class="font-bold text-slate-900">metabolizam-se ou intemperizam-se mais rapidamente</span>.
+                    </p>
+
+                    <!-- TABELA RESPONSIVA: Série de Goldich -->
+                    <!-- Desktop Table View -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-200 text-slate-800 font-semibold border-b border-slate-300">
+                                    <th class="p-3">Minerais de Bowen (Ordem de Cristalização)</th>
+                                    <th class="p-3">Temperatura de Cristalização</th>
+                                    <th class="p-3">Resistência ao Intemperismo Químico (Superfície)</th>
+                                    <th class="p-3">Vulnerabilidade (Goldich)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-slate-700">
+                                <tr>
+                                    <td class="p-3 font-semibold text-red-700">Olivina</td>
+                                    <td class="p-3">Muito Alta (~1200ºC)</td>
+                                    <td class="p-3 text-red-600">Muito Baixa</td>
+                                    <td class="p-3">Primeira a intemperizar</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-amber-700">Piroxénio / Anfibólio</td>
+                                    <td class="p-3">Alta</td>
+                                    <td class="p-3 text-amber-600">Baixa</td>
+                                    <td class="p-3">Baixa estabilidade</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-700">Biotite / Plagioclásio Sódico</td>
+                                    <td class="p-3">Média</td>
+                                    <td class="p-3 text-slate-600">Moderada</td>
+                                    <td class="p-3">Estabilidade média</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-emerald-800">Quartzo</td>
+                                    <td class="p-3">Baixa (~600ºC)</td>
+                                    <td class="p-3 text-emerald-700 font-bold">Extremamente Alta</td>
+                                    <td class="p-3">Último a intemperizar (Altamente estável)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile Card View (Evita scroll horizontal) -->
+                    <div class="block md:hidden space-y-4">
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-red-700 uppercase bg-red-50 px-2 py-0.5 rounded">Olivina (Menos Estável)</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Cristalização:</strong> Alta (~1200ºC)</div>
+                                <div><strong>Resistência:</strong> Muito Baixa</div>
+                                <div class="col-span-2"><strong>Nota:</strong> Primeira a decompor-se em contacto com os agentes externos.</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-amber-700 uppercase bg-amber-50 px-2 py-0.5 rounded">Piroxénio / Anfibólio</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Cristalização:</strong> Alta</div>
+                                <div><strong>Resistência:</strong> Baixa</div>
+                                <div class="col-span-2"><strong>Nota:</strong> Decomposição rápida em climas tropicais húmidos.</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-slate-700 uppercase bg-slate-100 px-2 py-0.5 rounded">Mica / Plagioclásios</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Cristalização:</strong> Média</div>
+                                <div><strong>Resistência:</strong> Moderada</div>
+                                <div class="col-span-2"><strong>Nota:</strong> Origina argilas importantes de transição.</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-emerald-700 uppercase bg-emerald-50 px-2 py-0.5 rounded">Quartzo (Mais Estável)</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Cristalização:</strong> Baixa (~600ºC)</div>
+                                <div><strong>Resistência:</strong> Extremamente Alta</div>
+                                <div class="col-span-2"><strong>Nota:</strong> Praticamente inerte quimicamente; acumula-se sob a forma de areia na fração mineral do solo.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECÇÃO 3: PEDOGÉNESE -->
+        <section class="mb-12 border-b border-slate-100 pb-10">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm">3</span>
+                <h2 class="text-2xl font-bold text-slate-900">Pedogénese (Formação e Classificação de Solos)</h2>
+            </div>
+            
+            <p class="text-slate-700 leading-relaxed mb-6">
+                A pedogénese é o ramo da ciência que estuda as dinâmicas físicas, químicas e biológicas que convertem o saprólito (rocha intemperizada) em <span class="grifo-amarelo">solo estratificado em horizontes diferenciados</span>. 
+            </p>
+
+            <div class="space-y-6">
+                <!-- Fatores de Formação -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">Fatores de Formação de Jenny (1941)</h3>
+                    <p class="text-sm text-slate-600 mb-3">O solo é uma função ativa expressa pela equação clássica: <code class="bg-white px-2 py-1 rounded border border-slate-200 font-mono text-xs font-bold text-slate-800">S = f(C, O, R, P, T)</code></p>
+                    
+                    <ul class="space-y-2 text-xs sm:text-sm text-slate-700">
+                        <li><strong>C (Clima):</strong> O fator mais ativo. Define as taxas de pluviosidade e temperatura, regulando a velocidade do intemperismo químico.</li>
+                        <li><strong>O (Organismos):</strong> Fornecem matéria orgânica e aceleram os ciclos biogeoquímicos através da bioturbação.</li>
+                        <li><strong>R (Relevo):</strong> Controla a infiltração da água vs escoamento superficial (solos profundos em relevo plano; solos rasos e erosionados em declives acentuados).</li>
+                        <li><strong>P (Material de Origem / Rocha Mãe):</strong> Fornece a mineralogia básica e textura inicial ao solo em formação.</li>
+                        <li><strong>T (Tempo cronológico):</strong> Define o estágio evolutivo (jovem vs maduro) do perfil de solo.</li>
+                    </ul>
+                </div>
+
+                <!-- Horizontes do Solo -->
+                <div class="border border-slate-200 p-5 rounded-xl">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">Perfil Ideal de Solo e Horizontes</h3>
+                    <div class="space-y-2 text-sm text-slate-700">
+                        <div class="flex items-start gap-2">
+                            <span class="font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs">Horizonte O</span>
+                            <p class="text-xs sm:text-sm"><span class="font-semibold text-slate-800">Camada Orgânica:</span> Detritos de serrapilheira (folhas, ramos, matéria orgânica fresca em decomposição).</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs">Horizonte A</span>
+                            <p class="text-xs sm:text-sm"><span class="font-semibold text-slate-800">Horizonte Mineral de Acumulação:</span> Elevado teor de matéria orgânica húmica misturada com fração mineral.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs">Horizonte E</span>
+                            <p class="text-xs sm:text-sm"><span class="font-semibold text-slate-800">Zona de Eluviação (Saída):</span> Perda acentuada de argila, ferro e alumínio. É tipicamente claro e arenoso.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs">Horizonte B</span>
+                            <p class="text-xs sm:text-sm"><span class="font-semibold text-slate-800">Zona de Iluviação (Entrada):</span> Horizonte de acumulação de minerais secundários (argilas, óxidos de Fe/Al) provenientes de cima.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs">Horizonte C</span>
+                            <p class="text-xs sm:text-sm"><span class="font-semibold text-slate-800">Saprólito:</span> Rocha-mãe fragmentada, parcialmente intemperizada quimicamente.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-mono font-bold bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs">Horizonte R</span>
+                            <p class="text-xs sm:text-sm"><span class="font-semibold text-slate-800">Rocha Sã (Não alterada):</span> embasamento rochoso intocado.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Classificação de Solos SiBCS -->
+                <div class="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3">Principais Solos do Território Brasileiro (Foco SiBCS)</h3>
+                    
+                    <!-- TABELA RESPONSIVA: SiBCS -->
+                    <!-- Desktop Table View -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-200 text-slate-800 font-semibold border-b border-slate-300">
+                                    <th class="p-3">Classe de Solo (SiBCS)</th>
+                                    <th class="p-3">Características Principais</th>
+                                    <th class="p-3">Grau de Intemperismo / Evolução</th>
+                                    <th class="p-3">Ocorrência Típica</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-slate-700">
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-900">Latossolos</td>
+                                    <td class="p-3">Profundos, bem drenados, homogéneos, ricos em óxidos de Fe/Al, muito intemperizados, ácidos.</td>
+                                    <td class="p-3 text-red-600 font-medium">Altamente Evoluídos (Maduros)</td>
+                                    <td class="p-3">Cerrado e áreas planas brasileiras</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-900">Argissolos</td>
+                                    <td class="p-3">Nítido incremento de argila do horizonte A para o B (<span class="grifo-verde">B textural</span>), suscetíveis à erosão.</td>
+                                    <td class="p-3 text-amber-600 font-medium">Moderadamente Evoluídos</td>
+                                    <td class="p-3">Encostas e relevos ondulados</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-900">Neossolos</td>
+                                    <td class="p-3">Solos extremamente rasos, sem horizonte B desenvolvido. Pouco intemperizados devido ao relevo declivoso ou aridez.</td>
+                                    <td class="p-3 text-emerald-600 font-medium">Pouco Evoluídos (Jovens)</td>
+                                    <td class="p-3">Regiões montanhosas ou semiáridas</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-slate-900">Gleissolos</td>
+                                    <td class="p-3">Saturados por água (anoxia), horizonte de cor acinzentada a azulada devido à redução do ferro.</td>
+                                    <td class="p-3 text-slate-500 font-medium">Variável (Condicionados à água)</td>
+                                    <td class="p-3">Várzeas e planícies aluviais</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mobile Card View (Evita scroll horizontal) -->
+                    <div class="block md:hidden space-y-4">
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-slate-900 uppercase bg-slate-100 px-2 py-0.5 rounded">Latossolos</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Evolução:</strong> Maduro / Muito profundo</div>
+                                <div><strong>Característica:</strong> Ácido, rico em ferro/alumínio</div>
+                                <div class="col-span-2"><strong>Nota:</strong> Solo mais comum e representativo das áreas intertropicais do Brasil.</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-slate-900 uppercase bg-slate-100 px-2 py-0.5 rounded">Argissolos</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Evolução:</strong> Moderado</div>
+                                <div><strong>Característica:</strong> B textural (argila acumulada no fundo)</div>
+                                <div class="col-span-2"><strong>Nota:</strong> O aumento súbito de argila em profundidade torna-o impermeável e propenso à erosão hídrica em encostas.</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg">
+                            <span class="text-[10px] font-bold text-slate-900 uppercase bg-slate-100 px-2 py-0.5 rounded">Neossolos</span>
+                            <div class="grid grid-cols-2 gap-1 text-xs mt-2 text-slate-700">
+                                <div><strong>Evolução:</strong> Jovem / Raso</div>
+                                <div><strong>Característica:</strong> Sem horizonte B diagnóstica</div>
+                                <div class="col-span-2"><strong>Nota:</strong> Associa-se a relevos montanhosos declivosos (Neossolos Litólicos) ou sedimentos quartzosos recentes (Regolíticos).</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECÇÃO 4: ANÁLISE DE TENDÊNCIAS DE COBRANÇA DA BANCA FAURGS -->
+        <section class="mb-12">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="flex items-center justify-center w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-sm">4</span>
+                <h2 class="text-2xl font-bold text-slate-900">Análise de Tendências e Rasteiras (Banca FAURGS)</h2>
+            </div>
+            
+            <p class="text-slate-700 leading-relaxed mb-6">
+                A FAURGS é uma banca tradicionalmente rigorosa do ponto de vista conceitual e classificatório nos concursos para o Ensino Básico, Técnico e Tecnológico (EBTT). Abaixo, encontra os principais focos de rasteiras na prova objetiva:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                <div class="border-l-4 border-red-500 bg-red-50/50 p-4 rounded-r-lg">
+                    <h4 class="font-bold text-red-900 text-sm mb-1">Rasteira 1: Relação Clima × Intemperismo</h4>
+                    <p class="text-xs text-red-800 leading-relaxed">
+                        <span class="grifo-vermelho font-semibold">Cuidado com pegadinhas de climas quentes.</span> A banca adora afirmar que climas tropicais secos (ou semiáridos) promovem intemperismo químico profundo. <strong class="text-slate-900">Lembre-se:</strong> a água é a protagonista da reação química. Em locais semiáridos ou desertos, o intemperismo físico domina devido à variação de temperatura diária.
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-red-500 bg-red-50/50 p-4 rounded-r-lg">
+                    <h4 class="font-bold text-red-900 text-sm mb-1">Rasteira 2: Velocidade de Intemperismo dos Minerais</h4>
+                    <p class="text-xs text-red-800 leading-relaxed">
+                        <span class="grifo-vermelho font-semibold">Tentativa de inversão da Série de Goldich.</span> A banca pode tentar associar a temperatura de cristalização do quartzo à fragilidade do mineral face ao intemperismo superficial. <strong class="text-slate-900">Regra de Ouro:</strong> Quanto maior a temperatura de cristalização na Série de Bowen (ex: Olivina), MENOS estável o mineral na superfície (climas amenos). O Quartzo, gerado a baixas temperaturas internas, é o mais estável.
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-red-500 bg-red-50/50 p-4 rounded-r-lg">
+                    <h4 class="font-bold text-red-900 text-sm mb-1">Rasteira 3: Confusão de Horizontes e Textura de Solos</h4>
+                    <p class="text-xs text-red-800 leading-relaxed">
+                        <span class="grifo-vermelho font-semibold">Latossolo vs. Argissolo.</span> A FAURGS frequentemente afirma que o Latossolo possui forte diferenciação textural entre horizontes A e B devido à argila. <strong class="text-slate-900">Isso é Falso!</strong> O Latossolo é altamente homogéneo (intemperismo total). O solo que possui a famosa barreira e o incremento abrupto de argila em profundidade é o <strong class="text-slate-950 font-bold">Argissolo (B textural)</strong>.
+                    </p>
+                </div>
+
+                <div class="border-l-4 border-red-500 bg-red-50/50 p-4 rounded-r-lg">
+                    <h4 class="font-bold text-red-900 text-sm mb-1">Rasteira 4: Metamorfismo Regional vs. Contacto</h4>
+                    <p class="text-xs text-red-800 leading-relaxed">
+                        <span class="grifo-vermelho font-semibold">Rochas Foliadas vs Não-Foliadas.</span> A banca pode induzir o candidato a acreditar que mármore e quartzito possuem textura de foliação (orientação preferencial de minerais devido à pressão). <strong class="text-slate-900">Erro:</strong> A foliação ocorre essencialmente no metamorfismo regional por pressão direcional (ex: Gnaisse, Micaxisto). Mármore e quartzito são não-foliados.
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BOTÃO DE TRANSIÇÃO PARA QUESTÕES -->
+        <div class="mt-12 text-center">
+            <a href="exogenaquestoes.html" class="inline-flex items-center gap-2 px-8 py-4 bg-slate-950 text-white rounded-lg font-semibold shadow hover:bg-slate-800 transition-all text-sm tracking-wide">
+                <span>Praticar Questões</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </a>
+            <p class="text-xs text-slate-400 mt-2">Clique para ir à página de questões estruturadas em questoes.html</p>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-100 py-8 text-center text-xs text-slate-400">
+        <p>© 2026 Tutor IFSC FAURGS. Desenvolvido para alto rendimento em Geociências e Pedogénese.</p>
+    </footer>
+
+    <!-- LOGICA DO REPRODUTOR DE AUDIO -->
+    <script>
+        const audio = document.getElementById('main-audio');
+        const btnPlay = document.getElementById('btn-play');
+        const playIcon = document.getElementById('play-icon');
+        const playText = document.getElementById('play-text');
+        const btnSpeed = document.getElementById('btn-speed');
+        const speedLabel = document.getElementById('speed-label');
+        const audioSrcInput = document.getElementById('audio-src-input');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const timeCurrent = document.getElementById('time-current');
+        const timeTotal = document.getElementById('time-total');
+
+        // Velocidades suportadas pelo player
+        const speeds = [1, 1.25, 1.5, 1.75, 2];
+        let speedIndex = 0;
+
+        // Atualizar o ficheiro MP3 do reprodutor com base no input
+        function updateAudioSource() {
+            const file = audioSrcInput.value.trim();
+            if (file) {
+                // Manter o estado de reprodução caso mude a origem
+                const isPlaying = !audio.paused;
+                audio.src = file;
+                audio.load();
+                if (isPlaying) {
+                    audio.play().catch(e => console.log("Erro ao reproduzir ficheiro:", e));
+                }
+            }
+        }
+
+        // Eventos de alteração do nome do ficheiro MP3
+        audioSrcInput.addEventListener('change', updateAudioSource);
+        audioSrcInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') updateAudioSource();
+        });
+
+        // Alternar Play/Pause
+        btnPlay.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playIcon.textContent = "⏸";
+                    playText.textContent = "Pausar";
+                }).catch(err => {
+                    // Feedback visual limpo na interface se o ficheiro local não for encontrado
+                    playText.textContent = "Ficheiro não carregado";
+                    console.log("Áudio não encontrado no caminho especificado: ", err);
+                    setTimeout(() => {
+                        playIcon.textContent = "▶";
+                        playText.textContent = "Iniciar";
+                    }, 2500);
+                });
+            } else {
+                audio.pause();
+                playIcon.textContent = "▶";
+                playText.textContent = "Iniciar";
+            }
+        });
+
+        // Alternar velocidade de reprodução
+        btnSpeed.addEventListener('click', () => {
+            speedIndex = (speedIndex + 1) % speeds.length;
+            const currentSpeed = speeds[speedIndex];
+            audio.playbackRate = currentSpeed;
+            speedLabel.textContent = `${currentSpeed.toFixed(2)}x`;
+        });
+
+        // Formatação de Tempo (Minutos e Segundos)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Atualização da barra de progresso e tempo do áudio
+        audio.addEventListener('timeupdate', () => {
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = `${percent}%`;
+            timeCurrent.textContent = formatTime(audio.currentTime);
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            timeTotal.textContent = formatTime(audio.duration);
+        });
+
+        // Clicar na barra de progresso para avançar ou recuar o áudio
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const percent = clickX / width;
+            if (audio.duration) {
+                audio.currentTime = percent * audio.duration;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo FAURGS - Geologia e Pedogênese</title>
+    <!-- Tailwind CSS para design ágil e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Lora para leitura acadêmica confortável e Inter para interface de usuário -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones elegantes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX para renderização de fórmulas matemáticas e químicas nativas de alta qualidade -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#FAF8F5',      // Fundo confortável de leitura (Alabastro/Sand)
+                            card: '#FFFFFF',    // Branco puro para os blocos de perguntas
+                            text: '#22252A',    // Cinza escuro quase preto para alto contraste
+                            primary: '#1E4630', // Verde Floresta Acadêmico
+                            accent: '#8C5E3C',  // Bronze de Terra/Argila
+                            correct: '#15803D', // Verde de Sucesso
+                            incorrect: '#B91C1C',// Vermelho de Erro
+                            border: '#E8E4DC'   // Cinza quente para bordas finas
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F5;
+            color: #22252A;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Ajuste de seleção de texto para contrastar com o fundo de leitura */
+        ::selection {
+            background-color: #E6EFEA;
+            color: #1E4630;
+        }
+        /* Custom scrollbar suave */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9D2C9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #BFB5A7;
+        }
+        /* Estilização para as transições de expansão das resoluções */
+        .resolution-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col selection:bg-emerald-100">
+
+    <header class="sticky top-0 z-50 bg-brand-bg/95 backdrop-blur-md border-b border-brand-border py-4 px-6 shadow-sm">
+        <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-emerald-900 text-white rounded-xl shadow-md">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg sm:text-xl text-brand-primary leading-tight">Simulado Acadêmico FAURGS</h1>
+                    <p class="text-xs text-stone-500 font-medium tracking-wide uppercase">Dinâmica Exógena, Rochas e Pedogênese</p>
+                </div>
+            </div>
+            <!-- Painel de progresso flutuante -->
+            <div class="flex items-center gap-4 bg-white px-4 py-2 rounded-xl border border-brand-border shadow-sm">
+                <div class="text-right">
+                    <p class="text-[10px] text-stone-400 font-bold uppercase tracking-wider">Respondido</p>
+                    <p class="text-sm font-semibold text-stone-700" id="progress-text">0 de 10 Questões</p>
+                </div>
+                <div class="w-24 bg-stone-150 h-2 rounded-full overflow-hidden border border-stone-200">
+                    <div id="progress-bar" class="bg-brand-accent h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+        <div class="mb-8 p-6 bg-emerald-50/50 border border-emerald-900/10 rounded-2xl">
+            <h2 class="font-serif font-bold text-lg text-emerald-950 mb-2">Simulado Especializado: Geologia e Ciência do Solo</h2>
+            <p class="text-sm text-emerald-900/80 leading-relaxed font-serif">
+                Esta avaliação segue rigorosamente o padrão conceitual, o nível de profundidade e o modelo de questões de múltipla escolha com 5 alternativas aplicados pela banca <strong>FAURGS</strong>. Ao responder as questões abaixo, você poderá avaliar seu entendimento em geodinâmica externa, mineralogia sedimentar, metamorfismo, o Sistema Brasileiro de Classificação de Solos (SiBCS) e manejo químico-pedogenético.
+            </p>
+        </div>
+
+        <form id="quiz-form" onsubmit="event.preventDefault(); finishQuiz();">
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q1">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 1 &bull; Geodinâmica Externa</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <p class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    No âmbito da geodinâmica externa da Terra, os processos de intemperismo, erosão e transporte atuam conjuntamente na modelagem do relevo e na redistribuição de sedimentos na crosta superficial. Com base na dinâmica desses processos exógenos, assinale a afirmação correta.
+                </p>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q1" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> A erosão é definida fundamentalmente como o processo físico-químico in-situ de desagregação mecânica e decomposição mineral de uma rocha preexistente.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q1" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Os depósitos sedimentares transportados pela ação eólica em ambientes áridos são constituídos primordialmente por cascalhos angulosos e matacões de granulometria grossa.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q1" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> Os sedimentos de granulometria grossa são transportados pela água corrente ativa a distâncias significativamente mais longas do que os sedimentos de granulometria fina devido à sua elevada inércia de massa.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q1" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> As geleiras operam como agentes de transporte de baixíssima seletividade, sendo capazes de mover blocos de dimensões métricas juntamente com partículas de grão fino em uma massa caótica de detritos.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q1" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> O intemperismo atua de forma independente e isolada dos processos erosivos, de modo que a desagregação física de um afloramento rochoso impede a atuação posterior de reações de hidrólise química sobre os minerais constituintes.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q1 -->
+                <div id="res-q1" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: D</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-2">
+                        <p><strong>Análise Detalhada:</strong> A alternativa <strong>D</strong> expressa de forma precisa a mecânica glaciogênica. Sendo corpos de gelo extremamente espessos e viscosos, as geleiras não selecionam granulometricamente as cargas em movimento (caráter não seletivo). Elas removem e carregam simultaneamente desde poeira fina de rocha até matacões métricos arrancados dos vales circundantes.</p>
+                        <p class="text-stone-500 italic text-xs mt-1">Refutando incorretas: A define intemperismo, não erosão; B descreve cascalhos que sofrem deflação eólica residual (ficam para trás como pavimentos residuais); C contradiz as leis hidráulicas (partículas pesadas depositam-se imediatamente ao perder energia cinemática); E desconsidera a profunda sinergia entre fraturamento físico e exposição química da superfície mineral.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q2">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 2 &bull; Sedimentologia e Análise Física</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <p class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    A análise granulométrica de materiais inconsolidados e solos constitui um procedimento fundamental em sedimentologia e pedologia. Sobre os métodos físicos de análise de partículas e a classificação de rochas terrígenas associadas, assinale a afirmação correta.
+                </p>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q2" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> O peneiramento por via úmida é o método físico mais eficiente e rotineiramente aplicado para realizar a separação quantitativa da fração argila em relação à fração silte.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q2" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Rochas sedimentares clásticas que apresentam, em sua composição predominante, fragmentos de diâmetro equivalente ao tamanho areia são classificadas na categoria dos lutitos.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q2" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> Rochas que contêm, predominantemente, clastos de tamanho argila são classificadas classicamente como conglomerados.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q2" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> Seixos e calhaus constituem os fragmentos de diâmetro equivalente predominantes na composição petrográfica dos arenitos finos.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q2" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> A separação de frações granulométricas finas através da técnica de decantação fundamenta-se na Lei de Stokes, a qual descreve a velocidade de sedimentação de uma partícula esférica em um meio fluido viscoso.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q2 -->
+                <div id="res-q2" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: E</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-3">
+                        <p><strong>Análise Detalhada:</strong> A alternativa correta é a <strong>E</strong>. A quantificação de frações muito finas em solo (silte e argila) é insolúvel por malha de peneiras secas ou úmidas. A física de deposição obedece à Lei de Stokes, dada pela expressão matemática:</p>
+                        <div class="my-4 text-center bg-stone-50 py-3 rounded-xl border border-brand-border">
+                            $$v = \frac{2}{9} \frac{g \cdot (\rho_p - \rho_f) \cdot r^2}{\eta}$$
+                        </div>
+                        <p>Onde a velocidade de decantação ($v$) depende diretamente do quadrado do raio ($r$) das partículas. Desse modo, o diâmetro dita o tempo exato para a amostragem de suspensão de argilas por decantação.</p>
+                        <p class="text-stone-500 italic text-xs">Refutando incorretas: A está incorreta (argila e silte exigem dispersão química e pipetagem/decantação, nunca peneiras); B classifica incorretamente (arenitos contêm fração areia; lutitos representam frações finas de argila/silte); C está invertida (conglomerados contêm clastos $> 2\text{ mm}$); D está equivocada (arenitos contêm grãos de areia, não seixos).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q3">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 3 &bull; Metamorfismo</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <p class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    As rochas metamórficas são formadas pela recristalização no estado sólido de outras rochas preexistentes quando submetidas a condições físico-químicas distintas daquelas de sua formação original. Assinale a afirmação correta sobre as rochas e os fatores de metamorfismo.
+                </p>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q3" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> As rochas metamórficas podem ser geradas de forma generalizada nas condições de temperatura e pressão atuantes na interface da superfície terrestre.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q3" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Os diferentes graus do metamorfismo representam intervalos exclusivos de variação da pressão hidrostática de soterramento, permanecendo a temperatura como fator neutro nas transformações minerais.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q3" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> Os fatores determinantes do metamorfismo limitam-se estritamente à variação da temperatura de fusão parcial e à pressão litostática pura, sem influência de fluidos hidrotermais ou estresse diferencial.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q3" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> Rochas que compartilham a mesma composição química global, quando submetidas a ambientes com gradientes térmicos e barométricos diferentes, desenvolvem assembleias mineralógicas distintas.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q3" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> Rochas de composições químicas globais amplamente divergentes, quando submetidas a uma mesma temperatura em profundidade, atingem o equilíbrio mineralógico desenvolvendo exatamente a mesma composição de fases.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q3 -->
+                <div id="res-q3" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: D</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-2">
+                        <p><strong>Análise Detalhada:</strong> A resposta correta é a <strong>D</strong>. É a definição termodinâmica do conceito de <em>fácies metamórfica</em>. Se o protólito possui composição geoquímica equivalente (como um basalto), as fases e espécies mineralógicas que recristalizarão em equilíbrio dependerão exclusivamente do gradiente térmico e barométrico imposto no soterramento (ex. fácies Xisto Verde em baixa temperatura versus fácies Eclogito em extrema pressão e temperatura).</p>
+                        <p class="text-stone-500 italic text-xs mt-1">Refutando incorretas: A está incorreta (na interface ocorrem diagênese e intemperismo, não metamorfismo); B está errada (a temperatura é o fator de maior impacto cinético nas reações de desidratação e recristalização); C negligencia o estresse dirigido (responsável pela foliação) e os fluidos quimicamente ativos; E ignora que protólitos geoquimicamente díspares mantêm composições químicas globais distintas e, logo, formam assembleias distintas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q4">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 4 &bull; Ciclo das Rochas e Petrogênese</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <div class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    O ciclo das rochas descreve a transferência contínua de massa e as transformações dinâmicas entre os reservatórios ígneos, metamórficos e sedimentares na litosfera. Considere as seguintes afirmações sobre os processos petrogenéticos e as transformações sedimentares associadas:
+                    
+                    <div class="my-4 bg-stone-50 p-4 rounded-xl border border-brand-border text-sm leading-relaxed space-y-2">
+                        <p><strong>I.</strong> O calor decorrente de intrusões ígneas na forma de diques e soleiras de diabásio em sequências sedimentares pode atuar como agente indutor do metamorfismo térmico local, acelerando o processo de maturação da matéria orgânica presente em rochas geradoras de hidrocarbonetos.</p>
+                        <p><strong>II.</strong> Em bacias sedimentares sob subsidência extremamente lenta e com rotas de proveniência longas, ocorre a dissolução preferencial de minerais menos estáveis e o desgaste mecânico contínuo, preservando apenas minerais pesados e altamente resistentes como o zircão e o quartzo.</p>
+                        <p><strong>III.</strong> As rochas metamórficas originadas em zonas de colisão orogênica podem sofrer fusão parcial completa (anatexia) se ultrapassarem o seu <em>solidus</em>, gerando magmas de afinidade granítica que, ao resfriarem e cristalizarem, originam novas rochas ígneas intrusivas.</p>
+                    </div>
+                    Quais estão corretas?
+                </div>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q4" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q4" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Apenas II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q4" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> Apenas I e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q4" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q4" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> I, II e III.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q4 -->
+                <div id="res-q4" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: E</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-2">
+                        <p><strong>Análise Detalhada:</strong> A resposta correta é a <strong>E</strong>, pois as três afirmações estão cientificamente impecáveis:</p>
+                        <ul class="list-disc pl-5 space-y-1 mt-1 text-stone-600 text-xs">
+                            <li><strong>Afirmativa I (Correta):</strong> Intrusões básicas de diabásio (como os derrames da Bacia do Paraná) transmitem fluxo térmico rápido, gerando auréolas locais e "cozinhando" a matéria orgânica em folhelhos geradores adjacentes.</li>
+                            <li><strong>Afirmativa II (Correta):</strong> Bacias estáveis tectonicamente e com longo curso fluvial desgastam quimicamente toda a milonita ou feldspato instável, enriquecendo a rocha residual unicamente com quartzo e minerais pesados ultraestáveis.</li>
+                            <li><strong>Afirmativa III (Correta):</strong> Zonas de orogênese sofrem fusão parcial profunda de rochas crustais pré-existentes (processo conhecido como anatexia), o que cria novos magmas ácidos graníticos.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q5">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 5 &bull; SiBCS e Horizontes Diagnósticos</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <div class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    O Sistema Brasileiro de Classificação de Solos (SiBCS) define horizontes diagnósticos subsuperficiais com base em propriedades físicas, químicas e mineralógicas que refletem a intensidade da pedogênese. Associe a segunda coluna de acordo com a primeira:
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4 bg-stone-50 p-4 rounded-xl border border-brand-border text-xs leading-relaxed">
+                        <div>
+                            <p class="font-bold mb-1 text-brand-primary">Classes Pedogenéticas:</p>
+                            <p><strong>1.</strong> Horizonte B textural</p>
+                            <p><strong>2.</strong> Horizonte B latossólico</p>
+                            <p><strong>3.</strong> Horizonte B incipiente</p>
+                            <p><strong>4.</strong> Horizonte vértico</p>
+                        </div>
+                        <div class="border-t sm:border-t-0 sm:border-l border-stone-250 pt-2 sm:pt-0 sm:pl-4">
+                            <p class="font-bold mb-1 text-brand-primary">Definições Físico-Químicas:</p>
+                            <p class="mb-1"><strong>( )</strong> Apresenta pouca alteração física e química, porém suficiente para o desenvolvimento de cor e estrutura, característico de solos pouco a moderadamente evoluídos, como os Cambissolos.</p>
+                            <p class="mb-1"><strong>( )</strong> Caracteriza-se por um incremento significativo no teor de argila do horizonte superficial para o subsuperficial, gerando um gradiente textural nítido, frequentemente associado à presença de cerosidade, comum em Argissolos.</p>
+                            <p class="mb-1"><strong>( )</strong> Apresenta superfícies de fricção nítidas (<em>slickensides</em>) decorrentes do movimento de contração e expansão de argilas expansivas do tipo 2:1 sob regimes alternados de umidade, típico de Vertissolos.</p>
+                            <p class="mb-1"><strong>( )</strong> Apresenta avançado estado de intemperismo, estrutura em blocos que se desfazem facilmente em estrutura granular muito pequena ("pó-de-café"), baixíssima capacidade de troca de cátions na fração argila e elevado grau de floculação, típico de Latossolos.</p>
+                        </div>
+                    </div>
+                    A sequência correta de preenchimento dos parênteses, de cima para baixo, é:
+                </div>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q5" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> 3 – 1 – 4 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q5" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> 1 – 3 – 2 – 4.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q5" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> 3 – 4 – 1 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q5" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> 2 – 1 – 4 – 3.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q5" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> 4 – 3 – 1 – 2.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q5 -->
+                <div id="res-q5" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: A</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-3">
+                        <p><strong>Análise Detalhada:</strong> O correto preenchimento segue estritamente as definições taxonômicas do SiBCS:</p>
+                        <ul class="list-disc pl-5 space-y-1 text-xs text-stone-600">
+                            <li><strong>(3) Horizonte B incipiente:</strong> Solos jovens a moderadamente intemperizados, com cor e estrutura definidas, mas quimicamente pouco alterados (Cambissolos).</li>
+                            <li><strong>(1) Horizonte B textural:</strong> Presença nítida de gradiente de argila entre horizonte superficial A e subsuperficial B, frequentemente com revestimento de argila (cerosidade), típico de Argissolos.</li>
+                            <li><strong>(4) Horizonte vértico:</strong> Presença de argila expansiva 2:1 (esmectita) que contrai e expande, produzindo superfícies de fricção chamadas <em>slickensides</em> (Vertissolos).</li>
+                            <li><strong>(2) Horizonte B latossólico:</strong> Solo altamente intemperizado com microestrutura granular típica ("pó-de-café"), baixíssima CTC residual e altíssima estabilidade estrutural (Latossolos).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q6">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 6 &bull; Pedologia do Sul e Neossolos</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <p class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    No Rio Grande do Sul, o levantamento pedológico revela uma distribuição complexa de solos associados à geomorfologia e à litologia regional. Dentre as classes pertencentes à ordem dos Neossolos, os Neossolos Litólicos e os Neossolos Regolíticos representam estágios iniciais de pedogênese. Sobre essas classes, assinale a afirmação INCORRETA.
+                </p>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q6" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> Os Neossolos Litólicos são solos caracterizados por apresentarem contato lítico ou lítico fragmentário dentro de 50 cm a partir da superfície do solo.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q6" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Os Neossolos Regolíticos diferenciam-se dos Litólicos por não apresentarem contato lítico dentro de 50 cm a partir da superfície, possuindo horizonte A assente diretamente sobre horizonte C ou Cr.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q6" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> Ambas as subordens admitem a presença de um horizonte B em início de formação, desde que a sua espessura e o seu grau de desenvolvimento não satisfaçam os requisitos de nenhum tipo de horizonte B diagnóstico subsuperficial.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q6" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> Os Neossolos Regolíticos Distróficos típicos devem apresentar teores expressivos de minerais primários facilmente alteráveis na fração areia total dentro de 150 cm a partir da superfície.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q6" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> Os Neossolos Litólicos caracterizam-se obrigatoriamente por apresentarem um horizonte B textural bem desenvolvido e espesso situado imediatamente acima da rocha consolidada.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q6 -->
+                <div id="res-q6" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-incorrect font-bold mb-2"><i class="fa-solid fa-triangle-exclamation mr-1 text-brand-incorrect"></i> GABARITO (INCORRETA): E</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-2">
+                        <p><strong>Análise Detalhada:</strong> O comando da questão pede a alternativa <strong>INCORRETA</strong>, fazendo da <strong>E</strong> o gabarito. Os Neossolos (sejam Litólicos ou Regolíticos) são solos incipientes caracterizados de forma inequívoca pela <strong>ausência</strong> de horizontes subsuperficiais diagnósticos bem desenvolvidos (como um horizonte B textural espesso e de nítido gradiente). Se o perfil contiver um horizonte B textural bem desenvolvido, ele migrará taxonomicamente para a ordem dos Argissolos, perdendo a classificação de Neossolo.</p>
+                        <p class="text-stone-500 italic text-xs mt-1">As alternativas A, B, C e D descrevem corretamente as determinações físicas e mineralógicas de enquadramento do SiBCS para as classes de solos jovens.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q7">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 7 &bull; Química e Fertilidade do Solo</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <div class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    A caracterização química do solo é indispensável para fins de classificação taxonômica no SiBCS e para o manejo da fertilidade. Considere os dados analíticos obtidos a partir da análise química de três amostras de terra fina seca ao ar (TFSA) coletadas em horizontes subsuperficiais distintos:
+                    
+                    <!-- Tabela de Dados Químicos -->
+                    <div class="overflow-x-auto my-4 border border-brand-border rounded-xl shadow-sm">
+                        <table class="min-w-full text-xs font-sans text-left">
+                            <thead class="bg-stone-50 border-b border-brand-border text-brand-primary uppercase font-bold">
+                                <tr>
+                                    <th class="p-3">Amostra</th>
+                                    <th class="p-3 text-center">$\text{Ca}^{2+}$ <br><span class="lowercase text-[10px] font-normal">($\text{cmol}_c\text{/dm}^3$)</span></th>
+                                    <th class="p-3 text-center">$\text{Mg}^{2+}$ <br><span class="lowercase text-[10px] font-normal">($\text{cmol}_c\text{/dm}^3$)</span></th>
+                                    <th class="p-3 text-center">$\text{K}^+$ <br><span class="lowercase text-[10px] font-normal">($\text{cmol}_c\text{/dm}^3$)</span></th>
+                                    <th class="p-3 text-center">$\text{Na}^+$ <br><span class="lowercase text-[10px] font-normal">($\text{cmol}_c\text{/dm}^3$)</span></th>
+                                    <th class="p-3 text-center">$\text{Al}^{3+}$ <br><span class="lowercase text-[10px] font-normal">($\text{cmol}_c\text{/dm}^3$)</span></th>
+                                    <th class="p-3 text-center">$\text{H}^+ + \text{Al}^{3+}$ <br><span class="lowercase text-[10px] font-normal">($\text{cmol}_c\text{/dm}^3$)</span></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brand-border">
+                                <tr class="hover:bg-stone-50">
+                                    <td class="p-3 font-semibold text-brand-primary">Amostra 1</td>
+                                    <td class="p-3 text-center">6,00</td>
+                                    <td class="p-3 text-center">2,20</td>
+                                    <td class="p-3 text-center">0,08</td>
+                                    <td class="p-3 text-center">0,00</td>
+                                    <td class="p-3 text-center">0,00</td>
+                                    <td class="p-3 text-center">5,00</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td class="p-3 font-semibold text-brand-primary">Amostra 2</td>
+                                    <td class="p-3 text-center">1,00</td>
+                                    <td class="p-3 text-center">0,60</td>
+                                    <td class="p-3 text-center">0,08</td>
+                                    <td class="p-3 text-center">0,00</td>
+                                    <td class="p-3 text-center">0,10</td>
+                                    <td class="p-3 text-center">3,71</td>
+                                </tr>
+                                <tr class="hover:bg-stone-50">
+                                    <td class="p-3 font-semibold text-brand-primary">Amostra 3</td>
+                                    <td class="p-3 text-center">0,50</td>
+                                    <td class="p-3 text-center">0,30</td>
+                                    <td class="p-3 text-center">0,09</td>
+                                    <td class="p-3 text-center">0,00</td>
+                                    <td class="p-3 text-center">2,00</td>
+                                    <td class="p-3 text-center">7,70</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    Com base nos dados apresentados e nos limites de saturação por bases ($V\%$) e saturação por alumínio ($m\%$), assinale a alternativa correta.
+                </div>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q7" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> A Amostra 1 apresenta saturação por bases ($V\%$) inferior a $50\%$, o que a enquadra na classe dos solos distróficos.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q7" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> A Amostra 2 apresenta saturação por bases superior a $50\%$, caracterizando um solo com caráter eutrófico de elevada fertilidade natural.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q7" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> A Amostra 3 apresenta saturação por bases ($V\%$) inferior a $50\%$ e saturação por alumínio ($m\%$) superior a $50\%$, caracterizando um solo de caráter álico (ou alítico, caso apresente argila de atividade alta).</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q7" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> A capacidade de troca de cátions a pH 7,0 ($T$) da Amostra 1 é numericamente inferior à capacidade de troca de cátions efetiva ($t$) da Amostra 3.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q7" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> A saturação por bases ($V\%$) da Amostra 2 é superior à saturação por bases da Amostra 1.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q7 -->
+                <div id="res-q7" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: C</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-3">
+                        <p><strong>Análise Detalhada:</strong> Para resolver, aplica-se o cálculo estequiométrico pedológico do complexo de troca:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-3 text-xs font-sans text-stone-600">
+                            <div class="p-3 bg-stone-50 border border-brand-border rounded-xl">
+                                <span class="font-bold text-brand-primary">Amostra 1 (Eutrófico):</span><br>
+                                $SB = 6,00+2,20+0,08 = 8,28$<br>
+                                $T = 8,28 + 5,00 = 13,28$<br>
+                                $V\% = \frac{8,28 \cdot 100}{13,28} = \mathbf{62,35\%}$ (eutrófico)
+                            </div>
+                            <div class="p-3 bg-stone-50 border border-brand-border rounded-xl">
+                                <span class="font-bold text-brand-primary">Amostra 2 (Distrófico):</span><br>
+                                $SB = 1,00+0,60+0,08 = 1,68$<br>
+                                $T = 1,68 + 3,71 = 5,39$<br>
+                                $V\% = \frac{1,68 \cdot 100}{5,39} = \mathbf{31,16\%}$ (distrófico)
+                            </div>
+                            <div class="p-3 bg-stone-50 border border-brand-border rounded-xl">
+                                <span class="font-bold text-brand-primary">Amostra 3 (Álico):</span><br>
+                                $SB = 0,50+0,30+0,09 = 0,89$<br>
+                                $T = 0,89 + 7,70 = 8,59$<br>
+                                $V\% = \frac{0,89 \cdot 100}{8,59} = \mathbf{10,36\%}$ ($V < 50\%$)<br>
+                                $t = 0,89 + 2,00 = 2,89$<br>
+                                $m\% = \frac{2,00 \cdot 100}{2,89} = \mathbf{69,20\%}$ ($m > 50\%$)
+                            </div>
+                        </div>
+                        <p>Com $V = 10,36\%$ (menor que $50\%$) e saturação por alumínio $m = 69,20\%$ (maior que $50\%$), o solo é classificado como de caráter <strong>álico</strong>, confirmando a alternativa <strong>C</strong>.</p>
+                        <p class="text-stone-500 italic text-xs">Refutando incorretas: A está incorreta ($V = 62,35\%$); B está incorreta (Amostra 2 possui $V=31,16\%$); D está errada (T da Amostra 1 é 13,28 contra t da Amostra 3 que é 2,89); E está errada pois $V$ da Amostra 2 é menor que o da Amostra 1.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q8">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 8 &bull; Física, Hidrologia e Impactos</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <div class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    A erodibilidade dos solos, as formas de relevo e a dinâmica hidrológica exercem controle direto sobre o desenvolvimento de processos erosivos e a vulnerabilidade ambiental dos ecossistemas. Considere as seguintes afirmações sobre a dinâmica superficial e as propriedades físicas dos solos no Estado do Rio Grande do Sul:
+                    
+                    <div class="my-4 bg-stone-50 p-4 rounded-xl border border-brand-border text-sm leading-relaxed space-y-2">
+                        <p><strong>I.</strong> A erodibilidade refere-se à susceptibilidade intrínseca de um solo à erosão hídrica, sendo controlada por atributos físicos internos do perfil, tais como a estrutura, a textura, a permeabilidade e a densidade dos horizontes.</p>
+                        <p><strong>II.</strong> Solos com nítido gradiente textural, onde um horizonte A arenoso sobrepõe um horizonte B mais argiloso, apresentam forte redução da permeabilidade em subsuperfície, o que favorece a formação de lençóis freáticos suspensos e escoamento subsuperficial lateral, elevando a erodibilidade do perfil.</p>
+                        <p><strong>III.</strong> Os solos hidromórficos de planícies de inundação (como os Gleissolos da planície do Rio Gravataí) caracterizam-se por extrema fragilidade mecânica e tendência à liquefação quando submetidos a intervenções e cargas impostas pela ocupação urbana.</p>
+                    </div>
+                    Quais estão corretas?
+                </div>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q8" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q8" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Apenas II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q8" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> Apenas I e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q8" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q8" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> I, II e III.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q8 -->
+                <div id="res-q8" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: E</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-2">
+                        <p><strong>Análise Detalhada:</strong> A alternativa correta é a <strong>E</strong> pois todas as premissas estão conceitualmente precisas. Os solos com nítido gradiente textural (Argissolos muito comuns no RS) provocam uma barreira hidráulica em subsuperfície; a água satura o horizonte arenoso superficial e drena lateralmente, originando ravinas e escorregamentos rápidos. Além disso, os Gleissolos de baixada sofrem grande fragilidade de suporte mecânico urbano devido à saturação perene por água e à poropressão.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q9">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 9 &bull; Intemperismo e Estabilidade Mineral</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <p class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    O intemperismo químico atua na destruição e transformação de minerais primários na zona de contato entre a litosfera, a atmosfera e a biosfera. Sobre as reações de intemperismo químico, a estabilidade mineral e os processos sedimentares correlacionados, assinale a afirmação correta.
+                </p>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q9" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> A reação de hidrólise ácida de feldspatos em climas tropicais úmidos é do tipo congruente, dissolvendo completamente a rede cristalina original sem deixar fases minerais sólidas residuais na fração argila do solo.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q9" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> Fácies sedimentares arenosas que apresentam frações síltico-argilosas abundantes associadas a arenitos friáveis (como na Formação Pirambóia) são fisicamente mais resistentes ao intemperismo químico do que fácies limpas com estratificações cruzadas de grande porte.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q9" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> A floculação constitui um processo de sedimentação físico-química típico de ambientes aquosos de baixa salinidade, onde a ausência absoluta de eletrólitos carregados induz o agrupamento espontâneo de partículas coloidais de argila.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q9" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> Durante processos de sedimentação de longo curso em bacias sob subsidência lenta, a dissolução química contínua desgasta os minerais de menor estabilidade termodinâmica, promovendo o enriquecimento relativo de minerais altamente resistentes, como o zircão e o quartzo.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q9" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> O intemperismo físico age como um inibidor mecânico do intemperismo químico, uma vez que a fragmentação de blocos rochosos diminui a área superficial total exposta ao ataque de soluções ácidas.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q9 -->
+                <div id="res-q9" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: D</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-2">
+                        <p><strong>Análise Detalhada:</strong> O gabarito é a alternativa <strong>D</strong>. Em bacias de baixa subsidência, as partículas minerais ficam longos períodos expostas à lixiviação e ao desgaste de intemperismo ao longo do trânsito fluvial. Isso dissolve sistematicamente os minerais instáveis (piroclastos, feldspatos, olivinas) e gera o enriquecimento residual de espécies ultraestáveis como o quartzo e o zircão.</p>
+                        <p class="text-stone-500 italic text-xs mt-1">Refutando incorretas: A está incorreta (a hidrólise de feldspatos é tipicamente incongruente, deixando argilominerais residuais como a caolinita); B está errada (as frações finas dão menor estabilidade física geral); C erra (a floculação depende diretamente de altas cargas elétricas em fluidos salinos); E inverte a lógica (o intemperismo físico catalisa o químico ao aumentar a área superficial exposta).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md" data-qid="q10">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-brand-accent uppercase tracking-wider">Questão 10 &bull; Biogeoquímica e Pastagens</span>
+                    <span class="status-badge hidden text-xs font-bold px-3 py-1 rounded-full"></span>
+                </div>
+                <p class="font-serif text-brand-text text-base sm:text-lg leading-relaxed mb-6">
+                    A evolução do perfil pedogenético e a manutenção das propriedades químicas do solo estão diretamente ligadas ao manejo agropecuário. Sobre a dinâmica da fertilidade e o comportamento físico-químico do solo sob diferentes níveis de degradação, assinale a afirmação correta.
+                </p>
+                
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q10" value="A" class="mt-1 accent-brand-primary" required>
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">A</strong> Os solos sob pastagens com maiores níveis de degradação química (N3 e N4) apresentam teores de cálcio, fósforo e matéria orgânica significativamente superiores nas camadas superficiais em comparação com pastagens sob degradação leve (N1 e N2).</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q10" value="B" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">B</strong> O acúmulo de matéria orgânica e a maior fertilidade química observados em superfície nos horizontes pedogenéticos iniciais devem-se à intensa atividade biológica de microrganismos e raízes, associada à baixa mobilidade vertical de nutrientes fracamente solúveis, como o fósforo.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q10" value="C" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">C</strong> O percentual de solo exposto decorrente da perda de cobertura de forrageiras em pastagens degradadas atua como fator de proteção mecânica do perfil do solo, minimizando as taxas de escoamento superficial induzidas pela chuva.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q10" value="D" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">D</strong> O manejo inadequado de pastagens em solos como o Cambissolo não afeta o percentual de solo exposto e a perda de nutrientes em encostas, pois as taxas de erosão dependem exclusivamente da declividade geomorfológica do terreno.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all">
+                        <input type="radio" name="q10" value="E" class="mt-1 accent-brand-primary">
+                        <span class="text-sm sm:text-base text-brand-text font-serif leading-relaxed"><strong class="font-sans mr-1 text-xs px-1.5 py-0.5 bg-stone-100 rounded">E</strong> Em todas as classes de solo sob pastagens degradadas, a lixiviação descendente acumula preferencialmente fósforo disponível nas camadas subsuperficiais profundas (horizonte C), tornando os horizontes superficiais desprovidos desse elemento químico.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Q10 -->
+                <div id="res-q10" class="resolution-box hidden mt-6 pt-6 border-t border-brand-border">
+                    <span class="inline-block bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-full mb-3">Resolução Acadêmica</span>
+                    <p class="text-sm text-brand-primary font-bold mb-2"><i class="fa-solid fa-circle-check mr-1 text-brand-correct"></i> GABARITO: B</p>
+                    <div class="text-sm text-stone-700 leading-relaxed font-serif space-y-3">
+                        <p><strong>Análise Detalhada:</strong> O gabarito é a alternativa <strong>B</strong>. O acúmulo de MO e nutrientes nas frações de topo (horizonte A) é amplificado pela cicclagem biogênica superficial (raízes bombeiam bases de horizontes profundos e reciclam via serapilheira e folhas), associada à baixíssima dinâmica de translocação descendente do fósforo, que se liga fortemente a óxidos de ferro e argilas (fixação de fosfatos).</p>
+                        <!-- Tabela Adicional de Degradação de Pastagens -->
+                        <div class="overflow-x-auto my-3 border border-brand-border rounded-xl">
+                            <table class="min-w-full text-[11px] font-sans text-left">
+                                <thead class="bg-stone-50 border-b border-brand-border text-brand-primary font-bold">
+                                    <tr>
+                                        <th class="p-2">Grau de Degradação</th>
+                                        <th class="p-2 text-center">Cobertura Vegetal</th>
+                                        <th class="p-2 text-center">Fertilidade Superficial</th>
+                                        <th class="p-2 text-center">Risco de Erosão</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-brand-border text-stone-650">
+                                    <tr>
+                                        <td class="p-2 font-medium">N1 / N2 (Leve)</td>
+                                        <td class="p-2 text-center text-brand-correct font-semibold">Elevada (&gt; 80%)</td>
+                                        <td class="p-2 text-center">Alta Matéria Orgânica e bases</td>
+                                        <td class="p-2 text-center">Baixo (Solo protegido)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-2 font-medium">N3 / N4 (Forte)</td>
+                                        <td class="p-2 text-center text-brand-incorrect font-semibold">Baixa (&lt; 50%)</td>
+                                        <td class="p-2 text-center text-brand-incorrect">Quimicamente esgotado</td>
+                                        <td class="p-2 text-center">Extremo (Sulcos e Ravinas)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-stone-500 italic text-xs">Refutando as falsas: A está incorreta pois solos degradados perdem nutrientes e matéria orgânica; C inverte o conceito (solo exposto aumenta a erosão hídrica via splash e escoamento); D ignora a cobertura do solo como mitigador mecânico; E está incorreta porque o fósforo disponível se fixa nas frações argilosas superficiais, não se lixiviando facilmente para o horizonte C.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center gap-4 mt-12 mb-16">
+                <button type="submit" id="submit-btn" class="bg-brand-primary hover:bg-emerald-950 text-white font-sans font-semibold text-lg py-4 px-10 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:ring-4 focus:ring-emerald-200">
+                    <i class="fa-solid fa-square-poll-vertical mr-2"></i> Finalizar Simulado e Ver Resoluções
+                </button>
+                <button type="button" id="reset-btn" onclick="resetQuiz()" class="hidden text-sm text-stone-500 hover:text-brand-accent transition-all">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reiniciar e Tentar Novamente
+                </button>
+            </div>
+        </form>
+
+        <div id="results-panel" class="hidden bg-white border border-brand-border rounded-2xl p-6 sm:p-8 mb-12 shadow-md transition-all">
+            <div class="text-center">
+                <div class="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-emerald-50 border-4 border-brand-primary shadow-inner">
+                    <span id="score-text" class="text-2xl sm:text-3xl font-bold text-brand-primary font-sans">0/10</span>
+                </div>
+                <h3 id="score-headline" class="font-serif font-bold text-xl sm:text-2xl text-brand-text mb-2">Processando Resultados...</h3>
+                <p id="score-subtext" class="text-sm text-stone-500 font-serif max-w-lg mx-auto leading-relaxed mb-6">
+                    Abaixo você pode ver o detalhamento analítico e o gabarito comentado para cada uma das questões respondidas.
+                </p>
+                <div class="flex flex-wrap justify-center gap-2 mb-4" id="score-badges">
+                    <!-- Badges dinâmicos de acertos gerados via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 px-6 mt-12 border-t border-stone-850">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+            <p>&copy; 2026 Simulado Preparatório Acadêmico. Inspirado nas provas aplicadas pela banca FAURGS.</p>
+            <p class="flex items-center gap-1">Desenvolvido com <i class="fa-solid fa-heart text-red-700"></i> para geólogos e engenheiros agrônomos.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Respostas corretas correspondentes a cada ID de questão
+        const answerKey = {
+            q1: "D",
+            q2: "E",
+            q3: "D",
+            q4: "E",
+            q5: "A",
+            q6: "E", // Questão pede a alternativa INCORRETA, que é a E
+            q7: "C",
+            q8: "E",
+            q9: "D",
+            q10: "B"
+        };
+
+        // Escuta os inputs para atualizar o indicador de progresso
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', updateProgress);
+        });
+
+        // Atualiza a barra de progresso dinamicamente
+        function updateProgress() {
+            const totalQuestions = Object.keys(answerKey).length;
+            let answeredCount = 0;
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answeredCount++;
+                }
+            }
+
+            const percentage = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').innerText = `${answeredCount} de ${totalQuestions} Questões`;
+        }
+
+        // Função executada ao enviar o formulário e finalizar o quiz
+        function finishQuiz() {
+            const totalQuestions = Object.keys(answerKey).length;
+            let correctAnswersCount = 0;
+            const badgesContainer = document.getElementById('score-badges');
+            badgesContainer.innerHTML = ''; // Limpa os badges antigos
+
+            // Rola suavemente para o cabeçalho antes de revelar tudo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Analisa cada uma das questões
+            for (let i = 1; i <= totalQuestions; i++) {
+                const qid = `q${i}`;
+                const checkedOption = document.querySelector(`input[name="${qid}"]:checked`);
+                const userChoice = checkedOption ? checkedOption.value : null;
+                const correctAnswer = answerKey[qid];
+                const card = document.querySelector(`.question-card[data-qid="${qid}"]`);
+                const statusBadge = card.querySelector('.status-badge');
+                const resolutionBox = document.getElementById(`res-${qid}`);
+
+                // Exibe a resolução e remove o ocultamento
+                resolutionBox.classList.remove('hidden');
+
+                // Desabilita os inputs para evitar modificações após correção
+                card.querySelectorAll('input[type="radio"]').forEach(radio => {
+                    radio.disabled = true;
+                });
+
+                // Cria o badge do painel superior
+                const badge = document.createElement('span');
+                badge.className = 'w-8 h-8 flex items-center justify-center text-xs font-bold rounded-lg transition-all border';
+
+                if (userChoice === correctAnswer) {
+                    correctAnswersCount++;
+                    // Estilo de acerto na questão individual
+                    statusBadge.innerText = 'Correta';
+                    statusBadge.className = 'status-badge inline-block text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-brand-correct border border-emerald-250';
+                    card.classList.add('border-emerald-300', 'bg-emerald-50/10');
+                    
+                    // Estilo do badge no sumário de resultados
+                    badge.innerText = i;
+                    badge.className += ' bg-emerald-500 text-white border-emerald-600 shadow-sm';
+                } else {
+                    // Estilo de erro na questão individual
+                    statusBadge.innerText = 'Incorreta';
+                    statusBadge.className = 'status-badge inline-block text-xs font-bold px-3 py-1 rounded-full bg-red-50 text-brand-incorrect border border-red-250';
+                    card.classList.add('border-red-200', 'bg-red-50/10');
+
+                    // Destaca a alternativa correta em verde
+                    const correctLabel = card.querySelector(`input[value="${correctAnswer}"]`).closest('.option-label');
+                    correctLabel.classList.add('bg-emerald-50', 'border-emerald-500');
+
+                    // Destaca a alternativa errada marcada em vermelho
+                    if (checkedOption) {
+                        const incorrectLabel = checkedOption.closest('.option-label');
+                        incorrectLabel.classList.add('bg-red-50', 'border-red-400');
+                    }
+
+                    // Estilo do badge no sumário de resultados
+                    badge.innerText = i;
+                    badge.className += ' bg-red-500 text-white border-red-600 shadow-sm';
+                }
+                badgesContainer.appendChild(badge);
+            }
+
+            // Atualiza e exibe o painel de pontuação consolidada
+            const scorePanel = document.getElementById('results-panel');
+            scorePanel.classList.remove('hidden');
+
+            const scoreText = document.getElementById('score-text');
+            scoreText.innerText = `${correctAnswersCount}/${totalQuestions}`;
+
+            const headline = document.getElementById('score-headline');
+            const subtext = document.getElementById('score-subtext');
+
+            if (correctAnswersCount >= 9) {
+                headline.innerText = 'Desempenho de Elite!';
+                subtext.innerText = `Excelente! Você acertou ${correctAnswersCount} de ${totalQuestions} questões. Seu domínio teórico-conceitual sobre intemperismo e pedogênese atende perfeitamente ao perfil de excelência exigido para cargos de engenharia e geociências da banca FAURGS.`;
+            } else if (correctAnswersCount >= 6) {
+                headline.innerText = 'Bom Desempenho!';
+                subtext.innerText = `Você acertou ${correctAnswersCount} de ${totalQuestions} questões. Um ótimo resultado, mas que indica necessidade de revisão pontual em classificação do SiBCS ou cálculos do complexo de troca. Veja as resoluções detalhadas abaixo das questões.`;
+            } else {
+                headline.innerText = 'Atenção aos Detalhes Teóricos';
+                subtext.innerText = `Você acertou ${correctAnswersCount} de ${totalQuestions} questões. Recomendamos revisar os horizontes diagnósticos subsuperficiais e a dinâmica das leis físicas de sedimentação. Estude atentamente as resoluções comentadas integradas a cada questão.`;
+            }
+
+            // Controla a exibição dos botões de ação
+            document.getElementById('submit-btn').classList.add('hidden');
+            document.getElementById('reset-btn').classList.remove('hidden');
+        }
+
+        // Função para reiniciar o estado do formulário e recomeçar o quiz
+        function resetQuiz() {
+            // Oculta o painel de resultados e as resoluções
+            document.getElementById('results-panel').classList.add('hidden');
+            document.querySelectorAll('.resolution-box').forEach(box => {
+                box.classList.add('hidden');
+            });
+
+            // Reseta as bordas dos cards de perguntas e badges
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.className = 'question-card bg-brand-card border border-brand-border rounded-2xl p-6 sm:p-8 mb-8 shadow-sm transition-all hover:shadow-md';
+                const statusBadge = card.querySelector('.status-badge');
+                statusBadge.classList.add('hidden');
+            });
+
+            // Limpa as classes de acerto/erro aplicadas nas labels de opções
+            document.querySelectorAll('.option-label').forEach(label => {
+                label.className = 'option-label flex items-start gap-4 p-4 rounded-xl border border-brand-border cursor-pointer hover:bg-stone-50 transition-all';
+            });
+
+            // Reabilita todos os inputs de radio
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.disabled = false;
+            });
+
+            // Limpa a seleção do formulário
+            document.getElementById('quiz-form').reset();
+
+            // Reseta a barra de progresso superior
+            updateProgress();
+
+            // Mostra novamente o botão de envio
+            document.getElementById('submit-btn').classList.remove('hidden');
+            document.getElementById('reset-btn').classList.add('hidden');
+
+            // Rola de volta para o topo de forma suave
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
