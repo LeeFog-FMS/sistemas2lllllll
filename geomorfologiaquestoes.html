@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Geomorfologia FAURGS - Interativo</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- KaTeX for rendering mathematical formulas beautifully -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        paper: {
+                            50: '#faf9f6', /* Off-white warm reading background */
+                            100: '#f4f3ee',
+                            200: '#e5e4df',
+                            900: '#1c1c1a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Smooth custom transitions and readability enhancements */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #faf9f6;
+            color: #1c1c1a;
+            -webkit-font-smoothing: antialiased;
+        }
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .prose table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .prose th, .prose td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e4df;
+            text-align: left;
+        }
+        .prose th {
+            background-color: #f4f3ee;
+            font-weight: 600;
+        }
+        /* Custom styled scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf9f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- Top Navigation / Progress Indicator Bar -->
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-paper-200 shadow-sm px-4 py-3">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-lg font-bold text-sm tracking-wider">FAURGS</div>
+                <div>
+                    <h1 class="text-sm font-bold text-zinc-800">Simulado Especializado</h1>
+                    <p class="text-xs text-zinc-500">Geomorfologia & Compartimentação do Relevo</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden sm:flex flex-col items-end">
+                    <span class="text-xs font-semibold text-zinc-600">Progresso de Resposta</span>
+                    <span class="text-xs font-bold text-indigo-600" id="progress-text">0 de 10 respondidas</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-24 sm:w-32 bg-zinc-200 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+        
+        <!-- Hero Title Block -->
+        <div class="mb-10 text-center sm:text-left border-b border-paper-200 pb-8">
+            <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-semibold uppercase tracking-wider rounded-full">Alto Nível Acadêmico</span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-zinc-900 mt-3 leading-tight">Caderno de Questões: Geomorfologia</h1>
+            <p class="text-zinc-600 mt-2 text-base leading-relaxed max-w-2xl">
+                Teste seus conhecimentos em compartimentação do relevo brasileiro, relevo submarino, dinâmica sedimentar costeira, processos de vertentes e tectônica global no estilo rigoroso da banca <strong>FAURGS</strong>.
+            </p>
+        </div>
+
+        <!-- Quiz Form container -->
+        <form id="quiz-form" onsubmit="event.preventDefault();" class="space-y-8">
+            
+            <!-- Questão 1 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q1">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q1"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 1</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Histórico Classificações</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        Considere as afirmações abaixo, referentes à evolução dos modelos de classificação e compartimentação do relevo brasileiro propostos pelos professores Aroldo de Azevedo, Aziz Ab'Saber e Jurandyr Ross.
+                    </p>
+                    <div class="bg-zinc-50 p-4 rounded-xl space-y-3 border border-zinc-100 text-sm">
+                        <p><strong>I -</strong> A classificação de Aroldo de Azevedo (década de 1940) baseou-se fundamentalmente no critério morfoaltimétrico, determinando que as superfícies com altitudes inferiores a 200 metros correspondiam às planícies, enquanto as áreas superiores a esse limite geográfico eram mapeadas como planaltos, totalizando oito grandes compartimentos morfológicos no território nacional.</p>
+                        <p><strong>II -</strong> O modelo proposto por Aziz Ab'Saber (década de 1960) superou a abordagem puramente morfométrica ao introduzir a análise morfogenética, definindo os planaltos como compartimentos topográficos nos quais os processos de desgaste erosivo superam os de deposição sedimentar, e as planícies como áreas dominadas pela deposição sobre a erosão.</p>
+                        <p><strong>III -</strong> A classificação desenvolvida por Jurandyr Ross (década de 1990) integrou os conceitos de morfoestrutura, morfoescultura e dinâmica morfoclimática, valendo-se das imagens de radar do Projeto Radambrasil para delimitar 28 unidades de relevo estruturadas em planaltos, planícies e depressões, sendo estas últimas definidas como superfícies planas de baixa altitude formadas exclusivamente por sedimentação marinha recente.</p>
+                    </div>
+                    <p class="font-semibold text-zinc-900">Quais estão corretas?</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q1">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q1" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q1" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q1" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q1" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q1" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) I, II e III.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box (Hidden initially) -->
+                <div id="explanation-q1" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-3">
+                            <p><strong>Gabarito Correto: C</strong></p>
+                            <p>As afirmações I e II estão corretas. A afirmação III apresenta erro conceitual crasso.</p>
+                            <p><strong>I (Correta):</strong> Aroldo de Azevedo (1940) propôs a divisão clássica do relevo brasileiro utilizando puramente cotas morfoaltimétricas, fixando 200m como limite separador absoluto entre planícies (abaixo de 200m) e planaltos (acima de 200m), totalizando 8 unidades estruturais.</p>
+                            <p><strong>II (Correta):</strong> Aziz Ab'Saber (1960) evoluiu para critérios morfogenéticos fundamentados na dinâmica de balanço energético superficial: planaltos são superfícies onde a denudação (desgaste erosivo) supera a deposição; planícies são onde a sedimentação se sobrepõe à erosão.</p>
+                            <p><strong>III (Incorreta):</strong> Embora Ross utilize 28 unidades, a sua definição de <em>depressões</em> fundamenta-se em zonas de denudação periféricas e marginais modeladas por erosão diferencial ao longo do tempo geológico, entre bacias sedimentares e escudos cristalinos antigos, e não por processos sedimentares marinhos recentes (que pertencem estritamente às planícies).</p>
+                            
+                            <div class="overflow-x-auto mt-4">
+                                <table class="min-w-full text-xs text-zinc-600 border border-zinc-200 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-zinc-100 text-zinc-800">
+                                            <th class="p-2 border">Classificação</th>
+                                            <th class="p-2 border">Divisões Principais</th>
+                                            <th class="p-2 border">Critérios Utilizados</th>
+                                            <th class="p-2 border">Unidades</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-2 border font-medium">Aroldo de Azevedo (1949)</td>
+                                            <td class="p-2 border">Planaltos e Planícies</td>
+                                            <td class="p-2 border">Morfoaltimétrico (Limiar absoluto de 200 m)</td>
+                                            <td class="p-2 border text-center">8</td>
+                                        </tr>
+                                        <tr class="bg-zinc-50/50">
+                                            <td class="p-2 border font-medium">Aziz Ab'Saber (1962)</td>
+                                            <td class="p-2 border">Planaltos e Planícies</td>
+                                            <td class="p-2 border">Morfogenético (Balanço erosão vs deposição)</td>
+                                            <td class="p-2 border text-center">10</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 border font-medium">Jurandyr Ross (1995)</td>
+                                            <td class="p-2 border">Planaltos, Planícies e Depressões</td>
+                                            <td class="p-2 border">Morfoestrutural, Morfoescultural e Climatobotânico</td>
+                                            <td class="p-2 border text-center">28</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 2 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q2">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q2"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 2</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Fisiografia do Rio Grande do Sul</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        O estado do Rio Grande do Sul apresenta um quadro geomorfológico complexo, reflexo de uma longa história geológica associada ao magmatismo mesozoico da Bacia do Paraná e à evolução tectônica do Cinturão Dom Feliciano.
+                    </p>
+                    <p>Associe as unidades geomorfológicas do estado do Rio Grande do Sul, apresentadas na <strong>Coluna I</strong>, às suas respectivas descrições litoestratigráficas e fisiográficas, elencadas na <strong>Coluna II</strong>.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-100 text-sm">
+                        <div>
+                            <p class="font-bold mb-2 text-zinc-900 border-b pb-1">Coluna I</p>
+                            <ul class="space-y-1 text-zinc-700">
+                                <li><strong>1.</strong> Planalto Meridional</li>
+                                <li><strong>2.</strong> Depressão Central</li>
+                                <li><strong>3.</strong> Escudo Sul-rio-grandense</li>
+                                <li><strong>4.</strong> Planície Costeira</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p class="font-bold mb-2 text-zinc-900 border-b pb-1">Coluna II</p>
+                            <ul class="space-y-2 text-zinc-700">
+                                <li><strong>( )</strong> Superfície de relevo muito baixo, caracterizada por extensas regiões de banhados, lagoas e lagunas, constituída por depósitos sedimentares quaternários de origem lagunar e marinha.</li>
+                                <li><strong>( )</strong> Compartimento modelado sobre terrenos granítico-metamórficos antigos do Pré-Cambriano, apresentando relevo forte ondulado a montanhoso, associado a morros e colinas dissecadas.</li>
+                                <li><strong>( )</strong> Estrutura de relevo plano a suavemente ondulado, constituída por rochas sedimentares das eras Paleozoica e Mesozoica, funcionando historicamente como calha de drenagem do rio Jacuí.</li>
+                                <li><strong>( )</strong> Relevo de altitudes elevadas estruturado por derrames de rochas vulcânicas básicas e ácidas da Formação Serra Geral, apresentando encostas abruptas escarpadas em suas bordas orientais.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="font-semibold text-zinc-900">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q2">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q2" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) 4 – 3 – 2 – 1.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q2" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) 4 – 2 – 3 – 1.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q2" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) 1 – 3 – 2 – 4.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q2" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) 2 – 4 – 1 – 3.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q2" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) 3 – 1 – 4 – 2.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q2" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: A (4 – 3 – 2 – 1)</strong></p>
+                            <p><strong>(4) Planície Costeira:</strong> Relevo de topografia plana e muito baixa, caracterizado por lagoas (Laguna dos Patos/Mirim) e sedimentos marinhos/lagunares do Quaternário.</p>
+                            <p><strong>(3) Escudo Sul-rio-grandense (Serras de Sudeste):</strong> Terrenos cristalinos de idade pré-cambriana originados na orogenia Dom Feliciano, com forte declividade e relevo dissecado.</p>
+                            <p><strong>(2) Depressão Central:</strong> Faixa de relevo suavemente ondulado sobre rochas sedimentares das eras Paleozoica/Mesozoica que serve como o vale central e bacia de drenagem do Rio Jacuí.</p>
+                            <p><strong>(1) Planalto Meridional:</strong> Estruturado por extensas camadas de basaltos e rochas vulcânicas ácidas da Formação Serra Geral. Apresenta o relevo de "Cuestas" e escarpas imponentes em sua borda oriental.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 3 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q3">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q3"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 3</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Relevo e Geologia Estrutural</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        Considere as afirmações abaixo, sobre as formas de relevo brasileiro, sua gênese e sua relação com os cinturões orogênicos e estruturas geológicas herdadas.
+                    </p>
+                    <div class="bg-zinc-50 p-4 rounded-xl space-y-3 border border-zinc-100 text-sm">
+                        <p><strong>I -</strong> As montanhas fazem parte do relevo brasileiro e estão associadas aos Cinturões Orogênicos. Podem ser caracterizadas por um conjunto de serras alongadas e paralelas entre si. São exemplos, as Serras do Espinhaço e da Chapada Diamantina (localizadas em Minas Gerais e Bahia), e a Serra do Caparaó (localizadas em Minas Gerais e Espírito Santo).</p>
+                        <p><strong>II -</strong> Os Planaltos Residuais Norte e Sul-Amazônicos compõem-se por inúmeros conjuntos de morros. Essas formas de relevo são preservadas devido à presença de rochas com maior resistência à erosão, como, por exemplo, a Serra dos Carajás, a qual possui elevada concentração de minério de ferro.</p>
+                        <p><strong>III -</strong> Os Tabuleiros Costeiros no Brasil correspondem a uma faixa estreita e alongada por quase todo o litoral brasileiro, desde o norte do Pará até o Maranhão e, depois, desde o Rio de Janeiro até a extremidade norte do Estado do Rio Grande do Sul. Tal forma de relevo encontra-se em processo de erosão marinha, gerando falésias abruptas.</p>
+                    </div>
+                    <p class="font-semibold text-zinc-900">Quais estão corretas?</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q3">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q3" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q3" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q3" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Apenas III.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q3" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Apenas I e II.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q3" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) I, II e III.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q3" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: D</strong></p>
+                            <p>As afirmações I e II estão totalmente corretas. A III está incorreta.</p>
+                            <p><strong>I (Correta):</strong> Do ponto de vista geológico e taxonômico contemporâneo, as porções mais elevadas e vigorosas de cinturões orogênicos antigos estruturados no Pré-Cambriano e rejuvenescidos no Cenozoico (como a Serra do Espinhaço e Serra do Caparaó) enquadram-se na definição morfoestrutural de montanhas.</p>
+                            <p><strong>II (Correta):</strong> Os Planaltos Residuais Amazônicos são testemunhos estruturais poupados da erosão cratônica devido à alta dureza mineralógica de suas formações (ex: metabasaltos e formações ferríferas bandadas de Carajás).</p>
+                            <p><strong>III (Incorreta):</strong> O limite sul de ocorrência da formação de Tabuleiros Costeiros (Grupo Barreiras) dá-se no norte do estado do Rio de Janeiro. Eles não ocorrem no litoral catarinense ou gaúcho, onde o relevo é modelado por feições lagunares holocênicas e afloramentos basálticos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 4 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q4">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q4"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 4</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Relevo Submarino</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        A margem continental brasileira exibe uma transição geomorfológica expressiva desde a linha de costa até o domínio abissal oceânico, controlada por processos tectônicos distensivos e taxas variáveis de aporte sedimentar terrígeno.
+                    </p>
+                    <p>Sobre a fisiografia e a morfologia do relevo submarino na porção meridional da margem continental do país, inserida no domínio geológico da Bacia de Pelotas, assinale a alternativa correta.</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q4">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q4" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) A plataforma continental do Rio Grande do Sul estende-se desde a costa até a isóbata de aproximadamente 160 metros, apresentando feições de relevos positivos e negativos que registram antigas flutuações do nível do mar.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q4" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) O talude continental gaúcho caracteriza-se por um relevo extremamente suave e contínuo, assemelhando-se morfoestruturalmente às bacias de Santos e Campos pela ocorrência generalizada de grandes depósitos evaporíticos e domos de sal.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q4" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) A elevação continental representa a porção de maior declive topográfico do relevo submarino, estendendo-se diretamente da linha de praia até os limites superiores do talude continental.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q4" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Os sedimentos quaternários da plataforma continental do Rio Grande do Sul limitam-se ao domínio de areias de dunas costeiras, inexistindo depósitos de lamas de plataforma interna ou estuarinas.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q4" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) A Bacia de Pelotas apresenta, em suas sequências sedimentares, grandes plataformas carbonáticas contínuas de idade cretácea, similares às demais bacias marginais brasileiras.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q4" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: A</strong></p>
+                            <p>A plataforma continental gaúcha estende-se até a quebra de inclinação (isóbata de 160 metros). Nela, registram-se feições morfológicas positivas (paleocordões, cristas de praia) e negativas (paleocanais e vales entalhados pela rede fluvial subaérea) esculpidas durante as transgressões e regressões marinhas quaternárias.</p>
+                            <p><strong>Por que as outras alternativas estão incorretas?</strong></p>
+                            <p><strong>(B)</strong> O talude é acidentado e a Bacia de Pelotas destaca-se no Brasil exatamente pela ausência de tectônica salífera ou grandes evaporitos (halocinese).</p>
+                            <p><strong>(C)</strong> A elevação continental é uma rampa de declive muito suave que repousa no sopé do talude e faz a transição para a planície abissal.</p>
+                            <p><strong>(D)</strong> A sedimentação é variada, abrigando lamas estuarinas finas e depósitos lamosos siliciclásticos de plataforma interna.</p>
+                            <p><strong>(E)</strong> A Bacia de Pelotas não possui depósitos de carbonatos e sal contínuos do Cretáceo, sendo essencialmente terrígena e siliciclástica.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 5 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q5">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q5"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 5</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Morfologia Litorânea</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        A morfologia litorânea é moldada pela ação contínua de ondas, marés, correntes de deriva e oscilações do nível relativo do mar ao longo do Quaternário, gerando feições erosivas e deposicionais distintas.
+                    </p>
+                    <p>Assinale com V (verdadeiro) ou F (falso) as afirmações a seguir, relativas às feições de morfologia litorânea.</p>
+                    
+                    <div class="bg-zinc-50 p-4 rounded-xl space-y-3 border border-zinc-100 text-sm">
+                        <p><strong>( )</strong> As lagunas são corpos de águas rasas e calmas situados em planícies costeiras, que mantêm comunicação restrita com o mar por intermédio de um ou mais canais, sendo frequentemente represadas por barreiras arenosas.</p>
+                        <p><strong>( )</strong> O tômbolo é uma feição costeira tipicamente erosiva, formada pelo recuo abrupto de falésias basálticas sob a ação direta de correntes marinhas profundas de ressurgência.</p>
+                        <p><strong>( )</strong> As restingas correspondem a cordões arenosos paralelos à linha de costa, construídos pela deposição de sedimentos pela deriva litorânea, desempenhando papel crucial no represamento de sistemas lagunares.</p>
+                        <p><strong>( )</strong> As falésias são escarpas íngremes sob processo de erosão marinha ativa (abrasão), ocorrendo no Brasil tanto em rochas sedimentares jovens do Grupo Barreiras quanto em basaltos da Bacia do Paraná.</p>
+                    </div>
+                    <p class="font-semibold text-zinc-900">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q5">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q5" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) V – V – F – V.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q5" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) V – F – V – V.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q5" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) F – V – F – F.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q5" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) V – F – F – V.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q5" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) F – F – V – V.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q5" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: B (V – F – V – V)</strong></p>
+                            <p><strong>(V) Laguna:</strong> Definição científica exata. São formadas pelo represamento marinho por barreiras arenosas costeiras, possuindo conexão restrita (canais ou canais de marés).</p>
+                            <p><strong>(F) Tômbolo:</strong> Incorreto. O tômbolo é uma feição tipicamente <strong>deposicional/construtiva</strong> (e não erosiva) formada pelo acúmulo arenoso que conecta uma ilha costeira ao continente.</p>
+                            <p><strong>(V) Restingas:</strong> Cordões deposicionais holocênicos ou pleistocênicos arenosos formados pela ação da deriva litorânea oblíqua das ondas.</p>
+                            <p><strong>(V) Falésias:</strong> Escarpas abruptas verticais geradas por abrasão marinha ativa na base. Ocorrem no Brasil em terrenos cenozóicos do Grupo Barreiras (Nordeste) e em terrenos basálticos (como em Torres/RS).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 6 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q6">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q6"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 6</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Dinâmica de Vertentes</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        A dinâmica de encostas e vertentes em regiões de relevo acidentado é regulada por processos erosivos, intempéricos e movimentos gravitacionais de massa, frequentemente induzidos ou acelerados por perturbações antrópicas.
+                    </p>
+                    <p>Sobre a evolução morfoescultural das vertentes e seus depósitos associados, assinale a alternativa correta.</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q6">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q6" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) O elúvio corresponde ao material sedimentar que sofreu expressivo deslocamento gravitacional ao longo da encosta, acumulando-se nas porções baixas das vertentes.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q6" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) O colúvio é constituído pelo material residual que permanece sobre a rocha matriz alterada, sem sofrer transporte, compondo via de regra a estrutura das linhas de cristas.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q6" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) As ravinas e as voçorocas são feições erosivas originadas da ação pluvial, sendo que a voçoroca se desenvolve quando o processo de ravinamento atinge o nível do lençol freático.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q6" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Os escorregamentos em encostas serranas são processos puramente exógenos atuais que ocorrem de forma independente da estrutura geológica e da declividade do terreno.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q6" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) A impermeabilização do solo em áreas urbanas reduz o escoamento superficial pluvial, agindo como fator mitigador de movimentos de massa e processos de ravinamento.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q6" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: C</strong></p>
+                            <p>A transição morfológica e hidráulica entre ravina e voçoroca ocorre de fato quando o entalhamento linear atinge a zona de saturação hídrica profunda (intercepta o lençol freático). A partir disso, além do escoamento superficial pluvial, o escoamento subsuperficial (<em>piping</em>) e o desmoronamento lateral passam a alimentar o avanço rápido e destrutivo da voçoroca.</p>
+                            <p><strong>Erros das demais:</strong></p>
+                            <p><strong>(A e B)</strong> Os conceitos estão invertidos. O <strong>elúvio</strong> é o sedimento intemperizado <em>in situ</em> (sem transporte). O <strong>colúvio</strong> é o material transportado por gravidade que se acumula na base.</p>
+                            <p><strong>(D)</strong> Os escorregamentos dependem intrinsecamente das descontinuidades estruturais herdadas (xistosidade, fraturas) e da declividade das encostas.</p>
+                            <p><strong>(E)</strong> A impermeabilização aumenta (e não reduz) drasticamente o escoamento pluvial, agravando os processos erosivos e instabilizando encostas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 7 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q7">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q7"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 7</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Geomorfologia Estrutural</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        As formas de relevo continental apresentam feições que refletem diretamente a estrutura geológica subjacente, as intrusões ígneas e a resistência diferencial das rochas aos agentes erosivos.
+                    </p>
+                    <p>Considere as seguintes afirmações sobre a compartimentação e a evolução morfoestrutural do relevo brasileiro.</p>
+                    
+                    <div class="bg-zinc-50 p-4 rounded-xl space-y-3 border border-zinc-100 text-sm">
+                        <p><strong>I -</strong> As cuestas, comuns no flanco ocidental paulista e no Rio Grande do Sul, apresentam uma morfologia dissimétrica composta por uma escarpa íngreme (front) e um declive suave (reverso), condicionadas pela inclinação de camadas sedimentares e derrames basálticos de resistências distintas.</p>
+                        <p><strong>II -</strong> Os grábenes são vales tectônicos formados a partir do abatimento de um bloco da crosta ao longo de falhas normais, constituindo áreas propícias à deposição que evoluem para bacias sedimentares.</p>
+                        <p><strong>III -</strong> O Arco de Ponta Grossa, importante estrutura geológica da Bacia do Paraná, caracteriza-se pela presença de inúmeros diques de rochas vulcânicas básicas associados ao magmatismo mesozoico, que exercem forte controle estrutural sobre a rede de drenagem e o relevo local.</p>
+                    </div>
+                    <p class="font-semibold text-zinc-900">Quais estão corretas?</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q7">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q7" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q7" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q7" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Apenas I e III.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q7" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q7" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) I, II e III.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q7" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: E</strong></p>
+                            <p>Todas as três afirmações estão absolutamente corretas, retratando o controle endógeno sobre a morfoescultura.</p>
+                            <p><strong>I (Correta):</strong> Cuestas são formas dissimétricas geradas por controle litoestratigráfico de mergulhos monoclinais suaves, em que a erosão seletiva solapa as bases menos resistentes de arenito expondo os topos escarpados basálticos rígidos (front e reverso).</p>
+                            <p><strong>II (Correta):</strong> Grábenes são fossas tectônicas clássicas abaixadas por forças distensivas crustais que recebem aporte de sedimentação deposicional.</p>
+                            <p><strong>III (Correta):</strong> O Arco de Ponta Grossa é um domo geológico proeminente cujas fraturas irradiadas receberam intrusões basálticas rígidas em forma de diques. Estes funcionam hoje como barreira erosiva seletiva e organizadores de canais de drenagem paralelos e retilíneos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 8 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q8">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q8"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 8</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Pedologia & Relevo</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        O mapeamento geomorfológico integrado permite correlacionar a declividade e as formas de relevo com a evolução do perfil de intemperismo e os solos associados.
+                    </p>
+                    <p>Assinale a afirmação correta sobre as relações entre relevo, processos intempéricos e pedogênese.</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q8">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q8" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Em relevos de declividade acentuada e encostas íngremes, o escoamento superficial rápido favorece a formação de solos extremamente profundos e lixiviados, como os Latossolos.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q8" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Se as condições climáticas locais forem caracterizadas por aridez ou semiaridez, predomina a decomposição química; se forem úmidas, prevalece a desagregação mecânica das rochas.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q8" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Nas planícies fluviais e flúvio-lagunares de baixa declividade, as condições de hidromorfismo constante favorecem o desenvolvimento de solos como Planossolos e Gleissolos.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q8" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Os Neossolos Litólicos são solos profundos e ricos em matéria orgânica que ocorrem predominantemente em superfícies tabulares submetidas a longo tempo de estabilidade tectônica.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q8" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) A taxa de infiltração da água no solo é uma variável independente da declividade topográfica, sendo controlada exclusivamente pela temperatura média anual da atmosfera.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q8" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-3">
+                            <p><strong>Gabarito Correto: C</strong></p>
+                            <p>Nas planícies de baixa declividade, a água acumula-se temporariamente gerando ambientes redutores, com deficiência de oxigênio (hidromorfismo), propiciando a pedogênese típica de Planossolos e Gleissolos.</p>
+                            
+                            <p class="font-semibold text-zinc-900 mt-2">Fundamentação Quantitativa:</p>
+                            <p>O gradiente de declividade topográfica de uma encosta ($G$) pode ser calculado por:</p>
+                            <div class="bg-zinc-100 p-3 rounded-lg text-center font-mono my-2 text-zinc-800 text-xs sm:text-sm">
+                                $$G = \left( \frac{\Delta h}{d} \right) \times 100$$
+                            </div>
+                            <p>Onde $\Delta h$ é o desnível altimétrico vertical e $d$ é a distância horizontal. Em baixas declividades ($G < 2\%$), o processo deposicional e o hidromorfismo superam o escoamento rápido de Horton.</p>
+
+                            <div class="overflow-x-auto mt-4">
+                                <table class="min-w-full text-xs text-zinc-600 border border-zinc-200 rounded-lg">
+                                    <thead>
+                                        <tr class="bg-zinc-100 text-zinc-800">
+                                            <th class="p-2 border">Tipo de Solo</th>
+                                            <th class="p-2 border">Relevo Associado</th>
+                                            <th class="p-2 border">Pedogênese e Dinâmica Hídrica</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-2 border font-medium">Latossolo</td>
+                                            <td class="p-2 border">Planaltos e superfícies tabulares suaves</td>
+                                            <td class="p-2 border">Alta infiltração, intemperismo químico profundo e alta lixiviação de bases.</td>
+                                        </tr>
+                                        <tr class="bg-zinc-50/50">
+                                            <td class="p-2 border font-medium">Neossolo Litólico</td>
+                                            <td class="p-2 border">Encostas íngremes e escarpas acentuadas</td>
+                                            <td class="p-2 border">Solos rasos, contato lítico próximo devido a taxas de erosão superiores à pedogênese.</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 border font-medium">Gleissolo / Planossolo</td>
+                                            <td class="p-2 border">Planícies fluviais e lagunares de baixa declividade</td>
+                                            <td class="p-2 border">Hidromorfismo persistente, anoxia, acumulação de argilas e deposição mecânica de finos.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <p class="mt-2"><strong>Erros comuns nas outras alternativas:</strong></p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>(A)</strong> Encostas íngremes impedem a infiltração de água e aceleram a erosão mecânica, originando solos jovens/rasos (Neossolos Litólicos), enquanto Latossolos exigem superfícies planas estáveis e antigas.</li>
+                                <li><strong>(B)</strong> Está invertido: climas secos favorecem desagregação física (mecânica); climas úmidos geram forte intemperismo químico (hidrólise).</li>
+                                <li><strong>(D)</strong> Neossolos são extremamente rasos, e não profundos.</li>
+                                <li><strong>(E)</strong> A infiltração depende ativamente do gradiente de encosta e do escoamento hídrico superficial resultante.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 9 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q9">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q9"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 9</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Tectônica & Relevo Global</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        A dinâmica interna da Terra e o modelo da Tectônica de Placas explicam a configuração das grandes cadeias montanhosas, fossas submarinas e a ocorrência de processos sísmicos e vulcânicos na litosfera.
+                    </p>
+                    <p>Sobre a tectônica global e a compartimentação do relevo planetário, assinale a alternativa correta.</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q9">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q9" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Limites transformantes, como a Falha de San Andreas, são caracterizados pelo choque frontal entre placas continentais, resultando na criação de novas bacias sedimentares profundas.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q9" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Quando ocorre o choque entre uma placa oceânica e uma placa continental (limite convergente), a placa oceânica, por ser mais densa, mergulha sob a continental em um processo denominado subducção.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q9" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) A isostasia refere-se ao movimento lateral rápido das placas tectônicas sobre a astenosfera, sendo o principal fator responsável pelo vulcanismo basáltico de fissura.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q9" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) As dorsais meso-oceânicas são formadas em limites convergentes de placas, onde a compressão tectônica gera o dobramento da crosta oceânica e o surgimento de fossas abissais.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q9" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) Os crátons correspondem a porções da litosfera continental geologicamente muito jovens e instáveis, constantemente afetadas por orogêneses modernas e falhamentos rústicos.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q9" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: B</strong></p>
+                            <p>A subducção ocorre na colisão convergente entre crosta oceânica basáltica (densa) e crosta continental granítica (leve), forçando o mergulho da placa oceânica no manto plástico, originando vulcanismo severo, terremotos profundos e dobramentos de orógenos na borda continental.</p>
+                            <p><strong>Erros:</strong></p>
+                            <p><strong>(A)</strong> Limites transformantes geram deslizamentos laterais paralelos (conservativos), sem criar ou destruir crosta.</p>
+                            <p><strong>(C)</strong> Isostasia é a compensação vertical hidrostática que rege a flutuação vertical das massas continentais e oceânicas na astenosfera.</p>
+                            <p><strong>(D)</strong> Dorsais meso-oceânicas nascem em limites divergentes por rifteamento e ascensão de magmas mantélicos.</p>
+                            <p><strong>(E)</strong> Os crátons são as estruturas continentais mais antigas e tectonicamente estáveis do planeta, imunes a orogêneses modernas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questão 10 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden" id="card-q10">
+                <div class="absolute top-0 left-0 h-1.5 w-full bg-zinc-200" id="indicator-q10"></div>
+                <div class="flex justify-between items-start mb-4">
+                    <span class="text-xs font-bold text-zinc-400 uppercase tracking-widest">Questão 10</span>
+                    <span class="px-2.5 py-0.5 bg-zinc-100 text-zinc-600 text-xs font-medium rounded-full">Dinâmica Sedimentar Costeira</span>
+                </div>
+                
+                <div class="prose max-w-none text-zinc-800 text-sm sm:text-base leading-relaxed space-y-4">
+                    <p class="font-medium text-zinc-950">
+                        A dinâmica sedimentar costeira e a evolução dos campos de dunas no sul do Brasil são fortemente influenciadas pela orientação da linha de costa, pelo clima de ventos e pelo potencial de deriva eólica e litorânea.
+                    </p>
+                    <p>Sobre a dinâmica de transferência sedimentar na costa catarinense e rio-grandense, assinale a afirmação correta.</p>
+                </div>
+
+                <!-- Alternatives -->
+                <div class="mt-6 space-y-3" id="options-container-q10">
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q10" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) O Cabo de Santa Marta (SC) representa uma inflexão abrupta na orientação do litoral, fazendo com que o vento predominante de Nordeste atue da terra para o mar ao sul do cabo, funcionando como perda de sedimentos do sistema praial.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q10" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) A deriva litorânea de sedimentos atua de forma isolada na planície costeira, sendo totalmente independente das oscilações do nível do mar ocorridas no Quaternário Tardio.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q10" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Os campos de dunas transgressivos do Litoral Norte do Rio Grande do Sul desenvolveram-se de forma independente das barreiras costeiras holocênicas.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q10" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) O transporte de sedimentos pela deriva litorânea na costa sul do Brasil ocorre exclusivamente de norte para sul durante todo o ano, devido à ausência de frentes frias de quadrante sul.</span>
+                    </label>
+                    <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                        <input type="radio" name="q10" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                        <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) Os depósitos eólicos costeiros são formados apenas quando há ausência completa de vegetação pioneira fixadora nas dunas frontais.</span>
+                    </label>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-q10" class="hidden mt-6 pt-6 border-t border-paper-200">
+                    <div class="bg-amber-50/70 border border-amber-200/60 p-5 rounded-xl">
+                        <h4 class="text-amber-900 font-bold flex items-center mb-2 text-sm sm:text-base">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Resolução Detalhada
+                        </h4>
+                        <div class="prose max-w-none text-zinc-700 text-xs sm:text-sm leading-relaxed space-y-2">
+                            <p><strong>Gabarito Correto: A</strong></p>
+                            <p>O Cabo de Santa Marta (SC) cria uma barreira morfológica que altera a dinâmica do vento de Nordeste (NE). Ao sul dessa estrutura, o vento sopra no sentido <em>offshore</em> (de terra para o mar), transportando as areias finas de volta à porção marinha submersa e subtraindo areia seca eólica da praia.</p>
+                            <p><strong>Erros:</strong></p>
+                            <p><strong>(B)</strong> A deriva de sedimentos dependeu inteiramente das oscilações e flutuações relativas do nível do mar holocênico e pleistocênico.</p>
+                            <p><strong>(C)</strong> As dunas transgressivas formaram-se em correlação indissociável às barreiras do tipo barreira costeira eólica isoladora do Quaternário.</p>
+                            <p><strong>(D)</strong> A deriva litorânea gaúcha inverte-se sazonalmente devido ao trânsito de frentes frias e ventos fortes austrais que causam deriva norte-sul no verão e sul-norte no inverno.</p>
+                            <p><strong>(E)</strong> A vegetação pioneira (espécies psamófilas) favorece diretamente a estabilização vertical das dunas frontais.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit/Reset Controls -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <button type="button" onclick="submitQuiz()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-4 rounded-xl shadow-md transition duration-200 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-square-check"></i>
+                    <span>Finalizar Simulado</span>
+                </button>
+                <button type="button" onclick="resetQuiz()" class="w-full sm:w-auto bg-zinc-200 hover:bg-zinc-300 text-zinc-700 font-bold px-6 py-4 rounded-xl shadow-sm transition duration-200 flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                    <span>Limpar Respostas</span>
+                </button>
+            </div>
+
+        </form>
+
+        <!-- Custom Warning Alert Modal (No browser alerts allowed) -->
+        <div id="warning-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-zinc-200 animate-in fade-in zoom-in duration-150">
+                <div class="flex items-center space-x-3 text-amber-600 mb-4">
+                    <i class="fa-solid fa-triangle-exclamation text-3xl"></i>
+                    <h3 class="text-lg font-bold text-zinc-950">Simulado Incompleto</h3>
+                </div>
+                <p class="text-zinc-600 text-sm leading-relaxed mb-6">
+                    Você ainda não respondeu todas as questões. Recomendamos preencher todas as opções para obter uma avaliação completa. Deseja corrigir mesmo assim?
+                </p>
+                <div class="flex space-x-3">
+                    <button onclick="dismissModal(); executeCorrection();" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition duration-150">
+                        Sim, corrigir
+                    </button>
+                    <button onclick="dismissModal()" class="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-semibold py-2.5 rounded-xl transition duration-150">
+                        Voltar e responder
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Dashboard (Displays below once quiz is submitted) -->
+        <div id="result-dashboard" class="hidden mt-12 bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-paper-200 animate-in slide-in-from-bottom duration-300">
+            <div class="text-center pb-6 border-b border-paper-200">
+                <span class="text-xs font-bold text-indigo-600 uppercase tracking-widest block mb-1">Seu Desempenho</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 leading-tight">Avaliação Concluída</h2>
+                <p class="text-zinc-500 text-xs sm:text-sm mt-1">Gabaritos e resoluções detalhadas foram revelados abaixo de cada questão.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6 text-center">
+                <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-2xl">
+                    <span class="text-xs font-medium text-zinc-600 uppercase">Pontuação Final</span>
+                    <p class="text-3xl font-extrabold text-indigo-700 mt-1" id="score-text">0 / 10</p>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-2xl">
+                    <span class="text-xs font-medium text-zinc-600 uppercase">Porcentagem</span>
+                    <p class="text-3xl font-extrabold text-emerald-700 mt-1" id="percentage-text">0%</p>
+                </div>
+                <div class="bg-zinc-50 border border-zinc-100 p-4 rounded-2xl flex flex-col justify-center items-center">
+                    <span class="text-xs font-medium text-zinc-600 uppercase block mb-1">Status de Desempenho</span>
+                    <span id="badge-text" class="px-3 py-1 text-sm font-bold rounded-full">--</span>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <h3 class="font-bold text-zinc-900 mb-4 flex items-center text-sm sm:text-base">
+                    <i class="fa-solid fa-list-check text-indigo-600 mr-2"></i> Mapa de Respostas
+                </h3>
+                <div class="grid grid-cols-5 sm:grid-cols-10 gap-2" id="grid-indicators">
+                    <!-- Dynamic indicator buttons -->
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-paper-200 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <button onclick="scrollToTop()" class="w-full sm:w-auto text-indigo-600 hover:text-indigo-800 font-semibold flex items-center justify-center space-x-2 text-sm">
+                    <i class="fa-solid fa-arrow-up"></i>
+                    <span>Subir e ler resoluções das questões</span>
+                </button>
+                <button onclick="resetQuiz()" class="w-full sm:w-auto bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-bold px-6 py-2.5 rounded-xl transition duration-150">
+                    Refazer Simulado
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-paper-200 py-6 mt-12 text-center text-xs text-zinc-400">
+        <div class="max-w-4xl mx-auto px-4">
+            <p>© 2026 Simulado Especializado de Geomorfologia. Produzido com metodologia de alta fixação para concursos e exames no modelo FAURGS.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Official Answer Key
+        const answerKey = {
+            q1: "C",
+            q2: "A",
+            q3: "D",
+            q4: "A",
+            q5: "B",
+            q6: "C",
+            q7: "E",
+            q8: "C",
+            q9: "B",
+            q10: "A"
+        };
+
+        const totalQuestions = 10;
+
+        // Auto-detect answer changes to update top navigation progress bars
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', () => {
+                updateProgress();
+                // Dynamically mark the top card indicator as partially active
+                const qName = radio.name;
+                const indicator = document.getElementById(`indicator-${qName}`);
+                if (indicator) {
+                    indicator.className = "absolute top-0 left-0 h-1.5 w-full bg-indigo-500 transition-colors duration-200";
+                }
+            });
+        });
+
+        function updateProgress() {
+            let answeredCount = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answeredCount++;
+                }
+            }
+            const percentage = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').innerText = `${answeredCount} de ${totalQuestions} respondidas`;
+        }
+
+        function submitQuiz() {
+            // Check if any question remains unanswered
+            let answeredAll = true;
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answeredAll = false;
+                    break;
+                }
+            }
+
+            if (!answeredAll) {
+                // Show custom modal overlay warning
+                document.getElementById('warning-modal').classList.remove('hidden');
+            } else {
+                executeCorrection();
+            }
+        }
+
+        function dismissModal() {
+            document.getElementById('warning-modal').classList.add('hidden');
+        }
+
+        function executeCorrection() {
+            let correctAnswers = 0;
+            const gridContainer = document.getElementById('grid-indicators');
+            gridContainer.innerHTML = ''; // Reset Grid
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const checkedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userChoice = checkedOption ? checkedOption.value : null;
+                const isCorrect = userChoice === answerKey[`q${i}`];
+                
+                if (isCorrect) {
+                    correctAnswers++;
+                }
+
+                // Show Explanation Box for this question
+                document.getElementById(`explanation-q${i}`).classList.remove('hidden');
+
+                // Adjust Visual indicators on individual Question Cards
+                const indicator = document.getElementById(`indicator-q${i}`);
+                const card = document.getElementById(`card-q${i}`);
+                
+                if (isCorrect) {
+                    indicator.className = "absolute top-0 left-0 h-1.5 w-full bg-emerald-500";
+                    card.classList.remove('border-paper-200');
+                    card.classList.add('border-emerald-300', 'bg-emerald-50/10');
+                } else {
+                    indicator.className = "absolute top-0 left-0 h-1.5 w-full bg-rose-500";
+                    card.classList.remove('border-paper-200');
+                    card.classList.add('border-rose-200', 'bg-rose-50/10');
+                }
+
+                // Highlight correct option and show wrong picked option
+                const optionContainer = document.getElementById(`options-container-q${i}`);
+                const optionLabels = optionContainer.querySelectorAll('.option-card');
+                
+                optionLabels.forEach(label => {
+                    const radio = label.querySelector('input');
+                    // Disable radios to prevent changing after completion
+                    radio.disabled = true;
+
+                    // Remove generic hover classes
+                    label.classList.remove('hover:bg-zinc-100/50', 'hover:border-zinc-300');
+
+                    if (radio.value === answerKey[`q${i}`]) {
+                        // Mark Correct option with distinctive Emerald/Green theme
+                        label.className = "option-card flex items-start p-4 bg-emerald-50 border border-emerald-400 rounded-xl cursor-not-allowed";
+                        label.innerHTML += `<span class="ml-auto text-emerald-600"><i class="fa-solid fa-circle-check"></i> Correto</span>`;
+                    } else if (userChoice && radio.value === userChoice) {
+                        // Mark Wrong Chosen option with distinctive Rose/Red theme
+                        label.className = "option-card flex items-start p-4 bg-rose-50 border border-rose-400 rounded-xl cursor-not-allowed";
+                        label.innerHTML += `<span class="ml-auto text-rose-600"><i class="fa-solid fa-circle-xmark"></i> Selecionado</span>`;
+                    } else {
+                        label.className = "option-card flex items-start p-4 bg-zinc-50 border border-zinc-200 rounded-xl cursor-not-allowed opacity-60";
+                    }
+                });
+
+                // Add indicator inside Results grid map
+                const indicatorBtn = document.createElement('button');
+                indicatorBtn.type = 'button';
+                indicatorBtn.onclick = () => document.getElementById(`card-q${i}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                indicatorBtn.className = `p-3 font-bold rounded-xl text-center text-sm transition transition-all cursor-pointer ${
+                    isCorrect 
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200' 
+                    : 'bg-rose-100 text-rose-800 border border-rose-300 hover:bg-rose-200'
+                }`;
+                indicatorBtn.innerHTML = `Q${i}<br><span class="text-[10px] font-medium font-mono">${isCorrect ? '✓' : '✗'}</span>`;
+                gridContainer.appendChild(indicatorBtn);
+            }
+
+            // Calculations & Result Update
+            const finalScore = correctAnswers;
+            const percentage = Math.round((finalScore / totalQuestions) * 100);
+            
+            document.getElementById('score-text').innerText = `${finalScore} / ${totalQuestions}`;
+            document.getElementById('percentage-text').innerText = `${percentage}%`;
+
+            // Badge text & color depending on scoring thresholds
+            const badge = document.getElementById('badge-text');
+            if (percentage >= 80) {
+                badge.innerText = "Excelente";
+                badge.className = "px-3 py-1 text-xs sm:text-sm font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300";
+            } else if (percentage >= 50) {
+                badge.innerText = "Bom Rendimento";
+                badge.className = "px-3 py-1 text-xs sm:text-sm font-bold rounded-full bg-amber-100 text-amber-800 border border-amber-300";
+            } else {
+                badge.innerText = "Revisar Conteúdo";
+                badge.className = "px-3 py-1 text-xs sm:text-sm font-bold rounded-full bg-rose-100 text-rose-800 border border-rose-300";
+            }
+
+            // Show result dashboard & scroll there
+            const dashboard = document.getElementById('result-dashboard');
+            dashboard.classList.remove('hidden');
+            dashboard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function resetQuiz() {
+            // Uncheck and enable all options
+            for (let i = 1; i <= totalQuestions; i++) {
+                const optionsContainer = document.getElementById(`options-container-q${i}`);
+                
+                // Hide explanation box
+                document.getElementById(`explanation-q${i}`).classList.add('hidden');
+                
+                // Reset card styling
+                const card = document.getElementById(`card-q${i}`);
+                card.className = "bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-paper-200 relative overflow-hidden";
+                
+                // Reset indicator color
+                document.getElementById(`indicator-q${i}`).className = "absolute top-0 left-0 h-1.5 w-full bg-zinc-200";
+
+                // Regenerate original clean HTML markup inside options
+                let originalOptions = '';
+                if (i === 1) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q1" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q1" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q1" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q1" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q1" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) I, II e III.</span>
+                        </label>
+                    `;
+                } else if (i === 2) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q2" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) 4 – 3 – 2 – 1.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q2" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) 4 – 2 – 3 – 1.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q2" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) 1 – 3 – 2 – 4.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q2" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) 2 – 4 – 1 – 3.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q2" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) 3 – 1 – 4 – 2.</span>
+                        </label>
+                    `;
+                } else if (i === 3) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q3" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q3" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q3" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Apenas III.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q3" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q3" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) I, II e III.</span>
+                        </label>
+                    `;
+                } else if (i === 4) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q4" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) A plataforma continental do Rio Grande do Sul estende-se desde a costa até a isóbata de aproximadamente 160 metros, apresentando feições de relevos positivos e negativos que registram antigas flutuações do nível do mar.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q4" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) O talude continental gaúcho caracteriza-se por um relevo extremamente suave e contínuo, assemelhando-se morfoestruturalmente às bacias de Santos e Campos pela ocorrência generalizada de grandes depósitos evaporíticos e domos de sal.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q4" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) A elevação continental representa a porção de maior declive topográfico do relevo submarino, estendendo-se diretamente da linha de praia até os limites superiores do talude continental.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q4" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Os sedimentos quaternários da plataforma continental do Rio Grande do Sul limitam-se ao domínio de areias de dunas costeiras, inexistindo depósitos de lamas de plataforma interna ou estuarinas.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q4" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) A Bacia de Pelotas apresenta, em suas sequências sedimentares, grandes plataformas carbonáticas contínuas de idade cretácea, similares às demais bacias marginais brasileiras.</span>
+                        </label>
+                    `;
+                } else if (i === 5) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q5" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) V – V – F – V.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q5" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) V – F – V – V.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q5" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) F – V – F – F.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q5" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) V – F – F – V.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q5" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) F – F – V – V.</span>
+                        </label>
+                    `;
+                } else if (i === 6) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q6" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) O elúvio corresponde ao material sedimentar que sofreu expressivo deslocamento gravitacional ao longo da encosta, acumulando-se nas porções baixas das vertentes.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q6" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) O colúvio é constituído pelo material residual que permanece sobre a rocha matriz alterada, sem sofrer transporte, compondo via de regra a estrutura das linhas de cristas.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q6" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) As ravinas e as voçorocas são feições erosivas originadas da ação pluvial, sendo que a voçoroca se desenvolve quando o processo de ravinamento atinge o nível do lençol freático.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q6" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Os escorregamentos em encostas serranas são processos puramente exógenos atuais que ocorrem de forma independente da estrutura geológica e da declividade do terreno.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q6" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) A impermeabilização do solo em áreas urbanas reduz o escoamento superficial pluvial, agindo como fator mitigador de movimentos de massa e processos de ravinamento.</span>
+                        </label>
+                    `;
+                } else if (i === 7) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q7" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q7" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q7" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Apenas I e III.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q7" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q7" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) I, II e III.</span>
+                        </label>
+                    `;
+                } else if (i === 8) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q8" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Em relevos de declividade acentuada e encostas íngremes, o escoamento superficial rápido favorece a formação de solos extremamente profundos e lixiviados, como os Latossolos.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q8" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Se as condições climáticas locais forem caracterizadas por aridez ou semiaridez, predomina a decomposição química; se forem úmidas, prevalece a desagregação mecânica das rochas.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q8" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Nas planícies fluviais e flúvio-lagunares de baixa declividade, as condições de hidromorfismo constante favorecem o desenvolvimento de solos como Planossolos e Gleissolos.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q8" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) Os Neossolos Litólicos são solos profundos e ricos em matéria orgânica que ocorrem predominantemente em superfícies tabulares submetidas a longo tempo de estabilidade tectônica.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q8" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) A taxa de infiltração da água no solo é uma variável independente da declividade topográfica, sendo controlada exclusivamente pela temperatura média anual da atmosfera.</span>
+                        </label>
+                    `;
+                } else if (i === 9) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q9" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) Limites transformantes, como a Falha de San Andreas, são caracterizados pelo choque frontal entre placas continentais, resultando na criação de novas bacias sedimentares profundas.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q9" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) Quando ocorre o choque entre uma placa oceânica e uma placa continental (limite convergente), a placa oceânica, por ser mais densa, mergulha sob a continental em um processo denominado subducção.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q9" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) A isostasia refere-se ao movimento lateral rápido das placas tectônicas sobre a astenosfera, sendo o principal fator responsável pelo vulcanismo basáltico de fissura.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q9" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) As dorsais meso-oceânicas são formadas em limites convergentes de placas, onde a compressão tectônica gera o dobramento da crosta oceânica e o surgimento de fossas abissais.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q9" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) Os crátons correspondem a porções da litosfera continental geologicamente muito jovens e instáveis, constantemente afetadas por orogêneses modernas e falhamentos rústicos.</span>
+                        </label>
+                    `;
+                } else if (i === 10) {
+                    originalOptions = `
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q10" value="A" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(A) O Cabo de Santa Marta (SC) representa uma inflexão abrupta na orientação do litoral, fazendo com que o vento predominante de Nordeste atue da terra para o mar ao sul do cabo, funcionando como perda de sedimentos do sistema praial.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q10" value="B" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(B) A deriva litorânea de sedimentos atua de forma isolada na planície costeira, sendo totalmente independente das oscilações do nível do mar ocorridas no Quaternário Tardio.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q10" value="C" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(C) Os campos de dunas transgressivos do Litoral Norte do Rio Grande do Sul desenvolveram-se de forma independente das barreiras costeiras holocênicas.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q10" value="D" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(D) O transporte de sedimentos pela deriva litorânea na costa sul do Brasil ocorre exclusivamente de norte para sul durante todo o ano, devido à ausência de frentes frias de quadrante sul.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 bg-zinc-50 border border-paper-200 rounded-xl cursor-pointer hover:bg-zinc-100/50 hover:border-zinc-300">
+                            <input type="radio" name="q10" value="E" class="mt-1 mr-3 h-4 w-4 text-indigo-600 border-zinc-300 focus:ring-indigo-500">
+                            <span class="text-zinc-800 text-sm sm:text-base leading-normal">(E) Os depósitos eólicos costeiros são formados apenas quando há ausência completa de vegetação pioneira fixadora nas dunas frontais.</span>
+                        </label>
+                    `;
+                }
+                optionsContainer.innerHTML = originalOptions;
+            }
+
+            // Rebind progress tracking events on reconstructed DOM elements
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    updateProgress();
+                    const qName = radio.name;
+                    const indicator = document.getElementById(`indicator-${qName}`);
+                    if (indicator) {
+                        indicator.className = "absolute top-0 left-0 h-1.5 w-full bg-indigo-500 transition-colors duration-200";
+                    }
+                });
+            });
+
+            updateProgress();
+            document.getElementById('result-dashboard').classList.add('hidden');
+            scrollToTop();
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

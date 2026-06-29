@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula: Compartimentação do Relevo e Geomorfologia - IFSC (FAURGS)</title>
+    <!-- Tailwind CSS para design ágil e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        /* Customizar marcas de grifos para serem suaves e profissionais */
+        mark {
+            background-color: #fef08a; /* Amarelo pastel */
+            color: #1f2937;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        /* Garantir que as tabelas fiquem perfeitamente responsivas sem quebrar */
+        @media (max-width: 768px) {
+            .table-responsive {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- CABEÇALHO DO PORTAL DE ESTUDO -->
+    <header class="border-b border-gray-200 bg-white sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider mb-1">
+                    Preparação IFSC • Magistério EBTT
+                </span>
+                <h1 class="text-xl font-bold text-gray-900">Geomorfologia e Compartimentação</h1>
+            </div>
+            
+            <!-- Link rápido para a seção FAURGS -->
+            <a href="#faurgs-alert" class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                ⚠️ Foco na Banca FAURGS
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow">
+
+        <!-- ========================================== -->
+        <!-- SEÇÃO: REPRODUTOR DE ÁUDIO (PLAYER DA AULA) -->
+        <!-- ========================================== -->
+        <section class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-10">
+            <h2 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                🔊 Reprodutor de Áudio da Aula
+            </h2>
+            
+            <div class="flex flex-col gap-4">
+                <!-- Controle de arquivo MP3 e player nativo oculto -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                    <div>
+                        <label for="audioSourceInput" class="block text-xs font-semibold text-gray-600 mb-1">
+                            Nome/Caminho do arquivo de áudio (MP3):
+                        </label>
+                        <!-- Input dinâmico: Permite alterar o arquivo sem nem precisar abrir o código -->
+                        <input 
+                            type="text" 
+                            id="audioSourceInput" 
+                            value="aula_geomorfologia.mp3" 
+                            placeholder="Ex: aula_geomorfologia.mp3" 
+                            class="w-full text-sm px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-gray-700 bg-white"
+                        >
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button 
+                            onclick="carregarAudio()" 
+                            class="w-full bg-gray-800 hover:bg-gray-900 text-white text-xs font-semibold py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                        >
+                            🔄 Recarregar Novo Áudio
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PLAYER DE AUDIO (ELEMENTO HTML5) -->
+                <!-- ========================================================================= -->
+                <!-- ATENÇÃO: ABAIXO É O LOCAL NO CÓDIGO ONDE VOCÊ AJUSTA O NOME PADRÃO DO MP3 -->
+                <!-- Modifique o atributo 'src="..."' conforme sua preferência de arquivo.    -->
+                <!-- ========================================================================= -->
+                <audio id="playerAudio" src="aula_geomorfologia.mp3" preload="metadata"></audio>
+                <!-- ========================================================================= -->
+
+                <!-- CONTROLES CUSTOMIZADOS DE ÁUDIO -->
+                <div class="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-3">
+                    
+                    <!-- Barra de progresso -->
+                    <div class="flex items-center gap-3">
+                        <span id="currentTime" class="text-xs text-gray-500 font-mono w-10">0:00</span>
+                        <input 
+                            type="range" 
+                            id="progressBar" 
+                            value="0" 
+                            max="100" 
+                            class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                        >
+                        <span id="durationTime" class="text-xs text-gray-500 font-mono w-10">0:00</span>
+                    </div>
+
+                    <!-- Botões de Controle Principal -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 pt-1">
+                        <div class="flex items-center gap-2">
+                            <!-- Retornar 10s -->
+                            <button onclick="pularTempo(-10)" title="Voltar 10s" class="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all">
+                                ⏪ -10s
+                            </button>
+                            <!-- Play / Pause -->
+                            <button id="btnPlayPause" onclick="togglePlay()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-bold text-sm transition-all shadow-sm flex items-center gap-2">
+                                <span>▶️ Play</span>
+                            </button>
+                            <!-- Avançar 10s -->
+                            <button onclick="pularTempo(10)" title="Avançar 10s" class="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all">
+                                ⏩ +10s
+                            </button>
+                        </div>
+
+                        <!-- Velocidade de reprodução -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-gray-500">Velocidade:</span>
+                            <select 
+                                id="selectSpeed" 
+                                onchange="mudarVelocidade(this.value)" 
+                                class="text-xs font-bold border border-gray-300 rounded-lg px-2.5 py-1.5 bg-gray-50 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500 cursor-pointer"
+                            >
+                                <option value="0.5">0.5x</option>
+                                <option value="0.75">0.75x</option>
+                                <option value="1.0" selected>1.0x (Normal)</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="1.75">1.75x</option>
+                                <option value="2.0">2.0x 🚀</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Informação de status do arquivo atual carregado -->
+                    <div class="text-[11px] text-gray-400 border-t border-gray-100 pt-2 flex items-center gap-2">
+                        <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span>
+                        Status do arquivo: <span id="audioStatus" class="font-mono text-gray-500">aula_geomorfologia.mp3 pronto</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ========================================== -->
+        <!-- CONTEÚDO PEDAGÓGICO DE DUAS PÁGINAS -->
+        <!-- ========================================== -->
+        
+        <!-- PÁGINA 1: COMPARTIMENTAÇÃO DO RELEVO -->
+        <article class="prose max-w-none text-gray-800">
+            <header class="border-b-2 border-gray-100 pb-4 mb-8">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">PÁGINA 1 DE 2 • FUNDAMENTOS</span>
+                <h2 class="text-2xl font-black text-gray-900 mt-0">Compartimentação de Relevo e Relevo Brasileiro</h2>
+                <p class="text-gray-500 text-sm italic mt-1">Desenvolvido com foco exclusivo nas matrizes conceituais do IFSC e tendências da banca FAURGS.</p>
+            </header>
+
+            <!-- Introdução Curta -->
+            <p class="text-base leading-relaxed mb-6">
+                A geomorfologia estuda as formas da superfície terrestre, sua <mark>gênese (endógena)</mark> e sua <mark>evolução (exógena)</mark> sob influência do clima. No contexto de concursos EBTT (Ensino Básico, Técnico e Tecnológico), a cobrança exige o domínio de conceitos estruturais, o conhecimento de nomenclaturas marinhas e, principalmente, a distinção clássica dos três grandes modelos de classificação do relevo brasileiro.
+            </p>
+
+            <!-- Tipos de Relevo Terrestre -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 border-l-4 border-blue-500 pl-3 mb-4">1. Os Quatro Grandes Tipos de Relevo</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                        <h4 class="font-bold text-sm text-gray-900 mb-1 flex items-center gap-2">⛰️ Planaltos</h4>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Áreas de superfícies irregulares onde o processo de <mark>desgaste (erosão)</mark> supera o de deposição. Delimitados por escarpas ou rampas de transição. Possuem altitudes variáveis e bases estruturais cratônicas ou sedimentares.
+                        </p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                        <h4 class="font-bold text-sm text-gray-900 mb-1 flex items-center gap-2">🏝️ Planícies</h4>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Áreas essencialmente planas formadas por processos de <mark>deposição (sedimentação)</mark> fluvial, lacustre ou marinha. Onde a deposição de sedimentos supera consideravelmente os processos erosivos.
+                        </p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                        <h4 class="font-bold text-sm text-gray-900 mb-1 flex items-center gap-2">📉 Depressões</h4>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Superfícies rebaixadas geradas por prolongado processo de <mark>desnudamento periférico</mark>. Podem ser <strong>absolutas</strong> (abaixo do nível do mar) ou <strong>relativas</strong> (mais baixas que o relevo circundante). No Brasil, <strong>todas</strong> as depressões são <mark>relativas</mark>.
+                        </p>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg p-4 bg-white">
+                        <h4 class="font-bold text-sm text-gray-900 mb-1 flex items-center gap-2">🏔️ Montanhas</h4>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Formas de relevo com maior elevação e declives acentuados. Originadas principalmente por <mark>tectonismo ativo (dobramentos modernos)</mark> ou vulcanismo. O Brasil <strong>não possui</strong> dobramentos modernos ativos, logo, carece desse relevo típico.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolução de Classificação de Relevo Brasileiro -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 border-l-4 border-blue-500 pl-3 mb-4">2. Classificação do Relevo Brasileiro</h3>
+                <p class="text-xs text-gray-600 mb-4">
+                    Memorize a transição histórica e técnica. A banca FAURGS frequentemente tenta inverter os critérios adotados por cada autor.
+                </p>
+
+                <!-- TABELA RESPONSIVA: No celular vira cards, evitando rolagem horizontal -->
+                <div class="overflow-hidden border border-gray-200 rounded-lg">
+                    <!-- Versão Desktop da Tabela -->
+                    <table class="hidden md:table min-w-full divide-y divide-gray-200 bg-white">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Autor e Época</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Critério Principal</th>
+                                <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">Estrutura de Divisão</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 text-xs">
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-gray-900">Aroldo de Azevedo (1940s)</td>
+                                <td class="px-4 py-3"><mark>Morfométrico / Altimétrico</mark> (cota fixa de 200m).</td>
+                                <td class="px-4 py-3">8 unidades: 4 planaltos e 4 planícies. Divisão simplista.</td>
+                            </tr>
+                            <tr class="bg-gray-50">
+                                <td class="px-4 py-3 font-semibold text-gray-900">Aziz Ab'Sáber (1950s/60s)</td>
+                                <td class="px-4 py-3"><mark>Morfoclimático / Processual</mark> (Erosão vs Sedimentação).</td>
+                                <td class="px-4 py-3">10 unidades: 7 planaltos e 3 planícies. Relevo ativo dinâmico.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-semibold text-gray-900">Jurandyr Ross (1980s)</td>
+                                <td class="px-4 py-3"><mark>Morfoestrutura, Morfoescultura e Clima</mark> (Radambrasil).</td>
+                                <td class="px-4 py-3">28 unidades: 11 planaltos, 11 depressões, 6 planícies. <mark>Taxonomia</mark> de táxons.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Versão Mobile da Tabela (Cards Empilhados para Responsividade Real) -->
+                    <div class="block md:hidden divide-y divide-gray-200 bg-white">
+                        <div class="p-4 text-xs">
+                            <span class="font-bold text-blue-600 block mb-1">Aroldo de Azevedo (1940s)</span>
+                            <p class="mb-1"><strong>Critério:</strong> <mark>Morfométrico / Altimétrico</mark> (limite de 200m).</p>
+                            <p><strong>Divisão:</strong> 8 unidades (4 planaltos e 4 planícies).</p>
+                        </div>
+                        <div class="p-4 text-xs">
+                            <span class="font-bold text-blue-600 block mb-1">Aziz Ab'Sáber (1950s/60s)</span>
+                            <p class="mb-1"><strong>Critério:</strong> <mark>Morfoclimático / Processual</mark> (Erosão x Sedimentação).</p>
+                            <p><strong>Divisão:</strong> 10 unidades (7 planaltos e 3 planícies).</p>
+                        </div>
+                        <div class="p-4 text-xs">
+                            <span class="font-bold text-blue-600 block mb-1">Jurandyr Ross (1980s)</span>
+                            <p class="mb-1"><strong>Critério:</strong> <mark>Morfoestrutura, Morfoescultura e Clima</mark> (Uso do Radambrasil).</p>
+                            <p><strong>Divisão:</strong> 28 unidades (11 planaltos, 11 depressões, 6 planícies).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- PÁGINA 2: RELEVO SUBMARINO E MORFOLOGIA LITORÂNEA -->
+        <article class="prose max-w-none text-gray-800 mt-12 pt-12 border-t-2 border-gray-100">
+            <header class="border-b-2 border-gray-100 pb-4 mb-8">
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest block mb-1">PÁGINA 2 DE 2 • TÓPICOS COMPLEMENTARES</span>
+                <h2 class="text-2xl font-black text-gray-900 mt-0">Relevo Submarino e Morfologia Litorânea</h2>
+            </header>
+
+            <!-- Relevo Submarino -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 border-l-4 border-blue-500 pl-3 mb-4">1. Compartimentação do Relevo Submarino</h3>
+                <p class="text-sm leading-relaxed mb-4">
+                    O assoalho oceânico possui compartimentos nítidos moldados por movimentos tectônicos, correntes marítimas e sedimentação continental. Atente para as transições morfológicas:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="bg-gray-50 p-4 border-l-4 border-gray-300 rounded-r-lg">
+                        <strong class="text-sm text-gray-900 block mb-1">🌊 Plataforma Continental</strong>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Extensão submersa do continente com <mark>declividade suave</mark> (em média 0,1°). Vai do litoral até cerca de <mark>200 metros de profundidade</mark>. É de crucial relevância econômica (extração de petróleo, pesca) e sofre forte influência da deposição terrígena.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 border-l-4 border-gray-300 rounded-r-lg">
+                        <strong class="text-sm text-gray-900 block mb-1">📉 Talude Continental</strong>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Zona de <mark>declive abrupto</mark> que conecta a plataforma continental às profundezas oceânicas (bacia abissal). Pode variar de 200m a até mais de 3.000m de profundidade. Marca o limite físico/geológico entre a crosta continental e a crosta oceânica.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 border-l-4 border-gray-300 rounded-r-lg">
+                        <strong class="text-sm text-gray-900 block mb-1">🕳️ Bacia (Planície) Abissal</strong>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            A vasta área plana do fundo do oceano profundo, localizada entre 3.000m e 6.000m de profundidade. Onde o relevo plano é interrompido por <mark>dorsais meso-oceânicas</mark> (cadeias de montanhas submarinas geradas por vulcanismo/divergência de placas) e colinas vulcânicas subaquáticas.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 border-l-4 border-gray-300 rounded-r-lg">
+                        <strong class="text-sm text-gray-900 block mb-1">⚡ Fossas Oceânicas</strong>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Depressões lineares estreitas e extremamente profundas encontradas nas <mark>zonas de subducção de placas tectônicas</mark> (limites convergentes).
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Morfologia Litorânea -->
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-900 border-l-4 border-blue-500 pl-3 mb-4">2. Dinâmica e Morfologia Litorânea</h3>
+                <p class="text-sm leading-relaxed mb-4">
+                    O litoral é a interface mais dinâmica da Terra, sofrendo ações combinadas de ondas, correntes de maré, vento e oscilações do nível do mar (glacioeustasia). 
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-gray-200 p-4 rounded-lg bg-white">
+                        <strong class="text-xs text-gray-500 uppercase block mb-1">Morfologias de Erosão (Destrutivas)</strong>
+                        <ul class="list-disc pl-4 text-xs text-gray-600 space-y-1 mt-2">
+                            <li><mark>Falésias Ativas</mark>: Encostas escarpadas esculpidas pelo processo de <strong>abrasão marinha</strong> direto.</li>
+                            <li><mark>Rias e Fiordes</mark>: Formas resultantes do afogamento de vales fluviais (Rias) ou vales glaciais antigos (Fiordes).</li>
+                        </ul>
+                    </div>
+
+                    <div class="border border-gray-200 p-4 rounded-lg bg-white">
+                        <strong class="text-xs text-gray-500 uppercase block mb-1">Morfologias de Acumulação (Construtivas)</strong>
+                        <ul class="list-disc pl-4 text-xs text-gray-600 space-y-1 mt-2">
+                            <li><mark>Restingas e Barreiras</mark>: Cordões arenosos formados pelo transporte longitudinal de sedimentos paralelamente à costa.</li>
+                            <li><mark>Estuários vs Deltas</mark>: Estuários são fozes de canal único sem barreiras sedimentares marcantes; já os Deltas possuem múltiplos canais ramificados devido à forte deposição.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ALERTA FAURGS / PEGADINHAS DE PROVA -->
+            <div id="faurgs-alert" class="bg-red-50 border border-red-200 rounded-xl p-6 mt-10 scroll-mt-24">
+                <h3 class="text-base font-extrabold text-red-800 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    🚨 RAIO-X FAURGS: Pegadinhas Críticas Para Professor EBTT
+                </h3>
+                <div class="space-y-4 text-xs text-red-950 leading-relaxed">
+                    <p>
+                        A banca <strong>FAURGS</strong> em provas para Docentes Federais possui estilo técnico e objetivo. Memorize esses pontos para evitar armadilhas:
+                    </p>
+                    <ul class="list-inside list-decimal space-y-2 pl-2">
+                        <li>
+                            <strong>A Classificação de Ross NÃO define depressões como absolutas:</strong> A banca colocará questões afirmando que o Brasil possui depressões absolutas. Errado! Todas as depressões brasileiras catalogadas por Ross são <strong>relativas</strong>.
+                        </li>
+                        <li>
+                            <strong>Inversão conceitual de Ab'Sáber vs Azevedo:</strong> Lembre que Aroldo de Azevedo considerou o relevo puramente descritivo de altitude (<mark>métrico</mark>). Aziz Ab'Sáber adicionou os <mark>processos</mark> de dinâmica climática e geomorfológica estrutural.
+                        </li>
+                        <li>
+                            <strong>Terminologia de Falésia Morta:</strong> Uma falésia que não recebe mais o embate direto das ondas marítimas é classificada como <strong>morta ou inativa</strong>. A banca adora questionar o processo de estabilização morfológica.
+                        </li>
+                        <li>
+                            <strong>Fiordes no Brasil?:</strong> A FAURGS pode tentar confundir o candidato afirmando a ocorrência de fiordes genuínos no litoral catarinense ou sul-brasileiro. O Brasil possui rias e estuários, mas <strong>não possui fiordes legítimos</strong>, que requerem erosão glacial ausente no nosso território geológico recente.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- RODAPÉ COM NAVEGAÇÃO DE QUESTÕES -->
+    <!-- ========================================== -->
+    <footer class="bg-gray-50 border-t border-gray-200 py-10 mt-16">
+        <div class="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-center md:text-left">
+                <p class="text-sm font-bold text-gray-800">Pronto para testar seus conhecimentos?</p>
+                <p class="text-xs text-gray-500 mt-1">Avance para praticar exercícios baseados no estilo FAURGS.</p>
+            </div>
+            
+            <!-- Redirecionamento configurado para questoes.html -->
+            <a 
+                href="geomorfologiaquestoes.html" 
+                class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-md inline-flex items-center gap-2 text-sm group"
+            >
+                📝 Ir Para o Caderno de Questões 
+                <span class="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 mt-8 pt-6 border-t border-gray-100 text-center text-[10px] text-gray-400">
+            © 2026 IFSC Preparação Professor de Geografia • Desenvolvido sob medida para memorização ativa e responsiva.
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE GERENCIAMENTO DE ÁUDIO -->
+    <script>
+        // Elementos do DOM
+        const audio = document.getElementById('playerAudio');
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const selectSpeed = document.getElementById('selectSpeed');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+        const audioSourceInput = document.getElementById('audioSourceInput');
+        const audioStatus = document.getElementById('audioStatus');
+
+        // Carregar o arquivo MP3 e atualizar o reprodutor
+        function carregarAudio() {
+            const novoArquivo = audioSourceInput.value.trim();
+            if (novoArquivo) {
+                audio.src = novoArquivo;
+                audio.load();
+                audioStatus.textContent = `${novoArquivo} carregado com sucesso`;
+                btnPlayPause.innerHTML = '<span>▶️ Play</span>';
+            } else {
+                audioStatus.textContent = 'Erro: Nome de arquivo inválido';
+            }
+        }
+
+        // Play ou Pause do Áudio
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        btnPlayPause.innerHTML = '<span>⏸️ Pause</span>';
+                    })
+                    .catch(e => {
+                        console.error("Falha ao reproduzir: ", e);
+                        audioStatus.textContent = "Erro de reprodução (verifique se o arquivo existe)";
+                    });
+            } else {
+                audio.pause();
+                btnPlayPause.innerHTML = '<span>▶️ Play</span>';
+            }
+        }
+
+        // Alterar a velocidade de reprodução
+        function mudarVelocidade(vel) {
+            audio.playbackRate = parseFloat(vel);
+        }
+
+        // Pular 10 segundos para frente ou para trás
+        function pularTempo(segundos) {
+            audio.currentTime += segundos;
+        }
+
+        // Formatar tempo de segundos para MM:SS
+        function formatarTempo(segundos) {
+            if (isNaN(segundos)) return "0:00";
+            const min = Math.floor(segundos / 60);
+            const seg = Math.floor(segundos % 60);
+            return `${min}:${seg < 10 ? '0' : ''}${seg}`;
+        }
+
+        // Eventos do player de áudio para atualizar a barra de progresso
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const progresso = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progresso;
+                currentTimeEl.textContent = formatarTempo(audio.currentTime);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatarTempo(audio.duration);
+        });
+
+        // Evento ao arrastar a barra de progresso manualmente
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                const novoTempo = (progressBar.value / 100) * audio.duration;
+                audio.currentTime = novoTempo;
+            }
+        });
+    </script>
+</body>
+</html>
