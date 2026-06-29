@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo Direcionado - Climatologia IFSC (Banca FAURGS)</title>
+    <!-- Tailwind CSS para um design ágil e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones elegantes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1e293b', /* Slate 800 - Leitura confortável */
+                        accent: '#2563eb', /* Blue 600 - Foco e botões */
+                        highlight: '#fef08a', /* Yellow 200 - Grifos sutis */
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+        /* Custom scrollbar para manter a estética */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Grifo personalizado */
+        .grifo {
+            background-color: #fef08a;
+            padding-left: 2px;
+            padding-right: 2px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen flex flex-col">
+
+    <!-- Player de Áudio Fixo no Topo -->
+    <div class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur border-b border-slate-200 shadow-sm py-3 px-4">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Título da Aula & Input do arquivo -->
+            <div class="w-full md:w-auto flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+                    </span>
+                    <h2 class="text-sm font-bold text-slate-800 tracking-tight">Audioaula de Apoio</h2>
+                </div>
+                <div class="flex items-center gap-1.5 w-full sm:w-auto bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg">
+                    <label for="audio-src-input" class="text-xs text-slate-500 font-medium whitespace-nowrap">Arquivo MP3:</label>
+                    <input type="text" id="audio-src-input" value="aula-climatologia.mp3" placeholder="Ex: aula.mp3" 
+                           class="bg-transparent text-xs text-slate-800 focus:outline-none font-semibold w-36 sm:w-44 border-b border-dashed border-slate-400 hover:border-blue-500 transition-colors" />
+                    <button onclick="carregarAudio()" title="Carregar arquivo" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-medium px-2 py-0.5 rounded-md transition-colors">
+                        Carregar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Controles do Player de Áudio -->
+            <div class="w-full md:w-auto flex items-center justify-between md:justify-end gap-4 bg-slate-50 border border-slate-100 p-2 rounded-xl flex-1 max-w-lg">
+                <audio id="audio-elemento" src="aula-climatologia.mp3" preload="none"></audio>
+                
+                <div class="flex items-center gap-3">
+                    <!-- Play/Pause -->
+                    <button id="btn-play-pause" onclick="alternarAudio()" class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 active:scale-95 transition-all shadow-sm">
+                        <i id="icone-play" class="fa-solid fa-play ml-0.5"></i>
+                    </button>
+                    <!-- Time Display -->
+                    <span id="tempo-audio" class="text-xs font-mono text-slate-600 select-none">00:00 / 00:00</span>
+                </div>
+
+                <!-- Progresso do Áudio -->
+                <div class="flex-1 flex items-center mx-1">
+                    <input type="range" id="progresso-audio" min="0" max="100" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600" oninput="ajustarProgresso(this.value)">
+                </div>
+
+                <!-- Velocidade do Áudio -->
+                <div class="relative inline-block text-left" id="dropdown-velocidade">
+                    <button onclick="toggleVelocidades()" class="bg-white border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 flex items-center gap-1.5 shadow-sm transition-colors">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span id="label-velocidade">1.0x</span>
+                        <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                    </button>
+                    <!-- Menu de Opções de Velocidade -->
+                    <div id="opcoes-velocidade" class="hidden absolute right-0 mt-1 w-24 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-50">
+                        <button onclick="mudarVelocidade(0.5)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium">0.5x</button>
+                        <button onclick="mudarVelocidade(0.75)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium">0.75x</button>
+                        <button onclick="mudarVelocidade(1.0)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-semibold text-blue-600">1.0x (Padrão)</button>
+                        <button onclick="mudarVelocidade(1.25)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium">1.25x</button>
+                        <button onclick="mudarVelocidade(1.5)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium">1.5x</button>
+                        <button onclick="mudarVelocidade(1.75)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium">1.75x</button>
+                        <button onclick="mudarVelocidade(2.0)" class="w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium">2.0x</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
+        
+        <!-- Header da Aula -->
+        <header class="border-b-2 border-slate-100 pb-6 mb-8 text-center sm:text-left">
+            <span class="bg-blue-50 text-blue-800 text-xs font-bold tracking-widest uppercase px-3 py-1.5 rounded-full border border-blue-200">
+                IFSC • Concurso Docente • Cargo: Professor de Geografia
+            </span>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-4 leading-tight">
+                Atmosfera Terrestre e Climatologia
+            </h1>
+            <p class="text-slate-600 mt-2 text-base sm:text-lg max-w-3xl">
+                Guia Teórico, Fórmulas de Memorização e Análise do Perfil de Cobrança da <span class="text-blue-700 font-bold">Banca FAURGS</span>.
+            </p>
+        </header>
+
+        <!-- Página 1 -->
+        <section class="space-y-8">
+            <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                <span class="text-2xl">📖</span>
+                <h2 class="text-2xl font-extrabold text-slate-800 uppercase tracking-tight">PÁGINA 1: Estrutura Atmosférica e Elementos Climáticos (Física da Atmosfera)</h2>
+            </div>
+
+            <!-- 1. Composição e Gênese -->
+            <article class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-800 font-bold text-sm w-7 h-7 flex items-center justify-center rounded-full">1</span>
+                    <h3 class="text-xl font-bold text-slate-800">Composição e Gênese da Atmosfera</h3>
+                </div>
+                <div class="space-y-3 text-slate-700 leading-relaxed text-sm sm:text-base">
+                    <p>
+                        <strong class="text-slate-900">Gênese:</strong> Resulta do resfriamento e consolidação da litosfera, seguido pela liberação de gases (<span class="grifo">desgaseificação</span>) por atividade vulcânica antiga, retidos pela <span class="grifo">gravidade</span>.
+                    </p>
+                    <p>
+                        <strong class="text-slate-900">Homosfera (Até 80 km):</strong> Camada de composição química homogênea devido à mistura turbulenta.
+                    </p>
+                    <div class="bg-slate-50 border border-slate-100 p-4 rounded-xl">
+                        <strong class="text-xs text-slate-500 uppercase tracking-wider block mb-2">Gases Principais (Atmosfera Seca)</strong>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                            <div class="bg-white p-2.5 rounded-lg border border-slate-200/60 shadow-sm">
+                                <span class="block text-xl font-extrabold text-slate-800">78%</span>
+                                <span class="text-xs font-semibold text-slate-500">Nitrogênio (N₂)</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-lg border border-slate-200/60 shadow-sm">
+                                <span class="block text-xl font-extrabold text-slate-800">21%</span>
+                                <span class="text-xs font-semibold text-slate-500">Oxigênio (O₂)</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-lg border border-slate-200/60 shadow-sm">
+                                <span class="block text-xl font-extrabold text-slate-800">0,93%</span>
+                                <span class="text-xs font-semibold text-slate-500">Argônio (Ar)</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded-lg border border-slate-200/60 shadow-sm">
+                                <span class="block text-xl font-extrabold text-slate-800">0,04%</span>
+                                <span class="text-xs font-semibold text-slate-500">Dióxido de Carbono (CO₂)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-500 italic mt-2">
+                        *Nota de Prova: O <span class="grifo">vapor de água e os aerossóis</span> são altamente variáveis espacial e temporalmente na atmosfera.
+                    </p>
+                </div>
+            </article>
+
+            <!-- 2. Camadas Térmicas -->
+            <article class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-800 font-bold text-sm w-7 h-7 flex items-center justify-center rounded-full">2</span>
+                    <h3 class="text-xl font-bold text-slate-800">Camadas Térmicas da Atmosfera</h3>
+                </div>
+                <p class="text-slate-700 leading-relaxed text-sm sm:text-base">
+                    A divisão vertical é definida pela variação do <span class="grifo">gradiente térmico</span> em altitude. As zonas de transição entre as camadas são chamadas de "pausas".
+                </p>
+
+                <!-- Tabela Responsiva Sem Scroll Horizontal (Formato Adaptável) -->
+                <div class="w-full">
+                    <!-- Tabela para Telas Médias e Grandes -->
+                    <div class="hidden md:block overflow-hidden border border-slate-200 rounded-xl">
+                        <table class="min-w-full divide-y divide-slate-200 text-sm">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left font-bold text-slate-700 uppercase tracking-wider">Camada</th>
+                                    <th class="px-4 py-3 text-left font-bold text-slate-700 uppercase tracking-wider">Altitude</th>
+                                    <th class="px-4 py-3 text-left font-bold text-slate-700 uppercase tracking-wider">Comportamento Térmico</th>
+                                    <th class="px-4 py-3 text-left font-bold text-slate-700 uppercase tracking-wider">Principais Características para a Prova</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-200">
+                                <tr>
+                                    <td class="px-4 py-3 font-extrabold text-slate-900 bg-slate-50/50">Troposfera</td>
+                                    <td class="px-4 py-3 text-slate-700">0 a 10-18 km</td>
+                                    <td class="px-4 py-3 text-slate-700 font-semibold text-rose-700">Decresce com a altitude (-0,65 °C a cada 100 m)</td>
+                                    <td class="px-4 py-3 text-slate-700">Concentra <span class="grifo">90% da massa gasosa</span> e quase toda a umidade. Onde ocorrem os fenômenos do tempo meteorológico.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-extrabold text-slate-900 bg-slate-50/50">Estratosfera</td>
+                                    <td class="px-4 py-3 text-slate-700">10-18 km a 50 km</td>
+                                    <td class="px-4 py-3 text-slate-700 font-semibold text-emerald-700">Cresce com a altitude</td>
+                                    <td class="px-4 py-3 text-slate-700">Contém a <span class="grifo">camada de ozônio (O₃)</span>, que absorve radiação ultravioleta. Alta estabilidade horizontal (voos comerciais).</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-extrabold text-slate-900 bg-slate-50/50">Mesosfera</td>
+                                    <td class="px-4 py-3 text-slate-700">50 km a 80 km</td>
+                                    <td class="px-4 py-3 text-slate-700 font-semibold text-rose-700">Decresce acentuadamente (até -100 °C)</td>
+                                    <td class="px-4 py-3 text-slate-700">Camada mais fria; ausência de gases absorvedores de calor. Ocorre a <span class="grifo">aeroluminescência</span>.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-extrabold text-slate-900 bg-slate-50/50">Termosfera</td>
+                                    <td class="px-4 py-3 text-slate-700">80 km a 500-600 km</td>
+                                    <td class="px-4 py-3 text-slate-700 font-semibold text-emerald-700">Cresce continuamente</td>
+                                    <td class="px-4 py-3 text-slate-700">Gases altamente ionizados que <span class="grifo">refletem ondas de rádio</span>. Onde ocorrem as auroras polares (ionosfera).</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-extrabold text-slate-900 bg-slate-50/50">Exosfera</td>
+                                    <td class="px-4 py-3 text-slate-700">Acima de 500-600 km</td>
+                                    <td class="px-4 py-3 text-slate-700">Isotermia predominante</td>
+                                    <td class="px-4 py-3 text-slate-700">Transição para o espaço exterior. Gases extremamente rarefeitos; órbita de satélites artificiais.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Cards para Dispositivos Móveis (Zero Scroll Horizontal) -->
+                    <div class="block md:hidden space-y-4">
+                        <!-- Card Troposfera -->
+                        <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="font-extrabold text-slate-900 text-base">Troposfera</span>
+                                <span class="text-xs bg-slate-100 font-semibold text-slate-600 px-2 py-0.5 rounded">0 a 10-18 km</span>
+                            </div>
+                            <p class="text-xs font-semibold text-rose-700"><i class="fa-solid fa-temperature-arrow-down mr-1"></i>Decresce com a altitude (-0,65 °C a cada 100 m)</p>
+                            <p class="text-sm text-slate-700">Concentra <span class="grifo">90% da massa gasosa</span> e quase toda a umidade. Onde ocorrem os fenômenos do tempo meteorológico.</p>
+                        </div>
+                        <!-- Card Estratosfera -->
+                        <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="font-extrabold text-slate-900 text-base">Estratosfera</span>
+                                <span class="text-xs bg-slate-100 font-semibold text-slate-600 px-2 py-0.5 rounded">10-18 km a 50 km</span>
+                            </div>
+                            <p class="text-xs font-semibold text-emerald-700"><i class="fa-solid fa-temperature-arrow-up mr-1"></i>Cresce com a altitude</p>
+                            <p class="text-sm text-slate-700">Contém a <span class="grifo">camada de ozônio (O₃)</span>, que absorve radiação ultravioleta. Alta estabilidade horizontal (voos comerciais).</p>
+                        </div>
+                        <!-- Card Mesosfera -->
+                        <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="font-extrabold text-slate-900 text-base">Mesosfera</span>
+                                <span class="text-xs bg-slate-100 font-semibold text-slate-600 px-2 py-0.5 rounded">50 km a 80 km</span>
+                            </div>
+                            <p class="text-xs font-semibold text-rose-700"><i class="fa-solid fa-temperature-arrow-down mr-1"></i>Decresce acentuadamente (até -100 °C)</p>
+                            <p class="text-sm text-slate-700">Camada mais fria; ausência de gases absorvedores de calor. Ocorre a <span class="grifo">aeroluminescência</span>.</p>
+                        </div>
+                        <!-- Card Termosfera -->
+                        <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="font-extrabold text-slate-900 text-base">Termosfera</span>
+                                <span class="text-xs bg-slate-100 font-semibold text-slate-600 px-2 py-0.5 rounded">80 km a 500-600 km</span>
+                            </div>
+                            <p class="text-xs font-semibold text-emerald-700"><i class="fa-solid fa-temperature-arrow-up mr-1"></i>Cresce continuamente</p>
+                            <p class="text-sm text-slate-700">Gases altamente ionizados que <span class="grifo">refletem ondas de rádio</span>. Onde ocorrem as auroras polares (ionosfera).</p>
+                        </div>
+                        <!-- Card Exosfera -->
+                        <div class="border border-slate-200 rounded-xl p-4 space-y-2">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                                <span class="font-extrabold text-slate-900 text-base">Exosfera</span>
+                                <span class="text-xs bg-slate-100 font-semibold text-slate-600 px-2 py-0.5 rounded">Acima de 500-600 km</span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-600">Isotermia predominante</p>
+                            <p class="text-sm text-slate-700">Transição para o espaço exterior. Gases extremamente rarefeitos; órbita de satélites artificiais.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3. Elementos Climáticos -->
+            <article class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-800 font-bold text-sm w-7 h-7 flex items-center justify-center rounded-full">3</span>
+                    <h3 class="text-xl font-bold text-slate-800">Elementos Climáticos (As Variáveis da Atmosfera)</h3>
+                </div>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    Os <span class="grifo">elementos</span> são as grandezas físicas mensuráveis que caracterizam o estado momentâneo do ar (<strong class="text-slate-950">Tempo</strong>). A média de longo prazo (mínimo de <span class="grifo">30 anos</span>) define o <strong class="text-slate-950">Clima</strong>.
+                </p>
+
+                <!-- Temperatura e Adiabatismo -->
+                <div class="space-y-4 pt-2 border-t border-slate-100">
+                    <h4 class="text-base font-bold text-blue-800 uppercase tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-temperature-half"></i> Temperatura e Adiabatismo (Termodinâmica Básica)
+                    </h4>
+                    <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                        Quando uma parcela de ar sobe, ela expande devido à menor pressão externa, realizando trabalho mecânico e resfriando <span class="grifo">sem trocar calor</span> com o meio (resfriamento adiabático).
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-amber-50/40 border border-amber-100 p-4 rounded-xl space-y-2">
+                            <span class="text-xs font-bold text-amber-800 uppercase tracking-widest block">Gradiente Adiabático Seco (GAS)</span>
+                            <p class="text-slate-700 text-sm leading-relaxed">
+                                Taxa de resfriamento de parcelas de ar <strong class="text-amber-950">não saturadas</strong> (Umidade Relativa &lt; 100%).
+                            </p>
+                            <span class="inline-block bg-white text-slate-800 font-mono font-bold text-sm px-2.5 py-1 rounded-md border border-amber-200">
+                                Constante: -1,0 °C a cada 100 m
+                            </span>
+                        </div>
+                        <div class="bg-blue-50/40 border border-blue-100 p-4 rounded-xl space-y-2">
+                            <span class="text-xs font-bold text-blue-800 uppercase tracking-widest block">Gradiente Adiabático Úmido (GAU)</span>
+                            <p class="text-slate-700 text-sm leading-relaxed">
+                                Taxa de resfriamento de parcelas de ar <strong class="text-blue-950">saturadas</strong> (Umidade Relativa = 100%).
+                            </p>
+                            <span class="inline-block bg-white text-slate-800 font-mono font-bold text-sm px-2.5 py-1 rounded-md border border-blue-200">
+                                Varia: -0,5 °C a -0,6 °C a cada 100 m
+                            </span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 border-l-4 border-blue-500 p-4 rounded-r-xl">
+                        <p class="text-xs sm:text-sm text-slate-700 font-medium">
+                            <strong class="text-blue-900">Por que o GAU é menor que o GAS?</strong> A condensação da água é um processo exotérmico. Ao atingir o ponto de saturação, a condensação do vapor <span class="grifo">libera calor latente</span> na parcela de ar, atenuando a taxa de resfriamento vertical.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Pressão e Dinâmica -->
+                <div class="space-y-4 pt-6 border-t border-slate-100">
+                    <h4 class="text-base font-bold text-blue-800 uppercase tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-wind"></i> Pressão Atmosférica e Dinâmica Eólica
+                    </h4>
+                    <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                        A pressão atmosférica é o peso exercido pela coluna de ar e decresce de forma <span class="grifo">exponencial</span> com a altitude. O vento desloca-se sempre das zonas de <span class="grifo">Alta Pressão</span> para as de <span class="grifo">Baixa Pressão</span>.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white border border-slate-200 p-4 rounded-xl space-y-2">
+                            <div class="flex items-center gap-2 text-slate-800">
+                                <i class="fa-solid fa-circle-down text-rose-600"></i>
+                                <span class="font-bold text-sm">Alta Pressão (Anticiclone)</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600">
+                                Ar <span class="grifo">subsidente</span> (desce), comprimindo-se e aquecendo-se adiabaticamente. Inibe a formação de nuvens; gera tempo estável, ensolarado e seco.
+                            </p>
+                        </div>
+                        <div class="bg-white border border-slate-200 p-4 rounded-xl space-y-2">
+                            <div class="flex items-center gap-2 text-slate-800">
+                                <i class="fa-solid fa-circle-up text-blue-600"></i>
+                                <span class="font-bold text-sm">Baixa Pressão (Ciclone)</span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-600">
+                                Ar <span class="grifo">convergente e ascendente</span> (sobe), expandindo-se e resfriando-se adiabaticamente. Favorece a condensação do vapor; gera instabilidade e chuvas.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Umidade do Ar -->
+                <div class="space-y-4 pt-6 border-t border-slate-100">
+                    <h4 class="text-base font-bold text-blue-800 uppercase tracking-wide flex items-center gap-2">
+                        <i class="fa-solid fa-droplet"></i> Umidade do Ar
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <span class="font-bold text-sm text-slate-800 block mb-1">Umidade Absoluta (Ha)</span>
+                            <span class="text-xs text-slate-500 font-mono block mb-2">Unidade: g/m³</span>
+                            <p class="text-xs sm:text-sm text-slate-600">
+                                Massa real e física de vapor de água contida em um determinado volume de ar.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl">
+                            <span class="font-bold text-sm text-slate-800 block mb-1">Umidade Relativa (Hr)</span>
+                            <span class="text-xs text-slate-500 font-mono block mb-2">Unidade: % (Percentual)</span>
+                            <p class="text-xs sm:text-sm text-slate-600">
+                                Relação percentual entre o vapor presente e a capacidade máxima de retenção do ar naquela temperatura (saturação). <span class="grifo">Se a temperatura subir</span> sem adição de vapor, a capacidade de retenção aumenta e a Hr cai.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Página 2 -->
+        <section class="space-y-8 mt-12">
+            <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                <span class="text-2xl">🌍</span>
+                <h2 class="text-2xl font-extrabold text-slate-800 uppercase tracking-tight">PÁGINA 2: Fatores Climáticos, Dinâmica Global e Estratégia de Prova</h2>
+            </div>
+
+            <!-- 1. Fatores Climáticos -->
+            <article class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-800 font-bold text-sm w-7 h-7 flex items-center justify-center rounded-full">1</span>
+                    <h3 class="text-xl font-bold text-slate-800">Fatores Climáticos (Modificadores Geográficos)</h3>
+                </div>
+                <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                    Fatores são os <span class="grifo">agentes geográficos ou astronômicos</span> que alteram, moldam e distribuem os elementos climáticos pela superfície planetária.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Latitude -->
+                    <div class="bg-slate-50/60 border border-slate-200/50 p-4 rounded-xl space-y-2">
+                        <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-compass text-blue-600"></i> Latitude
+                        </span>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Determina a zonalidade térmica mundial. Devido à esfericidade terrestre, a radiação incide verticalmente no Equador (altas temperaturas) e obliquamente nos polos (baixas temperaturas, maior dispersão de energia).
+                        </p>
+                    </div>
+                    <!-- Altitude e Relevo -->
+                    <div class="bg-slate-50/60 border border-slate-200/50 p-4 rounded-xl space-y-2">
+                        <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-mountain text-blue-600"></i> Altitude e Relevo
+                        </span>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Altitudes elevadas possuem menor pressão, ar rarefeito e menor capacidade de reter calor. Barreiras de relevo forçam a subida do ar (<span class="grifo">chuvas orográficas</span> no barlavento e secura adiabática no sotavento).
+                        </p>
+                    </div>
+                    <!-- Maritimidade vs Continentalidade -->
+                    <div class="bg-slate-50/60 border border-slate-200/50 p-4 rounded-xl space-y-2">
+                        <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-water text-blue-600"></i> Maritimidade vs. Continentalidade
+                        </span>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Baseia-se no <span class="grifo">calor específico</span> diferencial. A água tem alto calor específico (demora a aquecer/resfriar), agindo como moderadora térmica (baixa amplitude). A rocha/solo possui baixo calor específico (alta amplitude).
+                        </p>
+                    </div>
+                    <!-- Correntes Marítimas -->
+                    <div class="bg-slate-50/60 border border-slate-200/50 p-4 rounded-xl space-y-2">
+                        <span class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-arrow-trend-up text-blue-600"></i> Correntes Marítimas
+                        </span>
+                        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            Correntes quentes elevam evaporação e geram umidade costeira. Correntes frias causam grande estabilidade, inibem a convecção e originam desertos costeiros (Atacama e Namíbia).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Albedo -->
+                <div class="bg-amber-50/20 border border-amber-200 p-4 rounded-xl space-y-2">
+                    <span class="font-bold text-amber-800 text-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-sun text-amber-600"></i> Albedo (Refletividade)
+                    </span>
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                        Taxa de reflexão da radiação solar de uma superfície (0% a 100%).
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800 block">Alto Albedo (Claros)</span>
+                            <span class="text-slate-600">Neve fresca e gelo (80% a 95%). Refletem a radiação, mantendo as baixas temperaturas.</span>
+                        </div>
+                        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                            <span class="font-bold text-slate-800 block">Baixo Albedo (Escuros)</span>
+                            <span class="text-slate-600">Florestas densas e oceanos (&lt; 15%). Absorvem a energia térmica, aquecendo a superfície.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Massas de Ar no Brasil -->
+                <div class="space-y-3 pt-4 border-t border-slate-100">
+                    <span class="font-bold text-slate-800 text-sm block">Massas de Ar de Destaque no Brasil</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-white border border-slate-200 p-3.5 rounded-xl text-center">
+                            <span class="inline-block bg-rose-100 text-rose-800 font-extrabold text-xs px-2 py-0.5 rounded-md mb-1">mEc</span>
+                            <strong class="block text-xs text-slate-800 mb-1">Equatorial Continental</strong>
+                            <p class="text-xs text-slate-600">
+                                Quente e <span class="grifo">altamente úmida</span>. Exceção global por originar-se sobre o continente (efeito da floresta Amazônica).
+                            </p>
+                        </div>
+                        <div class="bg-white border border-slate-200 p-3.5 rounded-xl text-center">
+                            <span class="inline-block bg-orange-100 text-orange-800 font-extrabold text-xs px-2 py-0.5 rounded-md mb-1">mTc</span>
+                            <strong class="block text-xs text-slate-800 mb-1">Tropical Continental</strong>
+                            <p class="text-xs text-slate-600">
+                                Quente e <span class="grifo">seca</span>. Origina-se na depressão do Chaco e causa bloqueios atmosféricos secos no Centro-Sul.
+                            </p>
+                        </div>
+                        <div class="bg-white border border-slate-200 p-3.5 rounded-xl text-center">
+                            <span class="inline-block bg-blue-100 text-blue-800 font-extrabold text-xs px-2 py-0.5 rounded-md mb-1">mPa</span>
+                            <strong class="block text-xs text-slate-800 mb-1">Polar Atlântica</strong>
+                            <p class="text-xs text-slate-600">
+                                Fria e <span class="grifo">úmida</span>. Causa declínio térmico brusco, geadas no Sul e o fenômeno da friagem na Amazônia ocidental.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2. Circulação Geral -->
+            <article class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
+                <div class="flex items-center gap-3">
+                    <span class="bg-blue-100 text-blue-800 font-bold text-sm w-7 h-7 flex items-center justify-center rounded-full">2</span>
+                    <h3 class="text-xl font-bold text-slate-800">Circulação Geral da Atmosfera e Força de Coriolis</h3>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2 text-slate-700 text-sm leading-relaxed">
+                        <strong class="text-slate-900 block text-base">Modelo Tricelular de Circulação</strong>
+                        <p>
+                            Formado pelas células de <span class="grifo">Hadley</span> (convecção equatorial e subsidência nos subtrópicos), de <span class="grifo">Ferrel</span> (latitudes médias) e <span class="grifo">Polar</span>.
+                        </p>
+                        <p>
+                            Os <strong class="text-slate-900">Ventos Alísios</strong> são constantes e sopram das altas pressões subtropicais (30°) em direção às baixas pressões equatoriais (ZCIT).
+                        </p>
+                    </div>
+                    <div class="space-y-2 text-slate-700 text-sm leading-relaxed">
+                        <strong class="text-slate-900 block text-base">Força de Coriolis</strong>
+                        <p>
+                            Força inercial aparente gerada pela rotação da Terra que desvia ventos e correntes para a <span class="grifo">direita no Hemisfério Norte</span> e para a <span class="grifo">esquerda no Hemisfério Sul</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Fórmula da Força de Coriolis -->
+                <div class="bg-slate-50 border border-slate-200/60 p-5 rounded-xl space-y-4">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-widest block text-center">Fórmula do Módulo da Aceleração Horizontal de Coriolis</span>
+                    
+                    <div class="flex flex-col items-center justify-center py-2">
+                        <div class="bg-white px-6 py-4 rounded-xl border border-slate-200 shadow-sm text-lg sm:text-2xl font-mono text-slate-800 tracking-wider">
+                            a<sub>C</sub> = 2 · V · ω · sen(φ)
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-600 pt-2 border-t border-slate-200/60">
+                        <div class="text-center border-r border-slate-200 last:border-none">
+                            <span class="font-bold text-slate-800 block">a<sub>C</sub></span>
+                            Aceleração de Coriolis
+                        </div>
+                        <div class="text-center border-r border-slate-200 last:border-none">
+                            <span class="font-bold text-slate-800 block">V</span>
+                            Velocidade do vento
+                        </div>
+                        <div class="text-center border-r border-slate-200 last:border-none">
+                            <span class="font-bold text-slate-800 block">ω</span>
+                            Velocidade angular terrestre
+                        </div>
+                        <div class="text-center last:border-none">
+                            <span class="font-bold text-slate-800 block">φ</span>
+                            Latitude local
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50/50 border border-blue-100 p-3.5 rounded-lg text-xs sm:text-sm text-slate-700 space-y-2">
+                        <span class="font-bold text-blue-900 block">Efeitos Práticos Cruciais para a Prova:</span>
+                        <ul class="list-disc pl-4 space-y-1">
+                            <li> Nos <strong class="text-slate-900">Polos (φ = 90°):</strong> Desvio horizontal é <span class="grifo">máximo</span>, pois sen(90°) = 1.</li>
+                            <li> No <strong class="text-slate-900">Equador (φ = 0°):</strong> Desvio horizontal é <span class="grifo">nulo</span>, pois sen(0°) = 0.</li>
+                            <li> <strong class="text-slate-900">Consequência Direta:</strong> É impossível formar furacões e grandes ciclones rotacionais na faixa equatorial (0° a 5°), pois a deflexão horizontal é insuficiente para gerar rotação.</li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <!-- Gabaritando a FAURGS (Pegadinhas) -->
+        <section class="space-y-8 mt-12 mb-12">
+            <div class="flex items-center gap-2 pb-2 border-b border-slate-200">
+                <span class="text-2xl">🎯</span>
+                <h2 class="text-2xl font-extrabold text-slate-800 uppercase tracking-tight">GABARITANDO A FAURGS: Pegadinhas e Tendências de Prova</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Pegadinha 1 -->
+                <div class="bg-white border-l-4 border-red-500 shadow-sm p-5 rounded-r-2xl space-y-2">
+                    <span class="bg-red-50 text-red-800 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Pegadinha 1</span>
+                    <h4 class="font-bold text-sm text-slate-850">Confundir Elemento com Fator Climático</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-red-600">Erro comum:</strong> Afirmar que a latitude ou altitude são elementos climáticos.<br>
+                        <strong class="text-emerald-700">Regra de ouro:</strong> <span class="grifo">Elemento</span> é a propriedade física medível (temperatura, umidade, pressão). <span class="grifo">Fator</span> é o agente modificador geográfico (latitude, altitude, albedo, relevo).
+                    </p>
+                </div>
+
+                <!-- Pegadinha 2 -->
+                <div class="bg-white border-l-4 border-red-500 shadow-sm p-5 rounded-r-2xl space-y-2">
+                    <span class="bg-red-50 text-red-800 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Pegadinha 2</span>
+                    <h4 class="font-bold text-sm text-slate-850">O Distrator Termodinâmico Inconsistente</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-red-600">Erro comum:</strong> Associar o resfriamento de massas de ar e chuvas orográficas ao termo inventado <strong class="italic">"gradiente adiabático sísmico"</strong>.<br>
+                        <strong class="text-emerald-700">Regra de ouro:</strong> "Sísmico" refere-se à litosfera. O resfriamento dá-se estritamente pelos gradientes adiabáticos <span class="grifo">seco (GAS)</span> e <span class="grifo">úmido (GAU)</span>.
+                    </p>
+                </div>
+
+                <!-- Pegadinha 3 -->
+                <div class="bg-white border-l-4 border-red-500 shadow-sm p-5 rounded-r-2xl space-y-2">
+                    <span class="bg-red-50 text-red-800 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Pegadinha 3</span>
+                    <h4 class="font-bold text-sm text-slate-850">A Secura das Massas Continentais</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-red-600">Erro comum:</strong> Marcar que a Massa Equatorial Continental (mEc) é intrinsecamente seca por nascer no interior do continente.<br>
+                        <strong class="text-emerald-700">Regra de ouro:</strong> A mEc é altamente úmida devido à colossal <span class="grifo">evapotranspiração da Floresta Amazônica</span> (rios voadores).
+                    </p>
+                </div>
+
+                <!-- Pegadinha 4 -->
+                <div class="bg-white border-l-4 border-red-500 shadow-sm p-5 rounded-r-2xl space-y-2">
+                    <span class="bg-red-50 text-red-800 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Pegadinha 4</span>
+                    <h4 class="font-bold text-sm text-slate-850">Escala de Tempo de Monções vs. Brisas</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-red-600">Erro comum:</strong> Afirmar que as monções e as brisas compartilham da mesma escala de periodicidade.<br>
+                        <strong class="text-emerald-700">Regra de ouro:</strong> Brisas são <span class="grifo">locais e diárias</span> (dia/noite). Monções são <span class="grifo">regionais e sazonais</span> (estival/invernal).
+                    </p>
+                </div>
+
+                <!-- Pegadinha 5 -->
+                <div class="bg-white border-l-4 border-red-500 shadow-sm p-5 rounded-r-2xl space-y-2">
+                    <span class="bg-red-50 text-red-800 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Pegadinha 5</span>
+                    <h4 class="font-bold text-sm text-slate-850">ENSO no Sul do Brasil (Foco FAURGS - RS/SC)</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-red-600">Erro comum:</strong> Inverter as consequências de El Niño e La Niña na Região Sul.<br>
+                        <strong class="text-emerald-700">Regra de ouro:</strong> No Sul, o <strong class="text-slate-900">El Niño</strong> causa chuvas excessivas e inundações catastróficas. A <strong class="text-slate-900">La Niña</strong> provoca estiagens severas e secas prolongadas.
+                    </p>
+                </div>
+
+                <!-- Pegadinha 6 -->
+                <div class="bg-white border-l-4 border-red-500 shadow-sm p-5 rounded-r-2xl space-y-2">
+                    <span class="bg-red-50 text-red-800 text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded">Pegadinha 6</span>
+                    <h4 class="font-bold text-sm text-slate-850">Contrastes Térmicos Globais e Hemisférios</h4>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-red-600">Erro comum:</strong> Afirmar que o Hemisfério Sul possui maiores contrastes de amplitude térmica sazonal global.<br>
+                        <strong class="text-emerald-700">Regra de ouro:</strong> O <strong class="text-slate-900">Hemisfério Norte</strong> possui maiores amplitudes térmicas devido à <span class="grifo">continentalidade</span>. No Hemisfério Sul, as águas oceânicas agem como moderador de temperatura.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Botão de Acesso ao Próximo Passo -->
+        <div class="pt-8 border-t border-slate-200 text-center">
+            <a href="climatologiaquestoes.html" class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg hover:shadow-blue-200 hover:scale-[1.02] transition-all duration-200 w-full sm:w-auto">
+                <span>Ir para Exercícios de Fixação</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <p class="text-xs text-slate-500 mt-2">
+                Acesse o painel integrado de simulados baseados na banca FAURGS.
+            </p>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <p>© 2026 Plataforma Concursos IFSC. Foco em aprovação de alto desempenho.</p>
+    </footer>
+
+    <!-- Scripts para controle do reprodutor de áudio customizado -->
+    <script>
+        const audio = document.getElementById('audio-elemento');
+        const playBtn = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('icone-play');
+        const timeDisplay = document.getElementById('tempo-audio');
+        const progressBar = document.getElementById('progresso-audio');
+        const speedLabel = document.getElementById('label-velocidade');
+        const optionsVelocidade = document.getElementById('opcoes-velocidade');
+        const srcInput = document.getElementById('audio-src-input');
+
+        // Formatação de segundos para MM:SS
+        function formatarTempo(segundos) {
+            if (isNaN(segundos)) return "00:00";
+            const minutos = Math.floor(segundos / 60);
+            const restoSegundos = Math.floor(segundos % 60);
+            return `${minutos.toString().padStart(2, '0')}:${restoSegundos.toString().padStart(2, '0')}`;
+        }
+
+        // Carrega o arquivo dinamicamente a partir do input de texto
+        function carregarAudio() {
+            const novoSrc = srcInput.value.trim();
+            if (novoSrc !== "") {
+                audio.src = novoSrc;
+                audio.load();
+                playIcon.className = "fa-solid fa-play ml-0.5";
+                timeDisplay.textContent = "00:00 / 00:00";
+                progressBar.value = 0;
+            }
+        }
+
+        // Liga/desliga reprodução
+        function alternarAudio() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playIcon.className = "fa-solid fa-pause";
+                    })
+                    .catch(e => {
+                        console.error("Falha ao reproduzir: ", e);
+                        // Fallback visível caso o arquivo local não seja localizado
+                        alert("Não foi possível reproduzir. Verifique se o arquivo '" + audio.src.split('/').pop() + "' está no mesmo diretório.");
+                    });
+            } else {
+                audio.pause();
+                playIcon.className = "fa-solid fa-play ml-0.5";
+            }
+        }
+
+        // Sincroniza barra de progresso e tempo do áudio
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const porcetagem = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = porcetagem;
+                timeDisplay.textContent = `${formatarTempo(audio.currentTime)} / ${formatarTempo(audio.duration)}`;
+            }
+        });
+
+        // Sincroniza metadados carregados
+        audio.addEventListener('loadedmetadata', () => {
+            timeDisplay.textContent = `00:00 / ${formatarTempo(audio.duration)}`;
+        });
+
+        // Ajusta momento do áudio ao mover o scrubber
+        function ajustarProgresso(valor) {
+            if (audio.duration) {
+                audio.currentTime = (valor / 100) * audio.duration;
+            }
+        }
+
+        // Abre/fecha as opções de velocidade
+        function toggleVelocidades() {
+            optionsVelocidade.classList.toggle('hidden');
+        }
+
+        // Executa a alteração do playbackRate
+        function mudarVelocidade(vel) {
+            audio.playbackRate = vel;
+            speedLabel.textContent = vel === 1.0 ? '1.0x' : `${vel}x`;
+            optionsVelocidade.classList.add('hidden');
+            
+            // Destaca a velocidade ativa
+            const botoes = optionsVelocidade.getElementsByTagName('button');
+            for (let btn of botoes) {
+                if (parseFloat(btn.textContent) === vel || (vel === 1.0 && btn.textContent.includes('Padrão'))) {
+                    btn.className = "w-full px-4 py-2 text-left text-xs text-blue-600 hover:bg-slate-100 font-semibold";
+                } else {
+                    btn.className = "w-full px-4 py-2 text-left text-xs text-slate-700 hover:bg-slate-100 font-medium";
+                }
+            }
+        }
+
+        // Fecha o menu de velocidades se clicar fora dele
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('dropdown-velocidade');
+            if (dropdown && !dropdown.contains(e.target)) {
+                optionsVelocidade.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

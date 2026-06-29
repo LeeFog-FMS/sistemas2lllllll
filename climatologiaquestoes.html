@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo: Climatologia e Atmosfera Terrestre (FAURGS)</title>
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter para maximizar legibilidade em telas de todos os tamanhos -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- MathJax para renderização elegante de fórmulas matemáticas e físicas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        /* Tema Clássico "Warm Paper" - Proteção ocular avançada para leitores assíduos */
+        .theme-warm {
+            background-color: #fcfbf7;
+            color: #1c1d1f;
+        }
+        .theme-warm .card-bg {
+            background-color: #f7f5ee;
+            border-color: #e8e4d9;
+        }
+        .theme-warm .option-btn {
+            background-color: #ffffff;
+            border-color: #e2ded0;
+            color: #2d2e30;
+        }
+        .theme-warm .option-btn:hover:not(:disabled) {
+            background-color: #f3eedf;
+            border-color: #c9bf9e;
+        }
+        .theme-warm .text-muted {
+            color: #5c5e62;
+        }
+        
+        /* Tema "Cool Gray" - Neutro e elegante com alto contraste confortável */
+        .theme-cool {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .theme-cool .card-bg {
+            background-color: #ffffff;
+            border-color: #e2e8f0;
+        }
+        .theme-cool .option-btn {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+            color: #1e293b;
+        }
+        .theme-cool .option-btn:hover:not(:disabled) {
+            background-color: #f1f5f9;
+            border-color: #94a3b8;
+        }
+        .theme-cool .text-muted {
+            color: #475569;
+        }
+
+        /* Estilos de Opções Selecionadas, Corretas e Incorretas */
+        .option-selected {
+            border-width: 2px !important;
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
+            font-weight: 500;
+        }
+        .option-correct {
+            border-width: 2px !important;
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+            color: #065f46 !important;
+            font-weight: 600;
+        }
+        .option-incorrect {
+            border-width: 2px !important;
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            color: #991b1b !important;
+            font-weight: 600;
+        }
+
+        /* Suavização de scroll e transições finas */
+        html {
+            scroll-behavior: smooth;
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="theme-warm min-h-screen pb-24">
+
+    <header class="sticky top-0 z-50 card-bg border-b backdrop-blur-md bg-opacity-95 transition-all duration-300">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="bg-indigo-600 text-white font-bold text-xs px-2.5 py-1 rounded-md tracking-wider">FAURGS</span>
+                <h1 class="text-sm md:text-base font-semibold tracking-tight">Simulado: Climatologia e Atmosfera</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- Seletor de Tema Clássico vs Cool -->
+                <div class="flex items-center space-x-1 bg-gray-200/50 p-1 rounded-lg text-xs font-medium">
+                    <button id="btnWarm" onclick="setTheme('warm')" class="px-2 py-1 rounded bg-amber-100 text-amber-900 shadow-sm transition-all">Warm Paper</button>
+                    <button id="btnCool" onclick="setTheme('cool')" class="px-2 py-1 rounded text-gray-600 transition-all">Cool Gray</button>
+                </div>
+                <!-- Indicador de tempo decorrido para auto-avaliação -->
+                <div class="text-xs md:text-sm font-mono text-muted flex items-center space-x-1 bg-black/5 px-2.5 py-1 rounded-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span id="timer">00:00</span>
+                </div>
+            </div>
+        </div>
+        <!-- Barra de Progresso de Resolução -->
+        <div class="w-full bg-gray-200 h-1.5 overflow-hidden">
+            <div id="progressBar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 mt-8">
+        
+        <!-- Cartão de Instruções / Cabeçalho Institucional -->
+        <div class="card-bg border rounded-2xl p-6 md:p-8 mb-8 custom-shadow">
+            <div class="border-b pb-4 mb-4">
+                <p class="text-xs font-bold tracking-widest text-indigo-600 uppercase">Processo de Avaliação Acadêmica</p>
+                <h2 class="text-2xl md:text-3xl font-extrabold mt-1 tracking-tight">Atmosfera Terrestre e Climatologia</h2>
+                <p class="text-sm text-muted mt-2 leading-relaxed">
+                    Este simulado contém exatamente as **10 questões originais** elaboradas conforme a metodologia rigorosa da banca **FAURGS**. Avalie seus conhecimentos sobre a composição, o perfil térmico das camadas atmosféricas e a interação dos fatores com os elementos climáticos globais.
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs md:text-sm text-muted">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                    <span>10 Questões de Múltipla Escolha</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                    <span>Correção Automática Instantânea</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+                    <span>Resoluções Acadêmicas Detalhadas</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORMULÁRIO DE QUESTÕES -->
+        <form id="quizForm" onsubmit="event.preventDefault();" class="space-y-8">
+            
+            <!-- QUESTÃO 1 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-1">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 01</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A atmosfera terrestre apresenta uma estrutura estratificada em camadas sobrepostas, definida primordialmente pela variação do perfil térmico vertical, cujas propriedades físicas e químicas regulam a entrada de radiação solar e viabilizam a dinâmica climática global. Considere as afirmações abaixo sobre as características e a composição dessas camadas.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> A troposfera, camada adjacente à superfície que concentra a maior parcela da massa total de gases secos e quase a totalidade do vapor d'água da atmosfera, caracteriza-se por uma redução contínua da temperatura com a altitude, sendo o limite superior de seus processos convectivos demarcado pela tropopausa.</p>
+                        <p><strong>II -</strong> A estratosfera apresenta um gradiente térmico positivo devido à presença do ozônio molecular (\(O_3\)), que atua absorvendo a radiação ultravioleta prejudicial à vida, convertendo essa energia em calor sensível e estabilizando termicamente a camada.</p>
+                        <p><strong>III -</strong> A mesosfera constitui a zona mais fria do perfil atmosférico devido à ausência de mecanismos eficientes de absorção radiativa e à extrema rarefação gasosa, o que resulta em um gradiente térmico negativo que se estende até a mesopausa.</p>
+                        <p><strong>IV -</strong> A termosfera abriga a ionosfera, caracterizada por uma elevada densidade de átomos ionizados por radiação de alta energia, onde as temperaturas decrescem drasticamente à medida que se aproxima do espaço exterior.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(1, 'A')" id="opt-1-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(1, 'B')" id="opt-1-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas III e IV.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(1, 'C')" id="opt-1-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas I, II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(1, 'D')" id="opt-1-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas I, II e IV.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(1, 'E')" id="opt-1-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II, III e IV.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-1" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 1</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> A troposfera é o motor dinâmico do clima planetário, abrigando quase 80% da massa gasosa total da atmosfera e praticamente todo o vapor d'água. Sua fonte primária de calor é a superfície terrestre, que reemite calor sensível e latente. Isso resulta em um gradiente térmico negativo contínuo com a altitude. A tropopausa define o limite superior dessa camada, funcionando como um tampão térmico que impede a passagem de convecção profunda para a estratosfera.</p>
+                        <p><strong>Item II (Correto):</strong> Na estratosfera, o padrão de resfriamento é invertido devido à absorção fotoquímica da radiação ultravioleta (UV-B e UV-C) pelo ozônio de origem estratosférica (\(O_3\)). Esse processo atua como uma barreira radiativa que aquece a estratosfera à medida que a altitude aumenta.</p>
+                        <p><strong>Item III (Correto):</strong> A mesosfera situa-se acima da estratopausa e estende-se até aproximadamente 80 km. Caracteriza-se por uma drástica redução da densidade e pela ausência de gases absorvedores de radiação solar de ondas curtas, fazendo com que a radiação seja emitida livremente para o espaço e gerando baixas de temperatura severas (de até \(-90^\circ\text{C}\)).</p>
+                        <p><strong>Item IV (Incorreto):</strong> A termosfera de fato abriga a ionosfera. No entanto, nela as temperaturas <strong>aumentam</strong> de forma extrema com a altitude, podendo atingir até \(1500^\circ\text{C}\) nas porções externas devido à absorção de radiação ionizante de ondas curtas por gases extremamente rarefeitos.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: C</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 2 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-2">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 02</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A pressão atmosférica constitui um elemento climático dinâmico cujas variações espaciais e temporais governam a circulação geral da atmosfera e a formação dos ventos. Assinale a alternativa que preenche, correta e respectivamente, as lacunas do enunciado abaixo sobre a dinâmica dos sistemas de pressão.
+                    </p>
+                    
+                    <div class="italic bg-indigo-50/50 p-4 rounded-xl text-sm md:text-base leading-relaxed border-l-4 border-indigo-500 mb-6">
+                        "Os ciclones são caracterizados como centros de _________ pressão atmosférica para onde os ventos convergem em superfície, gerando movimentos ascendentes que favorecem a _________ do ar e a formação de instabilidades climáticas. Devido à atuação da Força de Coriolis, a circulação ciclonial ocorre no sentido _________ no Hemisfério Sul. Em contrapartida, os anticiclones constituem centros de _________ pressão associados a movimentos descendentes de ar estável (subsidência), cuja circulação no Hemisfério Sul desenvolve-se no sentido _________."
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(2, 'A')" id="opt-2-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>baixa – expansão adiabática e condensação – horário – alta – anti-horário</span>
+                        </button>
+                        <button type="button" onclick="selectOption(2, 'B')" id="opt-2-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>alta – compressão adiabática e evaporação – anti-horário – baixa – horário</span>
+                        </button>
+                        <button type="button" onclick="selectOption(2, 'C')" id="opt-2-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>baixa – compressão adiabática e condensação – anti-horário – alta – horário</span>
+                        </button>
+                        <button type="button" onclick="selectOption(2, 'D')" id="opt-2-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>alta – expansão adiabática e evaporação – horário – baixa – anti-horário</span>
+                        </button>
+                        <button type="button" onclick="selectOption(2, 'E')" id="opt-2-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>baixa – expansão adiabática e condensação – anti-horário – alta – anti-horário</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-2" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 2</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Diferenciação Barométrica:</strong> A circulação horizontal do ar é impulsionada pela diferença de gradiente de pressão horizontal, na qual o vento flui naturalmente das áreas anticiclônicas (alta pressão) para as áreas ciclônicas (baixa pressão).</p>
+                        <p><strong>Dinâmica Vertical e Termodinâmica:</strong> No centro de um ciclone (baixa pressão), a convergência dos ventos em superfície força o ar a subir de forma espiralada. À medida que ascende, o ar depara-se com pressões hidrostáticas menores, sofrendo <strong>expansão adiabática</strong>. Esse processo consome energia interna para realizar trabalho mecânico contra a atmosfera circundante, gerando o resfriamento da parcela. Ao alcançar o ponto de saturação, ocorre a <strong>condensação</strong> do vapor d'água, estimulando a nebulosidade e a formação de precipitação.</p>
+                        <p><strong>Atuação de Coriolis por Hemisfério:</strong> Devido à deflexão causada pela rotação planetária (Força de Coriolis), os ventos que convergem para a baixa pressão sofrem desvio para a esquerda no Hemisfério Sul, resultando em uma rotação de sentido <strong>horário</strong>. Nos anticiclones, o ar sofre subsidência (movimento descendente e divergente em superfície), gerando aquecimento por compressão adiabática, o que dissipa nuvens e mantém o tempo estável. Sob o efeito Coriolis, o fluxo divergente adquire sentido de rotação <strong>anti-horário</strong> no Hemisfério Sul.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: A</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 3 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-3">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 03</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A umidade atmosférica, expressa sob diferentes parâmetros físicos, atua como um regulador térmico central e elemento condicionante do balanço hídrico global. Considere as seguintes afirmações sobre a dinâmica da água na atmosfera.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> A umidade absoluta representa a massa de vapor d'água contida em um volume unitário de ar, mantendo-se constante independentemente de variações na temperatura ou na pressão da parcela de ar considerada.</p>
+                        <p><strong>II -</strong> A umidade relativa exprime a razão entre a pressão parcial de vapor d'água presente na atmosfera e a pressão de vapor de saturação para uma dada temperatura, sendo inversamente proporcional à temperatura do ar quando o conteúdo absoluto de vapor permanece inalterado.</p>
+                        <p><strong>III -</strong> O ponto de orvalho define-se como a temperatura limite na qual uma parcela de ar deve ser resfriada, sob pressão constante, para atingir o estado de saturação, iniciando o processo de condensação do vapor d'água.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(3, 'A')" id="opt-3-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(3, 'B')" id="opt-3-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(3, 'C')" id="opt-3-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas I e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(3, 'D')" id="opt-3-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(3, 'E')" id="opt-3-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II e III.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-3" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 3</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Incorreto):</strong> A umidade absoluta (\(U_a\)) é medida em gramas por metro cúbico (\(\text{g/m}^3\)) e expressa a concentração volumétrica de vapor d'água. Por depender do volume da parcela de ar, ela varia de forma inversamente proporcional a qualquer variação mecânica de volume provocada por mudanças de pressão ou temperatura, ainda que não haja variação real na massa de vapor.</p>
+                        <p><strong>Item II (Correto):</strong> A umidade relativa (\(UR\)) é expressa matematicamente como:</p>
+                        <div class="my-4 text-center">
+                            \(UR = \frac{e}{e_s(T)} \cdot 100\%\)
+                        </div>
+                        <p>Onde \(e\) representa a pressão de vapor parcial real e \(e_s(T)\) exprime a pressão de vapor de saturação (que cresce exponencialmente com a temperatura pela relação de Clausius-Clapeyron). Assim, se a temperatura sobe sem adição de vapor, a capacidade máxima (\(e_s\)) aumenta, reduzindo a umidade relativa.</p>
+                        <p><strong>Item III (Correto):</strong> O ponto de orvalho (\(T_d\)) constitui uma variável higrométrica fundamental na meteorologia. Quando uma parcela de ar atinge seu ponto de orvalho, a umidade relativa atinge o patamar de \(100\%\) e o ar torna-se termodinamicamente saturado, iniciando o processo de condensação física sob perda contínua de calor sensível.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: D</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 4 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-4">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 04</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A latitude atua como o principal fator climático astronômico de controle da distribuição de energia na Terra, influenciando diretamente a circulação geral e as variações zonais do clima. Sobre a influência da latitude nos elementos térmicos e dinâmicos do planeta, considere as afirmações abaixo.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> O balanço radiativo planetário apresenta superávit nas baixas latitudes e déficit nas altas latitudes, gerando um gradiente térmico meridional que impulsiona o transporte global de calor pelos oceanos e pela atmosfera.</p>
+                        <p><strong>II -</strong> A amplitude térmica anual tende a aumentar de forma progressiva com a latitude, alcançando seus máximos valores nas regiões polares devido às intensas oscilações sazonais do fotoperíodo e da inclinação dos raios solares.</p>
+                        <p><strong>III -</strong> A magnitude da Força de Coriolis varia de forma diretamente proporcional à latitude, sendo nula na linha do Equador e máxima nas regiões polares, o que impede a formação de sistemas ciclônicos de escala sinótica em baixas latitudes equatoriais.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(4, 'A')" id="opt-4-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(4, 'B')" id="opt-4-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(4, 'C')" id="opt-4-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas I e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(4, 'D')" id="opt-4-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(4, 'E')" id="opt-4-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II e III.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-4" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 4</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> Devido à esfericidade do planeta e à inclinação do seu eixo rotacional, as baixas latitudes recebem fluxos de radiação solar direta concentrados em uma menor área de contato durante todo o ano, enquanto nas altas latitudes o fluxo é espalhado e atenuado por uma espessa camada de ar. Esse gradiente de balanço energético cria um desequilíbrio térmico que força a circulação oceânica e atmosférica a redistribuir calor do Equador em direção aos polos.</p>
+                        <p><strong>Item II (Correto):</strong> Conforme a latitude aumenta, a variação da duração do dia solar ao longo do ano torna-se severa (estacionalidade profunda). Isso resulta em grandes contrastes radiativos entre as estações, o que maximiza as amplitudes térmicas anuais, principalmente em regiões continentais de alta latitude.</p>
+                        <p><strong>Item III (Correto):</strong> A aceleração de Coriolis (\(a_c\)) é modelada pela função:</p>
+                        <div class="my-4 text-center">
+                            \(a_c = 2 \cdot \omega \cdot v \cdot \sin(\phi)\)
+                        </div>
+                        <p>Como o seno de zero é zero, a força é nula na linha do Equador e máxima nos polos (\(90^\circ\)). Sem esse efeito defletor e gerador de torque rotativo nas correntes de ar superficiais, a formação de ciclones sinóticos e furacões é impedida na zona equatorial.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: E</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 5 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-5">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 05</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A altitude impõe modificações severas nas propriedades físicas do ar, atuando como um fator climático de grande relevância na compartimentação térmica e barométrica das paisagens terrestres. Considere as seguintes afirmações sobre os efeitos climáticos da altitude.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> O decréscimo da temperatura com a altitude na troposfera ocorre porque o ar se torna menos denso e rarefeito com a elevação, diminuindo a retenção da radiação terrestre de onda longa devido à menor concentração relativa de gases de efeito estufa por volume de ar.</p>
+                        <p><strong>II -</strong> O gradiente térmico vertical padrão na troposfera livre é de aproximadamente \(0,65^\circ\text{C}\) para cada \(100\text{ metros}\) de elevação altimétrica, sofrendo variações térmicas locais de acordo com o estado higrométrico da parcela de ar em ascensão.</p>
+                        <p><strong>III -</strong> A pressão atmosférica decresce de forma linear com a altitude, de modo que a taxa de redução barométrica permanece constante desde a base da troposfera até as camadas superiores da mesosfera.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(5, 'A')" id="opt-5-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(5, 'B')" id="opt-5-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(5, 'C')" id="opt-5-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(5, 'D')" id="opt-5-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(5, 'E')" id="opt-5-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II e III.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-5" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 5</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> O aquecimento primário da troposfera ocorre de baixo para cima, por meio da reemissão de onda longa (infravermelho) proveniente da superfície. Conforme a altitude aumenta, a densidade de moléculas diminui e o ar torna-se rarefeito. Menos moléculas de gases estufa por metro cúbico resultam em uma menor capacidade de reter calor sensível, gerando baixas de temperatura.</p>
+                        <p><strong>Item II (Correto):</strong> O gradiente vertical de temperatura padrão na atmosfera padrão é de fato de cerca de \(0,65^\circ\text{C}\) a cada \(100\text{ m}\). No entanto, sob dinâmica convectiva, se o ar estiver seco, resfria-se pelo Gradiente Adiabático Seco (GAS, de aprox. \(1^\circ\text{C}/100\text{ m}\)). Caso sature (com condensação e liberação de calor latente), segue o Gradiente Adiabático Úmido (GAU, variando entre \(0,4^\circ\text{C}\) e \(0,8^\circ\text{C}/100\text{ m}\)).</p>
+                        <p><strong>Item III (Incorreto):</strong> A pressão atmosférica diminui com a altitude em um perfil <strong>exponencial de decréscimo</strong>, e não linear. As camadas inferiores contêm a maior parcela da massa total e sofrem compressão gravimétrica severa, de modo que a perda de pressão nos primeiros quilômetros é muito mais brusca do que no limite com a mesosfera.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: C</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 6 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-6">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 06</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A maritimidade e a continentalidade constituem fatores climáticos de natureza geográfica que alteram sensivelmente o comportamento térmico e higrométrico de differentes regiões do globo. Sobre a ação desses fatores na dinâmica do clima, considere as afirmações abaixo.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> A maritimidade atua como um fator moderador das variações térmicas nas regiões costeiras, resultando em menores amplitudes térmicas diárias e anuais, dado o elevado calor específico da água líquida em relação aos componentes sólidos do solo.</p>
+                        <p><strong>II -</strong> A continentalidade propicia taxas aceleradas de aquecimento e resfriamento do solo, o que intensifica as amplitudes térmicas nas áreas interioranas e favorece a atuação de centros de alta pressão térmicos continentais durante o inverno.</p>
+                        <p><strong>III -</strong> Os contrastes térmicos sazonais resultantes da oposição entre maritimidade e continentalidade são responsáveis pela gênese dos sistemas de monções de grande escala, que alternam ventos úmidos e secos entre o oceano e o continente.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(6, 'A')" id="opt-6-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(6, 'B')" id="opt-6-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(6, 'C')" id="opt-6-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(6, 'D')" id="opt-6-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(6, 'E')" id="opt-6-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II e III.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-6" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 6</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> O calor específico elevado da água líquida (\(1,0\text{ cal/g}^\circ\text{C}\)) confere grande inércia térmica às massas hídricas em comparação ao solo (\(\approx 0,2\text{ cal/g}^\circ\text{C}\)). Isso faz com que as regiões costeiras tenham oscilações térmicas controladas, ou seja, baixa amplitude diária e estacional.</p>
+                        <p><strong>Item II (Correto):</strong> Com baixa inércia térmica, as superfícies terrestres expostas sofrem bruscas e rápidas elevações de temperatura durante o fotoperíodo, além de resfriamento radiativo acelerado à noite. Durante o inverno prolongado de altas latitudes continentais, o resfriamento intenso e rápido da massa de solo e ar adjacente forma centros barométricos térmicos de alta pressão (como o Anticiclone Siberiano).</p>
+                        <p><strong>Item III (Correto):</strong> O sistema de monções asiáticas é o exemplo clássico da oposição térmica sazonal de grande escala. No verão, o superaquecimento do continente asiático gera um centro de baixa pressão profunda que "suga" o ar marítimo carregado de umidade, gerando chuvas torrenciais na Índia e Sudeste Asiático. No inverno, o resfriamento drástico do continente inverte o fluxo, provocando ventos secos em direção ao oceano.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: E</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 7 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-7">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 07</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        As correntes marítimas globais operam como um mecanismo geofísico de grande escala na transferência latitudinal de energia térmica, modulando a umidade e a temperatura das massas de ar costeiras. Sobre esse tema, considere as afirmações abaixo.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> A Corrente de Humboldt (ou do Peru), por sua natureza fria, resfria a camada inferior da atmosfera sobrejacente, intensificando a estabilidade vertical do ar e inibindo a convecção profunda, o que se associa diretamente à extrema aridez do Deserto do Atacama.</p>
+                        <p><strong>II -</strong> A Corrente do Golfo (<em>Gulf Stream</em>) transporta águas quentes equatoriais para o Atlântico Norte, atenuando os invernos na porção ocidental da Europa e mantendo portos navegáveis em latitudes elevadas que, de outro modo, estariam congelados.</p>
+                        <p><strong>III -</strong> A Corrente de Benguela constitui uma corrente quente que percorre a costa sudoeste do continente africano, favorecendo a ascensão de ar úmido e gerando elevados índices pluviométricos na faixa litorânea do Deserto da Namíbia.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(7, 'A')" id="opt-7-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(7, 'B')" id="opt-7-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(7, 'C')" id="opt-7-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(7, 'D')" id="opt-7-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(7, 'E')" id="opt-7-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II e III.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-7" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 7</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> O fluxo de águas frias da corrente de Humboldt provoca o resfriamento basal do perfil atmosférico litorâneo, o que gera uma forte inversão térmica (estratificação estável). Isso impede a convecção térmica ascendente necessária para formar nuvens cumulus, resultando na formação de desertos de abrigo costeiro, como o Atacama.</p>
+                        <p><strong>Item II (Correto):</strong> A <em>Gulf Stream</em> leva fluxos imensos de calor sensível de origem intertropical até as franjas ocidentais da Europa. O calor liberado e o vapor de água atenuam severamente o clima local em latitudes onde, no Canadá equivalente, há apenas tundra e lagos congelados.</p>
+                        <p><strong>Item III (Incorreto):</strong> A Corrente de Benguela é uma corrente de águas <strong>frias</strong>, e não quentes. Ela atua na costa oeste sul-africana de modo idêntico ao processo de Humboldt, sendo o elemento gerador de subsidência responsável pela manutenção da secura do Deserto da Namíbia.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: C</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 8 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-8">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 08</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        As massas de ar e suas frentes dinâmicas constituem a base da Climatologia Dinâmica, explicando os estados do tempo e a sucessão de tipos climáticos regionais. Considere as seguintes afirmações sobre esses sistemas e sua atuação no território brasileiro.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> No Hemisfério Sul, as frentes frias organizam-se quando a Massa Polar Atlântica (\(mPa\)), fria, densa e estável, avança sobre massas tropicais aquecidas e menos densas, gerando uma rampa frontal íngreme que força a ascensão adiabática rápida do ar quente e a consequente formação de nuvens cumuliformes de tempestade.</p>
+                        <p><strong>II -</strong> A Massa Equatorial Continental (\(mEc\)), originada na região amazônica, caracteriza-se por ser quente e extremamente úmida, exercendo papel primordial no transporte latitudinal de umidade para o centro-sul do Brasil através do mecanismo conhecido como "rios voadores".</p>
+                        <p><strong>III -</strong> A Massa Tropical Continental (\(mTc\)), de origem semiárida sobre a Depressão do Chaco, atua principalmente durante o inverno no interior do país, provocando longos períodos de estabilidade atmosférica, ausência de precipitações e baixos valores de umidade relativa do ar.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(8, 'A')" id="opt-8-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(8, 'B')" id="opt-8-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas I e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(8, 'C')" id="opt-8-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(8, 'D')" id="opt-8-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas I, II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(8, 'E')" id="opt-8-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>Nenhuma das afirmações está correta.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-8" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 8</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> Os sistemas frontais frios organizam-se quando a cunha de ar frio polar polar-marítima (\(mPa\)), por ser mecanicamente mais pesada e densa, avança de sul e empurra o ar tropical e úmido (\(mTa\)) em rápida ascensão forçada. O choque gera uma rampa íngreme que favorece nuvens intensas de desenvolvimento vertical extremo (cumulonimbus) com trovoadas.</p>
+                        <p><strong>Item II (Correto):</strong> Embora possua gênese terrestre continental, a \(mEc\) comporta-se como massa marítima devido à evapotranspiração massiva promovida pelo dossel da Floresta Amazônica. Sob regime dinâmico, os fluxos meridionais de umidade ("rios voadores") canalizam bilhões de litros de água até o Centro-Oeste, Sudeste e Sul do Brasil.</p>
+                        <p><strong>Item III (Correto):</strong> A \(mTc\) é originada na depressão endorreica e continental do Chaco Sul-Americano. Por ser quente e seca, a sua atuação na estação de inverno gera subsidência persistente sobre o Brasil Central, determinando um bloqueio atmosférico prolongado que impede a passagem de chuvas e provoca quedas drásticas nos índices de umidade relativa do ar.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: D</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 9 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-9">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 09</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A atmosfera seca do planeta apresenta uma composição gasosa homogênea na homosfera, cujos constituintes desempenham funções cruciais na manutenção da biosfera e no balanço de energia do sistema Terra-Atmosfera. Considere as afirmações abaixo sobre esses constituintes.
+                    </p>
+                    
+                    <div class="space-y-3 mb-6 bg-black/5 p-4 rounded-xl text-sm md:text-base leading-relaxed">
+                        <p><strong>I -</strong> O Nitrogênio (\(N_2\)) e o Oxigênio (\(O_2\)) correspondem, juntos, a aproximadamente 99% do volume total da atmosfera terrestre seca, desempenhando papel essencial na diluição do oxigênio reativo e na sustentação de processos biológicos e metabólicos complexos.</p>
+                        <p><strong>II -</strong> O Argônio (\(Ar\)) constitui o terceiro gás mais abundante na atmosfera seca terrestre, perfazendo cerca de 0,93% do volume gasoso, caracterizando-se por sua inércia química decorrente de sua estrutura eletrônica estável.</p>
+                        <p><strong>III -</strong> O Dióxido de Carbono (\(CO_2\)), embora presente em concentrações menores (traços), desempenha uma função termorreguladora de primeira ordem por apresentar forte banda de absorção e reemissão de radiação terrestre de onda curta.</p>
+                    </div>
+
+                    <p class="font-semibold text-sm mb-4">Quais estão corretas?</p>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(9, 'A')" id="opt-9-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>Apenas I.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(9, 'B')" id="opt-9-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>Apenas I e II.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(9, 'C')" id="opt-9-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>Apenas II e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(9, 'D')" id="opt-9-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>Apenas I e III.</span>
+                        </button>
+                        <button type="button" onclick="selectOption(9, 'E')" id="opt-9-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>I, II e III.</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-9" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 9</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Item I (Correto):</strong> O Nitrogênio (\(N_2\), \(\approx 78,08\%\)) e o Oxigênio (\(O_2\), \(\approx 20,95\%\)) constituem praticamente toda a massa de gases secos da homosfera. O nitrogênio molecular atua de modo fundamental na estabilização física do oxigênio, diluindo sua alta taxa de reatividade oxidante e viabilizando processos biológicos complexos.</p>
+                        <p><strong>Item II (Correto):</strong> O terceiro constituinte em abundância volumétrica é o Argônio (com cerca de \(0,93\%\)), um gás nobre estável de alta inércia química que não interfere nas trocas químicas troposféricas habituais.</p>
+                        <p><strong>Item III (Incorreto):</strong> O Dióxido de Carbono (\(CO_2\)) atua de forma central na termorregulação do planeta (Efeito Estufa). Contudo, ele é praticamente transparente à radiação solar incidente de onda curta e age absorvendo de modo ativo a radiação de <strong>onda longa</strong> (infravermelho reemitido pela Terra) e devolvendo-a para a superfície em fluxos de contrarradiação.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: B</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 10 -->
+            <div class="card-bg border rounded-2xl p-6 md:p-8 custom-shadow relative transition-all duration-300" id="q-card-10">
+                <span class="absolute top-6 left-6 text-xs font-bold uppercase tracking-wider text-indigo-600">Questão 10</span>
+                <div class="mt-4 pt-4 leading-relaxed">
+                    <p class="font-medium text-base md:text-lg mb-4">
+                        A precipitação pluvial constitui um processo hidroclimático dinâmico que resulta de diferentes mecanismos de ascensão de parcelas de ar úmido e subsequente resfriamento adiabático e condensação. Assinale a alternativa que preenche, correta e respectivamente, as lacunas do enunciado abaixo sobre os tipos de precipitação.
+                    </p>
+                    
+                    <div class="italic bg-indigo-50/50 p-4 rounded-xl text-sm md:text-base leading-relaxed border-l-4 border-indigo-500 mb-6">
+                        "A precipitação _________ é decorrente de fortes processos de aquecimento convectivo da superfície, gerando correntes térmicas ascendentes rápidas que formam nuvens de grande desenvolvimento vertical. A precipitação _________ ocorre quando uma corrente de ar úmido é forçada a transpor uma barreira orográfica, resultando em chuva na encosta de barlavento e subsidência de ar seco a sotavento. Por fim, a precipitação _________ decorre do choque entre massas de ar com densidades distintas, gerando uma zona de descontinuidade que força a subida da massa menos densa."
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-2.5" role="radiogroup">
+                        <button type="button" onclick="selectOption(10, 'A')" id="opt-10-A" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">A)</span> <span>frontal – orográfica – convectiva</span>
+                        </button>
+                        <button type="button" onclick="selectOption(10, 'B')" id="opt-10-B" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">B)</span> <span>orográfica – convectiva – frontal</span>
+                        </button>
+                        <button type="button" onclick="selectOption(10, 'C')" id="opt-10-C" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">C)</span> <span>convectiva – orográfica – frontal</span>
+                        </button>
+                        <button type="button" onclick="selectOption(10, 'D')" id="opt-10-D" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">D)</span> <span>convectiva – frontal – orográfica</span>
+                        </button>
+                        <button type="button" onclick="selectOption(10, 'E')" id="opt-10-E" class="option-btn p-4 rounded-xl border text-left text-sm md:text-base transition-all flex items-start space-x-3">
+                            <span class="font-bold text-indigo-500 min-w-[20px]">E)</span> <span>orográfica – frontal – convectiva</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resolução detalhada (Oculta até enviar) -->
+                <div id="res-10" class="hidden mt-6 pt-6 border-t border-dashed border-gray-300">
+                    <h4 class="font-bold text-emerald-700 text-sm mb-3 flex items-center space-x-1.5">
+                        <span>🔍 RESOLUÇÃO DA QUESTÃO 10</span>
+                    </h4>
+                    <div class="text-sm md:text-base space-y-3 leading-relaxed text-muted">
+                        <p><strong>Precipitação Convectiva:</strong> Também conhecida como chuva de verão. Decorre da condução direta de calor do solo aquecido pelo sol para as parcelas de ar sobrejacentes. O ar aquecido expande-se, torna-se menos denso e sobe aceleradamente. Esse resfriamento adiabático brusco induz condensação violenta e gera nuvens do tipo cumulus/cumulonimbus, resultando em tempestades intensas e localizadas.</p>
+                        <p><strong>Precipitação Orográfica:</strong> Também chamada de chuva de relevo. Ocorre quando uma massa de vento úmida e contínua colide transversalmente com uma barreira geográfica (montanhas, escarpas de serras). Ao subir forçadamente pela vertente exposta ao vento (barlavento), o ar arrefece adiabaticamente, condensa-se e descarrega a umidade na forma de precipitação estável. A sotavento (vertente protegida), o ar desce seco e se aquece por compressão adiabática.</p>
+                        <p><strong>Precipitação Frontal:</strong> É a chuva dinâmica gerada pelo contato frontal de massas de ar com propriedades físicas (densidade e temperatura) distintas. O ar quente e úmido é forçado a subir sobre a rampa/cunha de ar frio e denso, originando condensação contínua de escala regional.</p>
+                        <p class="font-semibold text-emerald-800">Gabarito: C</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Ação para Submissão -->
+            <div class="flex justify-center pt-4">
+                <button type="button" id="submitBtn" onclick="submitQuiz()" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                    Finalizar Simulado e Ver Gabarito
+                </button>
+            </div>
+        </form>
+
+        <!-- SEÇÃO DE RESULTADOS E RESUMO (OCULTA INICIALMENTE) -->
+        <section id="resultsSection" class="hidden mt-12 bg-white border border-slate-200 rounded-3xl p-6 md:p-10 custom-shadow scroll-mt-24">
+            <div class="text-center pb-8 border-b border-slate-100">
+                <p class="text-xs font-bold tracking-widest text-indigo-600 uppercase">RESULTADO INDIVIDUAL</p>
+                <div class="flex items-center justify-center space-x-1 mt-4">
+                    <span id="scoreDisplay" class="text-6xl md:text-7xl font-extrabold text-slate-800">0</span>
+                    <span class="text-3xl md:text-4xl text-slate-400 font-light">/10</span>
+                </div>
+                <!-- Mensagem Dinâmica do Resultado -->
+                <h3 id="resultMessage" class="text-xl md:text-2xl font-bold text-slate-800 mt-4">Calculando Desempenho...</h3>
+                <p id="resultSubtext" class="text-sm text-slate-500 mt-2 max-w-lg mx-auto">
+                    Confira abaixo os acertos e estude as resoluções detalhadas questão por questão, organizadas para otimizar sua preparação.
+                </p>
+            </div>
+
+            <!-- Tabela e Quadro Geral de Gabarito Técnico -->
+            <div class="mt-8">
+                <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 text-center">Quadro Comparativo de Respostas</h4>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 max-w-2xl mx-auto text-sm">
+                    <div id="grid-item-1" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 01</span><strong class="text-base" id="grid-ans-1">-</strong></div>
+                    <div id="grid-item-2" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 02</span><strong class="text-base" id="grid-ans-2">-</strong></div>
+                    <div id="grid-item-3" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 03</span><strong class="text-base" id="grid-ans-3">-</strong></div>
+                    <div id="grid-item-4" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 04</span><strong class="text-base" id="grid-ans-4">-</strong></div>
+                    <div id="grid-item-5" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 05</span><strong class="text-base" id="grid-ans-5">-</strong></div>
+                    <div id="grid-item-6" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 06</span><strong class="text-base" id="grid-ans-6">-</strong></div>
+                    <div id="grid-item-7" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 07</span><strong class="text-base" id="grid-ans-7">-</strong></div>
+                    <div id="grid-item-8" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 08</span><strong class="text-base" id="grid-ans-8">-</strong></div>
+                    <div id="grid-item-9" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 09</span><strong class="text-base" id="grid-ans-9">-</strong></div>
+                    <div id="grid-item-10" class="border rounded-xl p-3 text-center bg-slate-50"><span class="block text-xs text-slate-400">Q. 10</span><strong class="text-base" id="grid-ans-10">-</strong></div>
+                </div>
+            </div>
+
+            <!-- Tabela Geral Comparativa de Camadas Atmosféricas (Igual ao Documento) -->
+            <div class="mt-10 p-6 bg-amber-50/40 rounded-2xl border border-amber-100 text-sm leading-relaxed text-slate-700">
+                <h4 class="font-bold text-slate-800 text-base mb-3 text-center sm:text-left">Análise Comparativa das Camadas Atmosféricas (Revisão Rápida)</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs md:text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200">
+                                <th class="py-2.5 font-bold text-slate-800">Camada</th>
+                                <th class="py-2.5 font-bold text-slate-800">Altitude Média (km)</th>
+                                <th class="py-2.5 font-bold text-slate-800">Perfil Térmico</th>
+                                <th class="py-2.5 font-bold text-slate-800">Mecanismo Físico Principal</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="py-2.5 font-semibold text-indigo-600">Troposfera</td>
+                                <td class="py-2.5">0 a 12</td>
+                                <td class="py-2.5">Resfriamento (\(0,65^\circ\text{C}/100\text{ m}\))</td>
+                                <td class="py-2.5">Aquecimento de base e expansão adiabática.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-indigo-600">Estratosfera</td>
+                                <td class="py-2.5">12 a 50</td>
+                                <td class="py-2.5">Aquecimento contínuo</td>
+                                <td class="py-2.5">Absorção de UV pela camada de Ozônio (\(O_3\)).</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-indigo-600">Mesosfera</td>
+                                <td class="py-2.5">50 a 80</td>
+                                <td class="py-2.5">Resfriamento severo</td>
+                                <td class="py-2.5">Emissão radiativa livre e ausência de gases absorvedores.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2.5 font-semibold text-indigo-600">Termosfera</td>
+                                <td class="py-2.5">80 a 600</td>
+                                <td class="py-2.5">Aquecimento extremo</td>
+                                <td class="py-2.5">Absorção de radiação gama e raios X por íons rarefeitos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Botão de Reiniciar Simulado -->
+            <div class="flex justify-center mt-8">
+                <button type="button" onclick="restartQuiz()" class="border-2 border-indigo-600 hover:bg-indigo-50 text-indigo-600 font-bold px-6 py-3 rounded-xl transition-all">
+                    Refazer Simulado
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Gabarito Oficial do Simulado (Map das respostas corretas)
+        const GABARITO = {
+            1: 'C',
+            2: 'A',
+            3: 'D',
+            4: 'E',
+            5: 'C',
+            6: 'E',
+            7: 'C',
+            8: 'D',
+            9: 'B',
+            10: 'C'
+        };
+
+        // Estado do Simulado
+        let userAnswers = {};
+        let isSubmitted = false;
+        let secondsElapsed = 0;
+        let timerInterval = null;
+
+        // Início do temporizador automático ao carregar a página
+        window.onload = function() {
+            startTimer();
+        };
+
+        // Função de controle de tempo
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                document.getElementById('timer').innerText = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // Parar o temporizador
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Escolha do tema de leitura (Warm / Cool)
+        function setTheme(theme) {
+            const body = document.body;
+            const btnWarm = document.getElementById('btnWarm');
+            const btnCool = document.getElementById('btnCool');
+
+            if (theme === 'warm') {
+                body.className = "theme-warm min-h-screen pb-24";
+                btnWarm.className = "px-2 py-1 rounded bg-amber-100 text-amber-900 shadow-sm transition-all";
+                btnCool.className = "px-2 py-1 rounded text-slate-500 transition-all";
+            } else {
+                body.className = "theme-cool min-h-screen pb-24";
+                btnCool.className = "px-2 py-1 rounded bg-slate-800 text-white shadow-sm transition-all";
+                btnWarm.className = "px-2 py-1 rounded text-slate-500 transition-all";
+            }
+        }
+
+        // Manipula a seleção de alternativas pelo usuário
+        function selectOption(questionNum, option) {
+            if (isSubmitted) return; // Bloqueia edições após enviar
+
+            // Desmarcar todas as alternativas daquela questão
+            const alternatives = ['A', 'B', 'C', 'D', 'E'];
+            alternatives.forEach(alt => {
+                const btn = document.getElementById(`opt-${questionNum}-${alt}`);
+                if (btn) btn.classList.remove('option-selected');
+            });
+
+            // Marcar a nova alternativa
+            const selectedBtn = document.getElementById(`opt-${questionNum}-${option}`);
+            if (selectedBtn) selectedBtn.classList.add('option-selected');
+
+            // Salvar resposta no estado global
+            userAnswers[questionNum] = option;
+
+            // Atualizar barra de progresso no topo
+            updateProgress();
+        }
+
+        // Atualizar barra de progresso com base nas questões respondidas
+        function updateProgress() {
+            const totalQuestions = 10;
+            const answeredCount = Object.keys(userAnswers).length;
+            const percentage = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = `${percentage}%`;
+        }
+
+        // Processa o envio e revela as notas, erros/acertos e explicações
+        function submitQuiz() {
+            if (isSubmitted) return;
+
+            // Verificar se todas as questões foram respondidas
+            const unanswered = [];
+            for (let i = 1; i <= 10; i++) {
+                if (!userAnswers[i]) {
+                    unanswered.push(i);
+                }
+            }
+
+            // Se existirem questões não marcadas, alerta o usuário suavemente na tela (sem alert nativo)
+            if (unanswered.length > 0) {
+                const card = document.getElementById(`q-card-${unanswered[0]}`);
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Aplicar efeito de borda pulsante vermelha no primeiro elemento não preenchido
+                card.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => {
+                    card.classList.remove('ring-2', 'ring-red-500');
+                }, 2000);
+                return;
+            }
+
+            isSubmitted = true;
+            stopTimer();
+
+            // Calcular Acertos
+            let correctHits = 0;
+            for (let i = 1; i <= 10; i++) {
+                const selected = userAnswers[i];
+                const correct = GABARITO[i];
+                const card = document.getElementById(`q-card-${i}`);
+                const resolutionBox = document.getElementById(`res-${i}`);
+                
+                // Mostrar a resolução de cada questão
+                resolutionBox.classList.remove('hidden');
+
+                // Ajustar estilo visual de cada opção com base no resultado
+                const alternatives = ['A', 'B', 'C', 'D', 'E'];
+                alternatives.forEach(alt => {
+                    const btn = document.getElementById(`opt-${i}-${alt}`);
+                    btn.disabled = true; // Desabilita novos cliques
+
+                    // Se a alternativa é a correta: fica verde
+                    if (alt === correct) {
+                        btn.classList.remove('option-selected');
+                        btn.classList.add('option-correct');
+                    }
+                    // Se foi o erro do estudante: fica vermelho
+                    else if (alt === selected && selected !== correct) {
+                        btn.classList.remove('option-selected');
+                        btn.classList.add('option-incorrect');
+                    }
+                });
+
+                // Atualizar o quadro de respostas comparativas
+                const gridAns = document.getElementById(`grid-ans-${i}`);
+                const gridItem = document.getElementById(`grid-item-${i}`);
+                
+                if (selected === correct) {
+                    correctHits++;
+                    gridAns.innerText = `Acertou (${selected})`;
+                    gridAns.className = "text-xs font-semibold text-emerald-600 block mt-0.5";
+                    gridItem.className = "border border-emerald-200 rounded-xl p-3 text-center bg-emerald-50";
+                } else {
+                    gridAns.innerText = `Errou (${selected}/${correct})`;
+                    gridAns.className = "text-xs font-semibold text-rose-600 block mt-0.5";
+                    gridItem.className = "border border-rose-200 rounded-xl p-3 text-center bg-rose-50";
+                }
+            }
+
+            // Exibir a seção de resultados consolidados
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+            
+            // Atualizar painel de pontuação final
+            document.getElementById('scoreDisplay').innerText = correctHits;
+
+            // Mensagens personalizadas de desempenho acadêmico
+            const msgTitle = document.getElementById('resultMessage');
+            const msgSubtext = document.getElementById('resultSubtext');
+
+            if (correctHits === 10) {
+                msgTitle.innerText = "Excelente! Desempenho Excepcional 🏆";
+                msgSubtext.innerText = "Parabéns! Você gabaritou o simulado. Sua compreensão sobre as camadas da atmosfera, as dinâmicas de pressão e os fatores geográficos está perfeita.";
+            } else if (correctHits >= 8) {
+                msgTitle.innerText = "Muito Bom! Ótimo Desempenho 📈";
+                msgSubtext.innerText = "Excelente rendimento. Você domina os elementos centrais de climatologia da FAURGS. Revise as resoluções abaixo para sanar pequenos detalhes.";
+            } else if (correctHits >= 5) {
+                msgTitle.innerText = "Aprovado! Bom aproveitamento 👍";
+                msgSubtext.innerText = "Você tem uma boa base conceitual. Contudo, fique atento aos termos mais específicos e dinâmicos (como Coriolis e gradientes adiabáticos).";
+            } else {
+                msgTitle.innerText = "Atenção! Foco nos Estudos 📚";
+                msgSubtext.innerText = "O conteúdo de climatologia da FAURGS exige precisão. Leia atentamente as resoluções integradas sob cada questão para fortalecer sua compreensão teórica.";
+            }
+
+            // Ocultar botão de envio
+            document.getElementById('submitBtn').classList.add('hidden');
+
+            // Scroll suave até os resultados consolidados
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Re-renderiza fórmulas matemáticas inseridas via MathJax após modificação dinâmica do DOM
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Permite reiniciar o simulado limpando todas as respostas e estados
+        function restartQuiz() {
+            userAnswers = {};
+            isSubmitted = false;
+            secondsElapsed = 0;
+
+            // Resetar barra de progresso superior
+            document.getElementById('progressBar').style.width = '0%';
+
+            // Limpar classes de cada questão
+            for (let i = 1; i <= 10; i++) {
+                const resolutionBox = document.getElementById(`res-${i}`);
+                resolutionBox.classList.add('hidden');
+
+                const alternatives = ['A', 'B', 'C', 'D', 'E'];
+                alternatives.forEach(alt => {
+                    const btn = document.getElementById(`opt-${i}-${alt}`);
+                    btn.disabled = false;
+                    btn.classList.remove('option-selected', 'option-correct', 'option-incorrect');
+                });
+
+                // Resetar grid de respostas do painel final
+                const gridAns = document.getElementById(`grid-ans-${i}`);
+                const gridItem = document.getElementById(`grid-item-${i}`);
+                gridAns.innerText = "-";
+                gridAns.className = "";
+                gridItem.className = "border rounded-xl p-3 text-center bg-slate-50";
+            }
+
+            // Ocultar seção de resultados e exibir novamente o botão de envio
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('submitBtn').classList.remove('hidden');
+
+            // Iniciar o cronômetro novamente
+            stopTimer();
+            startTimer();
+
+            // Scroll suave de volta para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
