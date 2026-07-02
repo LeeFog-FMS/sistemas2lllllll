@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Hidrografia - IFSC FAURGS</title>
+    <!-- Tailwind CSS para estilização moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter para alta legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX para renderizar equações matemáticas lindamente -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom highlight (grifado) effect */
+        .grifado {
+            background-color: #fef08a; /* Amarelo suave */
+            color: #1e293b; /* Slate escuro */
+            padding: 0.12rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .grifado-importante {
+            background-color: #fbcfe8; /* Rosa suave para super importante */
+            color: #1e293b;
+            padding: 0.12rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Cabeçalho Principal -->
+    <header class="border-b border-slate-100 bg-white sticky top-0 z-50 py-4 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-50 text-blue-600 p-2.5 rounded-xl">
+                    <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 tracking-tight">Geografia Concisa</h1>
+                    <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Tutor Especialista - IFSC / FAURGS</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                    Material Completo de Revisão
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-8 w-full">
+
+        <!-- Card do Reprodutor de Áudio -->
+        <section class="bg-slate-50 rounded-2xl p-6 mb-10 border border-slate-200 shadow-sm">
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center gap-2.5 text-slate-900">
+                    <i class="fa-solid fa-circle-play text-xl text-blue-600"></i>
+                    <h2 class="text-md font-semibold">Reprodutor de Áudio da Aula</h2>
+                </div>
+                
+                <p class="text-xs text-slate-600">
+                    Insira abaixo o nome exato do arquivo MP3 (com a extensão) localizado na mesma pasta desta página. Em seguida, clique em carregar para ouvi-lo.
+                </p>
+
+                <!-- Input e Carregamento -->
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <div class="relative flex-grow">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-file-audio"></i>
+                        </span>
+                        <input type="text" id="audio-filename" value="aula_hidrografia.mp3" 
+                            class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                            placeholder="Ex: aula_hidrografia.mp3">
+                    </div>
+                    <button id="btn-load-audio" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-medium text-sm rounded-xl transition duration-150 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate"></i> Carregar
+                    </button>
+                </div>
+
+                <!-- Elemento HTML5 oculto que controlamos via JS -->
+                <audio id="main-audio" src="aula_hidrografia.mp3" preload="metadata"></audio>
+
+                <!-- Interface Customizada do Player -->
+                <div class="bg-white border border-slate-200 rounded-xl p-4 flex flex-col gap-3">
+                    <!-- Progresso do Áudio -->
+                    <div class="flex items-center gap-3">
+                        <span id="current-time" class="text-xs font-semibold text-slate-500 w-10 text-right">0:00</span>
+                        <input type="range" id="progress-bar" min="0" value="0" step="0.1" class="flex-grow h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none">
+                        <span id="total-duration" class="text-xs font-semibold text-slate-500 w-10">0:00</span>
+                    </div>
+
+                    <!-- Controles e Velocidade -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 pt-1">
+                        <div class="flex items-center gap-3">
+                            <!-- Botão Play/Pause -->
+                            <button id="btn-play-pause" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700 active:scale-95 transition">
+                                <i id="play-icon" class="fa-solid fa-play ml-0.5"></i>
+                            </button>
+                            <!-- Status do Áudio -->
+                            <div class="text-xs">
+                                <span class="block font-medium text-slate-400 uppercase tracking-widest text-[10px]">Status</span>
+                                <span id="audio-status" class="font-bold text-slate-700">Pausado ou Aguardando</span>
+                            </div>
+                        </div>
+
+                        <!-- Seletor de Velocidade -->
+                        <div class="flex items-center gap-2">
+                            <label for="speed-selector" class="text-xs font-bold text-slate-500 uppercase tracking-wider">Velocidade:</label>
+                            <select id="speed-selector" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold rounded-lg p-1.5 focus:ring-1 focus:ring-blue-500 focus:outline-none">
+                                <option value="0.5">0.5x</option>
+                                <option value="1.0" selected>1.0x (Normal)</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="1.75">1.75x</option>
+                                <option value="2.0">2.0x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção do Documento Escrito -->
+        <article class="prose max-w-none">
+            
+            <!-- Título do Resumo -->
+            <div class="border-b border-slate-200 pb-6 mb-8">
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mb-2">FOLHA DE REVISÃO RÁPIDA: Hidrografia e Recursos Hídricos</h1>
+                <p class="text-sm text-slate-500">Preparação de alto rendimento para o concurso de Professor de Geografia do IFSC (Banca FAURGS).</p>
+            </div>
+
+            <!-- PÁGINA 1 -->
+            <section class="mb-12">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="bg-blue-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-full uppercase tracking-widest">Página 1</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-950 m-0">SISTEMAS FÍSICO-NATURAIS (OCEANOS, MARES, LAGOS E RIOS)</h2>
+                </div>
+
+                <!-- 1. Oceanos vs Mares -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">1.1</span> Oceanos vs. Mares: O Trunfo da Circulação Global
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        A <span class="grifado-importante">Circulação Termohalina</span> (também conhecida como o Cinturão de Transporte Global) é um dos conceitos de climatologia física e oceanografia prediletos das bancas. Trata-se de um fluxo contínuo e profundo regulado integralmente por <span class="grifado">gradientes de densidade da água</span>, os quais são determinados pela relação integrada entre a <span class="grifado font-semibold">temperatura (T) e a salinidade (S)</span>. Esse sistema global atua de forma decisiva na redistribuição do calor equatorial para as altas latitudes, regulando a estabilidade climática global e a zonalidade morfoclimática do planeta.
+                    </p>
+
+                    <!-- Tabela Responsiva sem scroll horizontal -->
+                    <div class="border border-slate-200 rounded-xl overflow-hidden mb-6">
+                        <div class="bg-slate-50 px-4 py-2 border-b border-slate-200">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Tabela de Diferenciação Crucial</span>
+                        </div>
+                        <!-- Container Grid alternativo a tabela tradicional para evitar scroll horizontal de forma nativa e limpa -->
+                        <div class="divide-y divide-slate-100 bg-white">
+                            <!-- Header do grid -->
+                            <div class="hidden md:grid grid-cols-12 gap-4 p-4 bg-slate-50/50 text-xs font-bold text-slate-600 uppercase">
+                                <div class="col-span-3">Critério</div>
+                                <div class="col-span-4">Oceanos</div>
+                                <div class="col-span-5">Mares</div>
+                            </div>
+                            
+                            <!-- Linha 1: Dimensão -->
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-4 p-4 text-sm">
+                                <div class="col-span-3 font-bold text-slate-900 md:text-slate-600">Dimensão</div>
+                                <div class="col-span-4 text-slate-700"><span class="md:hidden font-semibold block text-xs text-slate-400">Oceanos:</span> Ocupam imensas depressões intercontinentais contíguas.</div>
+                                <div class="col-span-5 text-slate-700"><span class="md:hidden font-semibold block text-xs text-slate-400">Mares:</span> Menores dimensões, situados de forma periférica nas margens ou interiores continentais.</div>
+                            </div>
+
+                            <!-- Linha 2: Profundidade -->
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-4 p-4 text-sm">
+                                <div class="col-span-3 font-bold text-slate-900 md:text-slate-600">Profundidade</div>
+                                <div class="col-span-4 text-slate-700"><span class="md:hidden font-semibold block text-xs text-slate-400">Oceanos:</span> Elevada profundidade média (geralmente superior a 3.000 metros), contendo grandes fossas abissais profundas.</div>
+                                <div class="col-span-5 text-slate-700"><span class="md:hidden font-semibold block text-xs text-slate-400">Mares:</span> Profundidades mais rasas a moderadas, limitadas quase sempre pela extensão da plataforma continental.</div>
+                            </div>
+
+                            <!-- Linha 3: Tipologia de Mar -->
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-1 md:gap-4 p-4 text-sm">
+                                <div class="col-span-3 font-bold text-slate-900 md:text-slate-600">Tipologia de Mar</div>
+                                <div class="col-span-4 text-slate-400 italic"><span class="md:hidden font-semibold block text-xs text-slate-400">Oceanos:</span> Não aplicável</div>
+                                <div class="col-span-5 text-slate-700">
+                                    <span class="md:hidden font-semibold block text-xs text-slate-400">Mares:</span>
+                                    <ul class="space-y-2 mt-1 list-disc list-inside">
+                                        <li><strong class="text-slate-900">Abertos (Costeiros):</strong> Possuem ampla e livre comunicação direta com o oceano (ex.: Mar do Norte).</li>
+                                        <li><strong class="text-slate-900">Interiores (Continentais):</strong> Estreita comunicação com o oceano por meio de canais ou estreitos (ex.: Mar Mediterrâneo).</li>
+                                        <li><strong class="text-slate-900">Fechados (Isolados):</strong> Sem comunicação natural com o oceano; geologicamente classificados como grandes lagos salgados (ex.: Mar Cáspio).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Hidrodinâmica Fluvial -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">1.2</span> Hidrodinâmica Fluvial e Redes de Drenagem
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        Estudar a bacia hidrográfica sob a ótica da geomorfologia fluvial exige o domínio completo de termos de microestrutura física que costumam aparecer misturados nas alternativas:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-blue-200 transition">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-blue-600">Bacia Hidrográfica</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Unidade territorial básica de planejamento e análise ambiental. É delimitada pelos <span class="grifado">divisores de águas (interflúvios)</span>, onde toda precipitação acumulada converge rumo a um exutório ou foz comum.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-blue-200 transition">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-blue-600">Talvegue</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                A <span class="grifado">linha imaginária de maior profundidade</span> contínua do leito fluvial. É exatamente nesse ponto geométrico onde o fluxo d'água atinge sua energia cinética e velocidade máximas.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-blue-200 transition">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-blue-600">Montante vs. Jusante</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Direções do escoamento. <strong class="text-slate-800">Montante</strong> aponta para a nascente ou ponto superior de captação (origem). <strong class="text-slate-800">Jusante</strong> aponta para a foz ou frentes mais baixas da calha (destino final).
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm hover:border-blue-200 transition">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wider text-blue-600">Morfologia da Foz</h4>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                <strong class="text-slate-800">Estuário:</strong> canal aberto único, livre de grandes sedimentos pela forte força das marés. <strong class="text-slate-800">Delta:</strong> foz ramificada em canais múltiplos decorrente do intenso depósito de sedimentos na calha.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border-l-4 border-slate-400 p-4 rounded-r-xl mb-6">
+                        <h4 class="font-bold text-slate-900 text-sm mb-2">Padrões de Drenagem e Direções de Escoamento:</h4>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li>
+                                <strong class="text-slate-950">Dendrítico:</strong> Padrão altamente ramificado semelhante a uma árvore. Desenha-se principalmente sobre <span class="grifado">rochas de resistência homogênea</span> e relevos suaves.
+                            </li>
+                            <li>
+                                <strong class="text-slate-950">Treliça ou Retangular:</strong> Arranjo caracterizado por dobras ou retas em ângulos retos, fortemente associado a <span class="grifado-importante">falhamentos e fraturas geológicas</span> profundas.
+                            </li>
+                            <li>
+                                <strong class="text-slate-950">Exorreico vs. Endorreico:</strong> O escoamento <span class="grifado">exorreico</span> deságua no oceano aberto; o <span class="grifado">endorreico</span> deságua em lagos ou mares fechados sem comunicação global direta.
+                            </li>
+                            <li>
+                                <strong class="text-slate-950">Arreico vs. Criptorreico:</strong> No regime <span class="grifado">arreico</span>, a água se infiltra ou evapora em pleno deserto antes de encontrar foz. No regime <span class="grifado">criptorreico</span>, o fluxo se dá prioritariamente por vias subterrâneas (ex.: relevos de carste/calcário).
+                            </li>
+                        </ul>
+                    </div>
+
+                    <p class="text-sm text-slate-700 leading-relaxed">
+                        Os <strong>Regimes de Vazão</strong> definem a origem da alimentação da rede hídrica. Podem ser do tipo <strong class="text-slate-900">Pluvial</strong> (alimentação estrita por chuvas - comum em climas tropicais), <strong class="text-slate-900">Nival</strong> (degelo de neve sazonal), <strong class="text-slate-900">Glacial</strong> (abastecimento por geleiras eternas) ou <strong class="text-slate-900">Misto</strong> (quando combinam mais de uma fonte ao longo de sua bacia, como o Rio Amazonas).
+                    </p>
+                </div>
+
+                <!-- 3. Gênese Lacustre -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">1.3</span> Gênese Lacustre (Origem dos Lagos)
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <span class="font-extrabold text-blue-600 text-xs tracking-wider uppercase">Lagos Tectônicos</span>
+                            <p class="text-xs text-slate-600 mt-2">
+                                Formados pela acomodação ou soerguimento de placas tectônicas (fendas de grabens). Possuem <span class="grifado">margens bastante escarpadas e alta profundidade</span>. Exemplos clássicos: Lago Baikal e Lago Tanganica.
+                            </p>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <span class="font-extrabold text-blue-600 text-xs tracking-wider uppercase">Lagos Vulcânicos</span>
+                            <p class="text-xs text-slate-600 mt-2">
+                                Originados do preenchimento pluviométrico de antigas caldeiras e crateras de vulcões inativos de longa data.
+                            </p>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <span class="font-extrabold text-blue-600 text-xs tracking-wider uppercase">Lagos Glaciais</span>
+                            <p class="text-xs text-slate-600 mt-2">
+                                Formados a partir da escavação e derretimento contínuo de geleiras continentais em altas latitudes. Exemplo: Grandes Lagos da América do Norte.
+                            </p>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <span class="font-extrabold text-blue-600 text-xs tracking-wider uppercase">Lagos de Barreira (Restinga)</span>
+                            <p class="text-xs text-slate-600 mt-2">
+                                Estruturados pelo fechamento ou barramento natural de lagunas decorrente do transporte arenoso litorâneo (ex.: Lagoa dos Patos).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PÁGINA 2 -->
+            <section class="border-t border-slate-200 pt-10">
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="bg-blue-600 text-white text-xs font-extrabold px-2.5 py-1 rounded-full uppercase tracking-widest">Página 2</span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-950 m-0">CICLO HIDROLÓGICO, PEDOLOGIA, LEGISLAÇÃO E MACETES FAURGS</h2>
+                </div>
+
+                <!-- 1. Equação do Balanço Hídrico -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">2.1</span> Equação do Balanço Hídrico no Ciclo da Água
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        Sob a perspectiva físico-geográfica de bacia, o ciclo da água atua de forma termodinâmica fechada. A modelagem teórica tradicional expressa o balanço hídrico na escala local por meio da seguinte equação estruturada:
+                    </p>
+                    
+                    <!-- Bloco de Fórmula Centralizado -->
+                    <div class="bg-slate-50 rounded-xl p-4 text-center my-6 border border-slate-200 flex flex-col items-center justify-center">
+                        <div class="text-lg font-bold text-slate-900 mb-2">Fórmula Teórica Geral:</div>
+                        <div class="text-xl font-mono text-blue-700 py-2">
+                            $$P = ET + R + I \pm \Delta S$$
+                        </div>
+                        <p class="text-xs text-slate-500 mt-2 max-w-lg leading-relaxed">
+                            Onde: <strong class="text-slate-700">P</strong> = Precipitação total; <strong class="text-slate-700">ET</strong> = Evapotranspiração real; <strong class="text-slate-700">R</strong> = Escoamento superficial (*runoff*); <strong class="text-slate-700">I</strong> = Infiltração profunda e <strong class="text-slate-700">ΔS</strong> = Variação líquida do armazenamento subterrâneo do solo.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. Pedologia Integrada -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">2.2</span> Pedologia Integrada: Dinâmica da Água e Gênese do Solo
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        Este é um dos eixos temáticos favoritos da FAURGS: correlacionar os horizontes pedológicos com o movimento da água. Memorize estes três processos fundamentais para não errar no domingo de prova:
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-amber-500 bg-amber-50/40 p-4 rounded-r-xl">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wide">Percolação (Processo Físico Puro)</h4>
+                            <p class="text-xs text-slate-600">
+                                Refere-se estritamente ao <span class="grifado">fluxo físico descendente e gravitacional</span> da água ao atravessar livremente as frestas, poros e fendas das camadas superiores e profundas do solo.
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-rose-500 bg-rose-50/40 p-4 rounded-r-xl">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wide">Lixiviação (Processo Químico-Físico)</h4>
+                            <p class="text-xs text-slate-600">
+                                Consiste na <span class="grifado">dissolução e transporte vertical de solutos e íons nutritivos</span> (como potássio, sódio, cálcio) induzidos pela água. Em regiões tropicais superúmidas, provoca o empobrecimento severo do solo e a formação de crostas duras de óxidos de ferro e alumínio (<span class="grifado-importante">processo de laterização</span>).
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-indigo-500 bg-indigo-50/40 p-4 rounded-r-xl">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1 uppercase tracking-wide">Eluviação (Processo Mecânico de Arraste)</h4>
+                            <p class="text-xs text-slate-600">
+                                É a lavagem e o <span class="grifado">arraste mecânico de partículas finas sólidas (argilas e coloides)</span> suspensas, saindo do horizonte superior eluvial (Horizonte E) e depositando-se no horizonte inferior iluvial (Horizonte B).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Gestão e Utilização Antrópica -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">2.3</span> Gestão e Utilização Antrópica (Lei das Águas - nº 9.433/1997)
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        No panorama internacional de uso hídrico, a distribuição do consumo mundial de água doce consolida-se em: <span class="grifado">Setor Agropecuário (~70% via irrigação)</span> > <span class="grifado">Setor Industrial (~20%)</span> > <span class="grifado">Abastecimento Doméstico (~10%)</span>. 
+                    </p>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        No semiárido nordestino brasileiro, destacam-se tecnologias de convivência como cisternas de placas de captação pluvial e barragens subterrâneas para retenção de umidade no solo.
+                    </p>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 my-6">
+                        <h4 class="font-extrabold text-blue-900 text-xs tracking-wider uppercase mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-star text-amber-500"></i> Os 6 Fundamentos de Ouro da PNRH para Gabaritar
+                        </h4>
+                        <ol class="space-y-3 text-sm text-slate-700">
+                            <li class="flex items-start gap-2">
+                                <span class="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">1</span>
+                                <div>A água é um <span class="grifado-importante">bem de domínio público</span> (não há propriedade privada de água).</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">2</span>
+                                <div>É um recurso natural limitado dotado de <span class="grifado-importante">valor econômico</span>, o que respalda a cobrança pelo uso.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">3</span>
+                                <div>Em cenários de escassez crônica, o uso prioritário define-se por <span class="grifado-importante">consumo humano e dessedentação de animais</span>.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">4</span>
+                                <div>A gestão do sistema deve assegurar e promover continuamente o <span class="grifado">uso múltiplo</span> da água.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">5</span>
+                                <div>A <span class="grifado-importante">bacia hidrográfica</span> é a unidade territorial básica de planejamento e aplicação das regras.</div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="bg-blue-100 text-blue-800 rounded-full h-5 w-5 flex items-center justify-center text-xs font-bold mt-0.5 shrink-0">6</span>
+                                <div>A gestão da água deve ser plenamente <span class="grifado">descentralizada e participativa</span> (Estado, usuários e comunidade civil).</div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- 4. O Instrumento da Outorga -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">2.4</span> O Instrumento da Outorga e as Isenções de Prova (Art. 12)
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-justify">
+                        A <strong class="text-slate-900">outorga</strong> representa o ato administrativo pelo qual o poder público autoriza o direito de uso dos recursos hídricos.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm">
+                            <h4 class="font-bold text-xs text-red-600 uppercase tracking-widest mb-2">Sujeito a Outorga</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+                                <li>Captações, retenções e derivações diretas.</li>
+                                <li>Extrações de aqüíferos subterrâneos.</li>
+                                <li>Lançamentos de efluentes em corpos d'água (para fins de diluição).</li>
+                                <li>Aproveitamentos de potencial hidrelétrico.</li>
+                            </ul>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white shadow-sm">
+                            <h4 class="font-bold text-xs text-emerald-600 uppercase tracking-widest mb-2">Independem de Outorga (Isenção)</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+                                <li>Uso para satisfazer necessidades de <span class="grifado-importante">pequenos núcleos rurais</span>.</li>
+                                <li>Derivações, captações ou acúmulos considerados <span class="grifado-importante">insignificantes</span> pelo respectivo órgão gestor.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Guia de Peguinhas da FAURGS -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <span class="text-blue-500">2.5</span> Guia de "Peguinhas" da FAURGS e Abordagem Regional
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-red-50 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">Peguinha 1</span>
+                                <h4 class="font-bold text-sm text-slate-900 m-0">Confusão entre Lixiviação, Percolação e Erosão</h4>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                A banca rotineiramente escreve o conceito exato de "transporte químico vertical de nutrientes em solução líquida" e insere <span class="text-red-500 font-semibold">percolação</span> ou <span class="text-red-500 font-semibold">erosão</span> para enganar. Lembre-se: <strong class="text-slate-800">Químico/solutos</strong> = Lixiviação. <strong class="text-slate-800">Físico/passagem</strong> = Percolação. <strong class="text-slate-800">Mecânico/superficial</strong> = Erosão.
+                            </p>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-red-50 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">Peguinha 2</span>
+                                <h4 class="font-bold text-sm text-slate-900 m-0">Dispensa de Outorga Urbana</h4>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Cuidado com afirmações que liberam de outorga "comunidades carentes em núcleos urbanos periféricos". A redação literal da Lei Federal 9.433/1997 é explícita ao outorgar dispensa somente a pequenos núcleos populacionais no <span class="grifado-importante">meio rural</span>.
+                            </p>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-amber-50 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">Ponto Crítico</span>
+                                <h4 class="font-bold text-sm text-slate-900 m-0">Recortes Geográficos Regionais (Rio Grande do Sul e Santa Catarina)</h4>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Em virtude de suas raízes acadêmicas locais, as bancas sulistas costumam focar em estudos de caso regionais:
+                            </p>
+                            <ul class="text-xs text-slate-600 mt-2 list-disc list-inside space-y-1">
+                                <li>A bacia do <span class="grifado">Rio Gravataí</span>, alvo frequente de análises severas de estresse hídrico agudo e poluição por efluentes urbanos e agrícolas.</li>
+                                <li>A bacia hidrográfica compartilhada dos rios <span class="grifado">Apuaê-Inhandava</span> (fronteira RS/SC), focando na alta fragilidade e instabilidade de seus Cambissolos originais frente aos impactos erosivos causados pelos barramentos de usinas hidrelétricas regionais.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- Botão para Próxima Página (Questões) -->
+        <section class="mt-16 border-t border-slate-200 pt-8 flex justify-center">
+            <a href="hidroquestoes.html" class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base rounded-2xl shadow-lg shadow-blue-500/10 hover:shadow-blue-500/25 transform active:scale-95 transition-all">
+                <span>Ir para o Banco de Questões (questoes.html)</span>
+                <i class="fa-solid fa-circle-arrow-right text-lg"></i>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="border-t border-slate-100 py-6 mt-16 bg-slate-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-400 font-medium">
+            &copy; 2026 Geografia Acadêmica - Professor EBTT. Desenvolvido para Concursos de Elite.
+        </div>
+    </footer>
+
+    <!-- Scripts do Reprodutor de Áudio -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audioEl = document.getElementById('main-audio');
+            const playPauseBtn = document.getElementById('btn-play-pause');
+            const playIcon = document.getElementById('play-icon');
+            const progressBar = document.getElementById('progress-bar');
+            const currentTimeLabel = document.getElementById('current-time');
+            const durationLabel = document.getElementById('total-duration');
+            const speedSelector = document.getElementById('speed-selector');
+            const filenameInput = document.getElementById('audio-filename');
+            const loadBtn = document.getElementById('btn-load-audio');
+            const statusLabel = document.getElementById('audio-status');
+
+            // Formatação de Tempo (Minutos : Segundos)
+            function formatTime(seconds) {
+                if (isNaN(seconds)) return "0:00";
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Atualiza o estado visual do botão Play/Pause
+            function updatePlayBtnUI() {
+                if (audioEl.paused) {
+                    playIcon.className = "fa-solid fa-play ml-0.5";
+                    statusLabel.textContent = "Pausado";
+                    statusLabel.className = "font-bold text-amber-600 text-xs";
+                } else {
+                    playIcon.className = "fa-solid fa-pause";
+                    statusLabel.textContent = `Reproduzindo (${audioEl.playbackRate}x)`;
+                    statusLabel.className = "font-bold text-emerald-600 text-xs";
+                }
+            }
+
+            // Ação de carregar novo arquivo de áudio
+            function loadNewAudio() {
+                const filename = filenameInput.value.trim();
+                if (filename) {
+                    audioEl.src = filename;
+                    audioEl.load();
+                    // Reiniciar barra e tempos
+                    progressBar.value = 0;
+                    currentTimeLabel.textContent = "0:00";
+                    durationLabel.textContent = "0:00";
+                    statusLabel.textContent = "Áudio Carregado";
+                    statusLabel.className = "font-bold text-blue-600 text-xs";
+                    
+                    // Aplicar velocidade que já está selecionada
+                    audioEl.playbackRate = parseFloat(speedSelector.value);
+                }
+            }
+
+            // Carrega no início
+            loadNewAudio();
+
+            // Eventos do Reprodutor
+            loadBtn.addEventListener('click', loadNewAudio);
+
+            playPauseBtn.addEventListener('click', () => {
+                if (audioEl.paused) {
+                    audioEl.play()
+                        .then(() => updatePlayBtnUI())
+                        .catch(err => {
+                            statusLabel.textContent = "Erro de reprodução ou arquivo indisponível";
+                            statusLabel.className = "font-bold text-red-600 text-xs";
+                            console.error("Erro ao tocar áudio: ", err);
+                        });
+                } else {
+                    audioEl.pause();
+                    updatePlayBtnUI();
+                }
+            });
+
+            audioEl.addEventListener('timeupdate', () => {
+                if (!audioEl.duration) return;
+                const progress = (audioEl.currentTime / audioEl.duration) * 100;
+                progressBar.value = progress;
+                currentTimeLabel.textContent = formatTime(audioEl.currentTime);
+            });
+
+            audioEl.addEventListener('loadedmetadata', () => {
+                progressBar.max = 100;
+                durationLabel.textContent = formatTime(audioEl.duration);
+            });
+
+            // Mudar progresso manualmente pelo controle deslizante
+            progressBar.addEventListener('input', () => {
+                if (!audioEl.duration) return;
+                const newTime = (progressBar.value / 100) * audioEl.duration;
+                audioEl.currentTime = newTime;
+            });
+
+            // Mudar velocidade de reprodução
+            speedSelector.addEventListener('change', () => {
+                audioEl.playbackRate = parseFloat(speedSelector.value);
+                updatePlayBtnUI();
+            });
+
+            // Final do Áudio
+            audioEl.addEventListener('ended', () => {
+                updatePlayBtnUI();
+                statusLabel.textContent = "Concluído";
+                statusLabel.className = "font-bold text-blue-700 text-xs";
+            });
+        });
+    </script>
+</body>
+</html>

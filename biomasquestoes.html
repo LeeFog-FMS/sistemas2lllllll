@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Biomas Terrestres - Padrão FAURGS</title>
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Configuração de fontes e transições suaves -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .serif-title {
+            font-family: 'Playfair Display', serif;
+        }
+        .code-font {
+            font-family: 'Fira Code', monospace;
+        }
+        /* Custom scrollbar para preservar o design elegante */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f0ea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c5c3b6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a3a193;
+        }
+        /* Efeito sutil de seleção para evitar fadiga ocular */
+        ::selection {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+
+<body class="bg-[#FAF9F5] text-[#24292F] min-h-screen transition-colors duration-300 ease-in-out">
+
+    <!-- Topo / Header Acadêmico -->
+    <header class="border-b border-[#EBE9E0] bg-[#FCFBF7] sticky top-0 z-40 shadow-sm backdrop-blur-md bg-opacity-95">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full">Simulado Exclusivo</span>
+                <h1 class="serif-title text-2xl md:text-3xl font-bold mt-1 text-[#1E2329]">Biomas Terrestres e Formações Vegetais</h1>
+                <p class="text-xs text-stone-500 mt-0.5">Foco de Pesquisa: As grandes paisagens vegetais da Terra e correlações climáticas (Padrão FAURGS)</p>
+            </div>
+            
+            <!-- Controles de Acessibilidade Visual e Progresso -->
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="flex bg-[#F1EFE6] p-1 rounded-lg border border-[#E1DFD4]">
+                    <button id="theme-sepia" onclick="setReadTheme('sepia')" class="px-3 py-1 text-xs font-medium rounded-md transition bg-white text-stone-800 shadow-sm">Papel Pólen</button>
+                    <button id="theme-light" onclick="setReadTheme('light')" class="px-3 py-1 text-xs font-medium rounded-md transition text-stone-600 hover:text-stone-900">Branco Neutro</button>
+                    <button id="theme-dark" onclick="setReadTheme('dark')" class="px-3 py-1 text-xs font-medium rounded-md transition text-stone-600 hover:text-stone-900">Modo Noite</button>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <button onclick="changeFontSize(-1)" class="w-8 h-8 rounded-full border border-[#E1DFD4] bg-[#FCFBF7] flex items-center justify-center text-sm font-bold hover:bg-[#F1EFE6] transition" title="Diminuir texto">A-</button>
+                    <button onclick="changeFontSize(1)" class="w-8 h-8 rounded-full border border-[#E1DFD4] bg-[#FCFBF7] flex items-center justify-center text-sm font-bold hover:bg-[#F1EFE6] transition" title="Aumentar texto">A+</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Barra de Progresso Real-time -->
+        <div class="w-full bg-[#EBE9E0] h-1.5 overflow-hidden">
+            <div id="progress-bar" class="bg-gradient-to-r from-emerald-600 to-teal-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Conteúdo das Questões (3 colunas no desktop) -->
+            <div class="lg:col-span-3 space-y-8" id="questions-container">
+                <!-- As questões serão injetadas dinamicamente via JS -->
+                <div class="flex justify-center items-center py-24">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800"></div>
+                </div>
+            </div>
+            
+            <!-- Barra Lateral Fixa com Navegação de Questões (1 coluna no desktop) -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-28 space-y-6">
+                    
+                    <!-- Box Informativo de Desempenho e Navegação -->
+                    <div class="bg-[#FCFBF7] border border-[#EBE9E0] rounded-2xl p-5 shadow-sm">
+                        <h3 class="font-bold text-stone-800 mb-3 text-sm tracking-wide uppercase">Cartão de Respostas</h3>
+                        
+                        <!-- Grid de números das questões -->
+                        <div class="grid grid-cols-5 gap-2.5 mb-6" id="nav-badge-grid">
+                            <!-- Injetado dinamicamente -->
+                        </div>
+                        
+                        <div class="space-y-3.5 border-t border-[#EBE9E0] pt-4 text-xs text-stone-600">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block"></span>
+                                <span>Questão Respondida</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full border-2 border-dashed border-[#A8A69A] inline-block"></span>
+                                <span>Questão Pendente</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel Flutuante de Ação -->
+                    <div class="bg-stone-900 text-stone-100 rounded-2xl p-5 shadow-md space-y-4">
+                        <div class="text-xs text-stone-400">Certifique-se de preencher todas as 10 questões antes de submeter para receber a análise completa.</div>
+                        <button id="btn-submit-simulado" onclick="submitSimulado()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold py-3 px-4 rounded-xl shadow-sm hover:brightness-105 active:scale-95 transition flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+                            Finalizar Simulado
+                        </button>
+                        <button id="btn-restart" onclick="restartSimulado()" class="w-full bg-stone-800 text-stone-300 font-medium py-2.5 px-4 rounded-xl border border-stone-700 hover:bg-stone-700 transition text-sm flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17"/></svg>
+                            Reiniciar Teste
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </main>
+
+    <section id="results-section" class="hidden border-t border-[#EBE9E0] bg-[#FCFBF7] py-12 px-4 mt-12 transition-all duration-500 ease-in-out">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center space-y-4 mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">Resultado Consolidado</span>
+                <h2 class="serif-title text-3xl md:text-4xl font-bold text-stone-900">Relatório de Desempenho</h2>
+                <p class="text-stone-600 max-w-lg mx-auto">Veja abaixo sua pontuação global, a taxa de acerto por conceito biogeográfico e as resoluções comentadas de cada questão.</p>
+            </div>
+            
+            <!-- Cards de Insights Rápidos -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+                <div class="bg-white border border-[#EBE9E0] p-6 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-1">Acertos</span>
+                    <span id="score-fraction" class="serif-title text-4xl font-extrabold text-emerald-700">0 / 10</span>
+                    <span class="text-xs text-stone-500 block mt-1" id="score-text">Aproveitamento</span>
+                </div>
+                <div class="bg-white border border-[#EBE9E0] p-6 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-1">Porcentagem</span>
+                    <span id="score-percent" class="serif-title text-4xl font-extrabold text-emerald-800">0%</span>
+                    <span class="text-xs text-stone-500 block mt-1" id="score-comment">Desempenho Geral</span>
+                </div>
+                <div class="bg-white border border-[#EBE9E0] p-6 rounded-2xl shadow-sm text-center">
+                    <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mb-1">Status Final</span>
+                    <span id="score-status" class="serif-title text-2xl font-extrabold text-stone-800 mt-2 block">Não Iniciado</span>
+                    <span class="text-xs text-stone-500 block mt-1">Conceito FAURGS</span>
+                </div>
+            </div>
+
+            <!-- Filtros para a Revisão de Erros/Acertos -->
+            <div class="flex items-center justify-between border-b border-[#EBE9E0] pb-4 mb-6 flex-wrap gap-4">
+                <h3 class="font-bold text-stone-800 text-lg">Revisar e Estudar Resoluções</h3>
+                <div class="flex gap-2">
+                    <button onclick="filterQuestions('all')" id="filter-all" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-800 text-white shadow-sm transition">Todas</button>
+                    <button onclick="filterQuestions('correct')" id="filter-correct" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-[#EBE9E0] text-emerald-800 hover:bg-[#F1EFE6] transition">Acertos</button>
+                    <button onclick="filterQuestions('wrong')" id="filter-wrong" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-[#EBE9E0] text-rose-800 hover:bg-[#F1EFE6] transition">Erros</button>
+                </div>
+            </div>
+
+            <!-- Tabela de Síntese Biogeográfica e Climatológica (Estudo Teórico) -->
+            <div class="bg-white border border-[#EBE9E0] rounded-2xl p-6 shadow-sm mb-12 overflow-hidden">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="p-2 bg-emerald-50 rounded-xl text-emerald-800">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </span>
+                    <div>
+                        <h4 class="font-bold text-stone-800">Tabela de Síntese Biogeográfica e Climatológica Global</h4>
+                        <p class="text-xs text-stone-500">Guia de consulta teórica rápida para fixação de termos e zonas climáticas.</p>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto border border-[#EBE9E0] rounded-xl">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-stone-50 border-b border-[#EBE9E0] text-stone-600 font-semibold uppercase">
+                                <th class="p-3">Bioma Terrestre</th>
+                                <th class="p-3">Zona Climática</th>
+                                <th class="p-3">Köppen</th>
+                                <th class="p-3">Adaptações Funcionais e Estruturais</th>
+                                <th class="p-3">Solos Característicos</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#EBE9E0] text-stone-700">
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Tundra</td>
+                                <td class="p-3">Polar</td>
+                                <td class="p-3 code-font">ET</td>
+                                <td class="p-3">Herbáceas baixas, musgos, líquens; ausência de árvores; crescimento rasteiro.</td>
+                                <td class="p-3">Gelissolos (com camada ativa sobre permafrost).</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Taiga (Boreal)</td>
+                                <td class="p-3">Subpolar</td>
+                                <td class="p-3 code-font">Df, Dw</td>
+                                <td class="p-3">Coníferas aciculifoliadas; perenifólias; folhas adaptadas ao peso da neve.</td>
+                                <td class="p-3">Espodossolos (Podzóis ácidos com eluviação acentuada).</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Floresta Temperada</td>
+                                <td class="p-3">Temperada</td>
+                                <td class="p-3 code-font">Cfb, Dfb</td>
+                                <td class="p-3">Caducifólias (decíduas); perda outonal de folhas como dormência.</td>
+                                <td class="p-3">Alfissolos e Luvisolos férteis, ricos em matéria orgânica.</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Floresta Tropical</td>
+                                <td class="p-3">Equatorial e Tropical</td>
+                                <td class="p-3 code-font">Af, Am</td>
+                                <td class="p-3">Perenifólias; latifoliadas; higrófitas; dossel estratificado em dosséis.</td>
+                                <td class="p-3">Latossolos quimicamente pobres e lixiviados.</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Savana</td>
+                                <td class="p-3">Tropical Estacional</td>
+                                <td class="p-3 code-font">Aw, As</td>
+                                <td class="p-3">Tropófitas; herbáceas contínuas com árvores esparsas; resistência ao fogo.</td>
+                                <td class="p-3">Plintossolos e Latossolos ácidos com baixa saturação de bases.</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Estepe</td>
+                                <td class="p-3">Semiárida</td>
+                                <td class="p-3 code-font">BSk, BSh</td>
+                                <td class="p-3">Herbáceas baixas e descontínuas; gramíneas de ciclo curto; xerófilas.</td>
+                                <td class="p-3">Kastanozems e Solonchaks salinos.</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="p-3 font-semibold text-stone-900">Deserto</td>
+                                <td class="p-3">Árida</td>
+                                <td class="p-3 code-font">BWh, BWk</td>
+                                <td class="p-3">Xerofíticas; suculência; redução foliar em espinhos; sementes efêmeras.</td>
+                                <td class="p-3">Aridissolos (pedregosos, arenosos e salinizados).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sistema Personalizado de Toasts de Alerta (Evita o uso do alert() padrão do navegador) -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <script>
+        const quizData = [
+            {
+                id: 1,
+                title: "Questão 01",
+                text: "Considere as seguintes afirmações sobre a distribuição global dos biomas terrestres e sua correlação direta com as zonas latitudinais de radiação solar e circulação atmosférica.",
+                subItems: [
+                    "I - As florestas tropicais e equatoriais estão geograficamente restritas às zonas de baixa latitude, caracterizando-se ecologicamente por apresentar vegetação predominantemente perenifólia e latifoliada, adaptada a ambientes de reduzida amplitude térmica anual e elevados índices de precipitação pluviométrica distribuídos ao longo do ano.",
+                    "II - A transição latitudinal entre as florestas temperadas decíduas e a tundra ártica é ocupada de forma contínua pela taiga, um bioma de baixa diversidade fisionômica, dominado por coníferas, que responde a condições de clima subpolar com invernos prolongados e estação de crescimento vegetativo curta.",
+                    "III - Os desertos quentes situam-se preferencialmente nas faixas de latitude média a baixa, estando associados às células de alta pressão subtropical (células de Hadley), cujo movimento de subsidência do ar inibe a convecção e inviabiliza a ocorrência de precipitações regulares."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "E",
+                resolution: "A primeira afirmativa está biologicamente correta, uma vez que as florestas equatoriais e tropicais úmidas se assentam estritamente sobre a zona de convergência intertropical. O balanço de radiação líquida constante garante temperaturas médias sempre elevadas e chuvas abundantes ao longo de todo o ano, o que desobriga as plantas de entrarem em dormência fisiológica, resultando em uma fisionomia florestal perenifólia e latifoliada. <br><br>A segunda afirmativa está geograficamente correta ao situar a taiga como a maior floresta contínua do globo, estendendo-se pelas latitudes subpolares do Hemisfério Norte, logo ao sul do domínio da tundra. A sua homogeneidade fisionômica baseia-se na dominância ecológica de poucas espécies de gimnospermas adaptadas à neve persistente e a solos congelados boa parte do ano. <br><br>A terceira afirmativa está meteorologicamente correta, dado que a distribuição dos grandes desertos subtropicais quentes do planeta coincide de forma exata com as latitudes de 30° N e 30° S. O mecanismo de subsidência do ar associado ao ramo descendente das Células de Hadley aquece adiabaticamente as massas de ar e diminui de forma drástica a umidade relativa, inibindo os processos termodinâmicos de ascensão convectiva e formação de nuvens."
+            },
+            {
+                id: 2,
+                title: "Questão 02",
+                text: "Em relação à Tundra e às suas condicionantes pedoclimáticas nas altas latitudes do Hemisfério Norte, assinale com V (verdadeiro) ou F (falso) as seguintes afirmações.",
+                subItems: [
+                    "( ) Ocorre em latitudes tipicamente superiores a 60° N, sob a influência direta do clima polar, em áreas de invernos secos e extremamente frios, e verões curtos cujas temperaturas médias diárias raramente ultrapassam 10°C.",
+                    "( ) A fisionomia vegetal da tundra é dominada por espécies arbóreas perenes de grande porte, dotadas de raízes pivotantes profundas que realizam a absorção de nutrientes nas camadas inferiores do solo durante o inverno ártico.",
+                    "( ) O <em>permafrost</em> constitui a camada de solo permanentemente congelada subsuperficial que, ao impedir a infiltração da água resultante do degelo superficial de verão, gera um ambiente saturado de umidade propício ao desenvolvimento de musgos, líquens e gramíneas.",
+                    "( ) A ausência de uma formação vegetal equivalente à tundra contínua nas mesmas latitudes do Hemisfério Sul é explicada pela assimetria na distribuição de terras e mares, com predomínio do domínio marítimo nas latitudes subpolares austrais."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "V – F – V – V." },
+                    { key: "B", text: "V – V – F – F." },
+                    { key: "C", text: "F – V – V – F." },
+                    { key: "D", text: "F – F – V – V." },
+                    { key: "E", text: "V – F – F – V." }
+                ],
+                correct: "A",
+                resolution: "A primeira afirmação é verdadeira por definir os limites térmicos e latitudinais da tundra ártica. A isoterma de 10°C no mês mais quente representa o limiar térmico global para o desenvolvimento arbóreo. <br><br>A segunda afirmação é biologicamente falsa, uma vez que a fisionomia da tundra é marcada pelo crescimento anão ou rasteiro de sua vegetação, composta basicamente por briófitas, líquens e arbustos de pequeno porte. O solo congelado e o curto período reprodutivo de verão inviabilizam o surgimento de árvores de grande porte. <br><br>A terceira afirmação é verdadeira ao descrever o papel ecológico do <em>permafrost</em>. Durante o verão ártico, apenas a fina camada superficial do solo (camada ativa) sofre degelo. Como a água líquida não consegue penetrar através da camada permanentemente congelada subjacente, ela fica retida na superfície, criando solos saturados de água que favorecem musgos e líquens. <br><br>A quarta afirmação é verdadeira e explica uma importante assimetria biogeográfica global. No Hemisfério Sul, as latitudes correspondentes à ocorrência da tundra ártica são dominadas por oceanos circumpolares, o que impede a formação de uma cobertura vegetal contínua equivalente à do Hemisfério Norte."
+            },
+            {
+                id: 3,
+                title: "Questão 03",
+                text: "Assinale a alternativa que preenche correta e respectivamente as lacunas do texto abaixo sobre as características biogeográficas da Taiga.<br><br>A Taiga, também denominada floresta boreal, desenvolve-se em faixas contínuas do Hemisfério Norte sob a influência do clima ________, caracterizado por amplitudes térmicas anuais extremas. Suas espécies arbóreas dominantes são ________, cujas agulhas foliares rígidas reduzem a perda de água por transpiração cuticular e resistem à sobrecarga de neve. O solo típico desse bioma, conhecido como ________, caracteriza-se pela forte acidez e baixa fertilidade natural devido à lenta decomposição da matéria orgânica acumulada na superfície.",
+                type: "options",
+                options: [
+                    { key: "A", text: "temperado oceânico – latifoliadas – chernozem" },
+                    { key: "B", text: "subpolar – aciculifoliadas – podzol" },
+                    { key: "C", text: "subtropical – esclerófilas – latossolo" },
+                    { key: "D", text: "polar – xerófitas – podzol" },
+                    { key: "E", text: "subpolar – caducifólias – lixiviado" }
+                ],
+                correct: "B",
+                resolution: "O preenchimento adequado das lacunas baseia-se na correlação precisa dos fatores ecológicos da taiga:<br>1. O clima associado é o <strong>subpolar</strong> (continental frio), marcado pelas maiores amplitudes térmicas anuais da Terra.<br>2. As espécies de árvores dominantes pertencem ao grupo das coníferas e apresentam folhas modificadas em formato de agulhas rígidas, chamadas de <strong>aciculifoliadas</strong>, cuja estrutura compacta e cerosa diminui a perda de água por transpiração fisiológica e suporta o acúmulo mecânico de neve sem quebrar os ramos.<br>3. O processo de pedogênese típico desse bioma sob clima frio e de decomposição lenta de matéria orgânica altamente ácida é a podzolização, que gera solos altamente intemperizados e ácidos conhecidos como <strong>podzóis</strong> (ou Espodossolos), caracterizados por um horizonte cinzento eluvial lavado de argila e compostos de ferro e alumínio."
+            },
+            {
+                id: 4,
+                title: "Questão 04",
+                text: "No bloco superior abaixo, estão listados três domínios vegetais das zonas temperadas e subtropicais da Terra; no inferior, descrições de suas respectivas características ecofisiológicas e climáticas. Associe adequadamente o bloco inferior ao superior.<br><br>1. Floresta Temperada Decídua<br>2. Floresta Ombrófila Mista (Mata de Araucária)<br>3. Formações Esclerófilas Mediterrâneas",
+                subItems: [
+                    "( ) Formação arbustiva e arbórea baixa, adaptada a um ritmo climático de invernos chuvosos e verões quentes e secos, exibindo folhas coriáceas endurecidas que limitam a perda hídrica por evapotranspiração estival.",
+                    "( ) Formação florestal caracterizada pela perda sazonal da folhagem de suas espécies dominantes durante o outono, atuando como mecanismo de dormência adaptativa frente ao congelamento do solo e à consequente seca fisiológica do inverno.",
+                    "( ) Formação florestal de caráter subtropical úmido desenvolvida em áreas de altitudes médias a elevadas, caracterizada pela coexistência de coníferas nativas associadas a um sub-bosque latifoliado diversificado, sob regime de chuvas bem distribuídas ao longo do ano."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "3 – 1 – 2." },
+                    { key: "B", text: "1 – 2 – 3." },
+                    { key: "C", text: "2 – 3 – 1." },
+                    { key: "D", text: "3 – 2 – 1." },
+                    { key: "E", text: "1 – 3 – 2." }
+                ],
+                correct: "A",
+                resolution: "A associação correta baseia-se na análise das adaptações adaptativas da vegetação aos ritmos climáticos zonais:<br><br>1. A primeira descrição diz respeito às <strong>Formações Esclerófilas Mediterrâneas (Item 3)</strong>, onde as plantas desenvolveram esclerofilia (folhas coriáceas, duras e protegidas por ceras) como mecanismo para enfrentar a seca fisiológica estival provocada pela ausência de chuvas durante os verões quentes.<br><br>2. A segunda descrição refere-se à <strong>Floresta Temperada Decídua (Item 1)</strong>, cuja característica fundamental é a caducidade sincronizada das folhas no outono, reduzindo a perda de água por transpiração quando o solo congela no inverno, o que inviabilizaria a absorção hídrica pelas raízes.<br><br>3. A terceira descrição descreve a <strong>Floresta Ombrófila Mista (Item 2)</strong>, típica do sul do Brasil, que combina elementos florísticos da Mata Atlântica com a conífera nativa <em>Araucaria angustifolia</em> sob clima subtropical de altitude e chuvas regulares ao longo do ano."
+            },
+            {
+                id: 5,
+                title: "Questão 05",
+                text: "As florestas equatoriais e tropicais úmidas abrigam as maiores taxas de biodiversidade e produtividade primária líquida entre os ecossistemas terrestres. Considere as seguintes afirmações sobre o funcionamento biogeográfico e as condições climáticas dessas florestas.",
+                subItems: [
+                    "I - A alta densidade vegetal e a produtividade exuberante da Floresta Amazônica são sustentadas diretamente pela elevada fertilidade natural e abundância de minerais solúveis em seus solos profundos e antigos.",
+                    "II - A estrutura florestal estratificada e a densidade do dossel superior bloqueiam a penetração da luz solar direta até o solo, criando um microclima sombreado, quente e saturado de umidade, propício ao desenvolvimento de espécies higrófilas e epífitas.",
+                    "III - A rápida ciclagem de nutrientes minerais, impulsionada pela decomposição acelerada da serrapilheira por microrganismos sob altas temperaturas e umidade constante, constitui o mecanismo primário de manutenção da floresta sobre solos quimicamente intemperizados."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas III." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "D",
+                resolution: "<strong>Afirmação I (Incorreta):</strong> Ao contrário do que sugere a exuberância de sua biomassa, os solos que sustentam as florestas tropicais úmidas e equatoriais, como a Amazônia, são profundos, antigos, extremamente intemperizados e quimicamente pobres. A intensa lixiviação promovida pelas chuvas constantes ao longo de milhões de anos removeu quase todos os minerais primários solúveis.<br><br><strong>Afirmação II (Correta):</strong> A densidade das copas das árvores no dossel superior impede a penetração da radiação solar direta, fazendo com que menos de 5% da luz atinja o solo florestal. Esse bloqueio gera um microclima sombreado, quente e úmido que favorece espécies higrófilas e adaptadas à baixa luminosidade.<br><br><strong>Afirmação III (Correta):</strong> O equilíbrio e a produtividade da floresta dependem de uma rápida ciclagem de nutrientes. A queda constante de folhas e galhos forma uma camada superficial chamada serrapilheira, que é decomposta de forma acelerada por fungos e microrganismos sob temperaturas elevadas e umidade constante. As micorrizas associadas às raízes superficiais absorvem imediatamente esses nutrientes antes que as águas de infiltração os lixiviem."
+            },
+            {
+                id: 6,
+                title: "Questão 06",
+                text: "Em relação às Savanas globais e ao domínio do Cerrado, assinale com V (verdadeiro) ou F (falso) as seguintes afirmações.",
+                subItems: [
+                    "( ) As formações savânicas desenvolvem-se tipicamente em regiões de clima tropical estacional, caracterizadas por uma alternância nítida entre um verão chuvoso e um inverno marcadamente seco.",
+                    "( ) A vegetação das savanas apresenta um caráter estrutural tropófilo, composto por um estrato herbáceo contínuo dominado por gramíneas, sobreposto por um estrato arbustivo-arbóreo esparso de caules tortuosos e casca espessa.",
+                    "( ) O fogo periódico de origem natural durante o ápice da estação seca constitui um fator ecológico e evolutivo integrador do Cerrado, atuando na dinâmica de quebra de dormência de sementes e estimulando o rebrotamento de espécies vasculares.",
+                    "( ) Ao contrário das savanas africanas, caracterizadas ecologicamente pela dominância de grandes mamíferos herbívoros, as savanas neotropicais sul-americanas destacam-se pela alta riqueza florística e endemismos, sendo classificadas globalmente como <em>hotspots</em> de biodiversidade."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "V – V – V – V." },
+                    { key: "B", text: "V – F – V – F." },
+                    { key: "C", text: "F – V – F – V." },
+                    { key: "D", text: "V – V – F – V." },
+                    { key: "E", text: "F – F – V – V." }
+                ],
+                correct: "A",
+                resolution: "<strong>Afirmação I (Verdadeira):</strong> As savanas são formações tropicais estacionais de transição cujo ciclo de crescimento da vegetação é estritamente controlado pela alternância entre uma estação seca de inverno e um verão chuvoso.<br><br><strong>Afirmação II (Verdadeira):</strong> A fisionomia vegetal exibe um caráter tropófilo, onde as espécies apresentam adaptações para sobreviver ao déficit hídrico temporário, como folhas coriáceas, caules tortuosos de casca grossa e corticosa para proteção térmica, e raízes longas capazes de buscar água nos lençóis freáticos profundos.<br><br><strong>Afirmação III (Verdadeira):</strong> O fogo é um elemento ecológico natural e evolutivo fundamental no Cerrado. Ele ocorre historicamente devido a raios no final do período de seca e atua estimulando a quebra de dormência de sementes, eliminando pragas de fungos e acelerando a ciclagem de nutrientes ao transformar a biomassa morta acumulada em cinzas ricas em potássio e fósforo.<br><br><strong>Afirmação IV (Verdadeira):</strong> Diferente das savanas da África Ocidental e Oriental, que abrigam uma fauna de grandes mamíferos ungulados migradores, o Cerrado brasileiro (a savana neotropical mais biodiversa do mundo) destaca-se por sua altíssima riqueza florística e elevado índice de espécies endêmicas de plantas, sendo classificado globalmente como um <em>hotspot</em> ambiental devido às graves perdas de habitat causadas pela agropecuária comercial."
+            },
+            {
+                id: 7,
+                title: "Questão 07",
+                text: "Os Campos Sulinos representam um ecossistema campestre de alta biodiversidade fisionômica localizado na zona temperada/subtropical da América do Sul. Considere as seguintes afirmações sobre os campos sulinos.",
+                subItems: [
+                    "I - A substituição da vegetação original e a modificação da paisagem por meio da agricultura intensiva, do sobrepastoreio e do plantio de silvicultura exótica de <em>Pinus</em> e <em>Eucalyptus</em> têm alterado profundamente a estrutura taxonômica original desse ecossistema.",
+                    "II - Registros palinológicos de Cambará do Sul documentam a dinâmica histórica da vegetação, evidenciando uma dominância antiga da vegetação campestre sob condições de paleoclima mais seco e frio, seguida pela expansão recente da floresta de araucárias favorecida pelo aumento da umidade no Holoceno tardio.",
+                    "III - As espécies forrageiras nativas não são exploradas comercialmente nos Campos Sulinos, uma vez que a totalidade das espécies campestres locais carece de valor nutritivo ou econômico agregado para a pecuária.",
+                    "IV - A invasão biológica do capim-annoni (<em>Eragrostis plana</em>) no bioma Pampa decorre diretamente e de forma exclusiva do plantio ordenado de florestas de eucaliptos."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas I e II." },
+                    { key: "C", text: "Apenas II e IV." },
+                    { key: "D", text: "Apenas I, II e III." },
+                    { key: "E", text: "I, II, III e IV." }
+                ],
+                correct: "B",
+                resolution: "<strong>Afirmação I (Correta):</strong> A integridade ecológica dos Campos Sulinos do bioma Pampa está ameaçada pelo avanço da fronteira agrícola, pela conversão de pastagens nativas para lavouras de soja e pela introdução da silvicultura exótica de rápido crescimento (<em>Pinus</em> e <em>Eucalyptus</em>), alterando a estrutura de nichos ecológicos.<br><br><strong>Afirmação II (Correta):</strong> Estudos baseados em registros palinológicos coletados em turfeiras de Cambará do Sul revelam que a paisagem campestre original dos Campos Sulinos é um reflexo de paleoclimas frios e secos do Último Máximo Glacial, e que a expansão recente da Mata de Araucária sobre os campos ocorreu há poucos milhares de anos, impulsionada pelo aumento da precipitação no Holoceno tardio.<br><br><strong>Afirmação III (Incorreta):</strong> Os Campos Sulinos possuem uma alta biodiversidade de gramíneas e leguminosas forrageiras nativas de elevado valor nutricional para a pecuária extensiva tradicional, sendo este uso pastoril um elemento histórico de conservação biológica integrada do bioma.<br><br><strong>Afirmação IV (Incorreta):</strong> O capim-annoni (<em>Eragrostis plana</em>) é uma gramínea de origem africana que foi introduzida acidentalmente no Rio Grande do Sul na década de 1970 como potencial forrageira. Sua dispersão agressiva e invasão biológica sobre as pastagens nativas do Pampa decorrem de sua grande produção de sementes, alelopatia e resistência ao pisoteio animal, não apresentando correlação de causa e efeito com o cultivo planejado de eucaliptos."
+            },
+            {
+                id: 8,
+                title: "Questão 08",
+                text: "No bloco superior abaixo, estão identificados países do continente africano por meio de números de 1 a 5; no inferior, descrições de suas paisagens biogeográficas e dinâmicas climáticas locais. Associe adequadamente o bloco inferior ao superior.<br><br>1. Namíbia<br>2. Egito<br>3. Congo<br>4. Uganda<br>5. Zâmbia",
+                subItems: [
+                    "( ) A alta nebulosidade que se desenvolve sobre este país, em virtude da insolação intensa e da convergência de umidade na faixa equatorial, propicia o desenvolvimento de uma floresta tropical bastante biodiversa.",
+                    "( ) As águas frias da corrente oceânica que margeia este país dificultam a formação de nuvens de chuva convectivas, criando as condições mecânicas para o surgimento de um deserto litorâneo hiperárido.",
+                    "( ) Este país, característico de um domínio desértico subtropical contínuo, apresenta cerca de 95% de seu território coberto por areias e rochas nuas, sob regime de elevada amplitude térmica diária.",
+                    "( ) O clima deste país, posicionado em baixas latitudes, é amenizado pela altitude do relevo regional e apresenta uma alternância nítida entre uma estação chuvosa e uma estação seca, abrigando savanas típicas sobre a maior parte do território."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "3 – 1 – 2 – 5." },
+                    { key: "B", text: "3 – 2 – 5 – 1." },
+                    { key: "C", text: "4 – 5 – 3 – 1." },
+                    { key: "D", text: "5 – 1 – 2 – 3." },
+                    { key: "E", text: "2 – 1 – 5 – 4." }
+                ],
+                correct: "A",
+                resolution: "A associação correta simula a correspondência entre a dinâmica atmosférica e a fisionomia resultante no continente africano:<br><br>1. A primeira descrição aponta para o <strong>Congo (País 3)</strong>, onde a intensa radiação solar e o acúmulo de vapor de água na zona de convergência equatorial geram chuvas diárias abundantes e sustentam uma floresta pluvial densa e estratificada.<br><br>2. A segunda descrição associa-se à <strong>Namíbia (País 1)</strong>. A presença da Corrente Fria de Benguela resfria as massas de ar marítimas superficiais, inibindo a sua capacidade de ascender e condensar. Isso gera um deserto litorâneo frio e extremamente seco conhecido como Deserto da Namíbia.<br><br>3. A terceira descrição identifica o <strong>Egito (País 2)</strong>, integrante do cinturão hiperárido do Deserto do Saara, sob o controle dos ventos alísios continentais secos e da subsidência de ar.<br><br>4. A quarta descrição refere-se à <strong>Zâmbia (País 5)</strong>, situada no planalto africano austral, sob clima tropical de altitude com uma alternância sazonal bem demarcada entre estações úmidas e secas, dominado por extensas áreas de savanas."
+            },
+            {
+                id: 9,
+                title: "Questão 09",
+                text: "Assinale a alternativa que preenche correta e respectivamente as lacunas do texto abaixo sobre as adaptações funcionais das formações vegetais terrestres aos fatores ambientais e edáficos.<br><br>Plantas adaptadas a viver em solos saturados quimicamente por cloretos e sulfatos solúveis, comuns em zonas de transição costeira sob influência das marés, são classificadas como ________, sendo dominantes na fisionomia dos manguezais. Por outro lado, as espécies que habitam ambientes continentais caracterizados por uma estação seca prolongada e que apresentam mecanismos morfológicos como a suculência, a redução da área foliar e a presença de estômatos protegidos são chamadas de ________. Por fim, as formações vegetais que perdem sazonalmente suas folhas como estratégia fisiológica de defesa contra o estresse hídrico no inverno ou na estação seca são denominadas ________.",
+                type: "options",
+                options: [
+                    { key: "A", text: "halófitas – xerófitas – caducifólias" },
+                    { key: "B", text: "hidrófitas – tropófitas – perenifólias" },
+                    { key: "C", text: "mesófitas – halófitas – latifoliadas" },
+                    { key: "D", text: "heliófitas – xerófitas – aciculifoliadas" },
+                    { key: "E", text: "halófitas – higrófitas – esclerófilas" }
+                ],
+                correct: "A",
+                resolution: "<strong>1ª Lacuna: halófitas</strong> - plantas adaptadas fisiologicamente a ambientes de solos salinos. Elas controlam a pressão osmótica celular interna acumulando solutos orgânicos e secretando o excesso de cloreto de sódio por glândulas foliares especializadas.<br><br><strong>2ª Lacuna: xerófitas</strong> - plantas que habitam regiões semiáridas ou áridas e que apresentam adaptações morfológicas para minimizar a evapotranspiração, como folhas reduzidas a espinhos, cutícula cerosa espessa, estômatos protegidos em criptas e caules clorofilados capazes de armazenar água.<br><br><strong>3ª Lacuna: caducifólias (ou decíduas)</strong> - formações vegetais que respondem sazonalmente ao estresse de seca ou frio eliminando as suas folhas. Esse processo hormonal (abscisão foliar) interrompe o fluxo de água nos tecidos condutores externos, protegendo a integridade fisiológica do vegetal durante os meses de menor disponibilidade hídrica."
+            },
+            {
+                id: 10,
+                title: "Questão 10",
+                text: "Em relação às respostas espaciais e ecológicas das grandes paisagens vegetais da Terra diante das pressões antrópicas e das mudanças climáticas globais, assinale com V (verdadeiro) ou F (falso) as afirmações abaixo.",
+                subItems: [
+                    "( ) O aquecimento acelerado das altas latitudes do Hemisfério Norte tem induzido o fenômeno de 'esverdeamento' (<em>greening</em>) da tundra ártica e a expansão latitudinal da linha de árvores da taiga, reduzindo o albedo da superfície e acelerando o derretimento do <em>permafrost</em>.",
+                    "( ) As florestas tropicais úmidas apresentam estabilidade homeostática rígida frente a aumentos de temperatura média global, o que assegura que o estresse térmico e as secas severas não alterem seu papel histórico de sumidouros líquidos de carbono atmosférico.",
+                    "( ) A conversão e a fragmentação do Cerrado e das áreas campestres do Pampa para a agricultura intensiva alteram o balanço de energia superficial, elevando as taxas de evapotranspiração real e reduzindo os processos locais de desertificação.",
+                    "( ) A Caatinga, domínio morfoclimático exclusivamente brasileiro rico em espécies endêmicas, é considerada por especialistas um dos ambientes ecologicamente mais vulneráveis e sensíveis à interferência humana e ao avanço das mudanças climáticas globais."
+                ],
+                type: "options",
+                options: [
+                    { key: "A", text: "V – F – F – V." },
+                    { key: "B", text: "F – V – F – V." },
+                    { key: "C", text: "V – V – F – F." },
+                    { key: "D", text: "F – F – V – V." },
+                    { key: "E", text: "V – F – F – V." }
+                ],
+                correct: "A",
+                resolution: "<strong>Item 1 (Verdadeiro):</strong> O rápido aumento das temperaturas médias anuais nas altas latitudes do planeta (Ampliação Ártica) prolonga o verão biogeográfico, ativando processos de decomposição de matéria orgânica no solo e gerando o avanço latitudinal de arbustos e árvores sobre a tundra ártica. Esse fenômeno diminui o albedo da superfície (a vegetação escura absorve mais calor que a neve clara), estabelecendo um ciclo de retroalimentação térmica positiva que acelera o derretimento do <em>permafrost</em>.<br><br><strong>Item 2 (Falso):</strong> Estudos ecofisiológicos recentes apontam que as florestas equatoriais úmidas estão se aproximando de um limiar crítico de resiliência ecológica. O estresse térmico somado a secas prolongadas induzidas pelo desmatamento sistemático eleva as taxas de mortalidade das grandes árvores emergentes, ameaçando converter extensos trechos dessas formações em fontes líquidas de dióxido de carbono ($CO_2$) para a atmosfera global.<br><br><strong>Item 3 (Falso):</strong> A substituição de extensas áreas de campos do Pampa e cerrados arbustivos por cultivos agrícolas anuais reduz a evapotranspiração real média anual e diminui o teor de matéria orgânica do solo, alterando negativamente o balanço de água subterrânea e intensificando os processos locais de degradação da terra e seca estacional.<br><br><strong>Item 4 (Verdadeiro):</strong> A Caatinga é um domínio morfoclimático de alta vulnerabilidade ecológica. O seu clima semiárido, caracterizado por elevados contrastes de pluviosidade estacional e solos rasos e pedregosos, faz com que a retirada da vegetação xerófila original para lenha ou pastagem exponha diretamente a superfície à erosão hídrica intensa, acelerando processos irreversíveis de desertificação no semiárido nordestino."
+            }
+        ];
+
+        // Objeto global de respostas do usuário
+        let userAnswers = {};
+        let isSubmitted = false;
+        let currentFilter = 'all';
+
+        window.onload = function() {
+            renderQuestions();
+            renderNavigationBadges();
+            updateProgress();
+        };
+
+        // Função de Rendering Dinâmico das Questões
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = ''; // Limpar container
+
+            quizData.forEach((q, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.id = `card-q${q.id}`;
+                questionCard.className = `bg-white border border-[#EBE9E0] rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow duration-200 scroll-mt-28`;
+                
+                // Cabeçalho do Card
+                let html = `
+                    <div class="flex items-center justify-between border-b border-[#F1EFE6] pb-4 mb-5 flex-wrap gap-2">
+                        <span class="text-sm font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-lg">Questão ${String(q.id).padStart(2, '0')}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-semibold text-stone-400">FAURGS Biomas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mb-6">
+                        <p class="text-[15px] leading-relaxed text-[#23272A] font-medium font-sans">
+                            ${q.text}
+                        </p>
+                `;
+
+                // Caso contenha sub-itens como assertivas ou julgamentos (I, II, III ou V/F)
+                if (q.subItems && q.subItems.length > 0) {
+                    html += `<div class="bg-[#FAF9F5] border border-[#EBE9E0] rounded-xl p-4 md:p-5 space-y-3 my-4">`;
+                    q.subItems.forEach(item => {
+                        html += `
+                            <div class="flex items-start gap-2.5 text-sm text-[#3E4246] leading-relaxed">
+                                <span class="text-emerald-800 font-bold shrink-0">•</span>
+                                <p>${item}</p>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+
+                html += `</div>`; // Fechamento div space-y-4
+
+                // Opções de Alternativa (A, B, C, D, E)
+                html += `<div class="space-y-3" id="options-group-q${q.id}">`;
+                q.options.forEach(opt => {
+                    const isSelected = userAnswers[q.id] === opt.key;
+                    const optionBtnId = `opt-q${q.id}-${opt.key}`;
+                    
+                    html += `
+                        <button 
+                            type="button"
+                            id="${optionBtnId}"
+                            onclick="selectOption(${q.id}, '${opt.key}')"
+                            ${isSubmitted ? 'disabled' : ''}
+                            class="w-full text-left p-4 rounded-xl border transition-all duration-150 flex items-start gap-4 group 
+                                   ${isSelected 
+                                       ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-sm' 
+                                       : 'bg-white border-[#EBE9E0] hover:bg-[#FAF9F5] hover:border-[#D1CFC2] text-stone-700'}"
+                        >
+                            <span class="w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center transition shrink-0
+                                         ${isSelected 
+                                             ? 'bg-emerald-600 text-white' 
+                                             : 'bg-[#F1EFE6] text-stone-600 group-hover:bg-stone-200'}"
+                            >
+                                ${opt.key}
+                            </span>
+                            <span class="text-sm font-medium pt-0.5 leading-relaxed">${opt.text}</span>
+                        </button>
+                    `;
+                });
+                html += `</div>`;
+
+                html += `
+                    <div id="resolution-block-q${q.id}" class="hidden mt-6 border-t border-[#F1EFE6] pt-5 transition-all duration-300">
+                        <!-- Conteúdo injetado via JS na correção -->
+                    </div>
+                `;
+
+                questionCard.innerHTML = html;
+                container.appendChild(questionCard);
+            });
+        }
+
+        // Renderização dos Badges de Navegação Lateral
+        function renderNavigationBadges() {
+            const grid = document.getElementById('nav-badge-grid');
+            grid.innerHTML = '';
+
+            quizData.forEach((q) => {
+                const badge = document.createElement('button');
+                badge.id = `nav-badge-q${q.id}`;
+                badge.innerText = String(q.id).padStart(2, '0');
+                badge.className = `h-10 text-xs font-bold rounded-lg border flex items-center justify-center transition duration-150`;
+                
+                // Aplica estado atual
+                if (userAnswers[q.id]) {
+                    badge.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-800');
+                } else {
+                    badge.classList.add('bg-white', 'border-[#EBE9E0]', 'text-stone-500', 'border-dashed');
+                }
+
+                // Evento de clique para scroll suave até a questão
+                badge.onclick = function() {
+                    const el = document.getElementById(`card-q${q.id}`);
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                };
+
+                grid.appendChild(badge);
+            });
+        }
+
+        function selectOption(questionId, optionKey) {
+            if (isSubmitted) return;
+
+            // Armazena a resposta selecionada
+            userAnswers[questionId] = optionKey;
+            
+            // Atualiza o design visual do botão selecionado na questão correspondente
+            const q = quizData.find(item => item.id === questionId);
+            q.options.forEach(opt => {
+                const optBtn = document.getElementById(`opt-q${questionId}-${opt.key}`);
+                const optSpan = optBtn.querySelector('span');
+                
+                if (opt.key === optionKey) {
+                    optBtn.className = "w-full text-left p-4 rounded-xl border transition-all duration-150 flex items-start gap-4 group bg-emerald-50 border-emerald-500 text-emerald-900 shadow-sm";
+                    optSpan.className = "w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center transition shrink-0 bg-emerald-600 text-white";
+                } else {
+                    optBtn.className = "w-full text-left p-4 rounded-xl border transition-all duration-150 flex items-start gap-4 group bg-white border-[#EBE9E0] hover:bg-[#FAF9F5] hover:border-[#D1CFC2] text-stone-700";
+                    optSpan.className = "w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center transition shrink-0 bg-[#F1EFE6] text-stone-600 group-hover:bg-stone-200";
+                }
+            });
+
+            // Atualiza os Badges de Navegação lateral
+            const navBadge = document.getElementById(`nav-badge-q${questionId}`);
+            if (navBadge) {
+                navBadge.className = "h-10 text-xs font-bold rounded-lg border flex items-center justify-center transition duration-150 bg-emerald-50 border-emerald-500 text-emerald-800";
+            }
+
+            updateProgress();
+        }
+
+        // Atualização da barra de progresso do simulado
+        function updateProgress() {
+            const totalQuestions = quizData.length;
+            const answeredCount = Object.keys(userAnswers).length;
+            const percent = (answeredCount / totalQuestions) * 100;
+            
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        function submitSimulado() {
+            if (isSubmitted) {
+                showToast("Este simulado já foi submetido. Você pode reiniciar para tentar novamente.", "info");
+                return;
+            }
+
+            const total = quizData.length;
+            const answeredCount = Object.keys(userAnswers).length;
+
+            if (answeredCount < total) {
+                const pendentes = total - answeredCount;
+                showToast(`Você ainda possui ${pendentes} questões sem resposta. Preencha todas para poder finalizar.`, "warning");
+                return;
+            }
+
+            isSubmitted = true;
+
+            // Bloquear todos os inputs
+            quizData.forEach(q => {
+                q.options.forEach(opt => {
+                    const btn = document.getElementById(`opt-q${q.id}-${opt.key}`);
+                    if (btn) btn.disabled = true;
+                });
+            });
+
+            // Calcular Acertos
+            let correctAnswersCount = 0;
+            quizData.forEach(q => {
+                const answer = userAnswers[q.id];
+                const isCorrect = answer === q.correct;
+                
+                if (isCorrect) {
+                    correctAnswersCount++;
+                }
+
+                // Injetar feedback visual direto nos cartões
+                revealQuestionCorrection(q, isCorrect);
+            });
+
+            // Exibir seção de Resultados
+            revealGeneralResults(correctAnswersCount, total);
+
+            // Scroll suave até a seção de resultados
+            document.getElementById('results-section').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+
+            showToast("Simulado avaliado com sucesso! Analise as resoluções logo abaixo.", "success");
+        }
+
+        // Revelar o feedback visual de cada alternativa de forma altamente descritiva
+        function revealQuestionCorrection(question, isCorrect) {
+            const resBlock = document.getElementById(`resolution-block-q${question.id}`);
+            if (!resBlock) return;
+
+            resBlock.classList.remove('hidden');
+
+            // Feedback Visual das Alternativas
+            question.options.forEach(opt => {
+                const optBtn = document.getElementById(`opt-q${question.id}-${opt.key}`);
+                const optSpan = optBtn.querySelector('span');
+
+                if (opt.key === question.correct) {
+                    // Certa (verde clássico)
+                    optBtn.className = "w-full text-left p-4 rounded-xl border transition-all duration-150 flex items-start gap-4 bg-emerald-50 border-emerald-500 text-emerald-900 shadow-sm relative overflow-hidden";
+                    optSpan.className = "w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center shrink-0 bg-emerald-600 text-white";
+                    
+                    // Adicionar Tag "Gabarito"
+                    const badge = document.createElement('span');
+                    badge.innerText = "Gabarito";
+                    badge.className = "absolute right-3 top-3 text-[10px] uppercase font-extrabold tracking-widest text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full";
+                    optBtn.appendChild(badge);
+                } 
+                else if (userAnswers[question.id] === opt.key && opt.key !== question.correct) {
+                    // Errada Selecionada (vermelho clássico)
+                    optBtn.className = "w-full text-left p-4 rounded-xl border transition-all duration-150 flex items-start gap-4 bg-rose-50 border-rose-400 text-rose-900 shadow-sm relative overflow-hidden";
+                    optSpan.className = "w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center shrink-0 bg-rose-600 text-white";
+                    
+                    // Adicionar Tag "Sua Resposta"
+                    const badge = document.createElement('span');
+                    badge.innerText = "Sua Escolha";
+                    badge.className = "absolute right-3 top-3 text-[10px] uppercase font-extrabold tracking-widest text-rose-800 bg-rose-100 px-2 py-0.5 rounded-full";
+                    optBtn.appendChild(badge);
+                }
+                else {
+                    // Neutra não selecionada
+                    optBtn.className = "w-full text-left p-4 rounded-xl border flex items-start gap-4 bg-stone-50 border-stone-200 text-stone-400 opacity-60 cursor-not-allowed";
+                    optSpan.className = "w-6 h-6 rounded-lg font-bold text-xs flex items-center justify-center shrink-0 bg-stone-200 text-stone-500";
+                }
+            });
+
+            // Atualização do Badge Lateral
+            const navBadge = document.getElementById(`nav-badge-q${question.id}`);
+            if (navBadge) {
+                if (isCorrect) {
+                    navBadge.className = "h-10 text-xs font-bold rounded-lg border flex items-center justify-center transition duration-150 bg-emerald-600 border-emerald-600 text-white shadow-sm";
+                } else {
+                    navBadge.className = "h-10 text-xs font-bold rounded-lg border flex items-center justify-center transition duration-150 bg-rose-600 border-rose-600 text-white shadow-sm";
+                }
+            }
+
+            // Injetar o texto rico da Resolução Detalhada
+            resBlock.innerHTML = `
+                <div class="bg-stone-50 rounded-xl p-5 border border-stone-200 space-y-3">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="w-2.5 h-2.5 rounded-full ${isCorrect ? 'bg-emerald-600' : 'bg-rose-500'}"></span>
+                        <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wider">
+                            Resolução Detalhada • Questão ${String(question.id).padStart(2, '0')}
+                        </h4>
+                    </div>
+                    <p class="text-xs md:text-sm text-stone-600 leading-relaxed font-sans">
+                        ${question.resolution}
+                    </p>
+                </div>
+            `;
+        }
+
+        function revealGeneralResults(corrects, total) {
+            const scoreFraction = document.getElementById('score-fraction');
+            const scorePercent = document.getElementById('score-percent');
+            const scoreStatus = document.getElementById('score-status');
+            const scoreComment = document.getElementById('score-comment');
+
+            scoreFraction.innerText = `${corrects} / ${total}`;
+            
+            const percentage = Math.round((corrects / total) * 100);
+            scorePercent.innerText = `${percentage}%`;
+
+            // Classificação de status baseada na régua tradicional FAURGS
+            if (percentage >= 80) {
+                scoreStatus.innerText = "Excelente!";
+                scoreStatus.className = "serif-title text-2xl font-extrabold text-emerald-800 mt-2 block";
+                scoreComment.innerText = "Nível de aprovação nas vagas diretas.";
+            } else if (percentage >= 60) {
+                scoreStatus.innerText = "Aprovado";
+                scoreStatus.className = "serif-title text-2xl font-extrabold text-teal-700 mt-2 block";
+                scoreComment.innerText = "Bom desempenho estrutural.";
+            } else if (percentage >= 50) {
+                scoreStatus.innerText = "Classificado";
+                scoreStatus.className = "serif-title text-2xl font-extrabold text-amber-700 mt-2 block";
+                scoreComment.innerText = "Abaixo da média esperada de corte.";
+            } else {
+                scoreStatus.innerText = "Insuficiente";
+                scoreStatus.className = "serif-title text-2xl font-extrabold text-rose-800 mt-2 block";
+                scoreComment.innerText = "Recomenda-se revisão integral da bibliografia.";
+            }
+        }
+
+        // Filtrar questões no pós-simulado
+        function filterQuestions(filterType) {
+            if (!isSubmitted) {
+                showToast("Finalize o simulado primeiro para filtrar seus acertos ou erros.", "info");
+                return;
+            }
+
+            currentFilter = filterType;
+
+            // Atualiza botões de filtro
+            const btns = {
+                all: document.getElementById('filter-all'),
+                correct: document.getElementById('filter-correct'),
+                wrong: document.getElementById('filter-wrong')
+            };
+
+            Object.keys(btns).forEach(key => {
+                if (key === filterType) {
+                    btns[key].className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-800 text-white shadow-sm transition";
+                } else {
+                    btns[key].className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-[#EBE9E0] text-stone-700 hover:bg-[#F1EFE6] transition";
+                }
+            });
+
+            // Mostra/oculta cards de questões correspondentes
+            quizData.forEach(q => {
+                const card = document.getElementById(`card-q${q.id}`);
+                const isCorrect = userAnswers[q.id] === q.correct;
+
+                if (filterType === 'all') {
+                    card.classList.remove('hidden');
+                } else if (filterType === 'correct' && isCorrect) {
+                    card.classList.remove('hidden');
+                } else if (filterType === 'wrong' && !isCorrect) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        // Reiniciar o simulado
+        function restartSimulado() {
+            userAnswers = {};
+            isSubmitted = false;
+            currentFilter = 'all';
+
+            // Oculta resultados
+            document.getElementById('results-section').classList.add('hidden');
+
+            // Renderiza tudo limpo novamente
+            renderQuestions();
+            renderNavigationBadges();
+            updateProgress();
+
+            // Reseta botões de filtro
+            const btns = ['all', 'correct', 'wrong'];
+            btns.forEach(b => {
+                const el = document.getElementById(`filter-${b}`);
+                if(el) {
+                    if(b === 'all') el.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-emerald-800 text-white shadow-sm transition";
+                    else el.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-white border border-[#EBE9E0] text-[#1E2329] hover:bg-[#F1EFE6] transition";
+                }
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast("Simulado redefinido. Bons estudos!", "success");
+        }
+
+        function setReadTheme(theme) {
+            const body = document.body;
+            const btnSepia = document.getElementById('theme-sepia');
+            const btnLight = document.getElementById('theme-light');
+            const btnDark = document.getElementById('theme-dark');
+
+            // Limpa classes
+            body.classList.remove('bg-[#FAF9F5]', 'text-[#24292F]', 'bg-white', 'text-stone-900', 'bg-stone-950', 'text-stone-100');
+
+            // Remove seleções visuais dos botões
+            [btnSepia, btnLight, btnDark].forEach(b => {
+                b.className = "px-3 py-1 text-xs font-medium rounded-md transition text-stone-600 hover:text-stone-900";
+            });
+
+            if (theme === 'sepia') {
+                body.classList.add('bg-[#FAF9F5]', 'text-[#24292F]');
+                btnSepia.className = "px-3 py-1 text-xs font-medium rounded-md transition bg-white text-stone-800 shadow-sm border border-[#EBE9E0]";
+            } else if (theme === 'light') {
+                body.classList.add('bg-[#FCFBF9]', 'text-stone-900');
+                btnLight.className = "px-3 py-1 text-xs font-medium rounded-md transition bg-white text-stone-800 shadow-sm border border-[#EBE9E0]";
+            } else if (theme === 'dark') {
+                body.classList.add('bg-stone-950', 'text-stone-100');
+                btnDark.className = "px-3 py-1 text-xs font-medium rounded-md transition bg-stone-800 text-stone-100 shadow-sm border border-stone-700";
+            }
+        }
+
+        // Modificador de tamanho de fontes do texto (Excelente acessibilidade)
+        let currentFontSizeClass = 'normal'; // normal, large, xlarge
+
+        function changeFontSize(direction) {
+            const container = document.getElementById('questions-container');
+            if (direction === 1) {
+                if (currentFontSizeClass === 'normal') {
+                    container.classList.add('text-lg');
+                    currentFontSizeClass = 'large';
+                } else if (currentFontSizeClass === 'large') {
+                    container.classList.remove('text-lg');
+                    container.classList.add('text-xl');
+                    currentFontSizeClass = 'xlarge';
+                }
+            } else {
+                if (currentFontSizeClass === 'xlarge') {
+                    container.classList.remove('text-xl');
+                    container.classList.add('text-lg');
+                    currentFontSizeClass = 'large';
+                } else if (currentFontSizeClass === 'large') {
+                    container.classList.remove('text-lg');
+                    currentFontSizeClass = 'normal';
+                }
+            }
+        }
+
+        // Toast Notification System personalizado (Não utiliza alert() para manter integridade visual)
+        function showToast(message, type = "info") {
+            const toastContainer = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-stone-900 text-white";
+            let iconSvg = "";
+
+            if (type === "success") {
+                bgClass = "bg-emerald-850 text-emerald-100 border border-emerald-700 bg-emerald-900";
+                iconSvg = `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`;
+            } else if (type === "warning") {
+                bgClass = "bg-amber-950 text-amber-100 border border-amber-800";
+                iconSvg = `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`;
+            } else if (type === "info") {
+                bgClass = "bg-stone-900 text-stone-100";
+                iconSvg = `<svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`;
+            }
+
+            toast.className = `flex items-center gap-3 p-4 rounded-xl shadow-lg transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto ${bgClass}`;
+            toast.innerHTML = `
+                ${iconSvg}
+                <span class="text-xs font-semibold leading-relaxed">${message}</span>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Animação de entrada
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            // Animação de saída
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4500);
+        }
+    </script>
+</body>
+</html>

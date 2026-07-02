@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Memorização Rápida: Biomas, Clima e Pedogênese</title>
+    <!-- Tailwind CSS para Estilização de Alto Nível -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom highlights and styling */
+        mark {
+            background-color: #fef08a; /* Tailwind yellow-200 */
+            color: #1e293b; /* Tailwind slate-800 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col antialiased selection:bg-yellow-200">
+
+    <!-- PLAYER DE ÁUDIO STICKY NO TOPO -->
+    <div class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm px-4 py-3">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <!-- Título / Status do Player -->
+            <div class="flex items-center gap-3 w-full md:w-auto">
+                <div class="p-2 bg-slate-100 rounded-lg text-slate-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                    </svg>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Áudio de Apoio / Podcast de Memorização</span>
+                    <div class="flex items-center gap-2">
+                        <label for="audio-source-input" class="text-xs text-slate-400 font-medium">Arquivo:</label>
+                        <input type="text" id="audio-source-input" value="aula_biomas.mp3" class="text-sm font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded px-2 py-0.5 focus:outline-none focus:ring-1 focus:ring-slate-400 w-44 md:w-64 truncate" title="Edite o nome do arquivo para carregar o seu áudio local">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles do Áudio -->
+            <div class="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto">
+                <!-- Áudio HTML5 oculto que gerencia a reprodução -->
+                <audio id="study-audio" src="aula_biomas.mp3" preload="metadata"></audio>
+                
+                <!-- Botão Play/Pause -->
+                <button id="btn-play-pause" class="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium py-2 px-4 rounded-lg transition-all focus:ring-2 focus:ring-slate-300 active:scale-95 text-sm min-h-[44px]">
+                    <span id="play-icon" class="flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                            <path d="M4.018 14L14.41 10 4.018 6z" />
+                        </svg>
+                        Ouvir Resumo
+                    </span>
+                    <span id="pause-icon" class="hidden flex items-center gap-1.5">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        Pausar
+                    </span>
+                </button>
+
+                <!-- Controle de Velocidade -->
+                <div class="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
+                    <button class="btn-speed text-xs font-semibold px-2 py-1.5 rounded transition text-slate-600 hover:text-slate-900" data-speed="1.0">1.0x</button>
+                    <button class="btn-speed text-xs font-semibold px-2 py-1.5 rounded transition text-slate-600 hover:text-slate-900 bg-white shadow-sm" data-speed="1.25">1.25x</button>
+                    <button class="btn-speed text-xs font-semibold px-2 py-1.5 rounded transition text-slate-600 hover:text-slate-900" data-speed="1.5">1.5x</button>
+                    <button class="btn-speed text-xs font-semibold px-2 py-1.5 rounded transition text-slate-600 hover:text-slate-900" data-speed="2.0">2.0x</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de Progresso do Áudio -->
+        <div class="max-w-5xl mx-auto mt-2 flex items-center gap-3">
+            <span id="current-time" class="text-[10px] font-mono text-slate-500">0:00</span>
+            <input type="range" id="audio-progress" min="0" value="0" step="1" class="flex-1 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800">
+            <span id="total-duration" class="text-[10px] font-mono text-slate-500">0:00</span>
+        </div>
+    </div>
+
+    <!-- CABEÇALHO DA AULA -->
+    <header class="bg-slate-50 border-b border-slate-100 py-10 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="inline-block px-3 py-1 bg-slate-200 text-slate-800 text-xs font-semibold rounded-full uppercase tracking-wider mb-3">Material Didático Teórico e Tático</span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Biomas Terrestres, Clima e Pedogênese
+            </h1>
+            <p class="mt-2 text-base md:text-lg text-slate-600 font-medium max-w-2xl mx-auto">
+                Guia Definitivo de Memorização Rápida para o Concurso de Professor de Geografia EBTT do IFSC (Banca FAURGS)
+            </p>
+            <div class="mt-6 flex flex-wrap justify-center gap-3 text-xs text-slate-500">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span> Foco em Assertivas Complexas</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> Grifos Estratégicos</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Sem Pegadinhas</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (DENTRO DE UM CONTAINER DE LEITURA CONFORTÁVEL) -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-8 md:py-12">
+        
+        <!-- PÁGINA 1: DINÂMICAS FISIOGRÁFICAS E PROCESSOS DE SÍNTESE -->
+        <section class="mb-14">
+            <div class="flex items-center gap-3 border-b border-slate-200 pb-3 mb-6">
+                <span class="text-2xl font-bold text-slate-300">Pág. 01</span>
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-wide">Dinâmicas Fisiográficas e Processos de Síntese</h2>
+            </div>
+
+            <!-- Bloco 1.1: Escalas de Udvardy -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <span class="w-1.5 h-6 bg-slate-800 rounded"></span>
+                    1. As Escalas Espaço-Temporais de Udvardy (1969)
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    Para pontuar na prova da FAURGS, você deve compreender de forma imediata que a distribuição geográfica e a evolução dos seres vivos no planeta são estruturadas sob <mark>duas escalas temporais e espaciais distintas</mark>:
+                </p>
+
+                <!-- Quadro Comparativo sem fundos escuros -->
+                <div class="grid md:grid-cols-2 gap-4 my-4">
+                    <div class="border border-slate-200 p-5 rounded-xl bg-white hover:border-slate-300 transition-colors">
+                        <span class="inline-block text-[10px] font-bold tracking-wider uppercase text-slate-500 bg-slate-100 px-2 py-1 rounded mb-2">Macroescala</span>
+                        <h4 class="text-base font-bold text-slate-950 mb-2">Escala Filogenética</h4>
+                        <ul class="text-sm text-slate-700 space-y-2">
+                            <li>• <strong class="text-slate-900">Dimensão Temporal:</strong> Milhões de anos (<mark>tempo geológico</mark>).</li>
+                            <li>• <strong class="text-slate-900">Processos de Referência:</strong> Dinâmica da <mark>Tectônica de Placas</mark>, ciclos glaciais de longa duração, especiação biológica e a <mark>Teoria dos Refúgios Pleistocênicos</mark>.</li>
+                            <li>• <strong class="text-slate-900">Aplicações de Prova:</strong> Fósseis correlacionando continentes ou a distribuição fitogeográfica atual de grandes famílias botânicas com base na deriva continental.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border border-slate-200 p-5 rounded-xl bg-white hover:border-slate-300 transition-colors">
+                        <span class="inline-block text-[10px] font-bold tracking-wider uppercase text-slate-500 bg-slate-100 px-2 py-1 rounded mb-2">Microescala</span>
+                        <h4 class="text-base font-bold text-slate-950 mb-2">Escala Secular ou Ecológica</h4>
+                        <ul class="text-sm text-slate-700 space-y-2">
+                            <li>• <strong class="text-slate-900">Dimensão Temporal:</strong> Décadas a séculos (<mark>tempo histórico</mark>).</li>
+                            <li>• <strong class="text-slate-900">Processos de Referência:</strong> Sucessão ecológica secundária, <mark>antropização acelerada</mark>, desmatamento localizado e bioinvasões por espécies exóticas introduzidas pelo ser humano.</li>
+                            <li>• <strong class="text-slate-900">Aplicações de Prova:</strong> Mudança na paisagem decorrente do agronegócio ou expansão da silvicultura em áreas de campo natural nas últimas décadas.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 1.2: Climatologia Sistêmica -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <span class="w-1.5 h-6 bg-slate-800 rounded"></span>
+                    2. Climatologia Sistêmica: Dinâmicas de Calor e Umidade
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    O clima funciona como o fator físico delimitador e impulsionador primário dos biomas da Terra. Lembre-se: para fins meteorológicos e estatísticos, a correta caracterização de um clima exige uma série histórica contínua de, no mínimo, <mark>30 anos de dados observados</mark>.
+                </p>
+
+                <div class="space-y-4 text-slate-700 text-sm md:text-base">
+                    <div class="flex gap-3 items-start">
+                        <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mt-2.5 shrink-0"></div>
+                        <p><strong class="text-slate-900 font-semibold">Latitude:</strong> É o controle radiativo e climático de ordem macrozonal primária. É responsável por definir a zonalidade das temperaturas no globo terrestre, com balanço de radiação <mark>máximo nas faixas equatoriais</mark> e deficitário nas regiões polares.</p>
+                    </div>
+
+                    <div class="flex gap-3 items-start">
+                        <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mt-2.5 shrink-0"></div>
+                        <p><strong class="text-slate-900 font-semibold">Altitude:</strong> Atua reduzindo sistematicamente a temperatura e a pressão atmosférica através do gradiente adiabático térmico. 
+                        <span class="block mt-2 pl-3 border-l-2 border-slate-300 text-sm text-slate-600 font-medium italic">
+                            Gatilho Mental de Prova (Paris vs. Quito): Quito, mesmo situada exatamente na faixa do Equador, apresenta médias térmicas anuais bastante amenas e baixíssima amplitude térmica devido à sua altitude (~2.850m). Em contraste, Paris (em latitude média e planície) possui amplitude térmica acentuada e estações do ano muito nítidas.
+                        </span>
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3 items-start">
+                        <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mt-2.5 shrink-0"></div>
+                        <p><strong class="text-slate-900 font-semibold">Continentalidade vs. Maritimidade:</strong> Relação pautada no calor específico da água (alto) contra o da rocha/terra (baixo). A <mark>maritimidade amortece as oscilações térmicas</mark> (menores amplitudes anuais), enquanto a <mark>continentalidade expande os extremos</mark> de calor e frio diários e sazonais.</p>
+                    </div>
+
+                    <div class="flex gap-3 items-start">
+                        <div class="w-1.5 h-1.5 rounded-full bg-slate-900 mt-2.5 shrink-0"></div>
+                        <p><strong class="text-slate-900 font-semibold">Célula de Hadley e ZCIT:</strong> O calor extremo no Equador provoca a forte ascensão de ar aquecido e úmido na <mark>Zona de Convergência Intertropical (ZCIT)</mark>, gerando volumosas chuvas convectivas diárias. Esse fluxo de ar sobe, resfria-se em altitude e ruma em direção aos trópicos, onde desce como ar seco e frio de alta pressão em torno das latitudes de 30° Norte e Sul (Anticiclones Subtropicais), gerando estabilidade e criando os <mark>grandes desertos quentes do planeta</mark>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 1.3: Pedogênese -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <span class="w-1.5 h-6 bg-slate-800 rounded"></span>
+                    3. Pedogênese: Processos Globais de Formação dos Solos (Essencial!)
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    A FAURGS valoriza a exatidão conceitual dos processos pedogenéticos. Identifique abaixo os cinco processos fundamentais que determinam a estrutura e propriedades físicas e químicas dos solos mundiais:
+                </p>
+
+                <!-- Processos de Pedogênese em Cartões de Estudos Brancos -->
+                <div class="space-y-4">
+                    <div class="border-l-4 border-slate-900 pl-4 py-1">
+                        <h4 class="text-base font-bold text-slate-950">1. Laterização (ou Ferralização)</h4>
+                        <p class="text-sm text-slate-700 mt-1">
+                            Ocorre em zonas de clima tropical e equatorial úmido sob intensas chuvas. A infiltração excessiva promove a lavagem das bases solúveis e do silício (<mark>desiticação</mark>), retendo e concentrando na parte superior os minerais menos móveis: <mark>óxidos de ferro e alumínio</mark>. Forma solos profundos, avermelhados, ácidos, muito intemperizados e originalmente pobres em minerais assimiláveis para as plantas (<strong class="text-slate-900">Latossolos</strong>).
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-slate-400 pl-4 py-1">
+                        <h4 class="text-base font-bold text-slate-950">2. Podzolização</h4>
+                        <p class="text-sm text-slate-700 mt-1">
+                            Processo característico de climas frios e temperados úmidos (comum sob as florestas de Taiga). A decomposição de matéria orgânica ácida no topo promove a solubilização e transporte descendente de ferro e alumínio. Isso gera um <mark>horizonte E lixiviado de cor cinza-esbranquiçada</mark> (composto quase unicamente por quartzo silicoso) e acumulação desses minerais no horizonte B subsequente (<strong class="text-slate-900">Espodossolos / Podzóis</strong>).
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-amber-600 pl-4 py-1">
+                        <h4 class="text-base font-bold text-slate-950">3. Calcificação</h4>
+                        <p class="text-sm text-slate-700 mt-1">
+                            Ocorre em climas semiáridos e temperados com deficit hídrico sazonal (ex: Estepes). Como a taxa de evapotranspiração excede as precipitações, a lavagem de minerais é mínima. Isso induz a <mark>precipitação de carbonato de cálcio e magnésio</mark> no horizonte B. O solo gerado é rico em matéria orgânica estável e extremamente fértil (<strong class="text-slate-900">Chernossolos / Mollisolos</strong>).
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-emerald-600 pl-4 py-1">
+                        <h4 class="text-base font-bold text-slate-950">4. Salinização</h4>
+                        <p class="text-sm text-slate-700 mt-1">
+                            Característico de ambientes áridos com severo deficit hídrico. A evapotranspiração brutal força a <mark>ascensão capilar da água subterrânea carregada de sais solúveis</mark>. Ao atingir a superfície, a água evapora rapidamente, resultando no acúmulo e na cristalização de uma crosta salina esbranquiçada de sódio, potássio ou magnésio, inviabilizando a maior parte das espécies vegetais (<strong class="text-slate-900">Aridissolos / Solonchaks</strong>).
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-4 py-1">
+                        <h4 class="text-base font-bold text-slate-950">5. Gleização</h4>
+                        <p class="text-sm text-slate-700 mt-1">
+                            Ocorre em relevos planos, várzeas ou planícies permanentemente inundadas com lençol freático superficial. Em condições <mark>anaeróbicas (ausência de oxigênio)</mark>, micro-organismos específicos reduzem quimicamente o ferro trivalente insolúvel (Fe³⁺, avermelhado) para ferro bivalente solúvel (Fe²⁺), gerando solos de matriz cinza, azulada ou esverdeada (<strong class="text-slate-900">Gleissolos hidromórficos</strong>).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA 2: BIOMAS MUNDIAIS, CONTEXTO REGIONAL E TÁTICA DE PROVA -->
+        <section class="mb-14">
+            <div class="flex items-center gap-3 border-b border-slate-200 pb-3 mb-6">
+                <span class="text-2xl font-bold text-slate-300">Pág. 02</span>
+                <h2 class="text-xl md:text-2xl font-bold text-slate-900 uppercase tracking-wide">Biomas, Regionalismo e Táticas de Gabarito</h2>
+            </div>
+
+            <!-- Bloco 2.1: Matriz de Biomas Terrestres sem Scroll Horizontal -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <span class="w-1.5 h-6 bg-slate-800 rounded"></span>
+                    1. Síntese dos Grandes Biomas Terrestres
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-6">
+                    Abaixo apresentamos a matriz comparativa completa. Para evitar barras de rolagem horizontais em telas pequenas, o sistema de grid abaixo apresenta as informações de forma limpa, mantendo a estrutura tabular no desktop e adaptando-se perfeitamente ao celular:
+                </p>
+
+                <!-- TABELA RESPONSIVA (GRID FLEXÍVEL) -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 bg-white">
+                    <!-- Linha Cabalho (Oculta no Celular) -->
+                    <div class="hidden md:flex bg-slate-50 text-xs font-bold text-slate-700 uppercase tracking-wider py-3 px-4 divide-x divide-slate-200">
+                        <div class="w-1/4 pr-2">Bioma</div>
+                        <div class="w-1/4 px-3">Clima e Localização</div>
+                        <div class="w-1/4 px-3">Solos Típicos</div>
+                        <div class="w-1/4 pl-2">Fisiologia Adaptativa</div>
+                    </div>
+
+                    <!-- BIOMA: Tundra -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Tundra
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Polar, sem verão real. Extremo Norte (Ártico) e montanhas ultra-elevadas.
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            Gelissolos, caracterizados pelo <mark>permafrost</mark> (subsolo congelado o ano todo).
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            Musgos, líquens e arbustos anões, de porte rasteiro para fugir do vento gelado e neve pesada.
+                        </div>
+                    </div>
+
+                    <!-- BIOMA: Taiga -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Taiga (Fl. Boreal)
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Subártico. Invernos gélidos prolongados, verão breve. Hemisfério Norte de transição.
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            <mark>Podzóis ácidos</mark>, cinzentos e lixiviados devido à decomposição lenta das acículas.
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            Coníferas com copas cônicas, folhas aciculifoliadas e perenifólias. Resiste ao acúmulo de neve.
+                        </div>
+                    </div>
+
+                    <!-- BIOMA: Floresta Temperada -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Floresta Temperada
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Temperado Úmido. Quatro estações nitidamente demarcadas pelo ciclo solar anual.
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            Alfissolos e Inceptissolos, férteis, abundantes em matéria orgânica ativa.
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            <mark>Caducifólia / Decídua</mark>. Perda coletiva das folhas no outono para reter água e conter energia no frio.
+                        </div>
+                    </div>
+
+                    <!-- BIOMA: Floresta Tropical -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Floresta Tropical / Equatorial
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Quente e chuvoso o ano todo. Zonas intertropicais de convergência e baixa latitude.
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            Latossolos profundos, muito intemperizados, extremamente lixiviados e ácidos.
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            Vegetação latifoliada, perenifólia e higrófila. <mark>Nutrição garantida por ciclagem química ultra-rápida</mark> de serapilheira.
+                        </div>
+                    </div>
+
+                    <!-- BIOMA: Savana -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Savana
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Tropical estacional. Verão muito chuvoso e inverno marcadamente seco.
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            Latossolos e Plintossolos, ácidos, argilosos, ricos em ferro e alumínio.
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            Estrutura tropófila. Árvores tortuosas de <mark>cascas corticosas espessas (isolamento contra fogo)</mark> e raízes profundas.
+                        </div>
+                    </div>
+
+                    <!-- BIOMA: Estepe -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Estepe
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Semiárido Continental. Temperaturas sazonais extremas (inverno muito frio).
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            <mark>Chernossolos</mark>, altíssima fertilidade natural devido à calcificação controlada.
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            Gramíneas contínuas de pequeno porte, ausência quase absoluta de arbustos ou indivíduos arbóreos.
+                        </div>
+                    </div>
+
+                    <!-- BIOMA: Deserto -->
+                    <div class="flex flex-col md:flex-row py-4 px-4 text-sm hover:bg-slate-50 transition-colors md:divide-x md:divide-slate-200">
+                        <div class="w-full md:w-1/4 pr-2 font-bold text-slate-900 flex items-center md:block gap-2 pb-2 md:pb-0 border-b md:border-none border-slate-100">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block">Bioma:</span> Deserto
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Clima/Localização:</span>
+                            Hiperárido, escassez extrema de chuvas e enormes amplitudes térmicas térmicas diárias.
+                        </div>
+                        <div class="w-full md:w-1/4 md:px-3 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Solos:</span>
+                            Aridissolos e solos litólicos, pedregosos, rasos, muito ricos em sais.
+                        </div>
+                        <div class="w-full md:w-1/4 md:pl-2 pt-2 md:pt-0">
+                            <span class="md:hidden text-xs text-slate-400 font-semibold uppercase block mt-1">Adaptação:</span>
+                            Plantas xerófitas e suculentas. Folhas reduzidas a espinhos (para evitar a perda de água) e fotossíntese pelo caule.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 2.2: Biogeografia Regional -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <span class="w-1.5 h-6 bg-slate-800 rounded"></span>
+                    2. Biogeografia Regional: O Sul do Brasil na Lente da FAURGS
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    Historicamente, a FAURGS é uma banca com raízes fortes no Sul do Brasil. Detalhes ecológicos e florísticos do Rio Grande do Sul e Santa Catarina são recorrentes nos certames. Atente-se a esses quatro pilares:
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div class="border border-slate-200 p-4 rounded-lg bg-white">
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                            O Bioma Pampa e a Bioinvasão
+                        </h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-2">
+                            Restrito à metade sul do RS (relevo de coxilhas), o Pampa é dominado por vegetação campestre herbácea nativa. Atualmente, está ameaçado pela monocultura agrícola e silvicultura exótica de <em class="text-slate-800">Pinus</em> e <em class="text-slate-800">Eucalyptus</em>. O <mark>Capim-Annoni (Eragrostis plana)</mark>, espécie invasora agressiva de origem africana com baixíssimo valor nutritivo, compete com forrageiras nativas e degrada solos e pastagens do bioma.
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 p-4 rounded-lg bg-white">
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                            Dinâmica Pleistoceno-Holoceno
+                        </h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-2">
+                            Análises palinológicas (pólen fóssil) nos turfeiras dos Aparados da Serra (Cambará do Sul) comprovam que os campos sulinos <mark>existiam de forma contínua durante o Pleistoceno tardio</mark> sob clima frio e seco. A expansão da <mark>Mata de Araucária</mark> sobre o bioma campestre ocorreu de forma recente (Holoceno tardio), impulsionada por clima mais úmido e quente. Portanto, os campos não são frutos do desmatamento humano recente!
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 p-4 rounded-lg bg-white">
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                            O Limite Físico dos Manguezais
+                        </h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-2">
+                            O ecossistema costeiro e de transição do manguezal se desenvolve em áreas de estuário de sedimentação lodo-argilosa litorânea em condições de pouca circulação de oxigênio. As plantas adaptam-se com pneumatóforos (raízes de respiração vertical) e glândulas de eliminação de sal. O seu <mark>limite meridional de distribuição na América do Sul está situado em Laguna (Santa Catarina)</mark>, onde a ocorrência cíclica de geadas severas do clima subtropical barra a expansão das espécies de mangue.
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 p-4 rounded-lg bg-white">
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                            As Espécies Chave de Araucária
+                        </h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-2">
+                            A Floresta Ombrófila Mista (Mata de Araucária) tem como elemento dominante a <em class="text-slate-800">Araucaria angustifolia</em> (Pinheiro-do-Paraná), mas divide habitat com outras espécies importantes: a <em class="text-slate-800">Podocarpus lambertii</em> (Pinheirinho) e o sub-bosque rico em <em class="text-slate-800">Ilex paraguariensis</em> (Erva-mate). Suas sementes (pinhão) dependem de aves como a Gralha-Azul para espalhamento florestal espontâneo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 2.3: Tática de Prova - Os Peguinhas Favoritos da Banca FAURGS -->
+            <div class="mb-10">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+                    <span class="w-1.5 h-6 bg-slate-800 rounded"></span>
+                    3. Tática de Prova: Os "Peguinhas" Favoritos da Banca FAURGS
+                </h3>
+                <p class="text-slate-700 leading-relaxed mb-6">
+                    A banca FAURGS costuma construir assertivas muito elaboradas, onde conceitos geograficamente corretos na primeira metade da frase são subitamente invalidados por uma contradição terminológica sutil no final da oração. Guarde estes quatro alertas para o dia da sua prova:
+                </p>
+
+                <!-- Quadro de Alertas Clínicos com Borda Macia (Sem Fundo Escuro) -->
+                <div class="space-y-4">
+                    <!-- ALERTA 1 -->
+                    <div class="border border-slate-200 p-5 rounded-xl hover:shadow-sm transition-all">
+                        <div class="flex items-center gap-2 text-rose-600 font-bold text-sm mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            ARMADILHA CONCEITUAL: Araucária vs. Taiga
+                        </div>
+                        <p class="text-xs text-slate-500 uppercase font-semibold">O que a banca tenta emplacar:</p>
+                        <p class="text-sm text-slate-700 italic bg-slate-50 p-2 rounded my-1 border-l-2 border-slate-300">"Pelo fato de conter espécies de pinheiros (coníferas aciculifoliadas), a Mata de Araucária constitui o bioma da Taiga brasileira, compartilhando solos podzolizados ácidos e frios."</p>
+                        <p class="text-xs text-slate-500 uppercase font-semibold mt-2">Gabarito com Rigor Técnico:</p>
+                        <p class="text-sm text-slate-700">
+                            A Mata de Araucária (Floresta Ombrófila Mista) faz parte da <mark>Mata Atlântica</mark>. Desenvolve-se sob clima subtropical úmido (Cfa/Cfb) em <mark>Latossolos e Nitossolos vermelhos e profundos</mark> e apresenta diversidade botânica imensamente superior à Taiga boreal clássica da Sibéria ou Canadá.
+                        </p>
+                    </div>
+
+                    <!-- ALERTA 2 -->
+                    <div class="border border-slate-200 p-5 rounded-xl hover:shadow-sm transition-all">
+                        <div class="flex items-center gap-2 text-rose-600 font-bold text-sm mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            CONFUSÃO DINÂMICA: Lixiviação vs. Erosão vs. Eluviação
+                        </div>
+                        <p class="text-xs text-slate-500 uppercase font-semibold">O que a banca tenta emplacar:</p>
+                        <p class="text-sm text-slate-700 italic bg-slate-50 p-2 rounded my-1 border-l-2 border-slate-300">"A lixiviação consiste no arraste superficial mecânico de partículas de argila provocado pelo impacto da chuva nas encostas desnudadas, sinônimo de eluviação."</p>
+                        <p class="text-xs text-slate-500 uppercase font-semibold mt-2">Gabarito com Rigor Técnico:</p>
+                        <p class="text-sm text-slate-700">
+                            A <mark>lixiviação é um processo essencialmente químico de dissolução e carreamento vertical descendente</mark> de íons solúveis através do fluxo da água de infiltração. A erosão refere-se ao desgaste mecânico superficial. E a <mark>eluviação é o transporte físico-mecânico de partículas de argila de uma camada superior</mark> do solo (E) para as camadas inferiores (B - iluviação).
+                        </p>
+                    </div>
+
+                    <!-- ALERTA 3 -->
+                    <div class="border border-slate-200 p-5 rounded-xl hover:shadow-sm transition-all">
+                        <div class="flex items-center gap-2 text-rose-600 font-bold text-sm mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            O MITO DA EXUBERÂNCIA: O Solo da Amazônia
+                        </div>
+                        <p class="text-xs text-slate-500 uppercase font-semibold">O que a banca tenta emplacar:</p>
+                        <p class="text-sm text-slate-700 italic bg-slate-50 p-2 rounded my-1 border-l-2 border-slate-300">"A biodiversidade extraordinária e a fitofisionomia de grande porte das florestas equatoriais tropicais justificam-se pela presença de solos minerais nativos muito férteis, ricos em nutrientes essenciais."</p>
+                        <p class="text-xs text-slate-500 uppercase font-semibold mt-2">Gabarito com Rigor Técnico:</p>
+                        <p class="text-sm text-slate-700">
+                            Estes solos (Latossolos) são geologicamente muito antigos, intemperizados, ácidos e lixiviados. A exuberância da floresta é mantida por um ciclo dinâmico e <mark>fechado de ciclagem de nutrientes</mark> sustentado pela <mark>serapilheira superficial</mark> (húmus de decomposição rápida formado por folhagem, galhos e material orgânico depositado).
+                        </p>
+                    </div>
+
+                    <!-- ALERTA 4 -->
+                    <div class="border border-slate-200 p-5 rounded-xl hover:shadow-sm transition-all">
+                        <div class="flex items-center gap-2 text-rose-600 font-bold text-sm mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                            ASSERTIVAS LONGAS E DETALHADAS: O Método FAURGS
+                        </div>
+                        <p class="text-xs text-slate-500 uppercase font-semibold">A Tática da Banca:</p>
+                        <p class="text-sm text-slate-700">
+                            A banca cria questões de proposições verdadeiras ou falsas (I, II, III) utilizando parágrafos inteiros de literatura acadêmica conceituada, mas inserem um termo antônimo ou invertido bem no final da frase. 
+                        </p>
+                        <p class="text-xs text-slate-500 uppercase font-semibold mt-2">Sua Solução de Prova:</p>
+                        <p class="text-sm text-slate-700">
+                            Adote a leitura atenta segmentada por conjunções. Divida o enunciado em duas partes. Se as premissas climatológicas do começo estiverem perfeitas, verifique rigorosamente se a <mark>conclusão física ou pedogenética terminal não contradiz a biogeografia</mark>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ÁREA DO BOTÃO FINAL DE ATIVIDADE -->
+        <div class="mt-14 border-t border-slate-200 pt-8 flex flex-col items-center">
+            <div class="text-center max-w-md mx-auto mb-6">
+                <h3 class="text-lg font-bold text-slate-900 mb-1">Pronto para testar seus conhecimentos?</h3>
+                <p class="text-sm text-slate-500">Mensure o seu nível de retenção teórica resolvendo simulados focados em assertivas no formato clássico da FAURGS.</p>
+            </div>
+            
+            <a href="biomasquestoes.html" class="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-8 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-base focus:ring-4 focus:ring-slate-200">
+                Acessar Banco de Questões
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </main>
+
+    <!-- FOOTER DA PÁGINA -->
+    <footer class="bg-slate-50 border-t border-slate-100 py-6 text-center text-xs text-slate-500 mt-auto">
+        <div class="max-w-4xl mx-auto px-4">
+            <p>© 2026 - Guia de Memorização Ativa | Direcionamento exclusivo para o concurso do IFSC</p>
+            <p class="mt-1">Desenvolvido com foco no rigor conceitual da geografia física e pedologia.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT: LÓGICA E CONTROLES INTERATIVOS DO REPRODUTOR DE ÁUDIO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('study-audio');
+            const btnPlayPause = document.getElementById('btn-play-pause');
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const speedButtons = document.querySelectorAll('.btn-speed');
+            const audioSourceInput = document.getElementById('audio-source-input');
+            const progressBar = document.getElementById('audio-progress');
+            const currentTimeEl = document.getElementById('current-time');
+            const totalDurationEl = document.getElementById('total-duration');
+
+            let currentSpeed = 1.25; // Velocidade inicial default
+
+            // Função para converter segundos em formato de tempo amigável (MM:SS)
+            function formatTime(seconds) {
+                if (isNaN(seconds)) return '0:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            }
+
+            // Atualiza a fonte de áudio caso o usuário edite o input
+            audioSourceInput.addEventListener('change', () => {
+                const currentFile = audioSourceInput.value.trim();
+                if (currentFile) {
+                    audio.src = currentFile;
+                    audio.load();
+                    resetPlayerState();
+                }
+            });
+
+            // Reseta o estado visual do player
+            function resetPlayerState() {
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                progressBar.value = 0;
+                currentTimeEl.textContent = '0:00';
+            }
+
+            // Alternar Play/Pause
+            btnPlayPause.addEventListener('click', () => {
+                if (audio.paused) {
+                    // Garantir que a velocidade atual está configurada
+                    audio.playbackRate = currentSpeed;
+                    
+                    audio.play().then(() => {
+                        playIcon.classList.add('hidden');
+                        pauseIcon.classList.remove('hidden');
+                    }).catch(err => {
+                        console.warn("Não foi possível reproduzir o áudio. Verifique se o arquivo especificado no campo existe no mesmo diretório local.", err);
+                        // Feedback silencioso sem quebrar a UI
+                        const currentInputVal = audioSourceInput.value;
+                        audioSourceInput.classList.add('border-red-400');
+                        setTimeout(() => audioSourceInput.classList.remove('border-red-400'), 2000);
+                    });
+                } else {
+                    audio.pause();
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                }
+            });
+
+            // Gerenciar Controle de Velocidade
+            speedButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Limpa classes ativas de todos os botões
+                    speedButtons.forEach(b => {
+                        b.classList.remove('bg-white', 'shadow-sm', 'text-slate-900');
+                        b.classList.add('text-slate-600');
+                    });
+
+                    // Ativa o botão clicado
+                    const selectedSpeed = parseFloat(btn.dataset.speed);
+                    currentSpeed = selectedSpeed;
+                    audio.playbackRate = selectedSpeed;
+                    
+                    btn.classList.add('bg-white', 'shadow-sm', 'text-slate-900');
+                    btn.classList.remove('text-slate-600');
+                });
+            });
+
+            // Sincroniza barra de progresso do áudio com o tempo atual
+            audio.addEventListener('timeupdate', () => {
+                if (!isNaN(audio.duration)) {
+                    progressBar.max = Math.floor(audio.duration);
+                    progressBar.value = Math.floor(audio.currentTime);
+                    currentTimeEl.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            // Sincroniza a duração total assim que o arquivo carrega metadados
+            audio.addEventListener('loadedmetadata', () => {
+                totalDurationEl.textContent = formatTime(audio.duration);
+                progressBar.max = Math.floor(audio.duration);
+            });
+
+            // Permite ao usuário navegar clicando na barra de progresso
+            progressBar.addEventListener('input', () => {
+                audio.currentTime = progressBar.value;
+            });
+
+            // Quando o áudio acabar por completo
+            audio.addEventListener('ended', () => {
+                resetPlayerState();
+            });
+
+            // Fallback de inicialização se os metadados já estiverem disponíveis imediatamente
+            if (audio.readyState >= 1) {
+                totalDurationEl.textContent = formatTime(audio.duration);
+                progressBar.max = Math.floor(audio.duration);
+            }
+        });
+    </script>
+</body>
+</html>

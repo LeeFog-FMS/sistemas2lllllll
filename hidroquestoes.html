@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado de Hidrografia - Estilo FAURGS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        paper: {
+                            50: '#faf9f6', /* Off-white quente e confortável para leitura */
+                            100: '#f5f2eb',
+                            800: '#1c1917', /* Cor de texto stone suave para evitar fadiga ocular */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #faf9f6;
+            color: #1c1917;
+        }
+        /* Efeito sutil de foco nas alternativas */
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-card:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased leading-relaxed">
+
+    <!-- Elementos visuais de água e topo acadêmico -->
+    <div class="relative overflow-hidden bg-brand-900 text-white py-12 px-6 shadow-md">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="absolute -bottom-10 -right-10 w-96 h-96 bg-brand-700 rounded-full blur-3xl opacity-20"></div>
+        <div class="max-w-4xl mx-auto relative z-10 text-center md:text-left">
+            <span class="inline-block px-3 py-1 bg-brand-700 text-brand-100 text-xs font-semibold uppercase tracking-wider rounded-full mb-3">
+                Geografia Física • Simulado Exclusivo
+            </span>
+            <h1 class="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-4">
+                Recursos Hídricos e Hidrografia Mundial
+            </h1>
+            <p class="text-brand-100/90 text-lg max-w-2xl font-light leading-relaxed">
+                Treinamento de alta performance elaborado estritamente no padrão de cobrança da banca <span class="font-semibold text-white">FAURGS</span>. Questões conceituais, assertivas múltiplas e análises integradas.
+            </p>
+            <div class="mt-6 flex flex-wrap gap-4 justify-center md:justify-start text-xs text-brand-200">
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 10 Questões Completas</span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Modo Simulado Ativo</span>
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-400"></span> Resoluções Detalhadas no Final</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Barra de Progresso Superior de Preenchimento -->
+    <div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm py-3 px-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-medium text-stone-600">Progresso do Simulado:</span>
+                <span id="progress-text" class="text-sm font-bold text-brand-700">0%</span>
+            </div>
+            <div class="flex-1 max-w-xs bg-stone-200 rounded-full h-2.5 overflow-hidden">
+                <div id="progress-bar" class="bg-brand-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <div class="hidden md:block">
+                <span id="unanswered-count" class="text-xs text-stone-500 bg-stone-100 px-2.5 py-1 rounded-full">
+                    10 não respondidas
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Área do Quiz -->
+    <main class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+        <form id="quiz-form" onsubmit="event.preventDefault(); submitQuiz();">
+            <div id="questions-container" class="space-y-10">
+                
+                <!-- QUESTÃO 1 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-1">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 1</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">O ciclo da água, ou ciclo hidrológico, é o motor biogeoquímico que impulsiona a circulação constante da água entre a atmosfera, a litosfera, a hidrosfera e a biosfera. Essa circulação opera em diferentes escalas temporais e espaciais e é intensamente influenciada pelas condições climáticas e pelas atividades humanas.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre a dinâmica do ciclo hidrológico e as interferências antrópicas em suas etapas.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> O ciclo hidrológico é classificado como "curto" ou "pequeno" quando envolve exclusivamente processos físicos de transformação da matéria, como a evaporação direta de corpos d'água e a subsequente precipitação, sem a participação de organismos vivos; por sua vez, o "grande ciclo" inclui processos fisiológicos e metabólicos de seres vivos, como a transpiração vegetal, a respiração e a excreção.</p>
+                            <p><strong>II -</strong> Cerca de 84% de toda a água que evapora para a atmosfera terrestre tem sua origem nos oceanos, ao passo que apenas 16% é proveniente dos continentes, demonstrando a hegemonia das massas oceânicas no suprimento de vapor d'água global.</p>
+                            <p><strong>III -</strong> A ciclagem da água na atmosfera é caracterizada por uma elevada taxa de renovação, de modo que, em termos estatísticos, cada molécula de água evaporada permanece aproximadamente 10 dias em suspensão na atmosfera antes de retornar à superfície sob a forma de precipitação.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q1" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q1" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q1" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q1" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q1" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 2 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-2">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 2</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">As correntes marítimas são grandes massas de água que se deslocam de forma contínua pelos oceanos terrestres, caracterizando-se por apresentar propriedades homogêneas de temperatura, salinidade e densidade. Esses fluxos exercem um papel crucial na regulação climática global e na configuração dos ecossistemas marinhos costeiros.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre as correntes marítimas e seus impactos socioeconômicos e climáticos.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> As correntes oceânicas frias, originadas nas zonas polares, deslocam-se em subsuperfície e reduzem a evaporação e a quantidade de vapor de água disponível no ar, o que contribui de forma determinante para a redução da umidade atmosférica e para a formação de desertos e áreas áridas ao longo das regiões litorâneas adjacentes, como ocorre com a influência da Corrente de Humboldt no deserto do Atacama.</p>
+                            <p><strong>II -</strong> O fenômeno da ressurgência costeira, impulsionado pelo deslocamento das massas de ar e pela rotação da Terra, promove a subida de águas profundas, frias e ricas em nutrientes minerais até a superfície, estimulando o crescimento do fitoplâncton e tornando essas zonas altamente propícias para a atividade pesqueira.</p>
+                            <p><strong>III -</strong> As correntes oceânicas quentes formam-se nas zonas equatoriais, movem-se superficialmente em direção aos polos em velocidades superiores às das correntes frias e transportam energia térmica que eleva a temperatura e a umidade do ar nas áreas litorâneas que recebem sua influência.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q2" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q2" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q2" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q2" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q2" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 3 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-3">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 3</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">A morfologia dos rios, os regimes de alimentação fluvial e a configuração de suas fozes variam significativamente de acordo com fatores geológicos, climáticos e hidrodinâmicos continentais e marinhos.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre a geomorfologia e a dinâmica dos cursos d'água.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> A foz em estuário é caracterizada por um único canal de deságue direto e desobstruído no oceano, sendo típica de rios cujas embocaduras estão sujeitas a forte ação de marés e correntes marítimas, as quais impedem o acúmulo de sedimentos e obstam a formação de ilhas e canais secundários.</p>
+                            <p><strong>II -</strong> A foz em delta configura-se pela ramificação do canal fluvial principal em diversos canais menores (distributários) que deságuam no corpo receptor, ocorrendo quando o volume de sedimentos transportados e depositados pelo rio supera a capacidade de remoção e dispersão das ondas, marés e correntes costeiras.</p>
+                            <p><strong>III -</strong> Rios de planície são tipicamente caracterizados por elevados índices de declividade e grande velocidade de fluxo, correndo sobre terrenos acidentados que geram quedas d'água e favorecem elevados potenciais hidrelétricos naturais, em detrimento de processos de navegação.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q3" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q3" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q3" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q3" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas I e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q3" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 4 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-4">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 4</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">A gestão dos recursos hídricos fundamenta-se na distinção técnica entre os usos consuntivos e não consuntivos da água, parametrizando as políticas públicas de outorga e planejamento ambiental de bacias hidrográficas.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre os usos da água e sua dinâmica setorial.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> Um uso é classificado como consuntivo quando a água é retirada de um manancial superficial ou subterrâneo e consumida, parcial ou totalmente, no processo de destino, não retornando de forma líquida direta e imediata ao corpo d'água original.</p>
+                            <p><strong>II -</strong> A agricultura irrigada destaca-se historicamente como o maior uso consuntivo setorial de água doce tanto no Brasil quanto no mundo, representando cerca de metade do volume total das retiradas de água dos mananciais nacionais.</p>
+                            <p><strong>III -</strong> Atividades como navegação, pesca, turismo, recreação e geração hidrelétrica nas turbinas são classificadas como usos não consuntivos, pois não captam a água diretamente para consumo, embora dependam intrinsecamente da manutenção de patamares adequados de vazão, quantidade e qualidade do sistema hídrico.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q4" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q4" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q4" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q4" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q4" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 5 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-5">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 5</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">As bacias hidrográficas representam as unidades territoriais fundamentais para análise, estudo e planejamento dos recursos hídricos superficiais do território brasileiro.</p>
+                        <p class="mb-4">Sobre as características físicas e econômicas das principais bacias hidrográficas, assinale a alternativa correta.</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q5" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) O rio São Francisco tem sua cabeceira principal localizada na Serra da Canastra (MG) e deságua no Oceano Atlântico entre Sergipe e Alagoas; trata-se de um rio perene de extrema importância socioeconômica que atravessa a região semiárida nordestina.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q5" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) A bacia do Tocantins-Araguaia é a maior bacia hidrográfica exclusivamente brasileira e caracteriza-se por apresentar rios predominantemente temporários que secam por completo durante os meses de inverno amazônico.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q5" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) A bacia do Paraná é constituída por rios tipicamente de planície em seu eixo principal, o que impede a instalação de usinas hidrelétricas e restringe o seu aproveitamento econômico à hidrovia Tietê-Paraná.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q5" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) A bacia Amazônica é caracterizada por apresentar rios de planalto em todo o seu curso principal (Rio Amazonas), o que confere a esse rio o maior potencial hidrelétrico instalado e aproveitado do país.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q5" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) Os rios de regime intermitente são aqueles que apresentam fluxo de água constante ao longo de todo o ano, não sofrendo alterações em suas vazões mesmo sob condições de estiagem severa.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 6 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-6">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 6</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">As águas subterrâneas representam reservas estratégicas essenciais de água doce no globo terrestre, preenchendo os poros de solos saturados e formações rochosas permeáveis que compõem os sistemas aquíferos.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre a dinâmica de armazenamento e recarga das águas subterrâneas.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> O Aquífero Guarani é um dos maiores sistemas aquíferos transfronteiriços do mundo, estendendo-se por cerca de 1,2 milhão de km² subterrâneos que abrangem áreas do Brasil, da Argentina, do Paraguai e do Uruguai.</p>
+                            <p><strong>II -</strong> A dinâmica de recarga de aquíferos livres ocorre através da infiltração vertical da água da chuva diretamente no solo; nos períodos de estiagem, o nível freático desses aquíferos abaixa devido ao escoamento que alimenta os rios superficiais (escoamento de base), enquanto na época chuvosa o nível freático eleva-se.</p>
+                            <p><strong>III -</strong> Os aquíferos profundos estão imunes a quaisquer impactos antrópicos decorrentes de atividades de superfície, de modo que a disposição inadequada de resíduos sólidos urbanos e o uso de agrotóxicos na agricultura não oferecem riscos à qualidade de suas águas.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q6" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q6" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q6" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q6" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q6" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 7 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-7">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 7</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">A gestão de recursos hídricos em âmbito regional exige a análise detalhada das bacias, sub-bacias e sistemas de drenagem locais, com ênfase nas áreas de planejamento hidrográfico do extremo sul do Brasil.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre as bacias hidrográficas e os corpos d'água do estado do Rio Grande do Sul.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> O município de Porto Alegre e sua região metropolitana estão inseridos na bacia hidrográfica do Lago Guaíba, um sistema que agrega diversas sub-bacias hidrográficas e recebe a contribuição hídrica direta do Delta do Jacuí.</p>
+                            <p><strong>II -</strong> A bacia hidrográfica dos rios Apuaê-Inhandava situa-se na cabeceira do rio Uruguai, no nordeste do estado do Rio Grande do Sul, servindo este rio também como divisão político-administrativa com o estado de Santa Catarina.</p>
+                            <p><strong>III -</strong> O sistema costeiro do Rio Grande do Sul conta com importantes corpos d'água isolados da bacia do Guaíba, como a bacia dos rios Piratini e da Lagoa Mangueira, bem como a bacia do rio Tramandaí.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q7" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q7" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q7" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q7" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q7" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 8 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-8">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 8</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">A partilha volumétrica da água na hidrosfera terrestre revela um cenário de acentuada assimetria entre a disponibilidade global de água doce e salgada, condicionando a geopolítica e a segurança hídrica de diversas nações.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre as estatísticas de distribuição dos recursos hídricos mundiais e nacionais.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> Os oceanos concentram a imensa maioria da água do planeta, correspondendo a cerca de 96,4% de toda a hidrosfera, restando apenas cerca de 3,6% de água doce.</p>
+                            <p><strong>II -</strong> Da fração de água doce existente no globo, a maior fatia encontra-se imobilizada sob a forma de calotas polares e geleiras (cerca de 2,25% do total do planeta), o que faz com que a água doce líquida superficial de fácil acesso em rios e lagos represente menos de 0,01% da água total da Terra.</p>
+                            <p><strong>III -</strong> O território brasileiro apresenta uma condição privilegiada, detendo aproximadamente 12% de todas as reservas de água doce superficiais do planeta, o que equivale a cerca de 53% dos recursos hídricos totais do continente sul-americano.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q8" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q8" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q8" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q8" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q8" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 9 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-9">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 9</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">Os lagos e os sistemas de drenagem terrestre distribuem-se pela superfície do planeta de acordo com processos geomorfológicos, geológicos e climáticos que definem suas funções ecológicas e níveis de salinidade.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre a classificação de lagos e tipos de drenagem.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> A drenagem é classificada como exorreica quando a rede fluvial flui de forma contínua em direção ao mar aberto ou oceanos, característica dominante da hidrografia do território brasileiro.</p>
+                            <p><strong>II -</strong> A drenagem endorreica caracteriza-se pelo escoamento das águas para o interior do continente, desaguando em lagos fechados ou mares interiores sem comunicação com os oceanos globais, onde a intensa evaporação de água pura eleva a salinidade hídrica ao longo do tempo geológico.</p>
+                            <p><strong>III -</strong> Lagos tectônicos são formados pelo acúmulo de água em depressões geradas por movimentos de falhamento ou dobramento da crosta terrestre (forças endógenas), diferindo estruturalmente dos lagos glaciais, que se originam da escavação do relevo por imensas massas de gelo em movimento.</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q9" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q9" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q9" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q9" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q9" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- QUESTÃO 10 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm transition-all hover:shadow" id="q-container-10">
+                    <div class="flex items-center justify-between gap-3 mb-4">
+                        <span class="text-xs font-bold uppercase tracking-widest text-brand-700">Questão 10</span>
+                        <span class="px-2.5 py-0.5 rounded text-xs font-semibold bg-stone-100 text-stone-600">FAURGS</span>
+                    </div>
+                    <div class="text-stone-800 text-base md:text-lg font-serif mb-6 leading-relaxed">
+                        <p class="mb-4">As bacias hidrográficas sofrem intensos impactos ambientais decorrentes do uso desordenado do solo e do descarte inadequado de resíduos líquidos e sólidos gerados pelas atividades urbanas, industriais e agrícolas.</p>
+                        <p class="mb-4">Considere as afirmações abaixo sobre a degradação ambiental e conservação de sistemas hídricos.</p>
+                        
+                        <div class="bg-stone-50 rounded-xl p-5 border border-stone-150 space-y-3 font-sans text-sm md:text-base text-stone-700">
+                            <p><strong>I -</strong> A supressão da mata ciliar remove a proteção natural dos solos das margens dos rios contra a erosão hídrica superficial, o que acelera o aporte e a deposição de sedimentos no fundo dos canais, gerando o assoreamento que reduz a calha de vazão, dificulta a navegação e potencializa enchentes.</p>
+                            <p><strong>II -</strong> O descarte de esgotos domésticos não tratados e fertilizantes agrícolas ricos em fósforo e nitrogênio provoca a eutrofização das águas, caracterizada pelo crescimento descontrolado de algas superficiais, o que bloqueia a luz solar e reduz o oxigênio dissolvido no meio aquático durante a decomposição da matéria orgânica.</p>
+                            <p><strong>III -</strong> A construção de grandes reservatórios artificiais para regularização de vazões sazonais altera significativamente os ciclos biológicos e hidrossociais locais, além de criar barreiras físicas que impedem a subida de peixes migradores para reprodução (piracema).</p>
+                        </div>
+                        <p class="mt-4 font-sans text-sm md:text-base font-semibold text-stone-800">Quais estão corretas?</p>
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="space-y-3 font-sans">
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q10" value="A" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500" required>
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q10" value="B" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q10" value="C" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q10" value="D" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-card flex items-start gap-3 p-4 rounded-xl border border-stone-200 cursor-pointer hover:bg-stone-50/50 hover:border-brand-300">
+                            <input type="radio" name="q10" value="E" class="mt-1 h-4 w-4 text-brand-600 border-stone-300 focus:ring-brand-500">
+                            <span class="text-sm md:text-base text-stone-700 font-medium">(E) I, II e III.</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Botão de Finalização -->
+            <div class="mt-12 text-center">
+                <button type="submit" id="btn-submit" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-600 hover:bg-brand-700 active:bg-brand-800 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-150 transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-brand-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Finalizar Simulado e Ver Correção
+                </button>
+            </div>
+        </form>
+
+        <!-- Resultados & Gabarito Dinâmico -->
+        <div id="results-panel" class="hidden mt-16 space-y-8 scroll-mt-20">
+            <hr class="border-stone-300 my-8">
+            
+            <div class="bg-white rounded-3xl p-6 md:p-10 border border-stone-200 shadow-xl overflow-hidden relative">
+                <div class="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-emerald-400 to-sky-500"></div>
+                
+                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div class="text-center md:text-left space-y-2">
+                        <span class="text-sm font-bold uppercase text-stone-500 tracking-wider">Desempenho Geral</span>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-stone-900" id="feedback-title">Analisando Resultados...</h2>
+                        <p class="text-stone-600 text-base" id="feedback-desc">Sua nota e nível de prontidão para o concurso serão exibidos aqui.</p>
+                    </div>
+                    
+                    <!-- Círculo de Pontos -->
+                    <div class="relative flex items-center justify-center">
+                        <svg class="w-36 h-36 transform -rotate-90">
+                            <circle cx="72" cy="72" r="64" stroke="#e2e8f0" stroke-width="12" fill="transparent"/>
+                            <circle id="score-circle" cx="72" cy="72" r="64" stroke="#0284c7" stroke-width="12" fill="transparent" stroke-dasharray="402.1" stroke-dashoffset="402.1" class="transition-all duration-1000 ease-out"/>
+                        </svg>
+                        <div class="absolute text-center">
+                            <span class="text-4xl font-extrabold text-stone-900" id="score-text">0</span>
+                            <span class="text-lg font-bold text-stone-400">/10</span>
+                            <p class="text-xs font-bold text-stone-500 uppercase tracking-widest mt-0.5">Acertos</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grade de Gabarito Rápido -->
+                <div class="mt-10 pt-8 border-t border-stone-100">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-stone-500 mb-4 text-center md:text-left">Gabarito Geral Rápido</h3>
+                    <div class="grid grid-cols-5 md:grid-cols-10 gap-3">
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q1</p><p class="font-bold text-base text-stone-800" id="g-1">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q2</p><p class="font-bold text-base text-stone-800" id="g-2">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q3</p><p class="font-bold text-base text-stone-800" id="g-3">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q4</p><p class="font-bold text-base text-stone-800" id="g-4">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q5</p><p class="font-bold text-base text-stone-800" id="g-5">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q6</p><p class="font-bold text-base text-stone-800" id="g-6">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q7</p><p class="font-bold text-base text-stone-800" id="g-7">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q8</p><p class="font-bold text-base text-stone-800" id="g-8">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q9</p><p class="font-bold text-base text-stone-800" id="g-9">-</p></div>
+                        <div class="text-center p-2 rounded-lg bg-stone-50 border border-stone-200"><p class="text-xs text-stone-400 font-bold mb-0.5">Q10</p><p class="font-bold text-base text-stone-800" id="g-10">-</p></div>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-center gap-4">
+                    <button type="button" onclick="resetQuiz()" class="px-6 py-2.5 bg-stone-100 hover:bg-stone-200 active:bg-stone-300 text-stone-800 font-semibold text-sm rounded-xl transition duration-150">
+                        Reiniciar Simulado
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resoluções Detalhadas -->
+            <div class="space-y-6">
+                <h3 class="font-serif text-2xl md:text-3xl font-bold text-stone-900 border-b-2 border-stone-200 pb-2">
+                    Resoluções Comentadas das Questões
+                </h3>
+                
+                <!-- RESOLUÇÃO 1 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-1">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">1</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 1</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é a correta, pois todas as três afirmações refletem com exatidão os dados científicos e teóricos sobre a circulação hidrológica global.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque a ciência hidrológica diferencia as trajetórias da água com base na participação ou não de processos biológicos ativos. O ciclo curto ou físico baseia-se estritamente na evaporação de líquidos superficiais induzida pela radiação solar, condensação nas altas camadas da troposfera e precipitação subsequente. O ciclo longo ou biológico incorpora a água que é integrada aos tecidos orgânicos dos seres vivos, circulando através da respiração, excreção, decomposição da matéria orgânica e, principalmente, pela transpiração vegetal (evapotranspiração das florestas).</p>
+                        
+                        <!-- Tabela Q1 -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm">
+                            <table class="min-w-full text-xs md:text-sm text-left border-collapse">
+                                <thead class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Tipo de Ciclo</th>
+                                        <th class="p-3 font-semibold">Processos Principais</th>
+                                        <th class="p-3 font-semibold">Participação Biológica</th>
+                                        <th class="p-3 font-semibold">Implicações Climáticas</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Ciclo Curto (Físico)</td>
+                                        <td class="p-3">Evaporação, condensação, precipitação, escoamento superficial direto.</td>
+                                        <td class="p-3">Nenhuma (exclusivamente físico-químico).</td>
+                                        <td class="p-3">Mantém o balanço de umidade básico da atmosfera.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Ciclo Longo (Biológico)</td>
+                                        <td class="p-3">Transpiração vegetal, absorção pelas raízes, respiração, excreção, decomposição.</td>
+                                        <td class="p-3">Ativa (plantas, animais e microrganismos).</td>
+                                        <td class="p-3">Regula chuvas regionais e alimenta os "rios voadores".</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>A afirmativa II é <strong>correta</strong> porque a distribuição da evaporação global é marcadamente assimétrica. Cerca de 84% de todo o vapor de água que ascende para a atmosfera é gerado pelas grandes massas oceânicas, decorrente da imensa área exposta à radiação solar direta (cerca de 70% da superfície do planeta). Os continentes, devido à cobertura vegetal e solos, respondem por apenas os 16% restantes do fluxo de evaporação global.</p>
+                        <p>A afirmativa III é <strong>correta</strong> porque a água que se encontra em estado gasoso na atmosfera apresenta uma altíssima taxa de renovação (turnover). Embora a atmosfera funcione como um reservatório modesto em termos de volume armazenado, sua dinâmica é extremamente veloz: uma molécula de água evaporada permanece em suspensão por um período médio de apenas 10 dias antes de se condensar e precipitar, completando dezenas de ciclos completos ao longo de um único ano.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 2 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">2</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 2</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é a correta, pois sintetiza de forma precisa as dinâmicas termodinâmicas e biológicas das correntes oceânicas mundiais.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque as correntes frias, oriundas das regiões polares, deslocam-se em profundidade por apresentarem maior densidade. Ao passarem próximo às margens continentais, elas resfriam as camadas inferiores da atmosfera, gerando uma forte inversão térmica que estabiliza o ar. O ar frio e seco não sobe, impedindo a convecção e a formação de nuvens de chuva. Esse processo inibe as precipitações sobre o oceano costeiro e, ao avançar sobre o continente, as massas de ar continuam secas, atuando diretamente na formação de desertos costeiros. O exemplo mais clássico é a Corrente de Humboldt (ou Corrente do Peru), que atua na formação do deserto do Atacama. Durante o fenômeno do El Niño, essa corrente fria é enfraquecida por águas quentes equatoriais, alterando drasticamente o regime de chuvas regional.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque a ressurgência (upwelling) é um processo hidrodinâmico essencial para a fertilidade biológica dos oceanos. Ventos constantes sopram paralelamente ao litoral e, devido ao efeito de Coriolis (rotação da Terra), empurram a camada de água quente superficial para longe da costa. Esse espaço é preenchido pela ascensão de águas profundas, caracterizadas por temperaturas muito baixas e elevadíssima concentração de nutrientes inorgânicos (fosfatos e nitratos) oriundos da decomposição de matéria orgânica no assoalho oceânico. Esses nutrientes fertilizam a zona fótica, gerando um crescimento exponencial do fitoplâncton (base da cadeia alimentar), o que sustenta imensas populações de peixes e atrai frotas pesqueiras mundiais.</p>
+
+                        <!-- Tabela Q2 -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm">
+                            <table class="min-w-full text-xs md:text-sm text-left border-collapse">
+                                <thead class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Parâmetro Comparativo</th>
+                                        <th class="p-3 font-semibold">Correntes Oceânicas Quentes</th>
+                                        <th class="p-3 font-semibold">Correntes Oceânicas Frias</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Região de Origem</td>
+                                        <td class="p-3">Regiões Equatoriais e Tropicais.</td>
+                                        <td class="p-3">Regiões Polares e Circumpolares.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Densidade e Profundidade</td>
+                                        <td class="p-3">Menor densidade; deslocamento superficial.</td>
+                                        <td class="p-3">Maior densidade; deslocamento profundo.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Velocidade de Deslocamento</td>
+                                        <td class="p-3">Elevada velocidade superficial.</td>
+                                        <td class="p-3">Baixa velocidade de subsuperfície.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Impacto Climático Costeiro</td>
+                                        <td class="p-3">Eleva temperaturas e aumenta índices de chuva.</td>
+                                        <td class="p-3">Reduz temperaturas e induz aridez costeira.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Exemplos de Destaque</td>
+                                        <td class="p-3">Corrente do Golfo, Corrente do Brasil.</td>
+                                        <td class="p-3">Corrente de Humboldt, Corrente das Falklands.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>A afirmativa III é <strong>correta</strong> porque as correntes quentes são impulsionadas pelos ventos alísios nas zonas intertropicais, onde a radiação solar é intensa. Elas são menos densas e circulam na porção mais superficial dos oceanos, movimentando-se rapidamente em direção aos polos. Ao transportarem calor sensível e calor latente, essas correntes elevam as temperaturas das costas litorâneas de latitudes temperadas e aumentam a evaporação, suprindo as massas de ar locais com grande quantidade de umidade.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 3 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-3">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">3</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 3</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>C</strong> é a correta, uma vez que a geomorfologia fluvial estabelece distinções claras entre os tipos de embocadura e as características de declividade dos cursos d'água.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque o estuário consiste em uma foz afunilada, aberta e sem obstruções de sedimentos. Esse tipo de desembocadura é típico de rios que deságuam em mares abertos com grande energia hidrodinâmica, onde a amplitude das marés e a força das correntes marítimas costeiras são capazes de varrer de forma contínua os sedimentos finos trazidos pelo rio, impedindo o surgimento de ilhas sedimentares, bancos de areia ou múltiplos canais.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque o delta é uma foz sedimentar ramificada em leque. Ele ocorre quando a quantidade de sedimentos minerais e orgânicos transportados pelo rio até a sua foz é superior à capacidade erosiva e de transporte do corpo receptor (mar ou lago). Com a desaceleração brusca da correnteza ao encontrar o mar, os sedimentos depositam-se no fundo, criando barreiras físicas que bifurcam e fragmentam o fluxo do rio em múltiplos canais distributários.</p>
+
+                        <!-- Tabela Q3 -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm">
+                            <table class="min-w-full text-xs md:text-sm text-left border-collapse">
+                                <thead class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Tipo de Foz</th>
+                                        <th class="p-3 font-semibold">Mecanismo de Formação</th>
+                                        <th class="p-3 font-semibold">Dinâmica Sedimentar</th>
+                                        <th class="p-3 font-semibold">Presença de Ilhas / Canais</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Estuário</td>
+                                        <td class="p-3">Forte ação de marés e correntes costeiras que limpam a embocadura.</td>
+                                        <td class="p-3">Remoção contínua de sedimentos pela energia marinha.</td>
+                                        <td class="p-3">Canal único desobstruído; ausência de ilhas internas.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Delta</td>
+                                        <td class="p-3">Deposição sedimentar supera a força de remoção do mar ou lago receptor.</td>
+                                        <td class="p-3">Acúmulo progressivo de areia, silte e argila na foz.</td>
+                                        <td class="p-3">Múltiplos canais secundários (distributários) e ilhas.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>A afirmativa III é <strong>incorreta</strong> porque descreve, na verdade, os rios de planalto, e não os de planície. Os rios de planície deslocam-se sobre declividades topográficas extremamente suaves, o que resulta em correntes lentas e sinuosas (formação de meandros) e favorece a deposição de sedimentos. Essas características geométricas e hidrodinâmicas tornam os rios de planície naturalmente favoráveis à navegação de embarcações de grande porte, porém inviabilizam a geração de energia hidrelétrica devido à falta de desníveis topográficos significativos.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 4 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-4">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">4</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 4</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é a correta, pois todas as três afirmações expressam com precisão as diretrizes técnicas e os dados estatísticos sobre a utilização humana da água no Brasil.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque o conceito de uso consuntivo está atrelado à diminuição quantitativa física do recurso hídrico na bacia original. Quando a água é captada para atividades como irrigação agrícola, abastecimento público urbano/rural ou processos industriais que a incorporam aos produtos ou a evaporam, esse volume não retorna imediatamente sob a forma líquida para o leito do rio ou aquífero de onde foi retirado, gerando indisponibilidade temporária ou espacial a jusante.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque a irrigação agrícola é, com grande margem, a atividade humana que consome os maiores volumes de água doce no Brasil e no mundo. Conforme os dados históricos e relatórios da Agência Nacional de Águas (ANA), o setor de agricultura irrigada responde por cerca de 52% de todas as retiradas de água dos mananciais superficiais e subterrâneos do território nacional, apresentando ainda um elevado potencial de expansão futura.</p>
+                        <p>A afirmativa III é <strong>correta</strong> porque os usos não consuntivos caracterizam-se pelo aproveitamento da água sem que ocorra sua retirada física permanente ou consumo volumétrico significativos. Na geração hidrelétrica, por exemplo, a água passa pelas tubulações de queda e move as turbinas, retornando integralmente ao leito natural do rio logo a jusante. O mesmo princípio aplica-se à navegação de cargas, à atividade pesqueira e ao turismo lacustre e fluvial. Embora não consumam a água, essas atividades são altamente vulneráveis a reduções de vazão ou alterações de qualidade provocadas por usos consuntivos localizados a montante.</p>
+
+                        <!-- Tabela Q4 -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm">
+                            <table class="min-w-full text-xs md:text-sm text-left border-collapse">
+                                <thead class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Setor de Utilização</th>
+                                        <th class="p-3 font-semibold">Tipo de Uso</th>
+                                        <th class="p-3 font-semibold">Percentual aprox. de Retirada (BR)</th>
+                                        <th class="p-3 font-semibold">Características e Perdas Principais</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Irrigação Agrícola</td>
+                                        <td class="p-3 text-stone-700">Consuntivo</td>
+                                        <td class="p-3">~52%</td>
+                                        <td class="p-3">Fortes perdas por evapotranspiração das plantas e infiltração localizada.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Abastecimento Urbano</td>
+                                        <td class="p-3 text-stone-700">Consuntivo</td>
+                                        <td class="p-3">~23,8%</td>
+                                        <td class="p-3">Grande volume retirado retorna ao sistema na forma de esgoto (requer tratamento).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Indústria</td>
+                                        <td class="p-3 text-stone-700">Consuntivo</td>
+                                        <td class="p-3">~9,1%</td>
+                                        <td class="p-3">Utilizada em processos químicos e resfriamento; alto retorno, mas com risco químico.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Hidreletricidade</td>
+                                        <td class="p-3 text-stone-500">Não Consuntivo</td>
+                                        <td class="p-3">-</td>
+                                        <td class="p-3">A água passa pelas turbinas sem consumo, mas reservatórios perdem água por evaporação.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Navegação e Pesca</td>
+                                        <td class="p-3 text-stone-500">Não Consuntivo</td>
+                                        <td class="p-3">-</td>
+                                        <td class="p-3">Dependem da manutenção das profundidades mínimas e do fluxo contínuo do leito.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 5 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">5</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 5</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>A</strong> é a única correta, apresentando dados verídicos sobre a hidrografia brasileira.</p>
+                        <p>O rio São Francisco ("Velho Chico") nasce na região serrana da Canastra, em Minas Gerais, sob condições de alta pluviosidade tropical. Ele percorre cerca de 2.800 km e cruza estados das regiões Sudeste e Nordeste antes de desaguar no Atlântico. Apesar de cruzar a região semiárida (o Sertão nordestino), onde as taxas de evaporação são elevadíssimas e as chuvas escassas, o São Francisco mantém-se como um rio perene. Isso se deve à recarga abundante recebida em suas cabeceiras e afluentes de cabeceira situados em clima tropical úmido. Suas águas são fundamentais para a irrigação agrícola (como a fruticultura de Petrolina e Juazeiro) e para o abastecimento humano na região sertaneja.</p>
+                        <p>Análise das alternativas incorretas:</p>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li>A alternativa <strong>B</strong> está incorreta porque, embora a bacia do Tocantins-Araguaia seja a maior bacia localizada inteiramente dentro das fronteiras brasileiras, seus rios são predominantemente perenes, mantendo fluxo contínuo de água ao longo do ano, sendo falsos os termos de que secam por completo.</li>
+                            <li>A alternativa <strong>C</strong> está incorreta porque a bacia do Paraná é constituída majoritariamente por rios de planalto em território nacional. Essa configuração geomorfológica acidentada, com inúmeros desníveis e gargantas rochosas, confere à bacia do Paraná o maior aproveitamento hidrelétrico instalado do país, abrigando usinas de grande porte como Itaipu, Porto Primavera e Ilha Solteira.</li>
+                            <li>A alternativa <strong>D</strong> está incorreta porque o eixo principal do rio Amazonas corre sobre uma imensa planície sedimentar com baixíssima declividade, caracterizando um rio de planície extremamente favorável à navegação fluvial. O elevado potencial hidrelétrico da bacia Amazônica não se situa em seu eixo principal, mas sim nos seus rios afluentes que nascem nos escudos cristalinos das Guianas e Central Brasileiro (áreas de planalto).</li>
+                            <li>A alternativa <strong>E</strong> está incorreta porque os rios de regime intermitente ou temporário são definidos precisamente pelo fato de secarem completamente durante as estações secas ou estiagens severas, sendo os rios perenes aqueles que mantêm fluxo constante ao longo de todo o ano.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 6 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">6</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 6</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>C</strong> é a correta, pois descreve com exatidão a geologia e a dinâmica física das reservas de água subterrânea.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque o Aquífero Guarani é um reservatório gigante formado por rochas arenosas do Período Triássico e Jurássico localizadas na Bacia do Paraná. Ele ocupa uma extensão aproximada de 1,2 milhão de km², distribuindo-se de forma transfronteiriça pelo subsolo do Brasil (onde ocupa a maior porção, no Centro-Sul), da Argentina, do Paraguai e do Uruguai, constituindo uma reserva estratégica vital para o abastecimento regional.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque os aquíferos livres ou freáticos são delimitados na porção superior pelo nível freático, que se comunica diretamente com a atmosfera através dos poros do solo. A recarga ocorre de forma direta pela infiltração vertical da água precipitada. Nos períodos chuvosos, a infiltração excede as perdas, elevando o nível freático. Nos períodos de estiagem, a falta de precipitação interrompe a recarga, e o aquífero passa a descarregar suas águas de forma lateral nos vales dos rios superficiais, sustentando o escoamento de base que mantém a perenidade dos rios.</p>
+                        <p>A afirmativa III é <strong>incorreta</strong> porque os aquíferos — mesmo os confinados ou profundos — não são sistemas completamente isolados ou imunes à poluição. A contaminação pode ocorrer nas zonas de afloramento, onde as rochas permeáveis estão expostas diretamente na superfície, permitindo a infiltração direta de pesticidas agrícolas, metais pesados e chorume de lixões urbanos. Adicionalmente, poços de captação mal construídos ou abandonados sem vedação adequada funcionam como condutos diretos que transportam poluentes da superfície para os aquíferos profundos, degradando a qualidade de suas águas.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 7 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-7">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">7</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 7</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é a correta, pois valida os dados sobre a hidrografia do Rio Grande do Sul e a divisão de suas bacias hidrográficas.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque Porto Alegre e sua região metropolitana estão localizadas às margens do Lago Guaíba. Esse corpo d'água funciona como um grande receptor que drena as águas de uma extensa bacia hidrográfica alimentada por rios caudalosos como o Jacuí, o Gravataí, o Sinos e o Caí, os quais convergem no Delta do Jacuí antes de alcançar o Guaíba.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque a bacia hidrográfica dos rios Apuaê-Inhandava (identificada tecnicamente como bacia U-010) situa-se na porção nordeste do estado do Rio Grande do Sul, próximo às cabeceiras do rio Uruguai. Esse rio delimita a fronteira político-administrativa entre os estados do Rio Grande do Sul e de Santa Catarina.</p>
+                        <p>A afirmativa III é <strong>correta</strong> porque o sistema de drenagem do Rio Grande do Sul é dividido em diferentes vertentes. Enquanto a bacia do Guaíba drena para a Laguna dos Patos, a região litorânea e a porção meridional contam com sistemas de drenagem independentes, como a bacia dos rios Piratini e da Lagoa Mangueira (situada no extremo sul do litoral) e a bacia do rio Tramandaí (no litoral norte), que lançam suas águas diretamente no oceano ou em lagunas costeiras sem conexão com o Guaíba.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 8 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">8</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 8</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é a correta, pois valida os dados hidrológicos mundiais e nacionais apresentados nas fontes documentais.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque a hidrosfera terrestre é composta predominantemente por água salgada. Os oceanos e mares concentram aproximadamente 96,4% do volume total de água do planeta, restando uma fração de apenas 3,6% distribuída sob a forma de água doce continental e vapor d'água atmosférico.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque a maior fatia de água doce do planeta não está disponível de forma líquida na superfície, mas sim congelada nas geleiras e calotas polares da Antártida, da Groenlândia e no topo de cordilheiras de alta altitude, correspondendo a cerca de 2,25% de toda a água da Terra (ou cerca de 68,7% de toda a água doce). Essa retenção criosférica faz com que a água de fácil acesso para consumo humano imediato — localizada em rios, lagos superficiais e pântanos — represente uma parcela residual inferior a 0,01% de toda a hidrosfera terrestre.</p>
+
+                        <!-- Tabela Q8 -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm">
+                            <table class="min-w-full text-xs md:text-sm text-left border-collapse">
+                                <thead class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Reservatório de Água</th>
+                                        <th class="p-3 font-semibold">Percentual do Total da Hidrosfera</th>
+                                        <th class="p-3 font-semibold">Percentual do Total de Água Doce</th>
+                                        <th class="p-3 font-semibold">Nível de Acessibilidade Humana</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Oceanos e Mares (Salgada)</td>
+                                        <td class="p-3">~96,4%</td>
+                                        <td class="p-3">-</td>
+                                        <td class="p-3">Inacessível sem processos industriais de dessalinização.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Calotas Polares e Geleiras</td>
+                                        <td class="p-3">~2,25%</td>
+                                        <td class="p-3">~62,5%</td>
+                                        <td class="p-3">Extremamente baixo (imobilizada em estado sólido).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Águas Subterrâneas</td>
+                                        <td class="p-3">~0,75%</td>
+                                        <td class="p-3">~20,8%</td>
+                                        <td class="p-3">Médio-alto (requer bombeamento em aquíferos).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Rios e Lagos Superficiais</td>
+                                        <td class="p-3">&lt;0.01%</td>
+                                        <td class="p-3">&lt;1,0%</td>
+                                        <td class="p-3">Altíssimo (mananciais tradicionais de captação).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>A afirmativa III é <strong>correta</strong> porque o Brasil é uma superpotência hídrica. Devido ao seu vasto território dominado por climas equatoriais e tropicais superúmidos e a presença da maior bacia hidrográfica do planeta (a Amazônica), o território brasileiro concentra cerca de 12% de toda a água doce líquida superficial do planeta Terra, valor que representa mais da metade (53%) de todas as reservas hídricas disponíveis no continente da América do Sul.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 9 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-9">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">9</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 9</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é la correta, pois os conceitos de drenagem e classificação lacustre estão em perfeita harmonia com os fundamentos da geografia física global.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque o conceito de drenagem exorreica refere-se a redes de rios cujos fluxos superficiais caminham de forma contínua em direção aos oceanos e mares abertos, desaguando na costa. Esta é a configuração amplamente dominante no Brasil, onde a totalidade das bacias hidrográficas (como a Amazônica, a do São Francisco e a Platina) escoa suas águas em direção ao Oceano Atlântico.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque na drenagem endorreica os rios não encontram saída para o oceano. Suas águas escoam para o interior do próprio continente, acumulando-se em depressões fechadas onde se formam mares interiores ou lagos fechados. Como a única saída de água desses sistemas é dada pela evaporação, apenas a água pura deixa o lago em forma de vapor, enquanto os sais minerais dissolvidos permanecem e acumulam-se de forma progressiva ao longo do tempo geológico, resultando em corpos d'água hipersalinos situados no interior de regiões secas.</p>
+
+                        <!-- Tabela Q9 -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm">
+                            <table class="min-w-full text-xs md:text-sm text-left border-collapse">
+                                <thead class="bg-stone-100 text-stone-800 border-b border-stone-200">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Tipo de Drenagem</th>
+                                        <th class="p-3 font-semibold">Direção do Fluxo Fluvial</th>
+                                        <th class="p-3 font-semibold">Destino Final das Águas</th>
+                                        <th class="p-3 font-semibold">Ocorrência Geográfica Comum</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Exorreica</td>
+                                        <td class="p-3">Em direção ao litoral.</td>
+                                        <td class="p-3">Mares abertos e Oceanos globais.</td>
+                                        <td class="p-3">Dominante em climas úmidos (ex: Brasil).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Endorreica</td>
+                                        <td class="p-3">Em direção ao interior continental.</td>
+                                        <td class="p-3">Lagos fechados e Mares interiores.</td>
+                                        <td class="p-3">Regiões áridas ou depressões (ex: Mar Morto).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-800">Arreica</td>
+                                        <td class="p-3">Sem direção definida; rios somem.</td>
+                                        <td class="p-3">Infiltração profunda ou evaporação rápida.</td>
+                                        <td class="p-3">Desertos de areia (ex: Saara, Kalahari).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p>A afirmativa III é <strong>correta</strong> porque a gênese dos lagos é diversificada. Os lagos tectônicos são gerados por forças geodinâmicas internas que fraturam ou dobram blocos da crosta, criando depressões profundas que são preenchidas por água (como o lago Baikal, o mais profundo do mundo). Já os lagos glaciais são de origem exógena, formados pelo degelo e pelo peso de grandes geleiras continentais que escavam bacias e depressões no relevo durante as eras glaciais, acumulando água à medida que o clima se aquece e o gelo recua, padrão comum nas altas latitudes do hemisfério norte.</p>
+                    </div>
+                </div>
+
+                <!-- RESOLUÇÃO 10 -->
+                <div class="bg-white rounded-2xl p-6 md:p-8 border border-stone-200 shadow-sm" id="res-10">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-stone-100 text-stone-800 font-bold text-sm">10</span>
+                        <h4 class="font-serif text-lg font-bold text-stone-800">Resolução da Questão 10</h4>
+                    </div>
+                    <div class="prose max-w-none text-stone-700 text-sm md:text-base leading-relaxed space-y-4">
+                        <p>A alternativa <strong>E</strong> é a correta, pois engloba de forma integral e integrada as principais problemáticas socioambientais enfrentadas pelas bacias hidrográficas na atualidade.</p>
+                        <p>A afirmativa I é <strong>correta</strong> porque a vegetação ciliar funciona como um filtro físico e uma blindagem mecânica para as margens dos rios. Suas raízes estruturam o solo, aumentando a coesão e evitando deslizamentos, enquanto a copa das árvores absorve a energia cinética das gotas de chuva, reduzindo a desagregação do solo. Sem essa proteção, a água da chuva lava a superfície descoberta do solo das margens e das encostas, transportando toneladas de sedimentos (areia e argila) para o fundo do leito do rio. Esse acúmulo de sedimentos (assoreamento) reduz a calha hidráulica do rio, tornando-o raso e obstruído, o que inviabiliza a navegação de embarcações e faz com que qualquer chuva moderada transborde o canal, deflagrando enchentes severas.</p>
+                        <p>A afirmativa II é <strong>correta</strong> porque a eutrofização é uma resposta ecológica ao enriquecimento artificial da água por nutrientes químicos, principalmente o fósforo e o nitrogênio presentes no esgoto doméstico não tratado e nos fertilizantes agrícolas arrastados das lavouras. Esse aporte de nutrientes fertiliza o corpo d'água, promovendo a proliferação explosiva de algas e cianobactérias na superfície (blooms). Essa camada verde superficial impede a passagem da luz solar, inviabilizando a fotossíntese de plantas subaquáticas, as quais morrem. A decomposição de toda essa matéria orgânica consome de forma acelerada o oxigênio dissolvido na água, tornando o ambiente anóxico e provocando a mortalidade massiva de peixes e de toda a fauna aquática.</p>
+                        <p>A afirmativa III é <strong>correta</strong> porque a construção de reservatórios para usinas hidrelétricas e barragens altera profundamente o regime hidrológico e os fluxos ecológicos das bacias. A criação de uma grande represa modifica o ambiente de lótico (água corrente e oxigenada de rio) para lêntico (água parada e estratificada de lago), alterando a temperatura e a deposição de sedimentos. Além disso, a barragem funciona como um obstáculo físico intransponível no leito do rio, bloqueando as rotas de migração que os peixes de piracema realizam subindo o curso d'água para depositar seus ovos nas cabeceiras da bacia, gerando redução de biodiversidade e afetando a subsistência de comunidades pesqueiras locais.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Personalizado para Substituir o 'alert()' nativo -->
+    <div id="validation-modal" class="hidden fixed inset-0 z-50 bg-stone-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-stone-200 transform transition-all scale-95 opacity-0 duration-200" id="modal-box">
+            <div class="flex items-center gap-3 text-amber-600 mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <h4 class="text-lg font-bold text-stone-900">Questões Pendentes!</h4>
+            </div>
+            <p class="text-stone-600 mb-6">Você precisa responder a todas as 10 questões do simulado antes de finalizar e ver as resoluções comentadas. Há questões em branco.</p>
+            <div class="text-right">
+                <button type="button" onclick="closeModal()" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-xl text-sm transition shadow">
+                    Entendido, vou revisar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-stone-100 border-t border-stone-200 py-10 mt-20 text-center text-sm text-stone-500">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-stone-700">Simulado Interativo de Hidrografia - Modelo Acadêmico</p>
+            <p>Desenvolvido com foco em legibilidade e usabilidade para leitura contínua.</p>
+            <p class="text-xs text-stone-400">© 2026 • Todos os direitos das questões pertencem aos seus respectivos criadores e à banca de concurso original.</p>
+        </div>
+    </footer>
+
+    <!-- LÓGICA DO QUIZ (JAVASCRIPT PURO) -->
+    <script>
+        // Mapeamento das alternativas corretas
+        const answersTemplate = {
+            q1: "E",
+            q2: "E",
+            q3: "C",
+            q4: "E",
+            q5: "A",
+            q6: "C",
+            q7: "E",
+            q8: "E",
+            q9: "E",
+            q10: "E"
+        };
+
+        // Ouvinte de mudança de inputs para atualizar a barra de progresso em tempo real
+        const inputs = document.querySelectorAll('input[type="radio"]');
+        inputs.forEach(input => {
+            input.addEventListener('change', () => {
+                // Adiciona efeito visual de seleção na div pai (label)
+                const name = input.name;
+                const siblings = document.querySelectorAll(`input[name="${name}"]`);
+                siblings.forEach(sib => {
+                    sib.closest('.option-card').classList.remove('bg-brand-50', 'border-brand-400', 'ring-2', 'ring-brand-100');
+                });
+                
+                if (input.checked) {
+                    input.closest('.option-card').classList.add('bg-brand-50', 'border-brand-400', 'ring-2', 'ring-brand-100');
+                }
+
+                updateProgress();
+            });
+        });
+
+        // Atualiza a barra de progresso superior
+        function updateProgress() {
+            let answeredCount = 0;
+            for (let i = 1; i <= 10; i++) {
+                const checkedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checkedOption) {
+                    answeredCount++;
+                }
+            }
+            
+            const percentage = Math.round((answeredCount / 10) * 100);
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            const unansweredText = document.getElementById('unanswered-count');
+            
+            progressBar.style.width = `${percentage}%`;
+            progressText.innerText = `${percentage}%`;
+            unansweredText.innerText = `${10 - answeredCount} não respondidas`;
+        }
+
+        // Validação customizada e encerramento do simulado
+        function submitQuiz() {
+            let unanswered = [];
+            for (let i = 1; i <= 10; i++) {
+                const isAnswered = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!isAnswered) {
+                    unanswered.push(i);
+                }
+            }
+
+            if (unanswered.length > 0) {
+                openModal();
+                // Destacar o primeiro container sem resposta
+                const firstUnansweredId = `q-container-${unanswered[0]}`;
+                document.getElementById(firstUnansweredId).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Se tudo estiver respondido, computar os acertos
+            computeResults();
+        }
+
+        // Funções de manipulação do modal personalizado
+        function openModal() {
+            const modal = document.getElementById('validation-modal');
+            const box = document.getElementById('modal-box');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                box.classList.remove('scale-95', 'opacity-0');
+                box.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('validation-modal');
+            const box = document.getElementById('modal-box');
+            box.classList.remove('scale-100', 'opacity-100');
+            box.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 150);
+        }
+
+        // Função central de cálculo e revelação dos resultados com feedback visual rico
+        function computeResults() {
+            let score = 0;
+            const resultsPanel = document.getElementById('results-panel');
+            
+            // Revelar o painel de resultados
+            resultsPanel.classList.remove('hidden');
+            
+            for (let i = 1; i <= 10; i++) {
+                const userChoice = document.querySelector(`input[name="q${i}"]:checked`).value;
+                const correctChoice = answersTemplate[`q${i}`];
+                
+                // Exibir no minigabarito do painel superior
+                const gCell = document.getElementById(`g-${i}`);
+                gCell.innerText = correctChoice;
+                
+                // Colorir os cards de opções com base no resultado
+                const options = document.querySelectorAll(`input[name="q${i}"]`);
+                options.forEach(opt => {
+                    const parent = opt.closest('.option-card');
+                    const val = opt.value;
+                    
+                    // Desabilitar para congelar as respostas do usuário
+                    opt.disabled = true;
+                    
+                    if (val === correctChoice) {
+                        // É a alternativa correta
+                        parent.classList.remove('bg-brand-50', 'border-brand-400');
+                        parent.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'ring-2', 'ring-emerald-100');
+                    } else if (opt.checked && val !== correctChoice) {
+                        // Resposta errada do usuário
+                        parent.classList.remove('bg-brand-50', 'border-brand-400');
+                        parent.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-900');
+                    } else {
+                        // Outras alternativas
+                        parent.classList.add('opacity-50');
+                    }
+                });
+
+                if (userChoice === correctChoice) {
+                    score++;
+                }
+            }
+
+            // Atualizar animação do círculo de score
+            const circle = document.getElementById('score-circle');
+            const radius = circle.r.baseVal.value;
+            const circumference = 2 * Math.PI * radius; // Aprox 402.12
+            const offset = circumference - (score / 10) * circumference;
+            
+            circle.style.strokeDasharray = `${circumference} ${circumference}`;
+            circle.style.strokeDashoffset = offset;
+            
+            // Alterar cor do círculo de acordo com o aproveitamento
+            if (score >= 8) {
+                circle.setAttribute('stroke', '#10b981'); // Emerald verde para notas altas
+            } else if (score >= 5) {
+                circle.setAttribute('stroke', '#f59e0b'); // Amber para média normal
+            } else {
+                circle.setAttribute('stroke', '#ef4444'); // Vermelho para abaixo de 5
+            }
+
+            document.getElementById('score-text').innerText = score;
+
+            // Definir mensagem personalizada de Feedback
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackDesc = document.getElementById('feedback-desc');
+            
+            if (score === 10) {
+                feedbackTitle.innerText = "Excelente! Aproveitamento Máximo";
+                feedbackDesc.innerText = "Você gabaritou o simulado! Seu domínio sobre regimes fluviais, ciclo hidrológico e correntes oceânicas está no nível mais avançado exigido pela FAURGS.";
+            } else if (score >= 8) {
+                feedbackTitle.innerText = "Excelente Desempenho!";
+                feedbackDesc.innerText = "Parabéns! Você alcançou um aproveitamento de ponta. Está altamente apto a enfrentar as questões de Geografia Física da banca.";
+            } else if (score >= 6) {
+                feedbackTitle.innerText = "Bom Trabalho!";
+                feedbackDesc.innerText = "Seu aproveitamento foi sólido, mas recomendo ler atentamente as resoluções comentadas para lapidar pequenos detalhes teóricos.";
+            } else {
+                feedbackTitle.innerText = "Atenção Necessária";
+                feedbackDesc.innerText = "Você teve dificuldades em conceitos-chave. Aproveite a seção de resoluções completas com tabelas abaixo para revisar e sanar dúvidas.";
+            }
+
+            // Desabilitar o botão de envio original
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = true;
+            btnSubmit.classList.add('opacity-50', 'cursor-not-allowed');
+
+            // Scroll suave até o topo do painel de resultados
+            resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Função para recomeçar o quiz do zero
+        function resetQuiz() {
+            // Recarregar os inputs
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => {
+                input.checked = false;
+                input.disabled = false;
+                
+                // Remover estilos de feedback e seleção
+                const parent = input.closest('.option-card');
+                parent.classList.remove(
+                    'bg-brand-50', 'border-brand-400', 'ring-2', 'ring-brand-100',
+                    'bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'ring-emerald-100',
+                    'bg-rose-50', 'border-rose-400', 'text-rose-900', 'opacity-50'
+                );
+            });
+
+            // Esconder o painel de resultados
+            document.getElementById('results-panel').classList.add('hidden');
+            
+            // Reabilitar botão de envio
+            const btnSubmit = document.getElementById('btn-submit');
+            btnSubmit.disabled = false;
+            btnSubmit.classList.remove('opacity-50', 'cursor-not-allowed');
+
+            // Resetar barra de progresso superior
+            updateProgress();
+
+            // Rolagem suave para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
