@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo - Geopolítica e Matrizes de Energia</title>
+    <!-- Tailwind CSS para design ágil e moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter para conforto de leitura -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Ícones via FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilizações para suavizar scrollbar e efeitos de leitura ativa */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .math-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen font-sans flex flex-col selection:bg-blue-100 selection:text-blue-900">
+
+    <header class="sticky top-0 z-40 bg-white border-b border-slate-200/80 shadow-sm backdrop-blur-md bg-white/90">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-sm sm:text-base font-bold text-slate-950 tracking-tight leading-tight">Simulado Estilo FAURGS</h1>
+                    <p class="text-xs text-slate-500 font-medium hidden sm:block">Geopolítica e Matrizes de Energia</p>
+                </div>
+            </div>
+
+            <!-- Painel de Controle e Tempo -->
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200/60 text-xs sm:text-sm font-semibold text-slate-700">
+                    <i class="fa-regular fa-clock mr-2 text-slate-500"></i>
+                    <span id="timer-display">00:00:00</span>
+                    <button id="btn-pause-timer" class="ml-2 hover:text-blue-600 transition" title="Pausar/Iniciar cronômetro">
+                        <i class="fa-solid fa-pause"></i>
+                    </button>
+                </div>
+                <button id="btn-finish-header" onclick="requestSubmitQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold shadow-sm transition-all duration-200 flex items-center">
+                    <i class="fa-solid fa-square-check mr-2"></i> Terminar Simulado
+                </button>
+            </div>
+        </div>
+        <!-- Barra de Progresso Real-time -->
+        <div class="w-full h-1 bg-slate-100">
+            <div id="progress-bar-fill" class="h-1 bg-blue-600 transition-all duration-300" style="width: 0%"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Coluna de Navegação Rápida (Esquerda/Fixo no desktop) -->
+            <aside class="lg:col-span-1 lg:sticky lg:top-24 h-fit space-y-6">
+                <div class="bg-white p-5 rounded-xl border border-slate-200/80 shadow-sm">
+                    <h3 class="font-bold text-sm text-slate-900 mb-4 tracking-tight uppercase">Progresso da Prova</h3>
+                    
+                    <!-- Grade de Questões -->
+                    <div class="grid grid-cols-5 gap-2 mb-6">
+                        <!-- Gerado dinamicamente via JS -->
+                        <div id="nav-buttons-container" class="contents"></div>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-4 space-y-3">
+                        <div class="flex items-center text-xs font-medium text-slate-600">
+                            <span class="w-4 h-4 rounded-full bg-blue-100 border border-blue-400 block mr-2 flex items-center justify-center text-[9px] text-blue-600 font-bold"><i class="fa-solid fa-circle text-[6px]"></i></span>
+                            <span>Respondida</span>
+                        </div>
+                        <div class="flex items-center text-xs font-medium text-slate-600">
+                            <span class="w-4 h-4 rounded-full bg-amber-100 border border-amber-400 block mr-2 flex items-center justify-center text-[9px] text-amber-600 font-bold"><i class="fa-solid fa-bookmark text-[7px]"></i></span>
+                            <span>Marcada para Revisão</span>
+                        </div>
+                        <div class="flex items-center text-xs font-medium text-slate-600">
+                            <span class="w-4 h-4 rounded-full bg-white border border-slate-300 block mr-2"></span>
+                            <span>Não respondida</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel Informativo da Banca -->
+                <div class="bg-slate-900 text-slate-300 p-5 rounded-xl shadow-sm border border-slate-800 hidden lg:block">
+                    <h4 class="font-bold text-white text-xs tracking-wider uppercase mb-2">Instruções FAURGS</h4>
+                    <ul class="text-xs space-y-2 list-disc list-inside text-slate-300">
+                        <li>Todas as questões possuem exatamente 5 alternativas de múltipla escolha (A a E).</li>
+                        <li>O estilo da banca preza por afirmações complexas baseadas em jurisprudência ou análise técnica comparada.</li>
+                        <li>Atenção às lacunas integradas que exigem termos sequenciais exatos.</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <section class="lg:col-span-3 space-y-8">
+                
+                <!-- Card Informativo Inicial -->
+                <div id="intro-card" class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 p-6 rounded-xl relative overflow-hidden">
+                    <div class="relative z-10">
+                        <span class="bg-blue-600 text-white text-[10px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full">Simulado Nível Superior</span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-3 tracking-tight">Geopolítica e Matrizes de Energia</h2>
+                        <p class="text-sm text-slate-600 mt-2 max-w-2xl leading-relaxed">
+                            Caderno elaborado no estilo rigoroso da banca **FAURGS**. Avalie seus conhecimentos sobre dinâmicas ambientais, cadeias minerais, matrizes elétricas comparadas e os desdobramentos geopolíticos do petróleo e gás natural.
+                        </p>
+                    </div>
+                    <div class="absolute right-0 bottom-0 translate-y-1/3 translate-x-1/12 opacity-5 pointer-events-none">
+                        <i class="fa-solid fa-earth-americas text-9xl text-blue-900"></i>
+                    </div>
+                </div>
+
+                <!-- Espaço de Renderização das Questões -->
+                <div id="quiz-questions-container" class="space-y-8"></div>
+
+                <!-- Painel de Resultados (Oculto Inicialmente) -->
+                <div id="results-panel" class="hidden bg-white p-6 sm:p-8 rounded-2xl border-2 border-emerald-500 shadow-xl space-y-6 transition-all duration-300 scroll-mt-24">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full mb-4">
+                            <i class="fa-solid fa-chart-pie text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-slate-900 tracking-tight">Resultado do Simulado</h3>
+                        <p class="text-sm text-slate-500 mt-1">Sua avaliação técnica detalhada do caderno de questões</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center mt-6">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Acertos</span>
+                            <div class="text-3xl font-black text-emerald-600 mt-1" id="score-correct">0 / 10</div>
+                            <span class="text-[11px] text-slate-400 font-semibold" id="score-percentage">0% de acerto</span>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Tempo Total</span>
+                            <div class="text-3xl font-black text-blue-600 mt-1" id="score-time">00:00</div>
+                            <span class="text-[11px] text-slate-400 font-semibold">Gasto para conclusão</span>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-widest">Desempenho</span>
+                            <div class="text-lg font-bold text-slate-700 mt-2.5" id="score-feedback">Precisa Praticar</div>
+                        </div>
+                    </div>
+
+                    <!-- Botão para voltar ao topo e ler resoluções com calma -->
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 border-t border-slate-100 pt-6">
+                        <p class="text-sm text-slate-600 font-medium">As resoluções de cada questão foram reveladas abaixo.</p>
+                        <button onclick="scrollToTop()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition">
+                            <i class="fa-solid fa-arrow-up mr-2"></i> Voltar ao Início
+                        </button>
+                        <button onclick="restartQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold shadow-md transition">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Refazer Simulado
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação do Fim da Página (Não ativo quando finalizado) -->
+                <div id="action-footer" class="bg-white p-6 rounded-xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-center sm:text-left">
+                        <h4 class="font-bold text-slate-900 text-sm">Pronto para finalizar o caderno de questões?</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">Certifique-se de responder todas as questões para um diagnóstico perfeito.</p>
+                    </div>
+                    <button id="btn-finish-footer" onclick="requestSubmitQuiz()" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center">
+                        <i class="fa-solid fa-square-check mr-2"></i> Finalizar e Ver Resoluções
+                    </button>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-slate-500 text-xs space-y-2">
+            <p class="font-semibold text-slate-600">Simulado Integrado - Licenciamento Educacional</p>
+            <p>Questões de Geopolítica Energética baseadas estritamente na ementa do conteúdo pragmático da banca FAURGS.</p>
+            <p>&copy; 2026 Simulado Acadêmico. Interface otimizada para leitura noturna/diurna prolongada.</p>
+        </div>
+    </footer>
+
+    <!-- Modal de Aviso de Questões Não Respondidas -->
+    <div id="modal-warning" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all scale-95 opacity-0 duration-300" id="modal-warning-content">
+            <div class="text-center">
+                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-600 mb-4">
+                    <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Questões em aberto!</h3>
+                <p class="text-sm text-slate-500 mt-2" id="modal-warning-text">
+                    Você ainda não respondeu todas as questões do simulado. Deseja realmente finalizar e ver o gabarito agora?
+                </p>
+            </div>
+            <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                <button onclick="closeModal('modal-warning')" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm px-4 py-2.5 rounded-xl transition">
+                    Voltar para a Prova
+                </button>
+                <button onclick="forceSubmitQuiz()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-4 py-2.5 rounded-xl transition">
+                    Sim, Ver Resoluções
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script Principal com a inteligência do Quiz -->
+    <script>
+        const questionsData = [
+            {
+                id: 1,
+                area: "Matrizes Energéticas Comparadas e Dinâmica Ecológica [cite: 1, 2, 6]",
+                statement: `A análise geográfica das matrizes de energia revela discrepâncias estruturais entre o perfil de consumo global e o modelo adotado no território brasileiro [cite: 1, 2]. Enquanto a matriz mundial permanece fortemente atrelada aos combustíveis fósseis, a configuração energética do Brasil é frequentemente apontada como uma das mais renováveis entre as grandes economias industrializadas, embora persistem desafios de descarbonização em setores específicos [cite: 1, 2].<br><br>Considere as seguintes afirmações sobre a composição e a dinâmica histórica dessas matrizes.`,
+                assertions: [
+                    "I - A expressiva renovabilidade da matriz elétrica brasileira apoia-se historicamente no aproveitamento do potencial hidrográfico, complementado nas últimas décadas pela expansão acelerada das fontes eólica e solar fotovoltaica [cite: 1, 3, 4].",
+                    "II - Embora a biomassa (com destaque para os derivados da cana-de-açúcar) ocupe papel central na matriz de energia primária do Brasil, o petróleo e seus derivados continuam a representar a maior parcela do consumo energético total do país devido à rigidez da infraestrutura de transportes e de cargas [cite: 1, 4].",
+                    "III - A participação percentual das fontes não renováveis na matriz energética mundial de energia primária é equivalente à observada na matriz elétrica brasileira, caracterizando uma homogeneidade estrutural na governança climática global [cite: 1, 5].",
+                    "IV - A expansão da silvicultura exótica em áreas de biomas abertos, embora forneça biomassa lignocelulósica para a geração térmica de eletricidade, altera a dinâmica ecológica original e a biodiversidade local [cite: 6]."
+                ],
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I e II." },
+                    { key: "B", text: "Apenas III e IV." },
+                    { key: "C", text: "Apenas I, II e IV." },
+                    { key: "D", text: "Apenas I, III e IV." },
+                    { key: "E", text: "I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (C)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>Afirmação I (Correta):</strong> O Brasil é uma referência internacional no aproveitamento de seu elevado potencial hidrológico para a geração elétrica de base [cite: 1, 2]. Nas últimas duas décadas, o planejamento energético nacional buscou mitigar a vulnerabilidade a crises hídricas por meio do incentivo à expansão de fontes renováveis alternativas não controláveis, especificamente a eólica (com parques concentrados na Região Nordeste e Sul) e a solar fotovoltaica, diversificando o Subsistema Nacional [cite: 4, 31].</p>
+                            <p><strong>Afirmação II (Correta):</strong> Há uma distinção geográfica e termodinâmica fundamental entre a <em>matriz elétrica</em> (destinada à eletricidade de rede) e a <em>matriz energética de energia primária</em> (que engloba o consumo industrial, comercial e de transportes) [cite: 4, 5]. Embora o Brasil possua uma matriz elétrica altamente renovável, a sua matriz de energia primária total continua a apresentar dependência estrutural de combustíveis fósseis [cite: 1]. O setor de transporte de cargas e passageiros do país apoia-se em uma infraestrutura eminentemente rodoviária, o que cristaliza o uso de óleo diesel e gasolina (derivados de petróleo) como as maiores fontes de energia primária consumidas no território [cite: 1, 4].</p>
+                            <p><strong>Afirmação III (Incorreta):</strong> A afirmação estabelece uma equivalência incorreta. A participação das fontes não renováveis na matriz energética mundial é de aproximadamente 80% [cite: 1]. Por outro lado, a participação renovável na matriz elétrica brasileira ultrapassa os 80% [cite: 2, 5]. As grandezas são inversas, revelando a singularidade do modelo elétrico brasileiro frente ao cenário de forte dependência fóssil do restante do globo [cite: 1, 2].</p>
+                            <p><strong>Afirmação IV (Correta):</strong> Conforme corroborado pelas avaliações geobotânicas das transformações no extremo meridional brasileiro, a introdução de monoculturas arbóreas (<em>Pinus</em> e <em>Eucalyptus</em>) para o fornecimento de carvão vegetal, biomassa energética e celulose tem alterado as fisionomias vegetais abertas nativas, promovendo a fragmentação de habitats e modificando a composição biológica original [cite: 4, 6].</p>
+                        </div>
+                        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+                            <table class="min-w-full text-left text-xs bg-slate-50 border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                        <th class="p-3">Escopo da Matriz</th>
+                                        <th class="p-3">Brasil (Perfil Médio)</th>
+                                        <th class="p-3">Mundo (Perfil Médio)</th>
+                                        <th class="p-3">Fonte Dominante</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="p-3 font-semibold text-slate-800">Matriz Energética Primária</td>
+                                        <td class="p-3">~45% a 48% Renovável [cite: 2]</td>
+                                        <td class="p-3">~14% a 15% Renovável [cite: 2]</td>
+                                        <td class="p-3">Petróleo e derivados (Brasil) vs. Carvão e Petróleo (Mundo) [cite: 1]</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-800">Matriz de Eletricidade</td>
+                                        <td class="p-3">~80% a 85% Renovável [cite: 2, 5]</td>
+                                        <td class="p-3">~25% a 28% Renovável [cite: 2]</td>
+                                        <td class="p-3">Hidrelétrica, Eólica e Solar (Brasil) vs. Carvão mineral (Mundo) [cite: 1, 4, 5]</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                area: "Geopolítica do Petróleo e Estratégias Globais [cite: 7, 8, 9]",
+                statement: `O mercado internacional de petróleo e gás passou por transformações tectônicas na última década, marcadas pela ascensão de novos polos produtores, pelo reposicionamento de alianças tradicionais e pelo uso de rotas comerciais alternativas para contornar sanções unilaterais [cite: 7, 8, 9].<br><br>Considere as seguintes afirmações sobre a geopolítica global do petróleo.`,
+                assertions: [
+                    "I - O desenvolvimento de técnicas de perfuração horizontal e fraturamento hidráulico (fracking) viabilizou a exploração em larga escala de jazidas de xisto (tight oil) nos Estados Unidos, alterando a balança comercial de energia do país e reduzindo sua dependência estratégica do Oriente Médio [cite: 9, 10].",
+                    "II - A criação da coalizão OPEP+, liderada conjuntamente pela Arábia Saudita e pela Federação Russa, representou uma estratégia de cartelização ampliada para regular a oferta global por meio de cotas de produção, visando estabilizar os preços do barril de petróleo frente à concorrência do petróleo não convencional norte-americano [cite: 7, 10, 11].",
+                    "III - O uso de frotas paralelas de transporte marítimo (shadow fleets) e a reconfiguração de certificados de origem (rebranding) constituem estratégias geopolíticas adotadas por países sob embargo econômico, como a Venezuela, para escoar sua produção rumo a mercados asiáticos, notadamente a China [cite: 8]."
+                ],
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "E",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (E)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>Afirmação I (Correta):</strong> A exploração de jazidas não convencionais de folhelho (<em>shale/tight oil</em>) a partir de 2008 promoveu uma reconfiguração geopolítica global [cite: 9, 10]. Os Estados Unidos deixaram a condição de maior importador mundial e alcançaram a liderança na produção de hidrocarbonetos [cite: 9, 33]. Essa autonomia energética redefiniu a política externa norte-americana, atenuando a sua dependência direta da segurança física do Golfo Pérsico e permitindo uma postura de maior assertividade geoeconômica [cite: 9].</p>
+                            <p><strong>Afirmação II (Correta):</strong> A ascensão do petróleo não convencional de xisto nos EUA pressionou as cotações internacionais para baixo, gerando uma crise de receitas nos países exportadores tradicionais [cite: 10]. Em resposta, a Organização dos Países Exportadores de Petróleo (OPEP) aliou-se a dez produtores externos (com destaque para a Rússia), institucionalizando a coalizão OPEP+ [cite: 7, 11]. Esse grupo atua na manipulação estratégica das cotas globais de extração para sustentar os preços do barril bruto no mercado internacional [cite: 7, 11].</p>
+                            <p><strong>Afirmação III (Correta):</strong> Sob severas restrições comerciais e sanções econômicas impostas pelo sistema financeiro ocidental, países produtores como a Venezuela e a Rússia estruturaram canais de exportação informais [cite: 8]. Isso inclui a contratação de petroleiros de propriedade difusa e sem rastreamento oficial ativo (<em>shadow fleets</em>) e operações de transbordo em alto-mar para alterar a documentação de origem das cargas (<em>rebranding</em>), direcionando o combustível principalmente para refinarias independentes na Ásia [cite: 8].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                area: "Crise do Gás na Europa e Transição de Logística [cite: 12, 13, 32]",
+                statement: `A interrupção dos fluxos de hidrocarbonetos conduzidos por gasodutos no Leste Europeu gerou uma crise de abastecimento sem precedentes, forçando o redirecionamento da infraestrutura de importação da União Europeia [cite: 12]. Para suprir a demanda industrial e de aquecimento doméstico, o bloco intensificou a aquisição de .................... , convertendo os .................... em seus principais parceiros comerciais nesse segmento [cite: 12, 13]. Essa transição logística emergencial demandou a rápida instalação de terminais móveis de .................... ao longo da costa do Mar do Norte [cite: 12, 14].<br><br>Assinale a alternativa que preenche corretamente as lacunas do enunciado acima, na ordem em que aparecem.`,
+                options: [
+                    { key: "A", text: "Gás Liquefeito de Petróleo (GLP) – Emirados Árabes Unidos – liquefação" },
+                    { key: "B", text: "Gás Natural Liquefeito (GNL) – Estados Unidos – regaseificação" },
+                    { key: "C", text: "Gás de Nafta – países do Golfo Pérsico – craqueamento" },
+                    { key: "D", text: "Gás Natural Liquefeito (GNL) – países da OPEP – liquefação" },
+                    { key: "E", text: "Gás de Xisto (shale gas) – países da Ásia Central – regaseificação" }
+                ],
+                correct: "B",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (B)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p>A eclosão do conflito no Leste Europeu em 2022 desestruturou o fluxo histórico de gás natural via gasodutos terrestres que interligavam a Sibéria russa ao parque fabril da Europa Ocidental (especialmente à Alemanha) [cite: 12].</p>
+                            <p>Frente à rápida redução do fornecimento, a União Europeia implementou políticas de contenção de demanda e substituição emergencial de fornecedores [cite: 12, 13]. O principal vetor físico dessa transição foi o <strong>Gás Natural Liquefeito (GNL)</strong>, combustível resfriado a <span class="math-text">-162 °C</span> para transporte em navios metaneiros de alta capacidade criogênica [cite: 12, 14].</p>
+                            <p>Os <strong>Estados Unidos</strong> consolidaram-se como o maior exportador de GNL para o mercado europeu, operando como parceiro estratégico de segurança energética do bloco [cite: 12, 13].</p>
+                            <p>Para reinserir esse combustível líquido na malha de distribuição de gás encanado, foi necessária a instalação emergencial de navios regaseificadores conhecidos como FSRUs (<em>Floating Storage and Regasification Units</em>), que atuam como portos de <strong>regaseificação</strong> na costa do Mar do Norte, superando o gargalo da ausência de terminais terrestres fixos [cite: 12, 14].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                area: "Legislação Ambiental e Licenciamento no Brasil [cite: 15, 16]",
+                statement: `No Brasil, o licenciamento de grandes empreendimentos de infraestrutura energética, como usinas hidrelétricas e termoelétricas de grande porte, é regido por normas específicas da Política Nacional do Meio Ambiente (PNMA - Lei nº 6.938/1981) [cite: 15, 16]. O controle do cumprimento dessa política e o gerenciamento dos impactos sobre o meio físico, biótico e socioeconômico são estruturados por meio de órgãos que integram o Sistema Nacional do Meio Ambiente (SISNAMA) [cite: 15, 16].<br><br>A respeito do instrumental regulatório e das competências no licenciamento ambiental de projetos de geração de energia no Brasil, assinale a alternativa correta.`,
+                options: [
+                    { key: "A", text: "Os Estudos de Impacto Ambiental e respectivos Relatórios de Impacto Ambiental (EIA/RIMA) são elaborados e aprovados pelo mesmo órgão ambiental licenciador, garantindo a neutralidade técnica do processo de análise [cite: 17]." },
+                    { key: "B", text: "O controle da Política Nacional do Meio Ambiente é restrito aos órgãos executivos da União, dos Estados e dos Municípios, sendo vedada a atuação fiscalizadora do Ministério Público e dos Tribunais de Contas sobre os processos de licenciamento de usinas geradoras [cite: 16]." },
+                    { key: "C", text: "O zoneamento ambiental e a avaliação de impactos ambientais constituem instrumentos originariamente previstos na Lei nº 6.938/1981, sendo de aplicação compulsória na fase de planejamento de usinas termoelétricas a carvão mineral ou gás natural [cite: 16]." },
+                    { key: "D", text: "O licenciamento ambiental de usinas hidrelétricas com reservatórios que inundem territórios de mais de um Estado da Federação compete exclusivamente aos órgãos ambientais de nível municipal onde se localiza o barramento da barragem." },
+                    { key: "E", text: "A geração termoelétrica a combustíveis fósseis é isenta da apresentação de EIA/RIMA devido ao seu caráter de segurança energética emergencial durante crises hídricas [cite: 4]." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (C)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>(A) Incorreta:</strong> O Estudo de Impacto Ambiental (EIA) e seu Relatório (RIMA) são elaborados por equipe técnica multidisciplinar independente contratada e paga pelo empreendedor interessado no licenciamento [cite: 17]. Ao órgão ambiental licenciador cabe a análise crítica, fiscalização e eventual aprovação ou rejeição técnica dos estudos apresentados, e não a sua elaboração simultânea [cite: 17].</p>
+                            <p><strong>(B) Incorreta:</strong> O controle da política ambiental e do processo de licenciamento de infraestruturas energéticas poluidoras não é monopólio do Poder Executivo [cite: 16]. O Ministério Público detém competência constitucional expressa para instaurar inquéritos civis e propor ações civis públicas no controle do licenciamento, secundado pelo controle de regularidade financeira e conformidade executado pelos Tribunais de Contas no caso de obras públicas [cite: 16].</p>
+                            <p><strong>(C) Correta:</strong> De acordo com a Lei nº 6.938/1981, que institui a PNMA, o zoneamento ambiental e a avaliação de impactos ambientais são instrumentos previstos em seu Artigo 9º [cite: 16]. Sua aplicação é obrigatória no planejamento e licenciamento de usinas termoelétricas movidas a carvão ou gás natural, classificadas legalmente como atividades potencialmente poluidoras de alta relevância socioambiental [cite: 16].</p>
+                            <p><strong>(D) Incorreta:</strong> A competência para o licenciamento ambiental de usinas hidrelétricas cujos reservatórios atinjam mais de um Estado da Federação ou cujos impactos transbordem os limites territoriais de uma unidade federativa é de competência federal, concentrada no IBAMA (Órgão Executor Federal do SISNAMA), e não do município de barramento [cite: 15, 16].</p>
+                            <p><strong>(E) Incorreta:</strong> A geração termoelétrica fóssil é uma atividade de altíssimo impacto ambiental local (emissão de material particulado, SO<sub>x</sub>, NO<sub>x</sub>) e global (emissão de gases de efeito estufa) [cite: 5, 22]. Portanto, ela se enquadra na exigência constitucional e legal obrigatória de realização de EIA/RIMA, não havendo hipótese de isenção por alegação de segurança energética emergencial [cite: 16].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                area: "Minerais Críticos e a Cadeia Global de Valor [cite: 18, 20, 21]",
+                statement: `A aceleração da transição energética rumo a uma matriz de baixo carbono gerou uma corrida geopolítica por minerais críticos e estratégicos, essenciais para a fabricação de turbinas eólicas, painéis solares fotovoltaicos e baterias de alta densidade energética [cite: 18, 19].<br><br>A respeito da distribuição geográfica, do refino e da regulação das cadeias globais de suprimento desses materiais, assinale com V (verdadeiro) ou F (falso) as seguintes afirmações.`,
+                assertions: [
+                    "( ) O Brasil e o Canadá ocupam posições marginais na nova ordem mineral global, devido à ausência de depósitos geológicos expressivos de elementos estratégicos como nióbio, grafita e terras raras em seus territórios [cite: 19, 20].",
+                    "( ) A República Popular da China concentra uma parcela desproporcional das etapas de refino químico e processamento de minerais críticos como o lítio e o cobalto, conferindo ao país uma vantagem estratégica que preocupa as economias do Atlântico Norte [cite: 18, 19].",
+                    "( ) O conceito de 'criticidade mineral' não é um atributo físico estático dos elementos químicos, mas sim uma categoria política e econômica construída conforme os riscos de interrupção de suprimento e a essencialidade para sistemas industriais específicos [cite: 21].",
+                    "( ) Os impactos socioambientais decorrentes da mineração de grande porte na América Latina têm gerado crises reputacionais e litígios locais, evidenciando as contradições ecológicas da própria cadeia de tecnologias limpas [cite: 18]."
+                ],
+                questionText: "A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    { key: "A", text: "V – V – F – F" },
+                    { key: "B", text: "F – V – V – V" },
+                    { key: "C", text: "F – F – V – V" },
+                    { key: "D", text: "V – F – F – V" },
+                    { key: "E", text: "F – V – F – F" }
+                ],
+                correct: "B",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (B)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>Primeira afirmação (Falsa):</strong> O Brasil e o Canadá são apontados por relatórios geológicos e analistas internacionais como potências minerais de primeira ordem na era da transição energética [cite: 20]. O Brasil é detentor da maior reserva global de nióbio, da segunda maior de grafita e da terceira maior de níquel e terras raras, apresentando oportunidades para se posicionar de forma soberana na cadeia global [cite: 19, 34].</p>
+                            <p><strong>Segunda afirmação (Verdadeira):</strong> Embora a extração física de minerais brutos esteja dispersa por vários continentes, a China detém uma concentração assimétrica de mais de 60% do refino químico global de lítio e cobalto, além de dominar o processamento de terras raras [cite: 18, 19]. Essa verticalização industrial de processamento gera profunda preocupação geopolítica no Atlântico Norte (EUA e UE) quanto à dependência tecnológica desses componentes cruciais [cite: 18, 19].</p>
+                            <p><strong>Terceira afirmação (Verdadeira):</strong> A classificação de um recurso mineral como "crítico" ou "estratégico" não decorre apenas de suas propriedades atômicas ou abundância crustal, mas sim de uma construção política determinada pelas vulnerabilidades das cadeias produtivas [cite: 21]. Um mineral abundante pode se tornar crítico caso seu processamento esteja geograficamente concentrado em uma única nação rival, gerando risco iminente de interrupção logística [cite: 19, 21].</p>
+                            <p><strong>Quarta afirmação (Verdadeira):</strong> A implantação de minas de grande porte para a extração de lítio, cobre e níquel na América Latina tem gerado tensões ecológicas locais devido ao consumo volumoso de recursos hídricos em regiões áridas e aos impactos em comunidades locais, o que expõe as contradições do discurso corporativo das transnacionais de tecnologia "limpa" [cite: 18].</p>
+                        </div>
+                        <div class="overflow-x-auto border border-slate-100 rounded-lg">
+                            <table class="min-w-full text-left text-xs bg-slate-50 border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                        <th class="p-3">Mineral Crítico</th>
+                                        <th class="p-3">Maior Extrator Global</th>
+                                        <th class="p-3">Líder de Processamento/Refino</th>
+                                        <th class="p-3">Tecnologia Associada</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="p-3 font-semibold text-slate-800">Lítio</td>
+                                        <td class="p-3">Austrália / Chile [cite: 18]</td>
+                                        <td class="p-3">China (~60% do total) [cite: 18, 19]</td>
+                                        <td class="p-3">Ânodos de baterias veiculares [cite: 19]</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="p-3 font-semibold text-slate-800">Cobalto</td>
+                                        <td class="p-3">Rep. Dem. do Congo [cite: 18]</td>
+                                        <td class="p-3">China (~70% do total) [cite: 18]</td>
+                                        <td class="p-3">Estabilização de células de baterias [cite: 34]</td>
+                                    </tr>
+                                    <tr class="border-b border-slate-100">
+                                        <td class="p-3 font-semibold text-slate-800">Terras Raras</td>
+                                        <td class="p-3">China [cite: 19]</td>
+                                        <td class="p-3">China (~90% do total) [cite: 19]</td>
+                                        <td class="p-3">Ímãs de geradores eólicos [cite: 19]</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-slate-800">Nióbio</td>
+                                        <td class="p-3">Brasil (~90% do total) [cite: 19]</td>
+                                        <td class="p-3">Brasil [cite: 19]</td>
+                                        <td class="p-3">Ligas metálicas especiais e supercondutores [cite: 19]</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                area: "Governança Climática Multilateral e Metas da COP28 [cite: 24, 25]",
+                statement: `A 28ª Conferência das Nações Unidas sobre Mudança do Clima (COP28), realizada em Dubai, centrou os debates diplomáticos na urgência de redefinir as metas de descarbonização da economia global diante da meta científica de limitar o aquecimento do planeta a <span class="math-text">1,5 °C</span> acima dos níveis pré-industriais [cite: 22, 23, 24].<br><br>Considere as seguintes afirmações sobre os compromissos multilaterais e os desdobramentos da COP28.`,
+                assertions: [
+                    "I - O documento final do evento registrou, de forma inédita em conferências climáticas da ONU, o apelo para que as partes promovam uma transição progressiva para fora dos combustíveis fósseis (transitioning away from fossil fuels) nos sistemas energéticos, de maneira justa, ordenada e equitativa [cite: 24, 25].",
+                    "II - A resolução aprovada estabeleceu um cronograma mandatório com sanções financeiras aplicadas pelo Fundo Monetário Internacional aos países produtores que não encerrarem a extração de carvão mineral até o ano de 2028 [cite: 24, 26].",
+                    "III - Paralelamente ao debate sobre os fósseis, pactuou-se a meta global de triplicar a capacidade instalada de energia renovável e duplicar a taxa média anual de melhoria da eficiência energética até o final desta década [cite: 18, 25]."
+                ],
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas III." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas I e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "D",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (D)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>Afirmação I (Correta):</strong> O "Consenso de Dubai" firmado na COP28 representou uma evolução na diplomacia do clima ao registrar formalmente no texto o apelo para que as nações promovam a transição gradual para fora dos combustíveis fósseis (<em>transitioning away</em>) nos seus sistemas energéticos [cite: 24, 25]. Até então, as declarações multilaterais concentravam-se estritamente na regulação das emissões gasosas sem explicitar a necessidade de encerramento da exploração do carvão, petróleo e gás natural [cite: 24, 35].</p>
+                            <p><strong>Afirmação II (Incorreta):</strong> O acordo multilateral resultante da COP28 não impôs cronogramas coercitivos nem sanções de natureza financeira por parte do FMI [cite: 24, 26]. O pacto baseia-se em compromissos voluntários nacionalmente determinados (NDCs), respeitando a autonomia soberana de cada nação signatária do Acordo de Paris [cite: 25].</p>
+                            <p><strong>Afirmação III (Correta):</strong> Para dar exequibilidade prática ao processo de descarbonização, os países signatários pactuaram a meta paralela de triplicar a capacidade global de energias renováveis instaladas e duplicar a taxa de eficiência energética até o ano de 2030, criando os alicerces estruturais para a substituição programada dos hidrocarbonetos [cite: 18, 25].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                area: "Modificação de Paisagem e Ecossistemas do Sul [cite: 6, 27]",
+                statement: `Os ecossistemas naturais da Região Sul do Brasil vêm sofrendo modificações em suas paisagens e na composição florística original devido à expansão de atividades econômicas, incluindo o cultivo de espécies exóticas destinadas à produção de celulose e biomassa energética [cite: 6].<br><br>Considere as seguintes afirmações sobre a dinâmica ecológica e as alterações antrópicas associadas aos biomas e à geração energética no sul do país.`,
+                assertions: [
+                    "I - A substituição da vegetação original de campos nativos e a modificação da paisagem na porção meridional do Brasil decorrem, entre outros fatores, da expansão da agricultura de grãos e da introdução de plantios homogêneos de Pinus e Eucalyptus [cite: 6].",
+                    "II - Registros palinológicos indicam que a dinâmica vegetacional na região dos Aparados da Serra documenta flutuações climáticas históricas, caracterizadas pela alternância entre formações campestres e a posterior expansão da floresta de araucárias [cite: 6].",
+                    "III - A invasão biológica por espécies exóticas forrageiras e o avanço da silvicultura em áreas de campo nativo alteram o balanço hídrico e a estrutura pedológica local, comprometendo a biodiversidade do bioma Pampa [cite: 6].",
+                    "IV - O aproveitamento energético de resíduos florestais na Região Sul consolidou-se como a principal fonte de geração elétrica do Subsistema Sul do SIN, superando a participação da fonte hidráulica e eliminando a dependência de usinas termelétricas movidas a carvão mineral [cite: 4, 27]."
+                ],
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I e II." },
+                    { key: "B", text: "Apenas I, II e III." },
+                    { key: "C", text: "Apenas I, III e IV." },
+                    { key: "D", text: "Apenas II, III e IV." },
+                    { key: "E", text: "I, II, III e IV." }
+                ],
+                correct: "B",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (B)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>Afirmação I (Correta):</strong> O bioma Pampa e os mosaicos de campos nativos associados à Mata de Araucárias vêm sofrendo um processo acelerado de fragmentação devido ao avanço da fronteira agrícola de grãos e da introdução de florestas cultivadas homogêneas de pinus e eucalipto voltadas à produção de madeira, celulose e biomassa florestal para fins térmicos [cite: 6].</p>
+                            <p><strong>Afirmação II (Correta):</strong> Estudos paleobotânicos e registros palinológicos colhidos em turfeiras no planalto de Cambará do Sul atestam as flutuações da paisagem vegetal ao longo do Holoceno [cite: 6]. Esses dados arqueológicos revelam que a fisionomia campestre dominava a paisagem em períodos pretéritos mais secos, ocorrendo a expansão posterior da floresta de <em>Araucaria angustifolia</em> sob condições de maior umidade térmica e pluvial [cite: 6].</p>
+                            <p><strong>Afirmação III (Correta):</strong> A introdução de espécies exóticas para silvicultura altera as propriedades físico-químicas do solo e reduz a disponibilidade de água subterrânea devido à alta taxa de evapotranspiração dos plantios homogêneos, descaracterizando o bioma de campos nativos e impactando a biodiversidade forrageira e animal endêmica [cite: 6].</p>
+                            <p><strong>Afirmação IV (Incorreta):</strong> Embora o aproveitamento energético de biomassa vegetal e silvicultura apresente relevância local na Região Sul, ele não constitui a fonte primária de geração elétrica do Subsistema Sul do Sistema Interligado Nacional (SIN) [cite: 2]. A geração do subsistema permanece ancorada na hidreletricidade, sendo complementada por usinas termoelétricas tradicionais a carvão mineral (Candiota/RS e Complexo Jorge Lacerda/SC) acionadas estrategicamente durante períodos de escassez de chuvas [cite: 4, 27].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                area: "Fronteiras de Hidrocarbonetos e Integração Regional [cite: 5, 8, 24]",
+                statement: `A geografia política da América Sul é marcada por dinâmicas de cooperação em infraestrutura de transporte e distribuição de recursos energéticos, mas também por disputas territoriais e socioambientais em fronteiras de expansão de hidrocarbonetos [cite: 5, 8, 24].<br><br>Associe as regiões geográficas ou projetos de infraestrutura energética listados na coluna da esquerda com as respectivas características geopolíticas ou socioambientais descritas na coluna da direita.<br><br>
+                <strong>Projetos:</strong><br>
+                1. Bacia de Stabroek (Essequibo)<br>
+                2. Formação de Vaca Muerta (Bacia de Neuquén)<br>
+                3. Gasoduto Bolívia-Brasil (Gasbol)<br>
+                4. Foz do Amazonas (Margem Equatorial)<br><br>
+                <strong>Associações:</strong><br>
+                ( &nbsp; ) Projeto pioneiro de integração energética regional na América do Sul que viabilizou a diversificação da matriz industrial paulista, conectando depósitos de gás natural boliviano ao mercado consumidor brasileiro [cite: 5].<br>
+                ( &nbsp; ) Fronteira exploratória marítima que concentra intensos debates sobre a viabilidade de licenciamento ambiental para perfuração em águas ultraprofundas, opondo interesses de soberania econômica a alertas de preservação biológica junto à foz hidrográfica [cite: 24, 26].<br>
+                ( &nbsp; ) Área de fricção geopolítica interestatal reativada após a confirmação de volumosas jazidas de petróleo leve de alta qualidade sob a plataforma continental, impulsionando o crescimento do PIB de um país vizinho e contestada por reivindicações territoriais históricas [cite: 8, 28].<br>
+                ( &nbsp; ) Gigantesco depósito de hidrocarbonetos não convencionais em folhelhos argilosos (shale oil e shale gas), cuja lavra por fraturamento hidráulico é considerada estratégica para a autossuficiência comercial e geração de divisas de uma economia sul-americana [cite: 10].`,
+                questionText: "A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    { key: "A", text: "3 – 4 – 1 – 2" },
+                    { key: "B", text: "1 – 3 – 4 – 2" },
+                    { key: "C", text: "3 – 1 – 4 – 2" },
+                    { key: "D", text: "4 – 3 – 2 – 1" },
+                    { key: "E", text: "2 – 4 – 1 – 3" }
+                ],
+                correct: "A",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (A)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>Associação 1 (Gasbol - 3):</strong> O Gasoduto Bolívia-Brasil constitui um dos maiores projetos de integração energética da América do Sul [cite: 5]. O empreendimento, operacionalizado na virada do século XXI, permitiu o escoamento de gás natural boliviano até o parque produtivo paulista, atuando como fator de modernização e diversificação da matriz industrial do Sudeste brasileiro [cite: 5].</p>
+                            <p><strong>Associação 2 (Foz do Amazonas / Margem Equatorial - 4):</strong> A Margem Equatorial brasileira é uma nova fronteira para exploração de petróleo e gás em águas ultraprofundas [cite: 24]. A bacia da Foz do Amazonas gera disputas ambientais e políticas de alta complexidade entre o Ministério de Minas e Energia e órgãos de fiscalização do SISNAMA, opondo o potencial de auferir divisas econômicas aos riscos biológicos em ecossistemas sensíveis próximos à foz estuarina [cite: 24, 26].</p>
+                            <p><strong>Associação 3 (Bacia de Stabroek / Essequibo - 1):</strong> A descoberta de volumosas reservas de petróleo leve e de alta qualidade pela ExxonMobil na plataforma continental da Guiana promoveu uma rápida expansão do PIB guianense [cite: 8]. Esse novo panorama despertou reações na Venezuela, que reativou sua histórica reivindicação territorial sobre a região de Essequibo, gerando tensões de caráter militar e diplomático na região de fronteira [cite: 8, 28].</p>
+                            <p><strong>Associação 4 (Vaca Muerta - 2):</strong> Localizada na bacia de Neuquén, na Patagônia argentina, a formação de Vaca Muerta abriga gigantescas reservas recuperáveis de óleo e gás não convencionais retidos em formações de folhelhos de baixa permeabilidade [cite: 10]. A lavra por meio de técnicas de faturamento hidráulico é tratada pelo governo argentino como um projeto estratégico de soberania energética e de atração de investimentos internacionais [cite: 10].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                area: "Cadeia do Urânio e Não Proliferação Nuclear [cite: 21, 29]",
+                statement: `A energia nuclear experimenta uma reavaliação no debate internacional sobre a transição energética global, sendo defendida por alguns atores como tecnologia indispensável à descarbonização profunda devido à constância de sua operação, enquanto outros apontam os riscos securitários e geopolíticos associados ao ciclo do combustível [cite: 5, 22, 29].<br><br>A geração termonuclear apoia-se em recursos não renováveis, especificamente no .................... , cujas maiores reservas globais de extração comercial concentram-se em países como o .................... [cite: 3, 21]. No cenário da governança global, o controle da tecnologia de .................... constitui o principal foco de monitoramento por parte de organismos internacionais para evitar desvios com fins bélicos [cite: 29, 30].<br><br>Assinale a alternativa que preenche corretamente as lacunas do enunciado acima, na ordem em que aparecem.`,
+                options: [
+                    { key: "A", text: "tório – Canadá – fissão passiva" },
+                    { key: "B", text: "urânio – Cazaquistão – enriquecimento isotópico" },
+                    { key: "C", text: "plutônio – Brasil – fusão magnética" },
+                    { key: "D", text: "urânio – Japão – enriquecimento isotópico" },
+                    { key: "E", text: "tório – Cazaquistão – fissão térmica" }
+                ],
+                correct: "B",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (B)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p>A geração termonuclear é classificada como uma fonte de energia primária não renovável, pois depende da extração e consumo de estoques minerais finitos presentes na crosta terrestre, especificamente o <strong>urânio</strong> [cite: 3, 29].</p>
+                            <p>O <strong>Cazaquistão</strong> é o maior produtor global de urânio bruto, superando outros produtores como o Canadá e a Austrália, o que confere à Ásia Central um papel central na cadeia logística primária do combustível atômico [cite: 21].</p>
+                            <p>No âmbito da segurança internacional e geopolítica de defesa, o processo de <strong>enriquecimento isotópico</strong> (elevação da concentração do isótopo físseis U<sup>235</sup> por meio de ultracentrifugadoras) constitui o gargalo tecnológico mais monitorado pela Agência Internacional de Energia Atômica (AIEA) [cite: 29]. Esse controle visa garantir que os reatores civis operem com urânio de baixo enriquecimento (3% a 5%), impedindo que o processo seja estendido até níveis de enriquecimento militar superiores a 90%, adequados para ogivas nucleares [cite: 29].</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                area: "Vetores Energéticos e Descarbonização Industrial [cite: 4, 12]",
+                statement: `O Hidrogênio Verde (H<sub>2</sub>V) desponta como um dos principais vetores tecnológicos para a descarbonização de indústrias de difícil abatimento de emissões (hard-to-abate), inserindo-se na geopolítica da transição energética como uma oportunidade de exportação de energia limpa sob a forma de moléculas [cite: 4, 12].<br><br>Sobre as características termodinâmicas, de produção e a inserção geopolítica do hidrogênio verde, assinale a alternativa correta.`,
+                options: [
+                    { key: "A", text: "O hidrogênio verde é classificado como uma fonte primária de energia de fluxo contínuo, cuja ocorrência em depósitos geológicos gasosos subterrâneos supera a abundância das reservas conhecidas de gás natural [cite: 3]." },
+                    { key: "B", text: "A obtenção do hidrogênio verde realiza-se por meio do processo de eletrólise da água, utilizando eletricidade gerada obrigatoriamente a partir de fontes renováveis de energia, como eólica e solar fotovoltaica [cite: 4, 12]." },
+                    { key: "C", text: "A matriz elétrica brasileira é inadequada para a produção comercial competitiva de hidrogênio verde devido à elevada dependência de térmicas a carvão mineral na Região Nordeste [cite: 4, 31]." },
+                    { key: "D", text: "Do ponto de vista geopolítico, a produção de hidrogênio verde é um processo de refino petroquímico altamente centralizado, controlado de forma exclusiva pela Organização dos Países Exportadores de Petróleo (OPEP) [cite: 7]." },
+                    { key: "E", text: "O custo de transporte e armazenamento do hidrogênio verde é insignificante devido à sua baixíssima volatilidade e alta densidade volumétrica no estado gasoso sob temperatura ambiente." }
+                ],
+                correct: "B",
+                resolution: `
+                    <div class="space-y-4">
+                        <p class="font-semibold text-slate-900 border-l-4 border-emerald-500 pl-3">Gabarito correto: (B)</p>
+                        <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                            <p><strong>Análise Detalhada:</strong></p>
+                            <p><strong>(A) Incorreta:</strong> O hidrogênio não ocorre de forma livre e abundante em estado gasoso na crosta terrestre como fonte primária [cite: 3]. Trata-se de um vetor energético (ou fonte secundária) que necessita de conversão industrial para ser isolado de outras moléculas (como a água ou hidrocarbonetos) [cite: 12].</p>
+                            <p><strong>(B) Correta:</strong> O hidrogênio verde (H<sub>2</sub>V) distingue-se por ser produzido por meio de eletrólise da água empregando energia elétrica de origem 100% limpa e renovável [cite: 4, 12]. A corrente elétrica de fontes renováveis cinde a molécula de água em oxigênio gasoso (O<sub>2</sub>) e hidrogênio gasoso (H<sub>2</sub>), resultando em um combustível de alta densidade energética por massa e com pegada nula de emissão de carbono [cite: 12].</p>
+                            <p><strong>(C) Incorreta:</strong> A matriz elétrica brasileira apresenta-se como uma das mais adequadas do mundo para a produção competitiva de H<sub>2</sub>V, devido à abundância e complementariedade sazonal de suas usinas hidrelétricas, parques eólicos e solares [cite: 2, 4]. O Nordeste brasileiro possui um dos menores custos de geração renovável do mundo, posicionando-se como potencial polo de exportação de moléculas de amônia verde para a Europa [cite: 4, 12].</p>
+                            <p><strong>(D) Incorreta:</strong> A produção de hidrogênio verde assenta-se na eletrólise da água a partir de eletricidade renovável, não guardando relação exclusiva com as etapas de refino petroquímico e controle do cartel petrolífero da OPEP [cite: 7, 12].</p>
+                            <p><strong>(E) Incorreta:</strong> O armazenamento do hidrogênio gasoso é complexo e oneroso devido à sua baixíssima densidade volumétrica no estado gasoso e à sua tendência de difusão molecular através de paredes metálicas, exigindo compressão mecânica extrema em tanques de alta pressão ou liquefação a <span class="math-text">-253 °C</span> para transporte seguro [cite: 12].</p>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        let userAnswers = {};
+        let reviewFlags = {};
+        let startTime = Date.now();
+        let timerInterval = null;
+        let isSubmitted = false;
+        let isTimerPaused = false;
+        let elapsedSeconds = 0;
+
+        window.onload = function() {
+            renderNavButtons();
+            renderQuestions();
+            startTimer();
+            updateProgressBar();
+        };
+
+        // Renderiza botões de navegação lateral rápida
+        function renderNavButtons() {
+            const container = document.getElementById('nav-buttons-container');
+            container.innerHTML = '';
+            questionsData.forEach((q, index) => {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${q.id}`;
+                btn.onclick = () => scrollToQuestion(q.id);
+                btn.className = "h-10 w-full rounded-lg font-bold text-xs transition-all duration-200 border flex flex-col items-center justify-center relative bg-white border-slate-200 text-slate-700 hover:border-slate-400";
+                
+                // Número da Questão
+                const numSpan = document.createElement('span');
+                numSpan.textContent = String(q.id).padStart(2, '0');
+                btn.appendChild(numSpan);
+
+                // Ícones de status pequenos
+                const badge = document.createElement('span');
+                badge.id = `badge-nav-${q.id}`;
+                badge.className = "absolute top-1 right-1 w-1.5 h-1.5 rounded-full hidden";
+                btn.appendChild(badge);
+
+                container.appendChild(btn);
+            });
+        }
+
+        // Renderiza as 10 questões detalhadamente
+        function renderQuestions() {
+            const container = document.getElementById('quiz-questions-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q) => {
+                const qCard = document.createElement('div');
+                qCard.id = `question-card-${q.id}`;
+                qCard.className = "bg-white p-6 sm:p-8 rounded-xl border border-slate-200 shadow-sm space-y-6 transition-all duration-300 scroll-mt-24 relative";
+
+                // Cabeçalho da Questão
+                let headerHtml = `
+                    <div class="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+                        <div>
+                            <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider">Questão ${q.id}</span>
+                            <span class="text-xs text-slate-400 font-medium ml-2 hidden sm:inline">Tema: ${q.area}</span>
+                        </div>
+                        <button onclick="toggleReview(${q.id})" id="btn-rev-${q.id}" class="text-slate-400 hover:text-amber-500 transition-all text-sm flex items-center space-x-1" title="Marcar para revisar mais tarde">
+                            <i id="icon-rev-${q.id}" class="fa-regular fa-bookmark"></i>
+                            <span class="hidden sm:inline text-xs font-semibold">Revisar</span>
+                        </button>
+                    </div>
+                `;
+
+                // Corpo do enunciado
+                let bodyHtml = `
+                    <div class="text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+                        ${q.statement}
+                    </div>
+                `;
+
+                // Itens numerados (Romanos) se existirem
+                let assertionsHtml = '';
+                if (q.assertions && q.assertions.length > 0) {
+                    assertionsHtml = `<div class="bg-slate-50 border border-slate-100 p-4 rounded-xl space-y-3.5 my-4">`;
+                    q.assertions.forEach(assertion => {
+                        assertionsHtml += `
+                            <p class="text-slate-700 text-sm leading-relaxed font-medium pl-2 border-l-2 border-slate-300">
+                                ${assertion}
+                            </p>
+                        `;
+                    });
+                    assertionsHtml += `</div>`;
+                }
+
+                // Pergunta conclusiva da banca (Quais estão corretas / assinale a correta...)
+                let questionTextHtml = `
+                    <p class="text-slate-950 font-bold text-sm sm:text-base my-2">
+                        ${q.questionText}
+                    </p>
+                `;
+
+                // Renderiza Alternativas (A a E)
+                let optionsHtml = `<div class="space-y-3 mt-4" id="options-group-${q.id}">`;
+                q.options.forEach(opt => {
+                    optionsHtml += `
+                        <label id="label-opt-${q.id}-${opt.key}" class="group flex items-start p-4 rounded-xl border border-slate-200 hover:border-slate-400 cursor-pointer bg-white transition-all duration-150">
+                            <div class="flex items-center h-5">
+                                <input type="radio" name="question-${q.id}" value="${opt.key}" 
+                                       onchange="selectOption(${q.id}, '${opt.key}')"
+                                       class="h-4 w-4 text-blue-600 border-slate-300 focus:ring-blue-500 transition cursor-pointer"
+                                       ${isSubmitted ? 'disabled' : ''}>
+                            </div>
+                            <span class="ml-3 text-sm text-slate-700 font-medium group-hover:text-slate-900 transition-all">
+                                <strong class="text-slate-900 mr-1.5">${opt.key})</strong> ${opt.text}
+                            </span>
+                        </label>
+                    `;
+                });
+                optionsHtml += `</div>`;
+
+                // Container para Resoluções Comentadas (Oculto até submeter)
+                let resolutionHtml = `
+                    <div id="resolution-card-${q.id}" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-5 sm:p-6 mt-6 space-y-4">
+                        <div class="flex items-center space-x-2 text-slate-800 border-b border-slate-200 pb-3">
+                            <i class="fa-regular fa-lightbulb text-amber-500 text-lg"></i>
+                            <h4 class="font-bold text-sm uppercase tracking-wider">Explicação & Resolução Técnica</h4>
+                        </div>
+                        <div class="prose max-w-none text-xs sm:text-sm text-slate-600 leading-relaxed">
+                            ${q.resolution}
+                        </div>
+                    </div>
+                `;
+
+                qCard.innerHTML = headerHtml + bodyHtml + assertionsHtml + questionTextHtml + optionsHtml + resolutionHtml;
+                container.appendChild(qCard);
+            });
+        }
+
+        // Seleção de alternativa
+        function selectOption(questionId, key) {
+            if (isSubmitted) return;
+            userAnswers[questionId] = key;
+            updateProgressBar();
+            updateNavigationState(questionId);
+        }
+
+        // Marcar/Desmarcar Revisão
+        function toggleReview(questionId) {
+            if (isSubmitted) return;
+            reviewFlags[questionId] = !reviewFlags[questionId];
+            
+            const btn = document.getElementById(`btn-rev-${questionId}`);
+            const icon = document.getElementById(`icon-rev-${questionId}`);
+            
+            if (reviewFlags[questionId]) {
+                btn.className = "text-amber-500 font-bold text-sm flex items-center space-x-1";
+                icon.className = "fa-solid fa-bookmark";
+            } else {
+                btn.className = "text-slate-400 hover:text-amber-500 transition-all text-sm flex items-center space-x-1";
+                icon.className = "fa-regular fa-bookmark";
+            }
+            updateNavigationState(questionId);
+        }
+
+        // Atualização visual dos botões no painel de navegação rápida
+        function updateNavigationState(questionId) {
+            const btn = document.getElementById(`nav-btn-${questionId}`);
+            const badge = document.getElementById(`badge-nav-${questionId}`);
+            
+            if (!btn) return;
+
+            // Reset classes
+            btn.className = "h-10 w-full rounded-lg font-bold text-xs transition-all duration-200 border flex flex-col items-center justify-center relative";
+            badge.className = "absolute top-1 right-1 w-1.5 h-1.5 rounded-full hidden";
+
+            if (isSubmitted) {
+                // Estado pós-submissão
+                const isCorrect = userAnswers[questionId] === questionsData.find(q => q.id === questionId).correct;
+                if (isCorrect) {
+                    btn.classList.add("bg-emerald-500", "border-emerald-600", "text-white");
+                } else if (userAnswers[questionId]) {
+                    btn.classList.add("bg-rose-500", "border-rose-600", "text-white");
+                } else {
+                    btn.classList.add("bg-slate-300", "border-slate-400", "text-slate-700");
+                }
+            } else {
+                // Estado durante a realização da prova
+                if (reviewFlags[questionId]) {
+                    btn.classList.add("bg-amber-100", "border-amber-400", "text-amber-700");
+                    badge.classList.remove("hidden");
+                    badge.classList.add("bg-amber-500");
+                } else if (userAnswers[questionId]) {
+                    btn.classList.add("bg-blue-100", "border-blue-400", "text-blue-700");
+                    badge.classList.remove("hidden");
+                    badge.classList.add("bg-blue-500");
+                } else {
+                    btn.classList.add("bg-white", "border-slate-200", "text-slate-700", "hover:border-slate-400");
+                }
+            }
+        }
+
+        // Atualiza a barra de progresso horizontal superior
+        function updateProgressBar() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const progress = (answeredCount / questionsData.length) * 100;
+            document.getElementById('progress-bar-fill').style.width = `${progress}%`;
+        }
+
+        // Deslocamento de tela suave até a questão desejada
+        function scrollToQuestion(id) {
+            const element = document.getElementById(`question-card-${id}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Rola até o topo
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (!isTimerPaused) {
+                    elapsedSeconds++;
+                    const hours = Math.floor(elapsedSeconds / 3600);
+                    const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+                    const seconds = elapsedSeconds % 60;
+                    document.getElementById('timer-display').textContent = 
+                        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }
+            }, 1000);
+
+            // Handler pausar timer
+            document.getElementById('btn-pause-timer').onclick = function() {
+                isTimerPaused = !isTimerPaused;
+                const icon = this.querySelector('i');
+                if (isTimerPaused) {
+                    icon.className = "fa-solid fa-play text-emerald-600";
+                    this.title = "Retomar cronômetro";
+                } else {
+                    icon.className = "fa-solid fa-pause";
+                    this.title = "Pausar cronômetro";
+                }
+            };
+        }
+
+        function requestSubmitQuiz() {
+            if (isSubmitted) return;
+            
+            const totalQuestions = questionsData.length;
+            const answeredCount = Object.keys(userAnswers).length;
+
+            if (answeredCount < totalQuestions) {
+                const missing = totalQuestions - answeredCount;
+                document.getElementById('modal-warning-text').innerHTML = `
+                    Você respondeu <strong>${answeredCount} de ${totalQuestions}</strong> questões.<br>
+                    Restam <strong>${missing} questões em branco</strong>. Deseja finalizar agora e ver o gabarito mesmo assim?
+                `;
+                openModal('modal-warning');
+            } else {
+                document.getElementById('modal-warning-text').innerHTML = `
+                    Você respondeu todas as 10 questões do caderno de avaliação!<br>
+                    Deseja submeter e obter a sua pontuação e resoluções detalhadas?
+                `;
+                openModal('modal-warning');
+            }
+        }
+
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(`${id}-content`);
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 50);
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            const content = document.getElementById(`${id}-content`);
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function forceSubmitQuiz() {
+            closeModal('modal-warning');
+            evaluateAndSubmit();
+        }
+
+        // Executa a correção detalhada e renderiza as explicações
+        function evaluateAndSubmit() {
+            isSubmitted = true;
+            isTimerPaused = true;
+            clearInterval(timerInterval);
+
+            let correctCount = 0;
+
+            // Percorre as questões avaliando as respostas
+            questionsData.forEach(q => {
+                const selected = userAnswers[q.id];
+                const isCorrect = selected === q.correct;
+
+                if (isCorrect) correctCount++;
+
+                // Revelar as resoluções comentadas de forma inline
+                const resCard = document.getElementById(`resolution-card-${q.id}`);
+                if (resCard) resCard.classList.remove('hidden');
+
+                // Atualizar estilos visuais de cada alternativa após finalização
+                q.options.forEach(opt => {
+                    const label = document.getElementById(`label-opt-${q.id}-${opt.key}`);
+                    if (!label) return;
+
+                    // Desabilitar cliques e remover hover original
+                    label.classList.remove('hover:border-slate-400', 'cursor-pointer');
+                    label.classList.add('cursor-default');
+
+                    // Se for a correta (sempre verde/esmeralda)
+                    if (opt.key === q.correct) {
+                        label.classList.add('bg-emerald-50', 'border-emerald-500', 'text-emerald-900', 'ring-2', 'ring-emerald-500/20');
+                    }
+                    // Se foi o erro do usuário (fundo vermelho/coral)
+                    else if (selected === opt.key && !isCorrect) {
+                        label.classList.add('bg-rose-50', 'border-rose-400', 'text-rose-950', 'ring-2', 'ring-rose-500/20');
+                    }
+                });
+
+                // Atualizar navegação rápida
+                updateNavigationState(q.id);
+            });
+
+            // Formatar exibição do Painel de Resultados
+            document.getElementById('score-correct').textContent = `${correctCount} / 10`;
+            const pct = (correctCount / questionsData.length) * 100;
+            document.getElementById('score-percentage').textContent = `${pct}% de aproveitamento`;
+
+            // Formatar Tempo Gasto
+            const hours = Math.floor(elapsedSeconds / 3600);
+            const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+            const seconds = elapsedSeconds % 60;
+            const timeStr = hours > 0 
+                ? `${hours}h ${minutes}m` 
+                : `${minutes}m ${seconds}s`;
+            document.getElementById('score-time').textContent = timeStr;
+
+            // Feedback Motivacional baseado na pontuação
+            let feedback = '';
+            if (pct === 100) feedback = "Excelente! Desempenho Perfeito! 🎉";
+            else if (pct >= 80) feedback = "Excelente! Ótimo aproveitamento! 🌟";
+            else if (pct >= 60) feedback = "Bom desempenho! Continue estudando. 👍";
+            else feedback = "Precisa Praticar! Revise as resoluções detalhadas. 📚";
+            document.getElementById('score-feedback').textContent = feedback;
+
+            // Mostrar Painel de Resultados
+            const resPanel = document.getElementById('results-panel');
+            resPanel.classList.remove('hidden');
+            
+            // Ocultar rodapé de ação de submissão
+            document.getElementById('action-footer').classList.add('hidden');
+
+            // Deslocar até o painel de resultados de forma suave
+            setTimeout(() => {
+                resPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+
+        // Reinicia o simulado para novas tentativas
+        function restartQuiz() {
+            userAnswers = {};
+            reviewFlags = {};
+            elapsedSeconds = 0;
+            isSubmitted = false;
+            isTimerPaused = false;
+            
+            document.getElementById('timer-display').textContent = "00:00:00";
+            document.getElementById('results-panel').classList.add('hidden');
+            document.getElementById('action-footer').classList.remove('hidden');
+
+            // Recria cronômetro
+            clearInterval(timerInterval);
+            startTimer();
+
+            // Atualiza componentes visuais
+            renderNavButtons();
+            renderQuestions();
+            updateProgressBar();
+
+            scrollToTop();
+        }
+    </script>
+</body>
+</html>

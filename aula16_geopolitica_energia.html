@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo Ativo - Geopolítica e Matrizes de Energia (FAURGS)</title>
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para alta legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons para interface limpa -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1f2937; /* Neutral dark gray for high contrast but comfortable reading */
+        }
+        /* Estilos personalizados para os grifos sem poluição visual */
+        mark.highlight-yellow {
+            background-color: #fef08a; /* Amber-100 soft yellow */
+            color: #854d0e; /* Amber-900 text */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        mark.highlight-orange {
+            background-color: #ffedd5; /* Orange-100 */
+            color: #9a3412; /* Orange-900 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        /* Custom progress bar */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #1f2937;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center pb-24">
+
+    <header class="w-full max-w-4xl px-6 pt-8 pb-4 border-b border-neutral-100">
+        <div class="flex items-center gap-2 text-xs font-semibold tracking-wider text-neutral-400 uppercase">
+            <span>IFSC • Cargo Professor de Geografia</span>
+            <span class="w-1 h-1 rounded-full bg-neutral-300"></span>
+            <span>Banca FAURGS</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-neutral-900 tracking-tight mt-2">
+            Geopolítica e Matrizes de Energia
+        </h1>
+        <p class="text-neutral-500 mt-2 text-sm md:text-base leading-relaxed">
+            Ficha de Memorização Ativa & Guia Teórico-Estratégico para o Concurso de Magistério Federal (EBTT).
+        </p>
+    </header>
+
+    <section class="w-full max-w-4xl px-6 mt-6">
+        <div class="bg-neutral-50 border border-neutral-200 rounded-xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-neutral-800 flex items-center gap-2 mb-3">
+                <i data-lucide="volume-2" class="w-4 h-4 text-neutral-600"></i>
+                Reprodutor de Áudio - Audioaula de Apoio
+            </h3>
+            
+            <!-- Entrada para configuração do arquivo MP3 -->
+            <div class="flex flex-col sm:flex-row gap-2 mb-4 items-stretch sm:items-center">
+                <label for="audio-src" class="text-xs font-medium text-neutral-600 min-w-[120px]">Nome do Arquivo MP3:</label>
+                <div class="flex-1 flex gap-2">
+                    <input type="text" id="audio-src" value="audio_aula.mp3" 
+                           class="w-full px-3 py-1.5 text-xs border border-neutral-300 rounded focus:ring-1 focus:ring-neutral-500 focus:outline-none" 
+                           placeholder="Ex: geopolitica_energia.mp3">
+                    <button id="btn-load-audio" 
+                            class="px-4 py-1.5 bg-neutral-800 hover:bg-neutral-900 text-white text-xs font-medium rounded transition">
+                        Carregar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Controles do Player de Áudio -->
+            <div class="flex flex-col gap-3">
+                <audio id="study-audio" src="audio_geopoliticaaula.mp3" preload="metadata" class="hidden"></audio>
+                
+                <div class="flex items-center justify-between gap-4">
+                    <!-- Botão Play/Pause -->
+                    <button id="btn-play" class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-800 hover:bg-neutral-900 text-white transition">
+                        <i id="play-icon" data-lucide="play" class="w-5 h-5"></i>
+                    </button>
+                    
+                    <!-- Barra de progresso customizada -->
+                    <div class="flex-1 flex items-center gap-2">
+                        <span id="current-time" class="text-xs font-mono text-neutral-500">00:00</span>
+                        <input type="range" id="progress-bar" value="0" min="0" max="100" 
+                               class="flex-1 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer accent-neutral-800">
+                        <span id="duration-time" class="text-xs font-mono text-neutral-500">00:00</span>
+                    </div>
+                </div>
+
+                <!-- Controles de Velocidade de Reprodução -->
+                <div class="flex flex-wrap items-center gap-2 border-t border-neutral-200/60 pt-3 mt-1">
+                    <span class="text-xs font-medium text-neutral-600">Velocidade de Reprodução:</span>
+                    <div class="flex gap-1" id="speed-controls">
+                        <button data-speed="0.5" class="px-2.5 py-1 text-xs font-semibold rounded border border-neutral-200 hover:bg-neutral-100 text-neutral-700">0.5x</button>
+                        <button data-speed="1.0" class="px-2.5 py-1 text-xs font-semibold rounded border border-neutral-800 bg-neutral-800 text-white">1.0x (Normal)</button>
+                        <button data-speed="1.25" class="px-2.5 py-1 text-xs font-semibold rounded border border-neutral-200 hover:bg-neutral-100 text-neutral-700">1.25x</button>
+                        <button data-speed="1.5" class="px-2.5 py-1 text-xs font-semibold rounded border border-neutral-200 hover:bg-neutral-100 text-neutral-700">1.5x</button>
+                        <button data-speed="1.75" class="px-2.5 py-1 text-xs font-semibold rounded border border-neutral-200 hover:bg-neutral-100 text-neutral-700">1.75x</button>
+                        <button data-speed="2.0" class="px-2.5 py-1 text-xs font-semibold rounded border border-neutral-200 hover:bg-neutral-100 text-neutral-700">2.0x</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="w-full max-w-4xl px-6 mt-10 space-y-12">
+        
+        <!-- SEÇÃO 1: CONCEITO BÁSICO -->
+        <article class="prose max-w-none text-neutral-800">
+            <h2 class="text-xl md:text-2xl font-bold text-neutral-900 border-l-4 border-neutral-800 pl-3 mb-4">
+                1. O Divisor de Águas Conceitual: OIE vs. OIEE
+            </h2>
+            <p class="leading-relaxed text-sm md:text-base mb-4">
+                A banca FAURGS frequentemente explora a confusão intencional entre a <strong class="text-neutral-900">Matriz Energética Total</strong> e a <strong class="text-neutral-900">Matriz Elétrica Nacional</strong>. Dominar essa distinção conceitual é um ponto essencial para pontuar nas provas objetivas.
+            </p>
+            
+            <div class="space-y-4">
+                <!-- Conceito 1 -->
+                <div class="p-4 bg-neutral-50 rounded-lg border border-neutral-150">
+                    <h3 class="text-base font-bold text-neutral-900 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-neutral-700"></span>
+                        Oferta Interna de Energia (OIE) – Matriz Energética
+                    </h3>
+                    <p class="text-sm text-neutral-600 mt-1 leading-relaxed">
+                        Representa o somatório de toda a energia necessária para fazer um país funcionar, incluindo o setor de transportes, indústrias, aquecimento doméstico, e também a própria geração de energia elétrica.
+                    </p>
+                    <ul class="list-disc list-inside mt-2 text-xs md:text-sm text-neutral-700 space-y-1 pl-2">
+                        <li><strong>Cenário Mundial:</strong> Altamente dependente de combustíveis fósseis (composta por aproximadamente <mark class="highlight-yellow">85,8% de fontes não renováveis</mark> e apenas <mark class="highlight-yellow">14,2% de fontes renováveis</mark>).</li>
+                        <li><strong>Cenário Brasileiro:</strong> Excepcionalmente limpo em termos comparativos, alcançando o marco histórico de <mark class="highlight-orange">50,0% de renovabilidade</mark> (ano-base 2024), amplamente impulsionado por derivados da cana-de-açúcar (biomassa), energia eólica e solar.</li>
+                    </ul>
+                </div>
+
+                <!-- Conceito 2 -->
+                <div class="p-4 bg-neutral-50 rounded-lg border border-neutral-150">
+                    <h3 class="text-base font-bold text-neutral-900 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-neutral-700"></span>
+                        Oferta Interna de Energia Elétrica (OIEE) – Matriz Elétrica
+                    </h3>
+                    <p class="text-sm text-neutral-600 mt-1 leading-relaxed">
+                        Refere-se única e exclusivamente ao subconjunto da energia transformado em eletricidade para redes de distribuição públicas e privadas.
+                    </p>
+                    <ul class="list-disc list-inside mt-2 text-xs md:text-sm text-neutral-700 space-y-1 pl-2">
+                        <li><strong>Cenário Mundial:</strong> Ainda majoritariamente dependente de termelétricas movidas a carvão mineral pesado e gás natural.</li>
+                        <li><strong>Cenário Brasileiro:</strong> Consagrada como uma das matrizes elétricas mais limpas do planeta, atingindo a marca de <mark class="highlight-orange">88,2% de renovabilidade</mark> em 2024. A intensidade carbônica do setor elétrico brasileiro é extremamente baixa, emitindo cerca de apenas <mark class="highlight-yellow">59,9 kg de CO2-eq por MWh gerado</mark>.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Gargalo de Emissões no Brasil -->
+            <div class="mt-4 p-4 border-l-4 border-amber-500 bg-amber-50/50 rounded-r-lg">
+                <p class="text-sm text-amber-950 font-medium">
+                    <i data-lucide="alert-triangle" class="inline w-4 h-4 mr-1 text-amber-700 align-text-bottom"></i>
+                    <strong>Gargalo Geográfico de Emissões no Brasil:</strong> Embora tenhamos uma matriz de geração elétrica extremamente limpa, o maior emissor de gases de efeito estufa da matriz energética (OIE) geral é o setor de <mark class="highlight-yellow">transportes</mark>, que responde pela emissão maciça de <mark class="highlight-yellow">214,3 milhões de toneladas de CO2-eq</mark> devido à extrema dependência do modal rodoviário e queima de óleo diesel e gasolina (petróleo).
+                </p>
+            </div>
+        </article>
+
+        <!-- SEÇÃO 2: CARVÃO MINERAL NO SUL -->
+        <article class="prose max-w-none text-neutral-800">
+            <h2 class="text-xl md:text-2xl font-bold text-neutral-900 border-l-4 border-neutral-800 pl-3 mb-4">
+                2. Geopolítica Regional do Carvão na Bacia do Paraná
+            </h2>
+            <p class="leading-relaxed text-sm md:text-base mb-4">
+                Este é o principal tema físico-regional e geoeconômico de Santa Catarina e Rio Grande do Sul explorado pela FAURGS. Fique muito atento aos dados geológicos corretos:
+            </p>
+
+            <ul class="list-disc list-outside ml-5 space-y-2 text-sm md:text-base text-neutral-700 mb-6">
+                <li>
+                    <strong>Idade Geológica correta:</strong> O carvão sul-brasileiro <strong class="text-neutral-900">não se formou no Período Carbonífero</strong>. Sua gênese ocorreu no <mark class="highlight-orange">Permiano Inferior</mark> (Era Paleozoica, cerca de 260 milhões de anos atrás), sob os estratos sedimentares da <mark class="highlight-orange">Formação Rio Bonito</mark> na Bacia do Paraná.
+                </li>
+                <li>
+                    <strong>Baixa Qualidade Energética (Rank):</strong> Devido a deposições em ambiente costeiro de subsidência intracratônica lenta, o carvão nacional possui um baixo grau de evolução físico-química. Ele possui <mark class="highlight-yellow">alto teor de cinzas</mark> (geralmente acima de 50%) e elevado teor de enxofre (pirita), o que o torna um carvão do tipo sub-betuminoso a betuminoso, classificado principalmente para uso energético direto nas usinas termelétricas regionais.
+                </li>
+            </ul>
+
+            <!-- Painel Comparativo Responsivo (SEM SCROLL HORIZONTAL) -->
+            <h3 class="text-lg font-bold text-neutral-900 mb-3 flex items-center gap-2">
+                <i data-lucide="layout-grid" class="w-4 h-4 text-neutral-700"></i>
+                Painel Comparativo Regional: Rio Grande do Sul vs. Santa Catarina
+            </h3>
+
+            <!-- Desktop Table View (escondido em telas mobile) -->
+            <div class="hidden md:block overflow-hidden border border-neutral-200 rounded-lg shadow-sm">
+                <table class="w-full text-left border-collapse text-sm">
+                    <thead>
+                        <tr class="bg-neutral-100 text-neutral-700 border-b border-neutral-200">
+                            <th class="p-3 font-semibold w-1/4">Critério de Prova</th>
+                            <th class="p-3 font-semibold w-3/8">Rio Grande do Sul (Jazida de Candiota)</th>
+                            <th class="p-3 font-semibold w-3/8">Santa Catarina (Região de Criciúma)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-neutral-200">
+                        <tr class="hover:bg-neutral-50/50">
+                            <td class="p-3 font-semibold text-neutral-900 bg-neutral-50/30">Reservas Nacionais</td>
+                            <td class="p-3">Concentra aproximadamente <mark class="highlight-yellow">89,25% de todo o carvão mineral</mark> do país.</td>
+                            <td class="p-3">Detém cerca de <mark class="highlight-yellow">10,41% das reservas nacionais</mark>.</td>
+                        </tr>
+                        <tr class="hover:bg-neutral-50/50">
+                            <td class="p-3 font-semibold text-neutral-900 bg-neutral-50/30">Método de Extração (Lavra)</td>
+                            <td class="p-3">Predomínio de <strong class="text-neutral-900">lavra a céu aberto (strip mining)</strong>, facilitada por camadas de carvão muito superficiais e espessas.</td>
+                            <td class="p-3">Predomínio de <strong class="text-neutral-900">mineração subterrânea profunda</strong>, através de galerias complexas e de maior custo operacional.</td>
+                        </tr>
+                        <tr class="hover:bg-neutral-50/50">
+                            <td class="p-3 font-semibold text-neutral-900 bg-neutral-50/30">Principais Impactos Ecológicos</td>
+                            <td class="p-3">Altas emissões diretas de gases estufa atmosféricos na combustão termoelétrica (complexos termoelétricos de Candiota e Pampa Sul).</td>
+                            <td class="p-3">Severo passivo histórico de <mark class="highlight-orange">Drenagem Ácida de Mina (DAM)</mark>, contaminando águas subterrâneas e superficiais na bacia do Rio Araranguá devido à lixiviação de pirita.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mobile Stack View (Garante visualização perfeita e inteira em celulares sem scroll lateral) -->
+            <div class="block md:hidden space-y-4">
+                <!-- Card 1: Reservas -->
+                <div class="border border-neutral-200 rounded-lg p-4 bg-neutral-50/50">
+                    <span class="text-xs font-bold uppercase text-neutral-400">Critério de Prova</span>
+                    <h4 class="text-sm font-bold text-neutral-950 mb-2">Reservas Nacionais</h4>
+                    <div class="space-y-2 text-xs md:text-sm">
+                        <div>
+                            <span class="font-semibold text-neutral-800 block">Rio Grande do Sul (Candiota):</span>
+                            <span class="text-neutral-600">Concentra aproximadamente <mark class="highlight-yellow">89,25% de todo o carvão mineral</mark> do país.</span>
+                        </div>
+                        <div class="pt-2 border-t border-neutral-200/60">
+                            <span class="font-semibold text-neutral-800 block">Santa Catarina (Criciúma):</span>
+                            <span class="text-neutral-600">Detém cerca de <mark class="highlight-yellow">10,41% das reservas nacionais</mark>.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Lavra -->
+                <div class="border border-neutral-200 rounded-lg p-4 bg-neutral-50/50">
+                    <span class="text-xs font-bold uppercase text-neutral-400">Critério de Prova</span>
+                    <h4 class="text-sm font-bold text-neutral-950 mb-2">Método de Extração (Lavra)</h4>
+                    <div class="space-y-2 text-xs md:text-sm">
+                        <div>
+                            <span class="font-semibold text-neutral-800 block">Rio Grande do Sul (Candiota):</span>
+                            <span class="text-neutral-600">Predomínio de <strong>lavra a céu aberto (strip mining)</strong>, facilitada por camadas de carvão muito superficiais e espessas.</span>
+                        </div>
+                        <div class="pt-2 border-t border-neutral-200/60">
+                            <span class="font-semibold text-neutral-800 block">Santa Catarina (Criciúma):</span>
+                            <span class="text-neutral-600">Predomínio de <strong>mineração subterrânea profunda</strong>, através de galerias complexas e de maior custo operacional.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Impactos -->
+                <div class="border border-neutral-200 rounded-lg p-4 bg-neutral-50/50">
+                    <span class="text-xs font-bold uppercase text-neutral-400">Critério de Prova</span>
+                    <h4 class="text-sm font-bold text-neutral-950 mb-2">Principais Impactos Ecológicos</h4>
+                    <div class="space-y-2 text-xs md:text-sm">
+                        <div>
+                            <span class="font-semibold text-neutral-800 block">Rio Grande do Sul (Candiota):</span>
+                            <span class="text-neutral-600">Altas emissões diretas de gases estufa atmosféricos na combustão termoelétrica (complexos termoelétricos de Candiota e Pampa Sul).</span>
+                        </div>
+                        <div class="pt-2 border-t border-neutral-200/60">
+                            <span class="font-semibold text-neutral-800 block">Santa Catarina (Criciúma):</span>
+                            <span class="text-neutral-600">Severo passivo histórico de <mark class="highlight-orange">Drenagem Ácida de Mina (DAM)</mark>, contaminando águas subterrâneas e superficiais na bacia do Rio Araranguá devido à lixiviação de pirita.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- SEÇÃO 3: CHOKEPOINTS MARÍTIMOS -->
+        <article class="prose max-w-none text-neutral-800">
+            <h2 class="text-xl md:text-2xl font-bold text-neutral-900 border-l-4 border-neutral-800 pl-3 mb-4">
+                3. Chokepoints Marítimos e a Geopolítica do Petróleo
+            </h2>
+            <p class="leading-relaxed text-sm md:text-base mb-4">
+                Os fluxos globais de hidrocarbonetos líquidos dependem de pontos de estrangulamento geográficos naturais conhecidos como <strong class="text-neutral-900">chokepoints</strong>. A interrupção física ou política dessas artérias provoca oscilações brutais imediatas na cotação do barril Brent e WTI.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Ormuz -->
+                <div class="p-4 border border-neutral-200 rounded-lg">
+                    <h3 class="font-bold text-neutral-900 flex items-center gap-1.5 text-base">
+                        <i data-lucide="anchor" class="w-4 h-4 text-neutral-700"></i>
+                        Estreito de Ormuz
+                    </h3>
+                    <p class="text-xs md:text-sm text-neutral-600 mt-2 leading-relaxed">
+                        Conecta o Golfo Pérsico ao Oceano Índico. É categorizado como <mark class="highlight-yellow">o gargalo marítimo mais crucial do planeta</mark>, pois concentra cerca de <mark class="highlight-yellow">20% de todo o fluxo comercial de petróleo</mark> e GNL do mundo. Possui enorme importância estratégica militar devido à projeção territorial e possibilidade de bloqueio direto por parte do Irã.
+                    </p>
+                </div>
+
+                <!-- Malaca -->
+                <div class="p-4 border border-neutral-200 rounded-lg">
+                    <h3 class="font-bold text-neutral-900 flex items-center gap-1.5 text-base">
+                        <i data-lucide="anchor" class="w-4 h-4 text-neutral-700"></i>
+                        Estreito de Malaca
+                    </h3>
+                    <p class="text-xs md:text-sm text-neutral-600 mt-2 leading-relaxed">
+                        Localizado entre a península da Malásia e a ilha de Sumatra, é a rota de navegação comercial mais curta entre o Oceano Índico e o Oceano Pacífico. Concentra aproximadamente <mark class="highlight-yellow">16% do fluxo de petróleo global</mark>.
+                    </p>
+                    <p class="text-xs text-amber-800 bg-amber-50 rounded p-2 mt-2 font-medium">
+                        <strong>O Dilema de Malaca:</strong> A enorme vulnerabilidade da China perante a um eventual bloqueio naval norte-americano neste canal forçou Pequim a investir maciçamente no cinturão geoeconômico terrestre (Belt and Road Initiative - "Nova Rota da Seda") por meio de oleodutos e ferrovias cortando a Ásia Central e o Paquistão.
+                    </p>
+                </div>
+
+                <!-- Suez e Cabo -->
+                <div class="p-4 border border-neutral-200 rounded-lg md:col-span-2">
+                    <h3 class="font-bold text-neutral-900 flex items-center gap-1.5 text-base">
+                        <i data-lucide="compass" class="w-4 h-4 text-neutral-700"></i>
+                        Rotas de Trânsito Secundárias
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                        <div>
+                            <span class="font-semibold text-xs md:text-sm text-neutral-800 block">Canal de Suez e Bab el-Mandeb:</span>
+                            <span class="text-xs text-neutral-600 leading-relaxed block mt-1">
+                                Ligações do Mar Vermelho ao Mar Mediterrâneo, concentrando cerca de <mark class="highlight-yellow">5,5% do tráfego petrolífero mundial</mark>. Alvo frequente de tensões militares geopolíticas por parte de forças regionais no Oriente Médio e na África Oriental (como milícias no Iêmen).
+                            </span>
+                        </div>
+                        <div>
+                            <span class="font-semibold text-xs md:text-sm text-neutral-800 block">Cabo da Boa Esperança (África do Sul):</span>
+                            <span class="text-xs text-neutral-600 leading-relaxed block mt-1">
+                                Concentra cerca de <mark class="highlight-yellow">5,8% do tráfego de petróleo</mark>. Funciona geograficamente como a principal rota de contingência e bypass físico no caso de interrupções e instabilidades militares graves no Canal de Suez.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <!-- SEÇÃO 4: TRANSIÇÃO ENERGÉTICA E MINERAIS CRÍTICOS -->
+        <article class="prose max-w-none text-neutral-800">
+            <h2 class="text-xl md:text-2xl font-bold text-neutral-900 border-l-4 border-neutral-800 pl-3 mb-4">
+                4. Transição Energética e a Nova Ordem Mineral
+            </h2>
+            <p class="leading-relaxed text-sm md:text-base mb-4">
+                A transição rumo à descarbonização econômica global substituiu as antigas dependências e alianças focadas unicamente em jazidas de petróleo por uma nova corrida por <strong class="text-neutral-900">minerais críticos para transição verde</strong> e terras raras.
+            </p>
+
+            <div class="space-y-4 text-sm md:text-base">
+                <!-- Monopólio da China -->
+                <div class="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+                    <h3 class="font-bold text-neutral-900 text-sm md:text-base">O Monopólio Tecnológico-Produtivo da China</h3>
+                    <p class="text-neutral-600 text-xs md:text-sm mt-1 leading-relaxed">
+                        A República Popular da China construiu uma hegemonia incontestável na cadeia de processamento químico de tecnologias limpas. Atualmente, o país detém o refino e o processamento industrial de <mark class="highlight-orange">mais de 70% das terras raras do mundo</mark>. Essa vantagem permite o exercício de forte coerção econômica e geopolítica em escala internacional.
+                    </p>
+                </div>
+
+                <!-- Reservas do Brasil -->
+                <div class="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+                    <h3 class="font-bold text-neutral-900 text-sm md:text-base">A Riqueza e Posição do Subsolo Brasileiro</h3>
+                    <p class="text-neutral-600 text-xs md:text-sm mt-1 leading-relaxed">
+                        O Brasil desponta como um dos gigantes estratégicos na transição devido às suas riquezas naturais:
+                    </p>
+                    <ul class="list-disc list-inside mt-2 text-xs md:text-sm text-neutral-700 pl-2">
+                        <li><strong>Nióbio:</strong> O país é detentor da maior reserva e produção global consolidada de nióbio (cerca de 90%).</li>
+                        <li><strong>Grafita e Terras Raras:</strong> O Brasil abriga a segunda maior reserva de grafita e a terceira maior reserva de terras raras e níquel do planeta.</li>
+                    </ul>
+                </div>
+
+                <!-- O Paradoxo do Lítio -->
+                <div class="p-4 bg-neutral-50 rounded-lg border border-neutral-200">
+                    <h3 class="font-bold text-neutral-900 text-sm md:text-base">O Paradoxo Socioambiental do Lítio no Vale do Jequitinhonha (MG)</h3>
+                    <p class="text-neutral-600 text-xs md:text-sm mt-1 leading-relaxed">
+                        No Vale do Jequitinhonha, região marcada historicamente por indicadores sociais desafiadores, as operações da extração de lítio nos municípios de <mark class="highlight-yellow">Araçuaí e Itinga</mark> (como as da Sigma Lithium) são apresentadas ao mercado corporativo como exemplos de "mineração verde de carbono zero".
+                    </p>
+                    <p class="text-neutral-600 text-xs md:text-sm mt-2 leading-relaxed">
+                        Contudo, movimentos sociais locais, ambientalistas e geógrafos apontam para um <strong class="text-neutral-950">neoextrativismo contraditório</strong>: a atividade gerou desmatamento significativo, alterou as bacias de microdrenagem de água, consumiu massivamente os escassos recursos hídricos locais e provocou pressões de expulsão territorial e gentrificação sobre comunidades tradicionais e agricultores familiares locais.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+        <!-- SEÇÃO 5: GUIA ANTI-PEGADINHAS FAURGS -->
+        <article class="prose max-w-none text-neutral-800 bg-neutral-50 border border-neutral-200 rounded-xl p-6">
+            <h2 class="text-xl font-bold text-neutral-900 flex items-center gap-2 mb-4">
+                <i data-lucide="shield-check" class="w-6 h-6 text-neutral-800"></i>
+                Guia Prático "Anti-Pegadinha" - Foco na FAURGS
+            </h2>
+            <p class="text-sm text-neutral-600 mb-4 leading-relaxed">
+                As bancas de concurso para Institutos Federais costumam estruturar questões com base em mitos recorrentes do senso comum geográfico. Estude o mapeamento das armadilhas abaixo para garantir o acerto da questão:
+            </p>
+
+            <div class="space-y-4">
+                <!-- Pegadinha 1 -->
+                <div class="p-3 bg-white border border-neutral-150 rounded shadow-sm">
+                    <h3 class="text-sm font-bold text-red-600 flex items-center gap-1.5">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        Pegadinha 1: Matriz Hidrelétrica é equivalente a 90% da Matriz Elétrica brasileira.
+                    </h3>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O ERRO:</strong> Afirmar que a eletricidade do Brasil é proveniente de quase 90% de usinas hidrelétricas clássicas.
+                    </p>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O CORRETO:</strong> A matriz elétrica nacional é <mark class="highlight-yellow">88,2% renovável no seu todo</mark>. No entanto, as hidrelétricas respondem diretamente por <mark class="highlight-orange">56,1% da geração</mark>. Os demais componentes cruciais da energia renovável vêm da eólica (14,3%), energia solar fotovoltaica (9,4%) e queima direta de biomassa florestal/açucareira (8,2%).
+                    </p>
+                </div>
+
+                <!-- Pegadinha 2 -->
+                <div class="p-3 bg-white border border-neutral-150 rounded shadow-sm">
+                    <h3 class="text-sm font-bold text-red-600 flex items-center gap-1.5">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        Pegadinha 2: O Brasil tornou-se completamente autossuficiente e independente do mercado global após o Pré-sal.
+                    </h3>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O ERRO:</strong> Afirmar que o Brasil suspendeu completamente as importações de petróleo e combustíveis por causa da autossuficiência volumétrica da extração nacional de óleo cru de águas ultraprofundas.
+                    </p>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O CORRETO:</strong> O Brasil possui <mark class="highlight-yellow">autossuficiência volumétrica quantitativa</mark>, porém apresenta dependência qualitativa estrutural. Nós exportamos óleo bruto pesado (de extração mais barata mas de refino complexo) e, paradoxalmente, <mark class="highlight-orange">importamos derivados leves e refinados de alta tecnologia</mark> (como gasolina refinada especial, diesel automotivo e carvão de coquefação para indústrias siderúrgicas de base). Isso é provocado pela incapacidade das refinarias nacionais originais em processar 100% de petróleo do tipo pesado nacional de forma econômica.
+                    </p>
+                </div>
+
+                <!-- Pegadinha 3 -->
+                <div class="p-3 bg-white border border-neutral-150 rounded shadow-sm">
+                    <h3 class="text-sm font-bold text-red-600 flex items-center gap-1.5">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        Pegadinha 3: Energias verdes de baixo carbono possuem impacto socioespacial e ecológico nulo.
+                    </h3>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O ERRO:</strong> Descrever usinas eólicas, painéis fotovoltaicos e a exploração de lítio e cobalto como sistemas de geração e extração sem qualquer tipo de passivo ou degradação ambiental ou social.
+                    </p>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O CORRETO:</strong> A transição ecológica de baixo carbono exige uma intensa exploração mineral (neoextrativismo mineral no Sul Global), o que acaba deslocando e intensificando a espoliação e a degradação socioambiental de novos territórios periféricos no globo.
+                    </p>
+                </div>
+
+                <!-- Pegadinha 4 -->
+                <div class="p-3 bg-white border border-neutral-150 rounded shadow-sm">
+                    <h3 class="text-sm font-bold text-red-600 flex items-center gap-1.5">
+                        <i data-lucide="x-circle" class="w-4 h-4"></i>
+                        Pegadinha 4: A Bacia de Carvão Mineral do Sul é datada geologicamente do Período Carbonífero.
+                    </h3>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O ERRO:</strong> Ligar diretamente a palavra "Carvão" ou "Carbonífera" à idade geológica de formação dos depósitos sul-brasileiros.
+                    </p>
+                    <p class="text-xs md:text-sm text-neutral-700 mt-1 pl-5">
+                        <strong class="text-neutral-900">O CORRETO:</strong> O carvão vegetal/mineral explorado em Santa Catarina (Criciúma) e no Rio Grande do Sul (Candiota) formou-se cronologicamente na Era Paleozoica, mas no período do <mark class="highlight-orange">Permiano Inferior</mark> (não no Carbonífero), associado à deposição costeira sedimentar marinha.
+                    </p>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- BOTÃO DE DIRECIONAMENTO PARA QUESTÕES (BOTTOM NAV) -->
+    <footer class="w-full max-w-4xl px-6 mt-12 mb-16 border-t border-neutral-200 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-neutral-500 text-center md:text-left">
+            <p>© 2026 - Concurso Professor Geografia IFSC / Banca FAURGS.</p>
+            <p class="mt-1">Desenvolvido com foco no rigor científico de memorização geográfica ativa.</p>
+        </div>
+        <div>
+            <a href="geopoliticaquestoes.html" 
+               class="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-lg text-sm shadow transition tracking-wide">
+                <span>Praticar com Questões</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar ícones do Lucide
+            lucide.createIcons();
+
+            // Elementos de controle do player de áudio
+            const audio = document.getElementById('study-audio');
+            const btnPlay = document.getElementById('btn-play');
+            const playIcon = document.getElementById('play-icon');
+            const progressBar = document.getElementById('progress-bar');
+            const currentTimeSpan = document.getElementById('current-time');
+            const durationTimeSpan = document.getElementById('duration-time');
+            const audioSrcInput = document.getElementById('audio-src');
+            const btnLoadAudio = document.getElementById('btn-load-audio');
+            const speedControls = document.getElementById('speed-controls');
+
+            // Formatação de Tempo (Minutos e Segundos)
+            function formatTime(secs) {
+                const minutes = Math.floor(secs / 60);
+                const seconds = Math.floor(secs % 60);
+                const formattedSecs = seconds < 10 ? '0' + seconds : seconds;
+                const formattedMins = minutes < 10 ? '0' + minutes : minutes;
+                return `${formattedMins}:${formattedSecs}`;
+            }
+
+            // Atualização de Duração
+            audio.addEventListener('loadedmetadata', function() {
+                durationTimeSpan.textContent = formatTime(audio.duration);
+                progressBar.max = Math.floor(audio.duration);
+            });
+
+            // Atualização Contínua do Progresso
+            audio.addEventListener('timeupdate', function() {
+                if (!audio.paused) {
+                    progressBar.value = Math.floor(audio.currentTime);
+                    currentTimeSpan.textContent = formatTime(audio.currentTime);
+                }
+            });
+
+            // Arrastar/Mudar a Posição da Barra de Progresso do Áudio
+            progressBar.addEventListener('input', function() {
+                audio.currentTime = progressBar.value;
+                currentTimeSpan.textContent = formatTime(progressBar.value);
+            });
+
+            // Carregamento de novo arquivo de áudio customizado
+            btnLoadAudio.addEventListener('click', function() {
+                const newSrc = audioSrcInput.value.trim();
+                if (newSrc) {
+                    audio.pause();
+                    audio.src = newSrc;
+                    audio.load();
+                    // Atualizar visual do botão Play/Pause
+                    playIcon.setAttribute('data-lucide', 'play');
+                    lucide.createIcons();
+                }
+            });
+
+            // Controle Play / Pause
+            btnPlay.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play()
+                        .then(() => {
+                            playIcon.setAttribute('data-lucide', 'pause');
+                            lucide.createIcons();
+                        })
+                        .catch(err => {
+                            console.warn("Áudio não encontrado ou permissão negada pelo navegador. Verifique o caminho.", err);
+                            // Notificação visual suave em vez de alert
+                            const notification = document.createElement('div');
+                            notification.className = "fixed bottom-4 right-4 bg-red-100 border border-red-300 text-red-800 text-xs px-4 py-2 rounded-lg shadow-md transition duration-300";
+                            notification.textContent = `Aviso: Arquivo "${audioSrcInput.value}" não foi localizado localmente para reprodução.`;
+                            document.body.appendChild(notification);
+                            setTimeout(() => notification.remove(), 5000);
+                        });
+                } else {
+                    audio.pause();
+                    playIcon.setAttribute('data-lucide', 'play');
+                    lucide.createIcons();
+                }
+            });
+
+            // Controle de Velocidade de Reprodução
+            speedControls.addEventListener('click', function(e) {
+                const targetButton = e.target.closest('button');
+                if (!targetButton) return;
+
+                const speed = parseFloat(targetButton.getAttribute('data-speed'));
+                audio.playbackRate = speed;
+
+                // Resetar o estilo ativo dos botões de velocidade
+                const allButtons = speedControls.querySelectorAll('button');
+                allButtons.forEach(btn => {
+                    btn.className = "px-2.5 py-1 text-xs font-semibold rounded border border-neutral-200 hover:bg-neutral-100 text-neutral-700";
+                });
+
+                // Destacar o botão atualmente ativo
+                targetButton.className = "px-2.5 py-1 text-xs font-semibold rounded border border-neutral-800 bg-neutral-800 text-white";
+            });
+
+            // Evento de Fim de Áudio
+            audio.addEventListener('ended', function() {
+                playIcon.setAttribute('data-lucide', 'play');
+                lucide.createIcons();
+                progressBar.value = 0;
+                currentTimeSpan.textContent = "00:00";
+            });
+        });
+    </script>
+</body>
+</html>
