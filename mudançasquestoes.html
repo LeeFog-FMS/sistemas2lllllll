@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Exame: Mudanças Climáticas e Desertificação (FAURGS)</title>
+    <!-- Carregamento do Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para alta legibilidade e conforto em leituras longas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones de interface ricos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Configuração de cores personalizadas e tipografia do Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Paleta "Warm Paper" ideal para evitar cansaço visual em leituras prolongadas
+                        paper: {
+                            50: '#FDFDFB',   // Fundo de página super macio
+                            100: '#FAF8F4',  // Tom de papel levemente amarelado
+                            200: '#F4F1EA',  // Bordas e divisores suaves
+                            300: '#EAE5DA',  // Tons secundários de foco
+                            800: '#2D2A26',  // Cor do texto principal (Grafite quente, evita contraste agressivo)
+                            900: '#1C1A18',  // Títulos em destaque
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F4;
+            color: #2D2A26;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+        /* Efeito de transição suave global */
+        .transition-all-ease {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Otimização de quebra de página para impressão (Modo de Estudos Física) */
+        @media print {
+            .no-print { display: none !important; }
+            body { background-color: #FFFFFF !important; color: #000000 !important; }
+            .print-card { border: 1px solid #D1D5DB !important; box-shadow: none !important; page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-paper-800 selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Barra Superior de Navegação / Identificação da Banca -->
+    <header class="border-b border-paper-200 bg-paper-50 sticky top-0 z-40 no-print transition-all-ease shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-md tracking-wider uppercase">Banca FAURGS</span>
+                <span class="text-paper-300">|</span>
+                <h1 class="text-sm font-semibold tracking-tight text-paper-900 hidden sm:block">Simulador de Mudanças Climáticas & Desertificação</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!-- Contador de tempo ativo -->
+                <div id="timer-container" class="flex items-center space-x-1.5 text-xs font-medium text-amber-800 bg-amber-50 px-2.5 py-1.5 rounded-lg border border-amber-100">
+                    <i class="fa-regular fa-clock"></i>
+                    <span id="timer-display">00:00</span>
+                </div>
+                <!-- Botão de reinício rápido -->
+                <button onclick="confirmReset()" class="text-xs font-medium text-stone-500 hover:text-red-600 transition-colors flex items-center gap-1.5 py-1">
+                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                    <span class="hidden md:inline">Reiniciar</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 md:py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Painel Esquerdo: Lista de Questões Principal -->
+            <div class="lg:col-span-8 space-y-8">
+                <!-- Seção de Título de Identificação do Exame -->
+                <div class="bg-paper-50 rounded-2xl p-6 border border-paper-200 shadow-sm">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-paper-900 tracking-tight leading-tight mb-2">
+                        Mudanças Climáticas Globais e Desertificação
+                    </h2>
+                    <p class="text-sm text-stone-600 leading-relaxed max-w-2xl">
+                        Este simulador foi projetado seguindo estritamente as diretrizes de formulação de enunciados, complexidade e padrões de alternativa da banca <strong>FAURGS</strong>. Resolva as questões abaixo e, ao final, envie o gabarito para analisar seu desempenho e conferir as resoluções comentadas de cada alternativa.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-stone-500">
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-clipboard-question"></i> 10 Questões</span>
+                        <span>•</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-graduation-cap"></i> Nível Superior / Técnico</span>
+                        <span>•</span>
+                        <span class="flex items-center gap-1"><i class="fa-solid fa-file-invoice"></i> Comentários Alternativa por Alternativa</span>
+                    </div>
+                </div>
+
+                <!-- Form contendo todas as perguntas geradas dinamicamente -->
+                <form id="quiz-form" class="space-y-8" onsubmit="submitQuiz(event)">
+                    <div id="questions-holder" class="space-y-8">
+                        <!-- Questões inseridas dinamicamente via JS -->
+                        <div class="flex justify-center items-center py-20">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600"></div>
+                        </div>
+                    </div>
+
+                    <!-- Painel de Envio de Gabarito (antes de submeter) -->
+                    <div id="submit-section" class="bg-paper-50 border border-paper-200 rounded-2xl p-6 text-center shadow-sm space-y-4 no-print">
+                        <h3 class="text-lg font-bold text-paper-900">Finalizou o preenchimento de suas respostas?</h3>
+                        <p class="text-xs text-stone-600 max-w-md mx-auto">
+                            Verifique se respondeu a todas as 10 questões no painel de navegação rápida lateral antes de submeter o exame para correção.
+                        </p>
+                        <button type="submit" class="inline-flex items-center justify-center gap-2 bg-amber-800 hover:bg-amber-900 text-white font-semibold text-sm px-8 py-3.5 rounded-xl transition-all shadow-md shadow-amber-800/10 hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-amber-700 focus:ring-offset-2">
+                            <i class="fa-solid fa-circle-check text-base"></i>
+                            Enviar Respostas e Corrigir Gabarito
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Painel de Resultados Geral do Usuário (Surgirá após submissão) -->
+                <div id="results-dashboard" class="hidden bg-paper-50 border-2 border-amber-700/20 rounded-2xl p-6 md:p-8 shadow-md space-y-6">
+                    <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-paper-200">
+                        <div class="text-center md:text-left space-y-1">
+                            <span class="text-xs font-semibold text-amber-800 uppercase tracking-wider">Desempenho Final</span>
+                            <h3 class="text-2xl md:text-3xl font-extrabold text-paper-900 tracking-tight">Resultado da Avaliação</h3>
+                            <p class="text-xs text-stone-600" id="result-status-text">Analise abaixo o detalhamento de seus acertos.</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <!-- Visualizador circular de pontuação simplificado -->
+                            <div class="bg-amber-50 text-amber-800 rounded-2xl px-5 py-4 border border-amber-100 text-center min-w-[120px]">
+                                <span class="block text-4xl font-extrabold" id="score-counter">0/10</span>
+                                <span class="text-[10px] uppercase tracking-wider font-semibold text-stone-500">Acertos</span>
+                            </div>
+                            <!-- Percentual -->
+                            <div class="bg-stone-100 text-stone-800 rounded-2xl px-5 py-4 border border-stone-200 text-center min-w-[120px]">
+                                <span class="block text-4xl font-extrabold" id="percentage-counter">0%</span>
+                                <span class="text-[10px] uppercase tracking-wider font-semibold text-stone-500">Aproveitamento</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                        <div class="bg-stone-50 border border-stone-200 p-4 rounded-xl">
+                            <span class="text-xs text-stone-600 block mb-1">Tempo Total Gasto</span>
+                            <span class="text-lg font-bold text-paper-900" id="final-time-display">00:00</span>
+                        </div>
+                        <div class="bg-stone-50 border border-stone-200 p-4 rounded-xl">
+                            <span class="text-xs text-stone-600 block mb-1">Status de Aprovação</span>
+                            <span class="text-lg font-bold" id="approval-badge">Não Classificado</span>
+                        </div>
+                        <div class="bg-stone-50 border border-stone-200 p-4 rounded-xl">
+                            <span class="text-xs text-stone-600 block mb-1">Critério de Corte (FAURGS)</span>
+                            <span class="text-lg font-bold text-paper-900">Mínimo 60%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row justify-center gap-3 pt-2 no-print">
+                        <button onclick="resetQuiz()" class="inline-flex items-center justify-center gap-1.5 bg-stone-800 hover:bg-stone-900 text-white font-medium text-xs px-5 py-2.5 rounded-lg transition-all">
+                            <i class="fa-solid fa-rotate-left"></i> Tentar Novamente
+                        </button>
+                        <button onclick="window.print()" class="inline-flex items-center justify-center gap-1.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-700 font-medium text-xs px-5 py-2.5 rounded-lg transition-all">
+                            <i class="fa-solid fa-print"></i> Imprimir Gabarito Completo
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Painel Direito: Barra Lateral de Controle e Progresso Rápido -->
+            <div class="lg:col-span-4 space-y-6 no-print">
+                <!-- Card de Acompanhamento em Tempo Real -->
+                <div class="bg-paper-50 border border-paper-200 rounded-2xl p-5 shadow-sm sticky top-24 space-y-5">
+                    <div class="border-b border-paper-200 pb-3">
+                        <h4 class="font-bold text-paper-900 text-sm flex items-center gap-2">
+                            <i class="fa-regular fa-folder-open text-amber-800"></i>
+                            Gabarito de Respostas
+                        </h4>
+                        <p class="text-[11px] text-stone-500 mt-1">Acompanhe as questões preenchidas no cartão de respostas dinâmico.</p>
+                    </div>
+
+                    <!-- Grid do Cartão de Respostas -->
+                    <div>
+                        <div class="grid grid-cols-5 gap-2.5" id="response-grid">
+                            <!-- Inserido dinamicamente via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Métricas instantâneas -->
+                    <div class="pt-3 border-t border-paper-200 space-y-2 text-xs">
+                        <div class="flex justify-between items-center text-stone-600">
+                            <span>Questões Respondidas:</span>
+                            <span class="font-semibold text-paper-900" id="answered-count">0 de 10</span>
+                        </div>
+                        <div class="flex justify-between items-center text-stone-600">
+                            <span>Pendentes:</span>
+                            <span class="font-semibold text-amber-800" id="pending-count">10</span>
+                        </div>
+                    </div>
+
+                    <!-- Informações sobre Estresse de Leitura / Redução de Fadiga Ocular -->
+                    <div class="bg-amber-50/50 rounded-xl p-3 border border-amber-100/50 text-stone-600 space-y-2">
+                        <h5 class="text-xs font-bold text-amber-900 flex items-center gap-1">
+                            <i class="fa-regular fa-lightbulb"></i> Conforto de Leitura
+                        </h5>
+                        <p class="text-[11px] leading-relaxed">
+                            Esta página utiliza a paleta <strong>Warm Paper</strong>. Ao contrário de displays brancos puros de alto contraste, o fundo sutilmente amarelado imita o papel físico de livros clássicos, poupando seus olhos em sessões longas de estudo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="border-t border-paper-200 bg-paper-50 py-8 mt-16 text-center text-xs text-stone-500 space-y-2 no-print">
+        <p>© 2026 Simulados de Concurso. Todos os direitos reservados.</p>
+        <p>Desenvolvido estritamente com base nos critérios teóricos e de estilo adotados pela banca FAURGS em certames de Ecologia, Geografia e Meio Ambiente.</p>
+    </footer>
+
+    <script>
+        // Dados das 10 Questões do simulado contendo enunciados estruturados com HTML para manter visual perfeito
+        const quizData = [
+            {
+                id: 1,
+                correctAnswer: 'A',
+                question: 'No contexto das discussões do Painel Intergovernamental sobre Mudanças Climáticas (IPCC) e do Painel Brasileiro de Mudanças Climáticas (PBMC), o aquecimento global impõe severas pressões sobre a dinâmica ambiental e a saúde humana. A alteração de variáveis meteorológicas locais repercute diretamente na epidemiologia e na distribuição de patógenos. Sobre a correlação entre o aumento da temperatura média global, os fenômenos climáticos extremos e a saúde pública, assinale a alternativa correta.',
+                options: {
+                    A: 'O aumento nas taxas pluviométricas e na temperatura média anual no Rio Grande do Sul atua expandindo a receptividade do território ao vetor <i>Aedes aegypti</i>, demandando a intensificação de ações estatais de vigilância e prevenção de patologias como dengue, zika e chikungunya.',
+                    B: 'Sendo o clima um fator estritamente secundário para a produtividade agropecuária de subsistência, a intensificação de secas prolongadas não gera reflexos significativos na segurança alimentar ou nutricional das populações vulneráveis.',
+                    C: 'A elevação das temperaturas urbanas reduz de maneira direta a concentração de poluentes atmosféricos secundários, minimizando de forma linear a incidência de distúrbios pulmonares obstrutivos crônicos.',
+                    D: 'O aumento da ocorrência de desastres naturais extremos, como inundações bruscas e tempestades tropicais severas, atua reduzindo a transmissão de enfermidades de veiculação hídrica devido à diluição imediata de agentes infecciosos.',
+                    E: 'Uma das consequências diretas observadas no Sul do Brasil é o declínio drástico das temperaturas médias invernais, o que elimina a sazonalidade de vírus respiratórios como o H1N1.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das alternativas para a Questão 01:',
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Correta.</strong> As alterações climáticas antropogênicas interferem nas dinâmicas termodinâmicas e pluviométricas de sistemas regionais. No sul do Brasil, o aumento da temperatura média anual e as perturbações no regime de chuvas geram cenários ecológicos propícios para a reprodução biológica rápida e expansão espacial da distribuição do mosquito vetor <i>Aedes aegypti</i>, resultando em potenciais surtos de dengue, zika e chikungunya e impondo maior demanda às redes públicas de monitoramento e controle sanitário.', correct: true },
+                        { opt: 'B', text: '<strong>Incorreta.</strong> O clima desempenha papel limitante e crucial nos rendimentos de safras agrícolas. As estiagens severas e prolongadas afetam de modo severo a segurança alimentar e a saúde nutricional de agricultores familiares, fomentando cenários de subnutrição e carências sistêmicas.' },
+                        { opt: 'C', text: '<strong>Incorreta.</strong> O aquecimento das áreas urbanas (efeito ilha de calor) catalisa as reações químicas fotoquímicas de poluentes precursores atmosféricos, elevando a concentração de oxidantes e poluentes secundários como o ozônio troposférico (O<sub>3</sub>), piorando quadros de asma e fibrose respiratória.' },
+                        { opt: 'D', text: '<strong>Incorreta.</strong> A ocorrência de enxurradas e grandes inundações eleva consideravelmente a difusão espacial e o contágio por doenças bacterianas e virais de veiculação hídrica (como a leptospirose e o cólera) devido ao transbordo de esgoto sanitário doméstico e à contaminação de mananciais de água potável.' },
+                        { opt: 'E', text: '<strong>Incorreta.</strong> As projeções climáticas e dados históricos do Rio Grande do Sul apontam para a elevação geral das temperaturas médias, inclusive com invernos mais curtos e menos rigorosos, o que altera os surtos sazonais de infecções aéreas sem erradicá-los.' }
+                    ]
+                }
+            },
+            {
+                id: 2,
+                correctAnswer: 'C',
+                question: `Pesquisas em latitudes extremas, a exemplo das missões científicas na Antártica apoiadas operacionalmente pela FAURGS no laboratório Criosfera 1, monitoram continuamente os gases de efeito estufa e aerossóis atmosféricos para compreender o balanço de energia planetário. Com relação à dinâmica do efeito estufa, distinguindo seus componentes naturais daqueles de origem antrópica, analise as afirmações a seguir.<br><br>
+                <div class="bg-stone-100/50 p-4 rounded-xl border border-stone-200 text-xs leading-relaxed space-y-2">
+                    <p><strong>I.</strong> O efeito estufa natural é um fenômeno termodinâmico vital para a manutenção da biosfera, controlado pela absorção e reemissão de radiação infravermelha de onda longa por gases como o vapor d'água (H<sub>2</sub>O) e o dióxido de carbono (CO<sub>2</sub>).</p>
+                    <p><strong>II.</strong> O efeito estufa antrópico caracteriza-se pela intensificação do forçamento radiativo positivo decorrente da emissão concentrada de gases como o dióxido de carbono (CO<sub>2</sub>) e metano (CH<sub>4</sub>) por queima de combustíveis fósseis, desmatamentos e atividades agropecuárias industriais.</p>
+                    <p><strong>III.</strong> O monitoramento de poluentes atmosféricos na Antártica indica que gases de efeito estufa de curta duração e aerossóis (como o black carbon ou fuligem) atuam exclusivamente promovendo o resfriamento da superfície terrestre por meio do aumento do albedo planetário.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: {
+                    A: 'Apenas I.',
+                    B: 'Apenas II.',
+                    C: 'Apenas I e II.',
+                    D: 'Apenas II e III.',
+                    E: 'I, II e III.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das afirmativas para a Questão 02:',
+                    tableHeader: ['Natureza do Efeito Estufa', 'Mecanismo Físico Principal', 'Gases e Forçadores Chave', 'Temperatura Média Projetada'],
+                    tableRows: [
+                        ['Natural', 'Absorção de onda longa da radiação terrestre pela atmosfera sem incremento exponencial de emissores residuais.', 'Vapor d\'água (H<sub>2</sub>O) e Dióxido de carbono (CO<sub>2</sub>) natural.', 'Estável em torno de +15 °C (permitindo água no estado líquido).'],
+                        ['Antrópico', 'Forçamento radiativo positivo artificial por emissões concentradas, acumulando calor residual troposférico.', 'CO<sub>2</sub> industrial, Metano (CH<sub>4</sub>), Óxido Nitroso (N<sub>2</sub>O), Gases Fluorados e Black Carbon.', 'Elevação progressiva acelerada das médias térmicas mundiais.']
+                    ],
+                    optionsComms: [
+                        { opt: 'I', text: '<strong>Correta.</strong> O efeito estufa natural é governado pelo aprisionamento molecular térmico da energia infravermelha de onda longa reemitida pela Terra, impedindo que essa energia se disperse livremente no espaço cósmico. Isso estabiliza as temperaturas terrestres globais médias em torno de +15 °C, propiciando a manutenção estável do ciclo da água e da atividade biológica celular.', correct: true },
+                        { opt: 'II', text: '<strong>Correta.</strong> O forçamento radiativo positivo adicional de origem humana é impulsionado pelo lançamento na atmosfera de grandes quantidades acumuladas de gases retentores de radiação (com destaque para o CO<sub>2</sub> industrial e o metano da pecuária e queima incompleta), o que eleva a taxa líquida de retenção calórica troposférica.', correct: true },
+                        { opt: 'III', text: '<strong>Incorreta.</strong> O <i>black carbon</i> (fuligem), embora classificado como aerossol de vida curta, possui coloração escura e propriedades altamente absorvedoras de radiação de onda curta solar direta. Quando ele se deposita sobre o gelo e a neve das calotas glaciais antárticas, reduz localmente o albedo superficial, acelerando a taxa de absorção de radiação e promovendo o aquecimento (retroalimentação radiativa positiva) em vez de resfriamento.' }
+                    ]
+                }
+            },
+            {
+                id: 3,
+                correctAnswer: 'C',
+                question: `A dinâmica geoecológica do Semiárido brasileiro apresenta singularidades em termos de circulação atmosférica, balanço hídrico e vulnerabilidade biológica frente ao avanço das atividades humanas e às mudanças climáticas globais. Avalie as seguintes asserções sobre as características climáticas da Caatinga e os paradigmas de intervenção socioambiental na região.<br><br>
+                <div class="bg-stone-100/50 p-4 rounded-xl border border-stone-200 text-xs leading-relaxed space-y-2">
+                    <p><strong>I.</strong> A Caatinga constitui o bioma brasileiro biologicamente mais sensível às pressões de interferência antrópica local combinadas com as tendências gerais do aquecimento climático global.</p>
+                    <p><strong>II.</strong> O déficit hídrico característico do semiárido é definido pela ausência absoluta de chuvas ao longo do ano, registrando-se médias pluviométricas anuais sistematicamente inferiores a 150 mm em todo o território nordestino.</p>
+                    <p><strong>III.</strong> O paradigma emergente de "convivência com o semiárido" contrapõe-se à histórica política hidráulica do "combate à seca", estruturando-se no desenvolvimento e na difusão de tecnologias sociais descentralizadas, como as cisternas de placa para captação de águas pluviais.</p>
+                </div><br>
+                Quais estão corretas?`,
+                options: {
+                    A: 'Apenas I.',
+                    B: 'Apenas II.',
+                    C: 'Apenas I e III.',
+                    D: 'Apenas II e III.',
+                    E: 'I, II e III.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das afirmativas para a Questão 03:',
+                    optionsComms: [
+                        { opt: 'I', text: '<strong>Correta.</strong> A Caatinga caracteriza-se pelo endemismo biológico e pela acentuada restrição hídrica, o que a expõe a um limiar ecotonal instável. Qualquer degradação de solos ou desflorestamento acelera as perdas orgânicas e hídricas locais sob cenários de mudanças climáticas.', correct: true },
+                        { opt: 'II', text: '<strong>Incorreta.</strong> O semiárido brasileiro não possui escassez hídrica total; o índice de precipitação média é de cerca de 750 mm anuais, patamar superior ao verificado em outras regiões áridas globais. O déficit decorre de uma distribuição temporal altamente concentrada das chuvas em poucos meses do ano, aliada a altos índices de evapotranspiração potencial decorrente de elevada irradiação solar direta.' },
+                        { opt: 'III', text: '<strong>Correta.</strong> A "convivência com o semiárido" estabelece uma mudança de paradigma ao reconhecer as limitações naturais locais e focar em tecnologias descentralizadas e participativas (como cisternas de placas de cimento para captar chuva do telhado). Isso substitui as grandes infraestruturas hídricas de captação centralizadas, que historicamente perpetuavam a exclusão social no semiárido.', correct: true }
+                    ]
+                }
+            },
+            {
+                id: 4,
+                correctAnswer: 'D',
+                question: 'A ocorrência de eventos climáticos e hidrológicos extremos no território do Rio Grande do Sul é influenciada por macrocontroles atmosféricos e oceânicos de escala global e regional. Sobre esses sistemas de circulação e suas dinâmicas no estado, assinale a alternativa correta.',
+                options: {
+                    A: 'O fenômeno El Niño promove o resfriamento térmico anômalo do Oceano Pacífico Equatorial, desencadeando secas agrícolas severas no Rio Grande do Sul no período do verão.',
+                    B: 'A Zona de Convergência do Atlântico Sul (ZCAS) configura-se como um anticiclone dinâmico de alta pressão que atua inibindo as chuvas no norte do Rio Grande do Sul durante o inverno.',
+                    C: 'A Oscilação Decadal do Pacífico (ODP) e a variabilidade térmica superficial do Atlântico Tropical atuam de forma isolada, não apresentando qualquer modulação ou interferência sobre os impactos do ciclo ENOS (El Niño-Oscilação Sul) na Região Sul.',
+                    D: 'O ciclo ENOS e a dinâmica do Atlântico exercem forte controle sobre a variabilidade interanual das chuvas no Rio Grande do Sul, onde a La Niña está historicamente correlacionada a períodos de estiagens severas e déficit hídrico acentuado.',
+                    E: 'A distribuição espacial das precipitações pluviométricas totais anuais no território sul-rio-grandense é espacialmente homogênea, dispensando a cartografia de isoietas para o planejamento de contingências.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das alternativas para a Questão 04:',
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Incorreta.</strong> O fenômeno El Niño consiste no aquecimento térmico anômalo das águas do Oceano Pacífico Equatorial e induz a anomalias de precipitação muito positivas (chuvas torrenciais acima da média) no Rio Grande do Sul.' },
+                        { opt: 'B', text: '<strong>Incorreta.</strong> A ZCAS corresponde a uma banda persistente de nebulosidade e umidade organizada que causa chuvas volumosas contínuas no Sudeste e Centro-Oeste do Brasil durante o verão, sem atuar como um anticiclone seco no RS.' },
+                        { opt: 'C', text: '<strong>Incorreta.</strong> A Oscilação Decadal do Pacífico (ODP) e o Atlântico interferem ativamente na variabilidade climática do Sul do Brasil, podendo potencializar ou enfraquecer o sinal de estiagem ou inundação associado ao ENOS.' },
+                        { opt: 'D', text: '<strong>Correta.</strong> No Rio Grande do Sul, a variabilidade do regime pluviométrico anual é fortemente modulada pelas anomalias de temperatura do Pacífico. A ocorrência do fenômeno La Niña altera os fluxos regionais de umidade e causa secas severas na Campanha e no Planalto Médio, impondo fortes perdas à agricultura do estado.', correct: true },
+                        { opt: 'E', text: '<strong>Incorreta.</strong> O território sul-rio-grandense apresenta contrastes espaciais nítidos em seus volumes pluviométricos sazonais de chuva, representados cartograficamente por linhas isoietas que balizam as decisões de contingência em defesa civil.' }
+                    ]
+                }
+            },
+            {
+                id: 5,
+                correctAnswer: 'A',
+                question: 'No planejamento ambiental e na mitigação de desastres provocados por eventos meteorológicos extremos, a geografia física e a defesa civil utilizam ferramentas tecnológicas integradas para modelagem espacial e previsão de riscos. A respeito do uso de geotecnologias nesse segmento, assinale a alternativa correta.',
+                options: {
+                    A: 'O sensoriamento remoto e o processamento de bases cartográficas digitais viabilizam a modelagem de riscos hidrológicos e climáticos voltados à mitigação de desastres como inundações, enxurradas e secas agrícolas.',
+                    B: 'Os modelos espaciais de risco climático operam exclusivamente com base em dados qualitativos, sendo inviável a incorporação de coeficientes quantitativos de precipitação em bases cartográficas.',
+                    C: 'As enxurradas e inundações urbanas constituem eventos de dinâmica estritamente local que impossibilitam a análise preditiva por imagens orbitais ou sensoriamento remoto.',
+                    D: 'O sensoriamento remoto destina-se unicamente ao mapeamento de florestas densas, não apresentando aplicabilidade no monitoramento de áreas afetadas por estiagens severas.',
+                    E: 'Modelos digitais de elevação do terreno (MDE) são dispensáveis no mapeamento de áreas de risco a inundações bruscas urbanas, visto que a declividade não interfere no fluxo de água pluvial.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das alternativas para a Questão 05:',
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Correta.</strong> A modelagem de dados integrados de relevo, drenagem e uso da terra, combinada a imagens orbitais de satélites e sensores climáticos, permite avaliar as manchas de inundação e áreas vulneráveis à seca, oferecendo dados para a prevenção de perigos de origem hidrometeorológica.', correct: true },
+                        { opt: 'B', text: '<strong>Incorreta.</strong> Os modelos espaciais de risco climático incorporam variáveis matemáticas quantitativas precisas, como milímetros diários acumulados de precipitação, declividades do solo e coeficientes físicos de rugosidade da drenagem urbana.' },
+                        { opt: 'C', text: '<strong>Incorreta.</strong> Inundações rápidas e transbordamentos pluviais urbanos são monitorados em tempo real de forma eficiente por imagens ópticas e radares orbitais, que mostram a mancha de cheia e subsidiam ações táticas de resgate.' },
+                        { opt: 'D', text: '<strong>Incorreta.</strong> O sensoriamento remoto é altamente eficaz no acompanhamento das estiagens, permitindo medir as reduções de umidade do solo e anomalias de vegetação (pelo cálculo de índices de vegetação como o NDVI).' },
+                        { opt: 'E', text: '<strong>Incorreta.</strong> O Modelo Digital de Elevação (MDE) é basilar no zoneamento de risco de inundação, pois a altitude relativa do terreno em relação à calha do rio define diretamente a susceptibilidade hidrodinâmica local ao transbordo pluvial.' }
+                    ]
+                }
+            },
+            {
+                id: 6,
+                correctAnswer: 'A',
+                question: `Numere a segunda coluna de acordo com a primeira, associando os principais Gases de Efeito Estufa (GEE) às suas respectivas origens e propriedades no contexto das dinâmicas das mudanças climáticas globais.<br><br>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-stone-100/50 p-4 rounded-xl border border-stone-200 text-xs leading-relaxed">
+                    <div>
+                        <p class="font-bold mb-1 text-amber-900">Coluna 1: Gases</p>
+                        <p><strong>(1)</strong> Dióxido de Carbono (CO<sub>2</sub>)</p>
+                        <p><strong>(2)</strong> Metano (CH<sub>4</sub>)</p>
+                        <p><strong>(3)</strong> Óxido Nitroso (N<sub>2</sub>O)</p>
+                        <p><strong>(4)</strong> Hexafluoreto de Enxofre (SF<sub>6</sub>)</p>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-1 text-amber-900">Coluna 2: Definições</p>
+                        <p><strong>( )</strong> Composto gasoso sintético de uso industrial com potencial de aquecimento global (GWP) de altíssima magnitude, comumente empregado como isolante em sistemas de alta tensão elétrica.</p>
+                        <p><strong>( )</strong> Gás com forte taxa de emissão proveniente da queima de combustíveis fósseis e alterações de uso da terra, constituindo o principal agente antropogênico do forçamento radiativo global.</p>
+                        <p><strong>( )</strong> Gás associado à dinâmica de degradação anaeróbica de resíduos orgânicos, cultivos agrícolas inundados de arroz e processos de fermentação entérica na pecuária extensiva.</p>
+                        <p><strong>( )</strong> Substância gasosa correlacionada de forma direta ao manejo de fertilização nitrogenada na agricultura convencional e a determinados processos industriais químicos de síntese.</p>
+                    </div>
+                </div><br>
+                A sequência correta de preenchimento dos parênteses, de cima para baixo, é:`,
+                options: {
+                    A: '4 – 1 – 2 – 3.',
+                    B: '1 – 3 – 4 – 2.',
+                    C: '4 – 2 – 3 – 1.',
+                    D: '2 – 3 – 1 – 4.',
+                    E: '3 – 2 – 1 – 4.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das associações para a Questão 06:',
+                    optionsComms: [
+                        { opt: 'SF6 (4)', text: '<strong>Associação 1 (SF<sub>6</sub>):</strong> O Hexafluoreto de Enxofre (SF<sub>6</sub>) é um composto químico industrial artificial com alto potencial de forçamento térmico (GWP superior a 22.000 vezes o do CO<sub>2</sub>). Permanece na atmosfera por milênios e é amplamente utilizado em subestações elétricas de transmissão.', correct: true },
+                        { opt: 'CO2 (1)', text: '<strong>Associação 2 (CO<sub>2</sub>):</strong> O Dióxido de Carbono (CO<sub>2</sub>) é quimicamente estável e constitui a principal fonte de perturbação radiativa antropogênica pelo seu grande volume residual emitido pelas chaminés industriais, escapamentos de veículos e desmatamento.', correct: true },
+                        { opt: 'CH4 (2)', text: '<strong>Associação 3 (CH<sub>4</sub>):</strong> O Metano (CH<sub>4</sub>) origina-se da quebra de biossólidos em condições de anoxia química (ausência de O<sub>2</sub>), como na biodegradação em pântanos tropicais, digestão entérica de bovinos alimentados com pastagens e aterros sanitários urbanos.', correct: true },
+                        { opt: 'N2O (3)', text: '<strong>Associação 4 (N<sub>2</sub>O):</strong> O Óxido Nitroso (N<sub>2</sub>O) provém primariamente da denitrificação biológica acelerada em solos saturados com fertilizantes de amônia ou nitrato utilizados de forma massiva pela agricultura moderna.', correct: true }
+                    ]
+                }
+            },
+            {
+                id: 7,
+                correctAnswer: 'B',
+                question: 'A inserção do clima na organização socioespacial humana é histórica, determinando ritmos biológicos, dinâmicas de trabalho e o estresse térmico vivenciado em centros urbanos sob a influência de ondas de calor intensificadas pelo aquecimento global. No âmbito do meio ambiente de trabalho e da saúde do trabalhador, utiliza-se o Índice de Bulbo Úmido Termômetro de Globo (IBUTG) para avaliar a exposição ao calor. Sobre o índice IBUTG e a influência térmica no trabalho humano, assinale a alternativa correta.',
+                options: {
+                    A: 'O IBUTG consiste em um indicador unidimensional que avalia a sobrecarga térmica de forma linear, desconsiderando a velocidade do vento ou a evaporação local.',
+                    B: 'O cálculo do índice IBUTG em trabalhos realizados sob exposição direta à radiação solar (ambientes externos com carga solar) inclui ponderadamente a temperatura de bulbo seco (t<sub>bs</sub>), além da temperatura de bulbo úmido natural (t<sub>bn</sub>) e de globo (t<sub>g</sub>).',
+                    C: 'O termômetro de bulbo úmido natural empregado no cálculo do IBUTG registra a temperatura do ar seco sem sofrer modulação pela umidade relativa ou velocidade do vento.',
+                    D: 'O índice de tolerância ao calor expresso pelo IBUTG é constante para o ser humano, sendo independente do nível de atividade metabólica ou esforço físico do trabalhador.',
+                    E: 'Em ambientes internos e protegidos de radiação solar direta (sem carga solar), o cálculo matemático do IBUTG prescinde da temperatura de globo (t<sub>g</sub>).'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das alternativas para a Questão 07:',
+                    tableHeader: ['Cenário de Medição', 'Fórmula de Cálculo do IBUTG', 'Variáveis Utilizadas na Expressão'],
+                    tableRows: [
+                        ['Ambiente Externo com Carga Solar', 'IBUTG = 0,7 × t<sub>bn</sub> + 0,1 × t<sub>bs</sub> + 0,2 × t<sub>g</sub>', 'Bulbo Úmido (t<sub>bn</sub>), Bulbo Seco (t<sub>bs</sub>) e Globo (t<sub>g</sub>).'],
+                        ['Ambiente Interno ou Sem Carga Solar', 'IBUTG = 0,7 × t<sub>bn</sub> + 0,3 × t<sub>g</sub>', 'Bulbo Úmido (t<sub>bn</sub>) e Temperatura de Globo (t<sub>g</sub>).']
+                    ],
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Incorreta.</strong> O índice IBUTG é um indicador multidimensional de sobrecarga térmica que leva em conta a temperatura e o calor radiante, bem como a taxa de resfriamento evaporativo proporcionada pelo vento e umidade atmosférica local.' },
+                        { opt: 'B', text: '<strong>Correta.</strong> Para locais de trabalho expostos à luz solar direta ao ar livre (com carga solar), a expressão matemática que define o índice pondera os valores térmicos registrados pelo termômetro de bulbo seco (t<sub>bs</sub>), pelo bulbo úmido natural (t<sub>bn</sub>) e pelo globo de cobre (t<sub>g</sub>): <br><div class="my-2 p-2 bg-stone-100 rounded text-center font-mono">IBUTG = 0,7 × t<sub>bn</sub> + 0,1 × t<sub>bs</sub> + 0,2 × t<sub>g</sub></div>', correct: true },
+                        { opt: 'C', text: '<strong>Incorreta.</strong> O termômetro de bulbo úmido natural depende ativamente do fluxo de ar circundante e do déficit de pressão de vapor da atmosfera, sendo afetado pelo resfriamento provocado pela evaporação da água de seu pavio.' },
+                        { opt: 'D', text: '<strong>Incorreta.</strong> A tolerância do trabalhador ao estresse térmico em ambientes fechados ou abertos varia diretamente de acordo com o dispêndio de energia metabólica da tarefa exercida, exigindo maiores períodos de repouso para atividades pesadas.' },
+                        { opt: 'E', text: '<strong>Incorreta.</strong> Em ambientes de trabalho sem carga solar direta (ambientes protegidos internos), o cálculo do IBUTG prescinde apenas da temperatura de bulbo seco (t<sub>bs</sub>), mantendo o termômetro de globo para avaliar as fontes internas de radiação térmica das máquinas: <br><div class="my-2 p-2 bg-stone-100 rounded text-center font-mono">IBUTG = 0,7 × t<sub>bn</sub> + 0,3 × t<sub>g</sub></div>' }
+                    ]
+                }
+            },
+            {
+                id: 8,
+                correctAnswer: 'A',
+                question: 'O processo de degradação ambiental dos solos e da vegetação no território brasileiro envolve diferentes tipologias, condicionadas por aspectos geológicos, pedológicos e climáticos específicos regionais. Sobre as diferenças conceituais e geográficas entre a desertificação e a arenização no país, assinale a alternativa correta.',
+                options: {
+                    A: 'A desertificação consiste no processo de degradação de terras em áreas áridas, semiáridas e subúmidas secas, ao passo que a arenização é um processo que ocorre em climas úmidos sobre solos arenosos preexistentes altamente suscetíveis à remoção da cobertura vegetal.',
+                    B: 'Ambos os processos constituem fenômenos geomorfológicos idênticos, de ocorrência exclusiva nas depressões intermontanas do semiárido climático brasileiro.',
+                    C: 'A arenização é uma consequência química e direta do acúmulo excessivo de óxidos de ferro no horizonte B-incipiente de solos argilosos profundos sob seca intensa.',
+                    D: 'No Rio Grande do Sul, a desertificação severa é o principal risco geodinâmico de degradação dos solos da Campanha Ocidental, devido aos baixos níveis de precipitação média anual inferiores a 300 mm.',
+                    E: 'Solos de textura argilosa profunda (Argissolos Vermelhos) sob clima tropical úmido apresentam a mesma suscetibilidade pedológica à arenização que os solos arenosos de origem eólica do Bioma Pampa.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das diferenças geográficas entre os processos:',
+                    tableHeader: ['Característica', 'Desertificação', 'Arenização'],
+                    tableRows: [
+                        ['Classificação Climática', 'Zonas Áridas, Semiáridas e Subúmidas Secas.', 'Subtropical Úmido e Temperado Úmido.'],
+                        ['Tipologia de Solos', 'Solos finos, rasos, pedregosos ou argilosos sujeitos à salinização.', 'Neossolos Quartzarênicos altamente arenosos e soltos de origem sedimentar.'],
+                        ['Processo Morfogenético', 'Erosão acelerada, perda de matéria orgânica e esgotamento biológico da terra.', 'Remoção física da vegetação rasteira e retrabalhamento erosivo de areias pela água e vento.'],
+                        ['Frequência de Chuva', 'Escassez crônica, irregularidade pluviométrica acentuada e forte déficit hídrico.', 'Chuvas constantes e abundantes, promovendo a lixiviação e o transporte de finos superficiais.']
+                    ],
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Correta.</strong> A desertificação restringe-se por definição internacional a solos frágeis sob climas secos, onde a perda biológica do solo é catalisada pelas flutuações e secas regionais unidas à ação humana predatória. Já a arenização constitui um retrabalhamento físico e geológico localizado em solos arenosos herdados de antigos depósitos fluviais sob clima úmido ou subúmido, como ocorre nos Neossolos Quartzarênicos e solos arenosos correlatos do Bioma Pampa gaúcho.', correct: true },
+                        { opt: 'B', text: '<strong>Incorreta.</strong> Os dois fenômenos são gerados por processos morfogenéticos distintos: a arenização atua sob chuvas abundantes e climas úmidos, enquanto a desertificação opera sob escassez hídrica atmosférica persistente e taxas severas de evaporação.' },
+                        { opt: 'C', text: '<strong>Incorreta.</strong> A arenização é de natureza física-mecânica, ocorrendo pela lavagem hidráulica superficial de areias quartzosas soltas que preenchem as depressões erosivas locais de encostas rebaixadas e planas.' },
+                        { opt: 'D', text: '<strong>Incorreta.</strong> No sudoeste do Rio Grande do Sul (Campanha Ocidental), ocorre arenização ativa impulsionada pelo manejo pastoril e agrícola inadequado sobre formações de arenitos frágeis, onde os índices anuais de chuva são de moderados a elevados (em geral de 1.200 a 1.500 mm ao ano).' },
+                        { opt: 'E', text: '<strong>Incorreta.</strong> Solos argilosos profundos e estruturados sob matas não possuem susceptibilidade intrínseca à arenização, a qual exige depósitos geológicos preexistentes arenosos e desprovidos de coesão mineral.' }
+                    ]
+                }
+            },
+            {
+                id: 9,
+                correctAnswer: 'B',
+                question: 'O aumento na intensidade e na frequência de eventos climáticos extremos de precipitação, intensificado pelo aquecimento global e pelas flutuações termodinâmicas regionais, acarreta consequências sistêmicas nos ecossistemas e no transporte de poluentes para ambientes marinhos. Sobre os impactos ecológicos decorrentes de eventos severos de escoamento superficial e contaminação hídrica associados a desastres, assinale a alternativa correta.',
+                options: {
+                    A: 'Os metais pesados transportados por drenagens pluviais e escoamentos de rejeitos não sofrem deposição estuarina, dispersando-se uniformemente no oceano aberto sem afetar a biota.',
+                    B: 'Compostos de metais pesados tóxicos depositados no leito dos rios sofrem processos de bioacumulação e biomagnificação ao longo das cadeias tróficas marinhas, gerando riscos de contaminação sistêmica para a fauna e para os consumidores humanos finais.',
+                    C: 'Poluentes orgânicos e químicos industriais carreados por enxurradas extremas precipitam-se imediatamente na foz dos rios sob a forma de sais inertes, neutralizando sua ecotoxicidade.',
+                    D: 'Elementos radiativos antropogênicos eventualmente carreados para águas costeiras deixam de emitir radiação ionizante ao entrarem em contato com a salinidade da água do mar.',
+                    E: 'O transporte de rejeitos minerais em larga escala por rios de grande porte neutraliza o estresse biológico dos estuários ao repovoar os ecossistemas com sedimentos ricos em ferro biodisponível.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das alternativas para a Questão 09:',
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Incorreta.</strong> Os metais pesados (como mercúrio e chumbo) apresentam elevada afinidade química com as frações finas de silte e argila que se depositam nos fundos lodosos de estuários fluviais, acumulando-se nesses ecossistemas.' },
+                        { opt: 'B', text: '<strong>Correta.</strong> Elementos metálicos pesados lixiviados e carreados pelas cheias industriais e de mineração sofrem deposição estuarina e marinha. Organismos filtradores básicos e peixes incorporam esses compostos persistentes (processo de bioacumulação). Devido ao fluxo trófico, as concentrações de veneno aumentam progressivamente ao longo da cadeia alimentar (biomagnificação), resultando em alta toxicidade para os predadores de topo de cadeia e para as populações humanas.', correct: true },
+                        { opt: 'C', text: '<strong>Incorreta.</strong> Os poluentes orgânicos de origem sintética e defensivos químicos não decantam sob a forma de sais neutros. Eles mantêm sua estrutura molecular ativa no meio aquático estuarino, exercendo toxicidade sobre os organismos bentônicos.' },
+                        { opt: 'D', text: '<strong>Incorreta.</strong> A decomposição radioativa de radionuclídeos e a emissão associada de partículas alfa e beta baseiam-se em leis físicas intrínsecas dos núcleos atômicos instáveis, não sofrendo modulação pela salinidade, temperatura ou reações químicas da água do mar.' },
+                        { opt: 'E', text: '<strong>Incorreta.</strong> O aporte maciço e desordenado de sedimentos de rejeitos de mineração ou de erosão agrícola sufoca a vida de bentos marinhas e estuarinas, impede a penetração da luz solar necessária à fotossíntese do fitoplâncton e colapsa a produtividade biológica aquática regional.' }
+                    ]
+                }
+            },
+            {
+                id: 10,
+                correctAnswer: 'B',
+                question: 'Os instrumentos de gestão, planejamento e zoneamento ambiental são fundamentais para ordenar as atividades humanas territoriais e implementar estratégias eficazes de adaptação diante dos cenários de mudanças climáticas e avanço da degradação das terras. Sobre a aplicação de tais mecanismos de proteção e monitoramento ambiental, assinale a alternativa <b>INCORRETA</b>.',
+                options: {
+                    A: 'O Planejamento e o Zoneamento Ambiental são instrumentos voltados à organização do território que visam mapear vulnerabilidades físicas locais, coibindo a ocupação de encostas instáveis e planícies propensas a inundações sob o efeito de tempestades extremas.',
+                    B: 'A Auditoria de Descomissionamento Ambiental avalia os passivos ecológicos, contaminações e danos estruturais de uma unidade empresarial em consequência direta do início do processo de sua instalação inicial no local.',
+                    C: 'As auditorias ambientais constituem ferramentas de controle e gestão que variam de escopo, sendo a Auditoria de Sítios voltada especificamente à investigação de contaminação ou poluição acumulada em um determinado local físico.',
+                    D: 'A Auditoria de Conformidade Legal atua verificando o nível de adequação operacional de uma organização em relação às exigências legais, normas técnicas e regulamentações ambientais vigentes aplicáveis.',
+                    E: 'Auditorias de responsabilidade avaliam de maneira detalhada os passivos ambientais das indústrias, bem como suas obrigações ecológicas efetivas e potenciais decorrentes de suas atividades operacionais históricas.'
+                },
+                resolution: {
+                    intro: 'Análise detalhada das alternativas (Foco na identificação da alternativa incorreta):',
+                    tableHeader: ['Modalidade de Auditoria', 'Foco Principal de Investigação', 'Fase Operacional de Aplicação'],
+                    tableRows: [
+                        ['Conformidade Legal', 'Verificação de conformidade com as leis, licenças e condicionantes ambientais governamentais.', 'Fase de operação comercial contínua da empresa.'],
+                        ['Sistemas de Gestão (SGA)', 'Avaliação da eficácia dos planos internos de gestão e metas verdes estabelecidas.', 'Fase de operação comercial contínua da empresa.'],
+                        ['Sítios / Áreas', 'Investigação física e química direta de passivos, toxicidade ou poluição no solo e na água.', 'Transações de compra de imóveis ou encerramento.'],
+                        ['Responsabilidade', 'Avaliação de riscos jurídicos, passivos financeiros históricos e multas judiciais potenciais.', 'Fusões, cisões, vendas ou aquisições corporativas.'],
+                        ['Descomissionamento', 'Verificação de descontaminação e restauração do ecossistema após o encerramento da atividade.', 'Fase de encerramento definitivo ou desativação do local.']
+                    ],
+                    optionsComms: [
+                        { opt: 'A', text: '<strong>Correta (Fato verdadeiro).</strong> O Zoneamento e o Planejamento Ambiental operam de forma integrada na gestão espacial urbana e rural, mapeando e restringindo a densidade urbana em áreas suscetíveis à instabilidade geotécnica de encostas e várzeas aluviais sujeitas a cheias históricas.' },
+                        { opt: 'B', text: '<strong>INCORRETA (Gabarito da questão).</strong> A Auditoria de Descomissionamento Ambiental não avalia o início ou a fase de instalação de uma empresa. Esse procedimento ocorre especificamente no encerramento das atividades industriais locais (desativação ou fechamento de minas, fábricas e portos), destinando-se a quantificar passivos ecológicos acumulados, avaliar a contaminação residual de solo e água subterrânea, e estabelecer as metas de remediação para assegurar o abandono limpo do sítio industrial.', correct: true },
+                        { opt: 'C', text: '<strong>Correta (Fato verdadeiro).</strong> As auditorias de sítio destinam-se a rastrear, recolher amostras e comprovar de forma científica a existência e o grau de acúmulo de poluentes industriais pesados ou hidrocarbonetos em terrenos específicos.' },
+                        { opt: 'D', text: '<strong>Correta (Fato verdadeiro).</strong> A conformidade legal atesta que os processos de controle ambiental da empresa obedecem rigorosamente à legislação aplicável às suas emissões e efluentes.' },
+                        { opt: 'E', text: '<strong>Correta (Fato verdadeiro).</strong> Auditorias de responsabilidade focam na investigação sistemática e quantificação monetária e técnica de danos ambientais pretéritos ou obrigações judiciais que possam ser transmitidas a novos compradores no processo de fusão ou venda corporativa.' }
+                    ]
+                }
+            }
+        ];
+
+        // Estado Geral do Simulador
+        let userAnswers = {}; // Armazena as seleções feitas pelo usuário
+        let isSubmitted = false; // Indica se o exame já foi submetido para correção
+        let startTime = Date.now(); // Marca inicial para temporizador
+        let timerInterval; // Referência do setInterval do cronômetro
+
+        // Inicialização na montagem da página
+        window.onload = function() {
+            initTimer();
+            renderQuiz();
+            renderResponseGrid();
+            loadProgress();
+        };
+
+        // Inicializa e atualiza o relógio dinâmico
+        function initTimer() {
+            timerInterval = setInterval(() => {
+                if (!isSubmitted) {
+                    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+                    document.getElementById('timer-display').innerText = formatTime(elapsed);
+                }
+            }, 1000);
+        }
+
+        // Formata segundos em string MM:SS
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = (seconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        // Renderiza as questões na tela
+        function renderQuiz() {
+            const container = document.getElementById('questions-holder');
+            container.innerHTML = '';
+
+            quizData.forEach((item, index) => {
+                const qNum = index + 1;
+                const questionCard = document.createElement('div');
+                questionCard.id = `q-card-${item.id}`;
+                questionCard.className = `bg-paper-50 border border-paper-200 rounded-2xl p-6 md:p-8 transition-all duration-300 print-card shadow-sm space-y-5`;
+
+                // Layout Interno do Card da Questão
+                questionCard.innerHTML = `
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="space-y-1">
+                            <span class="text-xs font-bold text-amber-800 tracking-wider uppercase">Questão ${qNum.toString().padStart(2, '0')}</span>
+                            <h3 class="text-base font-semibold leading-relaxed text-paper-900">${item.question}</h3>
+                        </div>
+                        <span id="badge-q-${item.id}" class="hidden no-print text-xs font-semibold px-2.5 py-1 rounded-full"></span>
+                    </div>
+
+                    <!-- Div das Alternativas -->
+                    <div class="space-y-3 pt-2" id="options-group-${item.id}">
+                        ${Object.entries(item.options).map(([key, text]) => {
+                            return `
+                                <label id="label-${item.id}-${key}" class="flex items-start gap-3.5 p-3.5 rounded-xl border border-paper-200 hover:border-amber-700/30 hover:bg-stone-50 cursor-pointer transition-all-ease text-sm select-none relative">
+                                    <input type="radio" name="question-${item.id}" value="${key}" 
+                                        class="mt-1 h-4 w-4 text-amber-800 border-paper-300 focus:ring-amber-700 accent-amber-800 cursor-pointer" 
+                                        onchange="selectOption(${item.id}, '${key}')"
+                                        ${userAnswers[item.id] === key ? 'checked' : ''}
+                                        ${isSubmitted ? 'disabled' : ''}>
+                                    <span class="font-bold text-amber-900 min-w-[1.25rem]">${key}.</span>
+                                    <span class="text-stone-700 leading-relaxed">${text}</span>
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <!-- Div da Resolução (Começa Oculta, surge pós-envio) -->
+                    <div id="resolution-block-${item.id}" class="hidden mt-6 pt-5 border-t border-paper-200 space-y-4">
+                        <div class="bg-amber-50/50 rounded-xl p-4 md:p-5 border-l-4 border-amber-600/70 text-sm space-y-3">
+                            <h4 class="font-bold text-amber-900 flex items-center gap-2">
+                                <i class="fa-regular fa-compass"></i> Resolução Detalhada
+                            </h4>
+                            <p class="text-xs text-stone-600 leading-relaxed">${item.resolution.intro}</p>
+                            
+                            <!-- Exibição de Tabelas de Resoluções Específicas se houver dados de tabela -->
+                            ${item.resolution.tableRows ? `
+                                <div class="overflow-x-auto my-3">
+                                    <table class="w-full text-left text-xs border-collapse rounded-lg overflow-hidden border border-stone-200">
+                                        <thead>
+                                            <tr class="bg-stone-100 text-stone-800 font-bold border-b border-stone-200">
+                                                ${item.resolution.tableHeader.map(h => `<th class="p-2.5">${h}</th>`).join('')}
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-stone-200 bg-white">
+                                            ${item.resolution.tableRows.map(row => `
+                                                <tr class="text-stone-700">
+                                                    ${row.map(cell => `<td class="p-2.5 leading-normal">${cell}</td>`).join('')}
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ` : ''}
+
+                            <!-- Detalhamento de cada alternativa -->
+                            <ul class="space-y-2 text-xs text-stone-700 leading-relaxed mt-3">
+                                ${item.resolution.optionsComms.map(comm => `
+                                    <li class="pl-4 border-l-2 ${comm.correct ? 'border-emerald-500' : 'border-stone-200'}">
+                                        ${comm.text}
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(questionCard);
+            });
+        }
+
+        // Renderiza o grid de acompanhamento na barra lateral direita
+        function renderResponseGrid() {
+            const grid = document.getElementById('response-grid');
+            grid.innerHTML = '';
+
+            quizData.forEach((item, index) => {
+                const qNum = index + 1;
+                const isAnswered = userAnswers[item.id] !== undefined;
+                
+                let btnStyle = "bg-white border-paper-200 text-stone-600 hover:border-amber-700/40 hover:bg-stone-50";
+                let statusIcon = "";
+
+                if (isSubmitted) {
+                    const isCorrect = userAnswers[item.id] === item.correctAnswer;
+                    if (isCorrect) {
+                        btnStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold";
+                        statusIcon = `<span class="absolute -top-1 -right-1 bg-emerald-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px]"><i class="fa-solid fa-check"></i></span>`;
+                    } else {
+                        btnStyle = "bg-rose-50 border-rose-500 text-rose-800 font-bold";
+                        statusIcon = `<span class="absolute -top-1 -right-1 bg-rose-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[8px]"><i class="fa-solid fa-xmark"></i></span>`;
+                    }
+                } else if (isAnswered) {
+                    btnStyle = "bg-amber-50 border-amber-500 text-amber-900 font-bold";
+                }
+
+                const block = document.createElement('div');
+                block.className = 'relative';
+                block.innerHTML = `
+                    <button type="button" onclick="scrollToQuestion(${item.id})" 
+                        class="w-full py-2.5 rounded-xl border text-center text-xs font-semibold transition-all-ease shadow-sm flex flex-col items-center justify-center gap-0.5 ${btnStyle}">
+                        <span>Q${qNum.toString().padStart(2, '0')}</span>
+                        <span class="text-[9px] opacity-60 font-mono">${userAnswers[item.id] || '-'}</span>
+                    </button>
+                    ${statusIcon}
+                `;
+                grid.appendChild(block);
+            });
+
+            // Atualiza indicadores de texto
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('answered-count').innerText = `${answeredCount} de 10`;
+            document.getElementById('pending-count').innerText = `${10 - answeredCount}`;
+        }
+
+        // Rola até o card da questão correspondente de forma suave
+        function scrollToQuestion(id) {
+            const card = document.getElementById(`q-card-${id}`);
+            if (card) {
+                const headerOffset = 80;
+                const elementPosition = card.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+
+                // Pequeno destaque piscante de foco visual suave
+                card.classList.add('ring-2', 'ring-amber-600/20');
+                setTimeout(() => {
+                    card.classList.remove('ring-2', 'ring-amber-600/20');
+                }, 1000);
+            }
+        }
+
+        // Executado ao marcar uma alternativa de rádio
+        function selectOption(qId, val) {
+            if (isSubmitted) return;
+            userAnswers[qId] = val;
+            saveProgress();
+            renderResponseGrid();
+        }
+
+        // Persiste o progresso no localStorage do navegador para evitar perda de dados por recarga acidental
+        function saveProgress() {
+            try {
+                localStorage.setItem('faurgs_quiz_answers', JSON.stringify(userAnswers));
+            } catch (e) {
+                console.error("Falha ao gravar no localStorage", e);
+            }
+        }
+
+        // Carrega o progresso ao abrir
+        function loadProgress() {
+            try {
+                const saved = localStorage.getItem('faurgs_quiz_answers');
+                if (saved) {
+                    userAnswers = JSON.parse(saved);
+                    renderQuiz();
+                    renderResponseGrid();
+                }
+            } catch (e) {
+                console.error("Falha ao recuperar do localStorage", e);
+            }
+        }
+
+        // Submete e corrige o quiz
+        function submitQuiz(event) {
+            event.preventDefault();
+
+            // Garantir que todas as questões possuem pelo menos uma resposta marcada
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount < 10) {
+                const proceed = confirm(`Você respondeu apenas ${answeredCount} de 10 questões. Deseja enviar o exame e finalizar assim mesmo?`);
+                if (!proceed) return;
+            }
+
+            isSubmitted = true;
+            clearInterval(timerInterval);
+
+            // Calcula o Score final
+            let correctCount = 0;
+            quizData.forEach(item => {
+                const isCorrect = userAnswers[item.id] === item.correctAnswer;
+                if (isCorrect) correctCount++;
+                
+                // Exibe resoluções comentadas para todas as questões
+                const block = document.getElementById(`resolution-block-${item.id}`);
+                if (block) block.classList.remove('hidden');
+
+                // Atualiza design visual de cada alternativa conforme acerto/erro
+                updateAlternativeStyles(item, isCorrect);
+            });
+
+            // Atualiza Painel de Resultados Geral
+            document.getElementById('score-counter').innerText = `${correctCount}/10`;
+            const percentage = Math.round((correctCount / 10) * 100);
+            document.getElementById('percentage-counter').innerText = `${percentage}%`;
+
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            document.getElementById('final-time-display').innerText = formatTime(elapsed);
+
+            // Emite Badge de Aprovação baseado no padrão da banca (> 60%)
+            const badge = document.getElementById('approval-badge');
+            if (percentage >= 60) {
+                badge.innerText = "Classificado";
+                badge.className = "text-lg font-bold text-emerald-600";
+                document.getElementById('result-status-text').innerHTML = 'Parabéns! Você alcançou a pontuação mínima de aprovação na prova de título.';
+            } else {
+                badge.innerText = "Não Classificado";
+                badge.className = "text-lg font-bold text-red-600";
+                document.getElementById('result-status-text').innerHTML = 'Infelizmente você ficou abaixo do corte de 60%. Revise as resoluções comentadas.';
+            }
+
+            // Exibir Painel de Resultados superior e ocultar formulário de envio
+            document.getElementById('results-dashboard').classList.remove('hidden');
+            document.getElementById('submit-section').classList.add('hidden');
+
+            // Limpa armazenamento persistente para permitir recomeçar limpo
+            try { localStorage.removeItem('faurgs_quiz_answers'); } catch(e) {}
+
+            // Rola suavemente para o topo para visualização do feedback inicial
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Atualiza grid de respostas com cores verde/vermelho
+            renderResponseGrid();
+        }
+
+        // Altera estilização das labels de rádio exibindo as cores corretas pós-submissão
+        function updateAlternativeStyles(item, wasOverallCorrect) {
+            const qId = item.id;
+            
+            // Atualizar badge superior do card
+            const qBadge = document.getElementById(`badge-q-${qId}`);
+            if (qBadge) {
+                qBadge.classList.remove('hidden');
+                if (userAnswers[qId] === item.correctAnswer) {
+                    qBadge.innerText = 'Correta';
+                    qBadge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200';
+                } else {
+                    qBadge.innerText = userAnswers[qId] ? 'Incorreta' : 'Em Branco';
+                    qBadge.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-rose-50 text-rose-800 border border-rose-200';
+                }
+            }
+
+            // Iterar sobre cada alternativa (A, B, C, D, E)
+            Object.keys(item.options).forEach(key => {
+                const label = document.getElementById(`label-${qId}-${key}`);
+                if (!label) return;
+
+                // Remover classes interativas anteriores
+                label.className = "flex items-start gap-3.5 p-3.5 rounded-xl border text-sm select-none relative ";
+
+                const isThisSelected = userAnswers[qId] === key;
+                const isThisCorrect = item.correctAnswer === key;
+
+                if (isThisCorrect) {
+                    // Alternativa Correta do Gabarito: Sempre Verde
+                    label.classList.add("bg-emerald-50/50", "border-emerald-500", "text-emerald-900");
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = "absolute right-4 top-4 text-emerald-600 font-bold text-xs flex items-center gap-1";
+                    iconSpan.innerHTML = `<i class="fa-solid fa-circle-check"></i> <span class="hidden sm:inline">Gabarito</span>`;
+                    label.appendChild(iconSpan);
+                } else if (isThisSelected) {
+                    // Usuário selecionou essa e estava incorreta: Vermelho
+                    label.classList.add("bg-rose-50/50", "border-rose-400", "text-rose-900");
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = "absolute right-4 top-4 text-rose-600 font-bold text-xs flex items-center gap-1";
+                    iconSpan.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> <span class="hidden sm:inline">Sua Escolha</span>`;
+                    label.appendChild(iconSpan);
+                } else {
+                    // Demais alternativas não selecionadas e incorretas: Opacidade reduzida
+                    label.classList.add("bg-stone-50/30", "border-paper-200", "opacity-60", "text-stone-500");
+                }
+            });
+        }
+
+        // Confirmação para reiniciar
+        function confirmReset() {
+            const proceed = confirm("Deseja realmente limpar suas respostas atuais e reiniciar o cronômetro do zero?");
+            if (proceed) {
+                resetQuiz();
+            }
+        }
+
+        // Reseta o estado inteiro do quiz
+        function resetQuiz() {
+            userAnswers = {};
+            isSubmitted = false;
+            startTime = Date.now();
+            
+            try { localStorage.removeItem('faurgs_quiz_answers'); } catch(e) {}
+
+            // Ocultar painel de resultados e revelar seção de envio
+            document.getElementById('results-dashboard').classList.add('hidden');
+            document.getElementById('submit-section').classList.remove('hidden');
+
+            renderQuiz();
+            renderResponseGrid();
+            initTimer();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

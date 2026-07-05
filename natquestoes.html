@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Estilo FAURGS - Relação Natureza-Sociedade e Dinâmicas de Degradação</title>
+    <!-- Tailwind CSS para Estilização Moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonte Inter para Legibilidade de Longa Duração -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Ícones do Phosphor para Elementos Visuais -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar para visual profissional */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900 transition-colors duration-300">
+
+    <!-- Header Fixo de Progresso -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm transition-all">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                    <i class="ph-bold ph-graduation-cap text-xl"></i>
+                </span>
+                <div>
+                    <h1 class="font-bold text-slate-900 text-sm md:text-base leading-tight">Simulado Estilo FAURGS</h1>
+                    <p class="text-xs text-slate-500 hidden md:block">Geografia Física, Meio Ambiente e Solos</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="text-right">
+                    <span class="text-xs text-slate-500 font-medium">Progresso</span>
+                    <div class="text-sm font-bold text-indigo-600" id="progress-text">0 / 10 respondidas</div>
+                </div>
+                <div class="w-24 md:w-32 bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-6 md:p-8 rounded-2xl mb-8 shadow-md">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-4">
+                <i class="ph-bold ph-lightning"></i> Alto Rendimento
+            </span>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight mb-3">
+                Relação Natureza-Sociedade e Dinâmicas Degradativas
+            </h2>
+            <p class="text-slate-300 text-sm md:text-base leading-relaxed max-w-3xl mb-6">
+                Este simulado contém 10 questões inéditas e de provas anteriores com foco em perspectivas socioambientais, processos geomorfológicos complexos (desmoronamentos, voçorocas) e degradação dos solos no Rio Grande do Sul.
+            </p>
+            
+            <!-- Seleção de Modo de Estudo -->
+            <div class="bg-slate-800/40 border border-slate-700/50 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="space-y-1">
+                    <h3 class="font-semibold text-slate-100 flex items-center gap-2 text-sm md:text-base">
+                        <i class="ph-bold ph-gear"></i> Escolha o Modo de Estudo:
+                    </h3>
+                    <p class="text-xs text-slate-400">Você pode alternar o formato de correção a qualquer momento.</p>
+                </div>
+                <div class="flex bg-slate-900 p-1 rounded-lg border border-slate-700 self-start sm:self-center">
+                    <button id="btn-mode-exam" onclick="setQuizMode('exam')" class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 bg-indigo-600 text-white shadow-sm flex items-center gap-1.5">
+                        <i class="ph-bold ph-file-text"></i> Modo Simulado
+                    </button>
+                    <button id="btn-mode-study" onclick="setQuizMode('study')" class="px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 text-slate-400 hover:text-slate-200 flex items-center gap-1.5">
+                        <i class="ph-bold ph-books"></i> Modo Prática
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-questions" class="space-y-8">
+            <!-- Questions will be dynamically rendered here via JavaScript -->
+        </div>
+
+        <!-- Botão de Finalizar (Modo Simulado) -->
+        <div id="action-panel" class="mt-12 mb-16 p-6 bg-white rounded-2xl border border-slate-200 shadow-sm text-center">
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Concluiu as suas respostas?</h3>
+            <p class="text-sm text-slate-500 mb-6">Confira se respondeu a todas as questões antes de submeter o gabarito.</p>
+            <button id="submit-quiz-btn" onclick="submitExam()" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-base">
+                <i class="ph-bold ph-check-square-offset text-xl"></i> Finalizar Simulado e Ver Resoluções
+            </button>
+        </div>
+
+        <!-- Dashboard de Resultados Oculto de Início -->
+        <div id="results-dashboard" class="hidden mt-12 mb-16 space-y-6">
+            <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-md">
+                <div class="text-center max-w-md mx-auto mb-8">
+                    <span id="score-badge" class="inline-flex items-center justify-center w-20 h-20 rounded-full text-3xl font-extrabold mb-4">
+                        <!-- Score counter loaded via JS -->
+                    </span>
+                    <h3 id="score-title" class="text-xl md:text-2xl font-extrabold text-slate-900 mb-2">Resultado Final</h3>
+                    <p id="score-subtitle" class="text-slate-500 text-sm">Review detailed statistics of your simulation below.</p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider block mb-1">Acertos</span>
+                        <span id="stat-correct" class="text-xl font-bold text-emerald-600">-</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider block mb-1">Erros</span>
+                        <span id="stat-incorrect" class="text-xl font-bold text-rose-600">-</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider block mb-1">Aproveitamento</span>
+                        <span id="stat-percent" class="text-xl font-bold text-indigo-600">-</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider block mb-1">Tempo de Prova</span>
+                        <span id="stat-time" class="text-xl font-bold text-slate-700">Concluído</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-slate-100 flex flex-col sm:flex-row gap-3 justify-center">
+                    <button onclick="resetQuiz()" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-sm transition-all flex items-center justify-center gap-1.5">
+                        <i class="ph-bold ph-arrows-counter-clockwise"></i> Refazer Simulado
+                    </button>
+                    <button onclick="window.print()" class="px-5 py-2.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold rounded-lg text-sm transition-all flex items-center justify-center gap-1.5">
+                        <i class="ph-bold ph-printer"></i> Imprimir / Salvar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-8 text-center text-xs md:text-sm text-slate-500 mt-12">
+        <div class="max-w-4xl mx-auto px-4">
+            <p class="mb-2">Desenvolvido com foco em Metodologias Ativas de Estudo e Preparação de Alto Rendimento.</p>
+            <p class="text-slate-400">Estilo FAURGS • Universidade Federal do Rio Grande do Sul (UFRGS) adaptado • 2026</p>
+        </div>
+    </footer>
+
+    <script>
+        // Database complete de questões originais
+        const questions = [
+            {
+                id: 1,
+                code: "Q01",
+                topic: "Arenização, Distribuição Geográfica e Condicionantes Hidrológicos (RS)",
+                prompt: `No sudoeste do estado do Rio Grande do Sul, o processo de arenização tem sido objeto de intensos debates conceituais e metodológicos no âmbito da ciência geográfica brasileira, destacando-se as contribuições teóricas acerca da relação entre a dinâmica natural e a intervenção social na produção do espaço.<br><br>Considere as seguintes afirmações sobre o processo de arenização, sua distribuição geográfica, condicionantes estruturais e dinâmica climática.`,
+                items: [
+                    "O fenômeno da arenização ocorre em uma faixa geográfica delimitada regionalmente entre as latitudes 29º00'S e 31º00'S e as longitudes 54º30'W e 58º45'W, caracterizando-se por manchas de solos descobertos e focos erosivos associados a ravinas e voçorocas.",
+                    "A morfogênese dos areais está associada a fatores estruturais e hidrológicos subsuperficiais, como os chamados \"degraus de abatimento\", feições de colapso que se desenvolvem nas porções médias das colinas (coxilhas) e estão vinculadas ao escoamento concentrado de águas subterrâneas.",
+                    "Investigações de cunho climatológico indicam que a arenização do Pampa gaúcho é ativada exclusivamente por períodos de seca extrema e prolongada, sendo que os episódios de chuvas diárias de forte intensidade (entre 80 e 100 mm) verificados nos meses de novembro e fevereiro exercem papel nulo na dinâmica erosiva-deposicional.",
+                    "De acordo com as análises morfogenéticas clássicas estabelecidas para a região de Quaraí (RS), a arenização constitui um processo de evolução natural associado a divisores de água, cabeceiras fluviais e vertentes médias limitadas a montante por escarpas areníticas, cuja dinâmica é posteriormente acelerada por práticas sociais inadequadas, como o sobrepastoreio."
+                ],
+                type: "items", // Indica que usa itens enumerados I, II, III...
+                options: [
+                    { key: "A", text: "Apenas I e III." },
+                    { key: "B", text: "Apenas II e IV." },
+                    { key: "C", text: "Apenas I, II e IV." },
+                    { key: "D", text: "Apenas II, III e IV." },
+                    { key: "E", text: "I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa C
+                        </p>
+                        <ul class="space-y-2">
+                            <li><strong>Afirmação I (Correta):</strong> A faixa geográfica descrita abrange perfeitamente a área onde as formações de arenitos da Bacia do Paraná (Formações Botucatu, Guará e Sanga do Cabral) afloram em clima subtropical, gerando as manchas de arenização típicas do sudoeste gaúcho.</li>
+                            <li><strong>Afirmação II (Correta):</strong> Os degraus de abatimento são feições clássicas estudadas pela geomorfologia regional do RS. Resultam de processos de erosão subsuperficial hídrica (sapeamento e escoamento em lençóis freáticos rasos) que causam subsidência nas vertentes médias das coxilhas.</li>
+                            <li><strong>Afirmação III (Incorreta):</strong> A dinâmica erosiva-deposicional é ativada de forma acentuada justamente sob condições de precipitação extrema. O aumento de chuvas intensas diárias (de 80 a 100 mm) correlaciona-se com altas taxas de escoamento e desagregação, exercendo papel dinâmico fundamental (e não nulo) na mobilização dos areais.</li>
+                            <li><strong>Afirmação IV (Correta):</strong> Reflete os estudos seminais de Dirce Suertegaray (1987). A arenização tem uma gênese natural ligada à dinâmica climática e geológica das cabeceiras (natureza em movimento), mas as ações sociais inadequadas, principalmente o sobrepastoreio extensivo histórico, catalisam esse processo e impedem a regeneração florística natural.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                code: "Q02",
+                topic: "Degradação Química, Física e Biológica de Solos sob Pastagens",
+                prompt: `A avaliação do estado de conservação dos solos agrícolas e pastoris constitui etapa indispensável para o planejamento de práticas de manejo sustentáveis e para a tomada de decisão quanto à recuperação de áreas degradadas.<br><br>Considere as afirmações abaixo sobre a degradação química, biológica e física de solos sob pastagens, tomando como base os diferentes níveis de degradação (do nível leve, N1, ao nível forte, N3).`,
+                items: [
+                    "A taxa média de cobertura vegetal de pastagem em áreas sob degradação leve (N1) é significativamente superior àquela registrada em áreas sob degradação forte (N3), refletindo a perda de qualidade física e química do solo ao longo do avanço do processo degradativo.",
+                    "Na avaliação química de perfis pedológicos sob diferentes níveis de degradação, constata-se que o pH do solo diminui em profundidade, acompanhado pelo aumento proporcional na saturação por alumínio (Al<sup>3+</sup>), independentemente do estado de conservação ou degradação da pastagem.",
+                    "Os parâmetros químicos associados à fertilidade do solo, tais como a saturação por bases (V), o nitrogênio (N), o fósforo (P), o potássio (K) e o carbono orgânico (C), apresentam concentrações superiores nas camadas mais profundas do perfil devido à lixiviação acelerada provocada pela atividade biológica de raízes."
+                ],
+                type: "items",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa C
+                        </p>
+                        <ul class="space-y-2">
+                            <li><strong>Afirmação I (Correta):</strong> Há uma relação direta e inversa entre a cobertura vegetal e a degradação. Quanto mais degradado o solo (nível forte N3), menor é o vigor e o recobrimento do estrato herbáceo, deixando a superfície pedológica exposta aos processos de compactação, erosão e ressecamento.</li>
+                            <li><strong>Afirmação II (Correta):</strong> Em muitos solos sob pastagem (particularmente Latossolos e Argissolos), o intemperismo avançado promove a lixiviação de bases nas camadas mais profundas. Isso resulta em um gradiente natural de decréscimo de pH e correspondente aumento na saturação de alumínio trocável (Al<sup>3+</sup>) em horizontes subsuperficiais, independentemente da degradação de curto prazo na pastagem superficial.</li>
+                            <li><strong>Afirmação III (Incorreta):</strong> A matéria orgânica (carbono orgânico), o nitrogênio e os nutrientes fundamentais (P e K) concentram-se preferencialmente na camada superficial (horizonte A) devido ao aporte biológico de serapilheira e ciclagem biológica das raízes. Eles não são maiores em profundidade; pelo contrário, decrescem sensivelmente ao longo do perfil.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                code: "Q03",
+                topic: "Dinâmica Evolutiva de Vertentes e Processos Erosivos Lineares",
+                prompt: `A dinâmica evolutiva das vertentes e a consequente perda de solos por processos erosivos lineares envolvem mecanismos físicos distintos, cujos limiares de desenvolvimento dependem da interação entre escoamento superficial, infiltração e dinâmica de águas subterrâneas.<br><br>Relacione os processos e feições erosivas lineares apresentados na primeira coluna às respectivas descrições e mecanismos de atuação listados na segunda coluna.`,
+                type: "matching",
+                matchingData: {
+                    col1: [
+                        { num: 1, text: "Ravinas" },
+                        { num: 2, text: "Voçorocas" },
+                        { num: 3, text: "Piping" },
+                        { num: 4, text: "Alcovas de regressão" }
+                    ],
+                    col2: [
+                        "Processo de erosão subsuperficial caracterizado pelo desenvolvimento de condutos internos ou túneis devido ao fluxo hídrico subterrâneo concentrado, que transporta partículas de solo e pode culminar no colapso do teto da feição.",
+                        "Incisões erosivas lineares ativas que se desenvolvem na paisagem apresentando cabeceira bem definida, múltiplos ressaltos ao longo de seu curso e cuja profundidade intercepta o lençol freático, manifestando surgências de água em seu interior.",
+                        "Espaços vazios esculpidos no formato de reentrâncias côncavas nas paredes das incisões erosivas, originados pela ação combinada do escoamento superficial na forma de filetes subverticais e da exfiltração do lençol freático nas faces livres de exposição.",
+                        "Sulcos erosivos lineares aprofundados na superfície do terreno que, embora apresentem dimensões físicas superiores a 50 cm de profundidade, caracterizam-se por ramificações raras e por não atingirem a zona saturada do lençol freático."
+                    ]
+                },
+                options: [
+                    { key: "A", text: "3 – 2 – 4 – 1." },
+                    { key: "B", text: "3 – 1 – 2 – 4." },
+                    { key: "C", text: "1 – 2 – 3 – 4." },
+                    { key: "D", text: "2 – 3 – 4 – 1." },
+                    { key: "E", text: "4 – 2 – 1 – 3." }
+                ],
+                correct: "A",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa A (3 – 2 – 4 – 1)
+                        </p>
+                        <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 space-y-2">
+                            <p><strong>Associação correta passo a passo:</strong></p>
+                            <p>• <strong>(3) Piping:</strong> A primeira descrição define perfeitamente o fenômeno físico da entubação ou <em>piping</em>, onde a água subsuperficial cria túneis ou condutos pelo arraste de sedimentos finos.</p>
+                            <p>• <strong>(2) Voçorocas:</strong> A segunda descrição elucida o conceito de voçoroca por excelência: a intercepção da zona saturada (lençol freático) gerando surgências de água permanentes ou temporárias no assoalho da incisão.</p>
+                            <p>• <strong>(4) Alcovas de regressão:</strong> A terceira descrição especifica as alcovas de regressão, associadas ao processo de colapso de cabeceiras nas bordas de grandes erosões.</p>
+                            <p>• <strong>(1) Ravinas:</strong> A quarta descrição define as ravinas, formas lineares profundas (geralmente > 50 cm) que não atingem a zona freática e não possuem ramificações tão complexas quanto as voçorocas.</p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                code: "Q04",
+                topic: "Dinâmica Ecológica e Transformações Ambientais nos Campos Sulinos",
+                prompt: `Os Campos Sulinos, ecossistemas de elevada biodiversidade localizados no sul do Brasil, têm sofrido profundas transformações em sua cobertura vegetal e na dinâmica de suas paisagens originais em decorrência de pressões antrópicas históricas e contemporâneas.<br><br>Considere as afirmações abaixo sobre a dinâmica ecológica e os impactos ambientais associados aos Campos Sulinos.`,
+                items: [
+                    "Registros palinológicos obtidos na região de Cambará do Sul documentam que a paisagem campestre passou por dinâmicas naturais de expansão e retração ao longo do Quaternário, sendo a posterior expansão das florestas de Araucária um evento marcante na evolução fitogeográfica local.",
+                    "A substituição da vegetação campestre original e a consequente modificação das paisagens decorrem da expansão de atividades agropecuárias e de projetos de silvicultura baseados no plantio de espécies exóticas, como Pinus e Eucalyptus.",
+                    "O avanço biológico de espécies invasoras, como o capim-annoni (Eragrostis plana), no bioma Pampa constitui um grave problema de degradação ecológica, sendo sua introdução e dispersão na paisagem facilitadas pelo plantio comercial planejado de florestas de eucalipto."
+                ],
+                type: "items",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa C
+                        </p>
+                        <ul class="space-y-2">
+                            <li><strong>Afirmação I (Correta):</strong> Estudos palinológicos e de isótopos de carbono provam que os campos predominavam no topo do planalto do RS no Holoceno Inferior e Médio sob clima mais seco. O avanço da floresta de Araucária ocorreu posteriormente com o aumento de umidade no Holoceno Tardio.</li>
+                            <li><strong>Afirmação II (Correta):</strong> A perda de habitat nos Campos Sulinos é severamente guiada pela conversão agrícola direta (grãos como a soja) e por reflorestamentos comerciais de pinus e eucaliptos em áreas campestres nativas.</li>
+                            <li><strong>Afirmação III (Incorreta):</strong> Embora o capim-annoni seja de fato a principal espécie vegetal exótica invasora do bioma Pampa, sua introdução ocorreu acidentalmente na década de 1970 misturada a sementes de forrageiras importadas (e não como ação associada ao plantio comercial planejado de eucaliptos).</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                code: "Q05",
+                topic: "Escorregamentos de Encostas e Indicadores de Instabilidade Geomórfica",
+                prompt: `Os escorregamentos ou deslizamentos constituem processos marcantes na evolução das encostas, caracterizando-se como riscos geomorfológicos graves quando interagem com áreas ocupadas pelas populações humanas.<br><br>Com relação às tipologias, condicionantes e indicadores físicos associados a esses movimentos gravitacionais de massa, assinale a afirmação correta.`,
+                type: "text",
+                options: [
+                    { key: "A", text: "Os escorregamentos de tipologia rotacional caracterizam-se por apresentar superfícies de ruptura planas e retilíneas, ocorrendo predominantemente em taludes curtos de rochas sãs e maciças desprovidas de fraturamento estrutural." },
+                    { key: "B", text: "O aparecimento de fendas de tração e depressões no terreno, a inclinação anômala de postes, cercas ou árvores, e o surgimento repentino de minas d'água na encosta configuram importantes indicadores físicos de instabilidade mecânica do solo." },
+                    { key: "C", text: "Os movimentos de massa induzidos são causados unicamente por anomalias sísmicas de alta magnitude, inexistindo correlação mecânica com a execução de cortes de talude inadequados ou com o descarte concentrado de águas servidas urbanas." },
+                    { key: "D", text: "A presença de solos pouco espessos assentes sobre superfícies rochosas maciças e impermeáveis atua como um fator natural de estabilização das encostas, impedindo a formação de planos de ruptura sob condições de chuvas torrenciais." },
+                    { key: "E", text: "O monitoramento preventivo de encostas urbanas limita-se à medição diária da umidade do ar, visto que a poropressão e o nível de saturação do lençol freático são variáveis sem relevância para a física dos deslizamentos de terra." }
+                ],
+                correct: "B",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa B
+                        </p>
+                        <p><strong>Justificativa:</strong></p>
+                        <p>O surgimento de fissuras (fendas de tração), degraus de abatimento, inclinação de feições verticais (pelo rastejo de encostas ou "creep") e surgências rápidas de água indicam que o solo está sofrendo esforços de cisalhamento que superam sua resistência mecânica intrínseca, servindo como claros indicadores de risco iminente de colapso.</p>
+                        <p><strong>Por que as outras alternativas estão erradas?</strong></p>
+                        <ul class="list-disc list-inside space-y-1 pl-2">
+                            <li><strong>A:</strong> Movimentos rotacionais possuem superfície de ruptura côncava/curva e ocorrem em solos espessos, colúvios e aterros. Superfícies planas definem movimentos translacionais.</li>
+                            <li><strong>C:</strong> Movimentos induzidos resultam frequentemente de intervenções humanas errôneas, como cortes abruptos de talude e vazamentos de água servida.</li>
+                            <li><strong>D:</strong> Pelo contrário, solos rasos sobre rocha lisa e impermeável facilitam deslizamentos translacionais por conta do "efeito rampa" no contato lito-pedológico quando saturado.</li>
+                            <li><strong>E:</strong> A poropressão é o parâmetro físico central na mecânica dos solos para escorregamentos, diminuindo a resistência friccional entre as partículas.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                code: "Q06",
+                topic: "Análise de Estabilidade de Encostas: Fatores Condicionantes e Gatilhos",
+                prompt: `A análise da estabilidade de encostas e a modelagem de riscos geomorfológicos exigem a distinção clara entre as condições intrínsecas ao meio físico e as forças dinâmicas externas capazes de desencadear a ruptura do equilíbrio de vertentes.<br><br>De acordo com as classificações de fatores condicionantes dos movimentos gravitacionais de massa na literatura geomorfológica, assinale a alternativa que apresenta, respectivamente, um agente predisponente geológico, um agente predisponente morfológico e um agente desencadeante imediato.`,
+                type: "text",
+                options: [
+                    { key: "A", text: "Presença de descontinuidades estruturais concordantes com o declive – Altura e declividade do talude – Ocorrência de chuvas intensas e concentradas." },
+                    { key: "B", text: "Execução de aterros antrópicos – Dissolução química de minerais – Oscilação sazonal do nível do lençol freático." },
+                    { key: "C", text: "Presença de rochas argilosas de comportamento plástico – Desmatamento de topo de morro – Grau de intemperismo do manto de alteração." },
+                    { key: "D", text: "Erosão basal por dinâmica fluvial – Presença de solos pouco espessos sobre rochas impermeáveis – Compactação mecânica por tráfego de maquinário." },
+                    { key: "E", text: "Ocorrência de terremotos de magnitude elevada – Orientação da vertente em relação à insolação – Flutuação de marés estuarinas." }
+                ],
+                correct: "A",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa A
+                        </p>
+                        <p>A classificação geomorfológica divide os fatores em:</p>
+                        <ul class="list-disc list-inside space-y-1 pl-2">
+                            <li><strong>Predisponentes Geológicos (Intrínsecos estruturais):</strong> Atributos litológicos e estruturais (xistosidade, fraturas, descontinuidades concordantes ao declive).</li>
+                            <li><strong>Predisponentes Morfológicos (Geométricos):</strong> Geometria tridimensional do terreno (ângulo de declive, comprimento de rampa, altura do talude).</li>
+                            <li><strong>Desencadeantes Imediatos (Gatilhos dinâmicos):</strong> Eventos que rompem subitamente o equilíbrio limite do material (chuva torrencial concentrada aumentando a poropressão rapidamente, abalos sísmicos).</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                code: "Q07",
+                topic: "Erodibilidade Pedológica e Diferenças Texturais Locais (Passo Fundo vs Cruz Alta)",
+                prompt: `A erodibilidade de um solo refere-se à sua susceptibilidade intrínseca aos processos de desagregação e transporte de partículas pela ação dos agentes erosivos, variando em função de suas propriedades mineralógicas, texturais e físico-químicas estruturais.<br><br>A respeito da física do solo, dos fatores de erodibilidade e dos métodos de análise laboratorial de amostras pedológicas, assinale a afirmação correta.`,
+                type: "text",
+                options: [
+                    { key: "A", text: "O solo desenvolvido no município de Passo Fundo apresenta características mais arenosas e menor teor de óxidos de ferro em comparação ao solo de Cruz Alta, visto que o material parental do primeiro é composto exclusivamente por arenitos puros." },
+                    { key: "B", text: "A presença de um gradiente textural acentuado entre os horizontes superficiais (A) e subsuperficiais (B) atua reduzindo o risco de erosão do solo, pois a descontinuidade textural facilita a drenagem natural uniforme da água pluvial." },
+                    { key: "C", text: "Para a extração e análise da água intersticial contida em uma amostra de solo coletada em campo, os procedimentos físicos laboratoriais indicados compreendem, sequencialmente, as técnicas de sedimentação e cocção." },
+                    { key: "D", text: "O solo de Passo Fundo, cujo material parental é o basalto com influência de arenito, apresenta características mais argilosas e maior teor de óxidos metálicos quando comparado ao solo de Cruz Alta, cujo material parental é de matriz predominantemente arenítica." },
+                    { key: "E", text: "A erodibilidade do solo é um parâmetro estático e homogêneo em toda a bacia hidrográfica, determinado unicamente pela profundidade total do perfil pedológico, independentemente do relevo e do manejo." }
+                ],
+                correct: "D",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa D
+                        </p>
+                        <ul class="space-y-2">
+                            <li><strong>Justificativa da D:</strong> A geologia local determina a física dos solos. No Planalto Médio Gaúcho, os Latossolos Vermelhos desenvolvidos em Passo Fundo derivam da Formação Serra Geral (basaltos), conferindo maior teor de argila e óxidos de Fe e Al, que ajudam na estruturação estável em microagregados. O solo de Cruz Alta apresenta transições com maior influência de rochas areníticas da Formação Botucatu/Tupanciretã, gerando frações de areia mais expressivas e maior suscetibilidade de desagregação.</li>
+                            <li><strong>Por que as outras estão erradas?</strong>
+                                <ul class="list-disc list-inside pl-3 space-y-1 mt-1 text-xs">
+                                    <li><strong>A:</strong> Inverte a geologia de Passo Fundo e Cruz Alta.</li>
+                                    <li><strong>B:</strong> O gradiente textural (comum em Argissolos) eleva significativamente a erodibilidade porque a infiltração é barrada no horizonte B mais denso, provocando saturação e erosão laminar severa.</li>
+                                    <li><strong>C:</strong> A extração de água intersticial sem alterar quimicamente os solutos é obtida via centrifugação com solventes ou sucção a vácuo/placas porosas de pressão, não por "cocção" (que evaporaria e alteraria os analitos).</li>
+                                    <li><strong>E:</strong> A erodibilidade é dinâmica e heterogênea, condicionada diretamente por variações locais e pelas práticas de manejo da terra.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                code: "Q08",
+                topic: "Impactos Ambientais Regionais e Dinâmica de Erosões Lineares no RS",
+                prompt: `A interface entre a expansão das atividades humanas e o meio biofísico manifesta-se de forma nítida na aceleração de processos erosivos e degradativos do solo em bacias hidrográficas sob diferentes regimes de uso da terra.<br><br>Considere as seguintes afirmações sobre os impactos ambientais e geomorfológicos diagnosticados no estado do Rio Grande do Sul.`,
+                items: [
+                    "Na Área de Proteção Ambiental (APA) do Banhado Grande, a ocorrência de ravinas e voçorocas impõe restrições severas ao manejo agrícola, demandando planejamento específico para o uso de maquinários e implementos agrícolas nas atividades de cultivo de espécies anuais, pecuária e fruticultura.",
+                    "No município de Pelotas, o desenvolvimento de feições erosivas lineares de grande porte é exemplificado pelo caso histórico da Voçoroca do Barro Duro, cujo processo erosivo natural foi acelerado pela ação humana a partir da instalação inadequada de um esgoto a céu aberto, desestabilizando mecanicamente o solo da região.",
+                    "A fragilidade ambiental das encostas na APA do Banhado Grande impede totalmente qualquer atividade pastoril ou agrícola em seu território, restando a totalidade de sua área de manejo restrita por lei à conservação estrita de matas ciliares primárias."
+                ],
+                type: "items",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa C
+                        </p>
+                        <ul class="space-y-2">
+                            <li><strong>Afirmação I (Correta):</strong> A APA do Banhado Grande possui fragilidades associadas a solos arenosos e vertentes de transição. Nela, o desenvolvimento de ravinas e processos erosivos obriga os produtores a adotarem terraços, plantio direto e restrição ao uso de maquinário pesado para mitigar prejuízos físicos severos.</li>
+                            <li><strong>Afirmação II (Correta):</strong> O caso da Voçoroca do Barro Duro em Pelotas é amplamente referenciado na literatura acadêmica geomorfológica do RS como um modelo clássico de voçorocamento urbano induzido pela má canalização de águas pluviais/esgoto sanitário, atuando como gatilho antrópico drástico em material friável.</li>
+                            <li><strong>Afirmação III (Incorreta):</strong> Uma Área de Proteção Ambiental (APA) é uma Unidade de Conservação de Uso Sustentável, permitindo de forma regulamentada atividades produtivas agrícolas e pecuárias. Não há proibição total das atividades humanas, mas sim a necessidade de que estas sigam diretrizes estabelecidas em plano de manejo.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                code: "Q09",
+                topic: "Monitoramento de Detalhe e Mecanismos Evolutivos de Voçorocas por VANTs",
+                prompt: `Compreender os mecanismos erosivos internos que governam a evolução de feições lineares ativas é crucial para estimar as taxas de perda de solo e desenhar estratégias eficazes de estabilização física e biológica.<br><br>Assinale a alternativa que preenche corretamente as lacunas do texto abaixo, considerando os mecanismos erosivos de voçorocas monitorados com o auxílio de Veículos Aéreos Não Tripulados (VANTs) de alta resolução.<br><br><em>"O imageamento de detalhe de grandes voçorocas ativas no sul do Brasil revela que os ________________________ constituem o principal agente responsável pelo avanço lateral e vertical da feição, predominando em suas porções superiores. Por sua vez, no terço inferior da voçoroca, constata-se a ocorrência de abatimentos e áreas de rebaixamento controlados pelo contato físico entre ________________________"</em>.`,
+                type: "text",
+                options: [
+                    { key: "A", text: "fluxos de detritos eólicos – lentes de rochas basálticas compactas e lentes de depósitos orgânicos holocênicos" },
+                    { key: "B", text: "filetes subverticais pluviais – horizontes de solo argiloso profundo e camadas de depósitos coluviais inconsolidados" },
+                    { key: "C", text: "processos de deflação pelo vento – lentes de rochas graníticas fraturadas e horizontes de latossolos intemperizados" },
+                    { key: "D", text: "movimentos gravitacionais de massa – lentes de rocha arenosa friável e lentes de rocha mais argilosa" },
+                    { key: "E", text: "canais de escoamento difuso superficial – depósitos aluvionares recentes e lentes de rochas metamórficas do embasamento" }
+                ],
+                correct: "D",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa D
+                        </p>
+                        <p><strong>Justificativa:</strong></p>
+                        <p>Estudos morfotectônicos e de monitoramento por fotogrametria aérea de alta resolução (VANTs) de grandes voçorocas de cabeceira revelam que o avanço das bordas ocorre principalmente por mecanismos físicos de <strong>movimentos gravitacionais de massa</strong> (desmoronamento das paredes verticais devido à perda de coesão e subescavação).</p>
+                        <p>No assoalho e terço inferior destas feições, a evolução é comandada pela hidrologia no contato físico diferencial entre as camadas de <strong>rocha arenosa friável e lentes de rocha mais argilosa</strong> (ou horizontes mais consolidados), gerando processos de alcova por exfiltração hídrica localizada (sapping).</p>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                code: "Q10",
+                topic: "Planejamento Conservacionista, Práticas de Suporte e Equação de Perda de Solo (USLE)",
+                prompt: `A conservação dos recursos hídricos e edáficos assenta-se no emprego de práticas integradas para amortecer o impacto das forças erosivas e reter os sedimentos ao longo das vertentes de uma bacia hidrográfica.<br><br>Considere as afirmações abaixo sobre o planejamento conservacionista de solos baseado no controle de perdas de terra.`,
+                items: [
+                    "As práticas conservacionistas mecânicas caracterizam-se pela construção de estruturas artificiais, como terraços e caixas de infiltração, projetadas para seccionar a encosta, reduzir o comprimento de rampa e, consequentemente, diminuir a velocidade do escoamento superficial.",
+                    "O fator práticas conservacionistas (P) e o fator uso e manejo do solo (C), que integram a Equação Universal de Perda de Solo (USLE), expressam, respectivamente, o potencial intrínseco de erodibilidade física da matriz pedológica e o índice pluviométrico acumulado do terreno.",
+                    "As práticas conservacionistas vegetativas atuam diretamente na interceptação das gotas de chuva pelas copas e resíduos, dissipando a sua energia cinética de impacto e evitando a desagregação das partículas do solo na superfície."
+                ],
+                type: "items",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-3 text-slate-700 text-sm leading-relaxed">
+                        <p class="font-semibold text-slate-900 border-b border-slate-100 pb-1 flex items-center gap-1.5">
+                            <i class="ph-bold ph-check text-emerald-600"></i> Gabarito: Alternativa C
+                        </p>
+                        <ul class="space-y-2">
+                            <li><strong>Afirmação I (Correta):</strong> As estruturas físicas de engenharia agrícola (terraços em contorno, bacias de captação) são desenhadas para quebrar a rampa de declividade lateral. Reduzindo o fator L (comprimento de declive), a energia de cisalhamento hidráulico do fluxo superficial é mitigada drasticamente.</li>
+                            <li><strong>Afirmação II (Incorreta):</strong> Na clássica equação USLE (A = R · K · LS · C · P), o fator C descreve as culturas e manejo da cobertura vegetal, e o fator P expressa as práticas de conservação de suporte. O potencial de erodibilidade do solo é expresso pelo fator K, enquanto a energia da chuva é o fator R (erosividade).</li>
+                            <li><strong>Afirmação III (Correta):</strong> A vegetação viva ou morta (palhada) reduz o impacto de respingo ("splash effect"). O dossel vegetal dissipa a energia mecânica das gotas pluviais e estabiliza fisicamente a primeira camada de poros, prevenindo o selamento superficial.</li>
+                        </ul>
+                    </div>
+                `
+            }
+        ];
+
+        // Estado global da aplicação
+        let quizMode = "exam"; // 'exam' (simulado clássico) ou 'study' (feedback imediato)
+        let userAnswers = {}; // Guarda as respostas selecionadas { questionId: optionKey }
+        let examSubmitted = false;
+
+        // Renderiza as questões na página
+        function renderQuiz() {
+            const container = document.getElementById('quiz-questions');
+            container.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const isAnswered = userAnswers[q.id] !== undefined;
+                const selectedAnswer = userAnswers[q.id];
+                
+                // Criação do HTML da questão
+                let qHtml = `
+                    <div id="q-card-${q.id}" class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md ${isAnswered ? 'border-l-4 border-l-indigo-500' : ''}">
+                        <div class="flex items-center justify-between mb-4 gap-4 flex-wrap">
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-600">
+                                Questão ${String(idx + 1).padStart(2, '0')}
+                            </span>
+                            <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded-md max-w-[280px] truncate" title="${q.topic}">
+                                ${q.topic}
+                            </span>
+                        </div>
+
+                        <!-- Enunciado Principal -->
+                        <div class="text-slate-900 font-medium text-sm md:text-base leading-relaxed mb-6">
+                            ${q.prompt}
+                        </div>
+                `;
+
+                if (q.type === 'items' && q.items) {
+                    qHtml += `
+                        <div class="bg-slate-50/70 border border-slate-100 rounded-xl p-4 md:p-6 mb-6 space-y-3">
+                            ${q.items.map((item, itemIdx) => `
+                                <div class="flex gap-3 text-sm md:text-base text-slate-700">
+                                    <span class="font-bold text-indigo-600 flex-shrink-0 select-none">${romanize(itemIdx + 1)} -</span>
+                                    <span class="leading-relaxed">${item}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+
+                if (q.type === 'matching' && q.matchingData) {
+                    qHtml += `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            <!-- Coluna 1 -->
+                            <div class="bg-indigo-50/40 border border-indigo-100 rounded-xl p-4 space-y-2">
+                                <h4 class="text-xs font-bold uppercase text-indigo-800 tracking-wide mb-2 border-b border-indigo-100/60 pb-1">Primeira Coluna</h4>
+                                ${q.matchingData.col1.map(item => `
+                                    <div class="flex gap-2 text-xs md:text-sm text-slate-700">
+                                        <span class="font-bold text-indigo-600 select-none">${item.num}.</span>
+                                        <span>${item.text}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <!-- Coluna 2 -->
+                            <div class="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2">
+                                <h4 class="text-xs font-bold uppercase text-slate-500 tracking-wide mb-2 border-b border-slate-200/60 pb-1">Segunda Coluna</h4>
+                                ${q.matchingData.col2.map(item => `
+                                    <div class="flex gap-2 text-xs md:text-sm text-slate-700 items-start">
+                                        <span class="font-bold text-slate-400 select-none flex-shrink-0">( &nbsp; )</span>
+                                        <span class="leading-relaxed">${item}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                qHtml += `
+                    <div class="space-y-3">
+                        ${q.options.map(opt => {
+                            let optionClass = "border border-slate-200 hover:border-indigo-200 hover:bg-slate-50/40";
+                            let checkIcon = `<span class="w-5 h-5 rounded-full border border-slate-300 flex-shrink-0 flex items-center justify-center font-bold text-xs select-none bg-white text-slate-600 group-hover:border-indigo-400">${opt.key}</span>`;
+                            
+                            const isSelected = selectedAnswer === opt.key;
+
+                            if (isSelected) {
+                                optionClass = "border-2 border-indigo-600 bg-indigo-50/50";
+                                checkIcon = `<span class="w-5 h-5 rounded-full bg-indigo-600 flex-shrink-0 flex items-center justify-center font-bold text-xs select-none text-white">${opt.key}</span>`;
+                            }
+
+                            // No Modo Prática (ou após enviar simulado), exibe feedback de cores imediato
+                            if (examSubmitted || (quizMode === 'study' && isAnswered)) {
+                                if (opt.key === q.correct) {
+                                    optionClass = "border-2 border-emerald-500 bg-emerald-50/40";
+                                    checkIcon = `<span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex-shrink-0 flex items-center justify-center text-xs font-bold"><i class="ph-bold ph-check"></i></span>`;
+                                } else if (isSelected) {
+                                    optionClass = "border-2 border-rose-400 bg-rose-50/30";
+                                    checkIcon = `<span class="w-5 h-5 rounded-full bg-rose-600 text-white flex-shrink-0 flex items-center justify-center text-xs font-bold"><i class="ph-bold ph-x"></i></span>`;
+                                }
+                            }
+
+                            // Desabilita cliques após submissão ou resposta dada no modo prática
+                            const isDisabled = examSubmitted || (quizMode === 'study' && isAnswered);
+                            const clickAction = isDisabled ? '' : `onclick="selectOption(${q.id}, '${opt.key}')"`;
+
+                            return `
+                                <div ${clickAction} class="group flex items-start gap-3 p-4 rounded-xl cursor-pointer transition-all duration-200 ${optionClass}">
+                                    ${checkIcon}
+                                    <span class="text-sm md:text-base text-slate-700 font-medium group-hover:text-slate-900">${opt.text}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+
+                // Seção de Resolução Dinâmica (Modo Prática ativo ou após o Simulado enviado)
+                if (examSubmitted || (quizMode === 'study' && isAnswered)) {
+                    qHtml += `
+                        <div class="mt-6 pt-5 border-t border-slate-100 animate-fadeIn">
+                            <div class="bg-slate-50 rounded-xl p-5 border border-slate-100">
+                                <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider mb-3 flex items-center gap-1.5 text-indigo-700">
+                                    <i class="ph-bold ph-lightbulb-filament"></i> Resolução Comentada
+                                </h4>
+                                ${q.resolution}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                qHtml += `</div>`;
+                container.innerHTML += qHtml;
+            });
+
+            updateProgress();
+        }
+
+        // Função de seleção de alternativa
+        function selectOption(questionId, key) {
+            userAnswers[questionId] = key;
+            
+            // Se estiver no modo estudo (prática), atualiza apenas o card correspondente para dar o feedback
+            if (quizMode === 'study') {
+                renderQuiz();
+            } else {
+                // Modo simulado apenas atualiza visual levemente e a barra de progresso
+                const card = document.getElementById(`q-card-${questionId}`);
+                if (card) {
+                    card.classList.add('border-l-4', 'border-l-indigo-500');
+                }
+                updateProgress();
+                
+                // Força re-render parcial para atualizar estado do círculo marcado
+                // (Para manter performance, re-renderizamos a árvore inteira rapidamente)
+                renderQuiz();
+            }
+        }
+
+        // Altera o modo do Quiz (Simulado ou Prática)
+        function setQuizMode(mode) {
+            if (examSubmitted) return; // Impede mudar após enviar o simulado
+            
+            quizMode = mode;
+            
+            const btnExam = document.getElementById('btn-mode-exam');
+            const btnStudy = document.getElementById('btn-mode-study');
+            const actionPanel = document.getElementById('action-panel');
+
+            if (mode === 'exam') {
+                btnExam.className = "px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 bg-indigo-600 text-white shadow-sm flex items-center gap-1.5";
+                btnStudy.className = "px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 text-slate-400 hover:text-slate-200 flex items-center gap-1.5";
+                actionPanel.classList.remove('hidden');
+            } else {
+                btnStudy.className = "px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 bg-indigo-600 text-white shadow-sm flex items-center gap-1.5";
+                btnExam.className = "px-3 py-1.5 rounded-md text-xs font-semibold transition-all duration-200 text-slate-400 hover:text-slate-200 flex items-center gap-1.5";
+                actionPanel.classList.add('hidden');
+            }
+
+            renderQuiz();
+        }
+
+        // Atualiza a barra de progresso no topo da página
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const total = questions.length;
+            const pct = (answeredCount / total) * 100;
+
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+            document.getElementById('progress-text').innerText = `${answeredCount} / ${total} respondidas`;
+        }
+
+        // Envia o simulado e calcula estatísticas
+        function submitExam() {
+            const total = questions.length;
+            const answeredCount = Object.keys(userAnswers).length;
+
+            if (answeredCount < total) {
+                // Mensagem personalizada caso falte responder
+                const missing = total - answeredCount;
+                if (!confirm(`Você ainda não respondeu a ${missing} questão(ões). Deseja mesmo finalizar e ver as resoluções?`)) {
+                    return;
+                }
+            }
+
+            examSubmitted = true;
+            
+            // Oculta painel de ações do modo simulado
+            document.getElementById('action-panel').classList.add('hidden');
+            
+            // Calcula acertos
+            let correctCount = 0;
+            questions.forEach(q => {
+                if (userAnswers[q.id] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            // Atualiza e exibe o dashboard de resultados
+            const incorrectCount = total - correctCount;
+            const percent = Math.round((correctCount / total) * 100);
+
+            document.getElementById('stat-correct').innerText = correctCount;
+            document.getElementById('stat-incorrect').innerText = incorrectCount;
+            document.getElementById('stat-percent').innerText = `${percent}%`;
+
+            const badge = document.getElementById('score-badge');
+            badge.innerText = `${correctCount}/${total}`;
+            
+            if (percent >= 70) {
+                badge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full text-3xl font-extrabold mb-4 bg-emerald-50 text-emerald-600 border-4 border-emerald-200";
+                document.getElementById('score-title').innerText = "Excelente Desempenho!";
+                document.getElementById('score-subtitle').innerText = "Parabéns! Você demonstra forte domínio dos tópicos ambientais e geomorfológicos cobrados pela FAURGS.";
+            } else if (percent >= 50) {
+                badge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full text-3xl font-extrabold mb-4 bg-amber-50 text-amber-600 border-4 border-amber-200";
+                document.getElementById('score-title').innerText = "Bom Desempenho";
+                document.getElementById('score-subtitle').innerText = "Aproveite as resoluções comentadas para revisar pontos-chave sobre conservação de solos e vertentes.";
+            } else {
+                badge.className = "inline-flex items-center justify-center w-20 h-20 rounded-full text-3xl font-extrabold mb-4 bg-rose-50 text-rose-600 border-4 border-rose-200";
+                document.getElementById('score-title').innerText = "Requer Mais Revisão";
+                document.getElementById('score-subtitle').innerText = "Leia as fundamentações com atenção para fixar termos clássicos como piping, voçorocas e as teses de arenização.";
+            }
+
+            document.getElementById('results-dashboard').classList.remove('hidden');
+            
+            // Re-renderiza as questões para travar cliques e mostrar as marcações de acerto/erro
+            renderQuiz();
+
+            // Rolagem suave até o dashboard de resultados
+            document.getElementById('results-dashboard').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Reseta o estado completo do quiz
+        function resetQuiz() {
+            userAnswers = {};
+            examSubmitted = false;
+            document.getElementById('results-dashboard').classList.add('hidden');
+            setQuizMode('exam');
+        }
+
+        // Utilitário para algarismos romanos
+        function romanize(num) {
+            if (isNaN(num)) return NaN;
+            const lookup = { M: 1000, CM: 900, D: 500, CD: 400, C: 100, XC: 90, L: 50, XL: 40, X: 10, IX: 9, V: 5, IV: 4, I: 1 };
+            let roman = '';
+            for (let i in lookup) {
+                while (num >= lookup[i]) {
+                    roman += i;
+                    num -= lookup[i];
+                }
+            }
+            return roman;
+        }
+
+        window.onload = function() {
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>

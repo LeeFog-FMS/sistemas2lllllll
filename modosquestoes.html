@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Modos de Produção e a Evolução do Espaço Geográfico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Paleta otimizada para leitura longa (Eye-care) */
+            --bg-color: #FDFBF7; /* Off-white estilo papel */
+            --text-main: #2D3748; /* Cinza escuro suave, menos contraste que o preto puro */
+            --text-muted: #4A5568;
+            --surface-color: #FFFFFF;
+            --border-color: #E2E8F0;
+            --accent-color: #3182CE;
+            --accent-hover: #2B6CB0;
+            --correct-color: #F0FFF4;
+            --correct-border: #9AE6B4;
+            --correct-text: #22543D;
+            --wrong-color: #FFF5F5;
+            --wrong-border: #FEB2B2;
+            --wrong-text: #742A2A;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            font-size: 16px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px; /* Largura ideal para leitura */
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1A202C;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .question-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            color: #1A202C;
+        }
+
+        .question-text {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .question-text p {
+            margin-bottom: 12px;
+        }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .option-item {
+            margin-bottom: 10px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #FAFAFA;
+        }
+
+        .option-label:hover {
+            background-color: #F0F4F8;
+            border-color: #CBD5E0;
+        }
+
+        .option-input {
+            margin-top: 5px;
+            margin-right: 15px;
+            cursor: pointer;
+            accent-color: var(--accent-color);
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Estados de Resposta */
+        .option-item.correct .option-label {
+            background-color: var(--correct-color);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+        }
+
+        .option-item.wrong .option-label {
+            background-color: var(--wrong-color);
+            border-color: var(--wrong-border);
+            color: var(--wrong-text);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 40px;
+            box-shadow: 0 4px 6px rgba(49, 130, 206, 0.2);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .submit-btn:disabled {
+            background-color: #A0AEC0;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        #results-section {
+            display: none;
+            margin-top: 50px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .score-banner {
+            background-color: #1A202C;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .score-banner h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .score-banner .score-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #63B3ED;
+        }
+
+        .resolution-card {
+            background-color: var(--surface-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .resolution-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .resolution-card p {
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .resolution-card .gabarito-tag {
+            display: inline-block;
+            background-color: #EDF2F7;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #EDF2F7;
+            font-weight: 600;
+        }
+
+        /* Estilos para manter formatações do texto original */
+        .roman-list { margin-left: 20px; margin-bottom: 15px; }
+        .roman-list div { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Simulado FAURGS</h1>
+        <p>Modos de Produção e a Evolução do Espaço Geográfico</p>
+    </header>
+
+    <form id="quiz-form">
+        <!-- Questão 01 -->
+        <div class="question-card" id="card-q1">
+            <div class="question-title">Questão 01</div>
+            <div class="question-text">
+                <p>Considere as afirmações abaixo sobre a evolução do espaço geográfico nas diferentes fases do modo de produção capitalista.</p>
+                <div class="roman-list">
+                    <div>I - No Capitalismo Comercial, a Divisão Internacional do Trabalho (DIT) estruturou-se sob a lógica da relação metrópole-colônia, na qual os territórios coloniais funcionavam como provedores de metais preciosos e matérias-primas tropicais, inviabilizando a autonomia manufactureira e determinando os primeiros eixos de fluxos comerciais globais.</div>
+                    <div>II - A fase do Capitalismo Industrial promoveu uma reconfiguração espacial sem precedentes por meio da urbanização acelerada e da concentração das unidades produtivas junto às bacias carboníferas e depósitos de minério de ferro, consolidando a divisão clássica do trabalho entre países fornecedores de produtos primários e nações industrializadas.</div>
+                    <div>III - O Capitalismo Financeiro-Monopolista, impulsionado pela segunda revolução industrial e pela fusão do capital bancário com o industrial, caracterizou-se pela exportação de capitais e pela partilha imperialista da África e da Ásia, redesenhando as infraestruturas de transporte das colónias para atender estritamente ao escoamento de recursos estratégicos.</div>
+                    <div>IV - No Capitalismo Informacional, observa-se uma dispersão espacial da produção física concomitante a uma centralização dos centros de decisão e inovação em cidades globais e tecnopolos, o que reduz substancialmente a dependência corporativa em relação às redes de telecomunicações e fluxos de dados informacionais.</div>
+                </div>
+                <p>Quais estão corretas?</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="A" class="option-input"> (A) Apenas I.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="B" class="option-input"> (B) Apenas I e II.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="C" class="option-input"> (C) Apenas I, II e III.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="D" class="option-input"> (D) Apenas II, III e IV.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q1" value="E" class="option-input"> (E) I, II, III e IV.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 02 -->
+        <div class="question-card" id="card-q2">
+            <div class="question-title">Questão 02</div>
+            <div class="question-text">
+                <p>Numere a segunda coluna de acordo com a primeira, associando os conceitos e as estruturas territoriais que caracterizaram a organização do espaço geográfico na experiência socialista soviética às suas respectivas descrições operacionais.</p>
+                <div style="display: flex; gap: 40px; margin-bottom: 20px;">
+                    <div>
+                        <div>(1) Kolkhozes</div>
+                        <div>(2) Sovkhozes</div>
+                        <div>(3) Gosplan</div>
+                        <div>(4) Monograds</div>
+                    </div>
+                </div>
+                <div class="roman-list">
+                    <div>( ) Cidades monoindustriais cujo planeamento centralizado estruturou a totalidade do espaço urbano e da economia local ao redor de um único complexo fabril ou empresa estatal, gerando forte dependência regional e vulnerabilidade socioeconómica pós-soviética.</div>
+                    <div>( ) Cooperativas agrícolas de produção onde a terra pertencia formalmente ao Estado, mas era concedida em usufruto perpétuo ao coletivo de camponeses, os quais partilhavam os rendimentos com base na produtividade conjunta, após cumprirem as quotas obrigatórias de entrega estatal.</div>
+                    <div>( ) Órgão máximo do planeamento estatal centralizado, responsável por substituir os mecanismos de mercado na alocação territorial de recursos, definição de quotas de produção física, localização das indústrias e planeamento das redes de transporte em escala nacional.</div>
+                    <div>( ) Fazendas estatais de grande dimensão nas quais os trabalhadores eram assalariados públicos diretos e que funcionavam como unidades agrícolas modelo para a introdução de mecanização pesada e difusão de tecnologias produtivas no campo socialista.</div>
+                </div>
+                <p>A sequência correta de preenchimento dos parênteses da segunda coluna, de cima para baixo, é:</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="A" class="option-input"> (A) 4 – 1 – 3 – 2.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="B" class="option-input"> (B) 4 – 3 – 1 – 2.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="C" class="option-input"> (C) 2 – 1 – 3 – 4.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="D" class="option-input"> (D) 1 – 2 – 4 – 3.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q2" value="E" class="option-input"> (E) 3 – 4 – 1 – 2.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 03 -->
+        <div class="question-card" id="card-q3">
+            <div class="question-title">Questão 03</div>
+            <div class="question-text">
+                <p>Considere as afirmações abaixo sobre a evolução do espaço geográfico e as transformações socioeconómicas na República Popular da China desde a sua fundação em 1949.</p>
+                <div class="roman-list">
+                    <div>I - Durante o período maoísta (1949-1976), a organização do espaço pautou-se pelo isolamento externo, pela coletivização da terra em Comunas Populares e pelo esforço de industrialização interiorana, materializado no programa da "Terceira Linha", que visava criar um parque industrial militarizado e autossuficiente nas províncias do interior.</div>
+                    <div>II - As reformas económicas sob a liderança de Deng Xiaoping, iniciadas em 1978, implementaram o modelo do "socialismo de mercado", caracterizado pela criação de Zonas Económicas Especiais (ZEEs) ao longo da costa oriental, as quais atuaram como portas de entrada de Investimento Direto Estrangeiro (IDE) e tecnologia ocidental.</div>
+                    <div>III - A inserção da China na globalização resultou num desenvolvimento espacial homogéneo, de modo que o fosso socioeconómico e demográfico entre as províncias costeiras do Leste e as províncias do interior do Oeste foi superado, tornando desnecessárias as recentes políticas de migração e reordenamento do território.</div>
+                </div>
+                <p>Quais estão corretas?</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="A" class="option-input"> (A) Apenas I.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="B" class="option-input"> (B) Apenas II.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="C" class="option-input"> (C) Apenas I e II.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="D" class="option-input"> (D) Apenas II e III.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q3" value="E" class="option-input"> (E) I, II e III.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 04 -->
+        <div class="question-card" id="card-q4">
+            <div class="question-title">Questão 04</div>
+            <div class="question-text">
+                <p>O colapso da União Soviética em 1991 privou a República de Cuba de cerca de 80% do seu comércio externo, mergulhando a ilha numa crise económica extrema conhecida como "Período Especial em Tempos de Paz". Para mitigar os impactos espaciais e produtivos decorrentes dessa crise, o Estado cubano viu-se obrigado a reestruturar radicalmente as suas dinâmicas territoriais.</p>
+                <p>Nesse contexto, a estratégia de adaptação que provocou a reconfiguração espacial mais profunda e duradoura na escala urbana e regional de Cuba foi a:</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="A" class="option-input"> (A) expansão da monocultura latifundiária da cana-de-açúcar altamente mecanizada em detrimento da produção de alimentos de subsistência, visando angariar divisas externas no mercado ocidental.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="B" class="option-input"> (B) transição forçada para a agricultura urbana e periurbana de cariz ecológico e biológico (como os organopónicos), que ocupou vazios urbanos e converteu as áreas metropolitanas de Havana em polos de produção alimentar local e descentralizada.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="C" class="option-input"> (C) proibição total do turismo internacional e dos investimentos estrangeiros na faixa costeira, de modo a evitar a contaminação ideológica do espaço urbano cubano pelo consumo capitalista.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="D" class="option-input"> (D) desurbanização coerciva e transferência de metade da população da capital, Havana, para frentes agrícolas pioneiras situadas nas províncias montanhosas do interior do país.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q4" value="E" class="option-input"> (E) dependência financeira imediata estabelecida junto ao Conselho de Assistência Mútua Económica (COMECON), que financiou a expansão de grandes centrais hidroelétricas e redes ferroviárias pesadas ao longo de toda a ilha após 1993.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 05 -->
+        <div class="question-card" id="card-q5">
+            <div class="question-title">Questão 05</div>
+            <div class="question-text">
+                <p>Numere a segunda coluna de acordo com a primeira, associando as etapas históricas de evolução dos transportes e das comunicações aos seus respetivos papéis na integração e diferenciação do espaço geográfico global.</p>
+                <div style="display: flex; gap: 40px; margin-bottom: 20px;">
+                    <div>
+                        <div>(1) Redes de Circulação Mercantilista (Séculos XV-XVIII)</div>
+                        <div>(2) Redes de Circulação Industrial Clássica (Século XIX)</div>
+                        <div>(3) Redes de Circulação do Capitalismo Flexível (Final do Século XX-XXI)</div>
+                        <div>(4) Redes de Circulação da Planificação Socialista (Século XX)</div>
+                    </div>
+                </div>
+                <div class="roman-list">
+                    <div>( ) Integração territorial assente em sistemas de transporte terrestre de grande capacidade (ferrovias pesadas e hidrovias) geridos pelo Estado para ligar diretamente as regiões fornecedoras de carvão e ferro aos complexos siderúrgicos internos, negligenciando a integração de mercados de consumo regionais.</div>
+                    <div>( ) Estruturação de redes logísticas globais complexas, assentes na intermodalidade, na expansão dos contentores, nas infovias e nos fluxos de dados em tempo real, permitindo a fragmentação transnacional das cadeias de produção sob o comando centralizado de sedes corporativas multinacionais.</div>
+                    <div>( ) Redes de circulação marítima baseadas em frotas mercantes que conectavam entrepostos litorâneos e colónias periféricas às metrópoles europeias, estruturando o primeiro esboço de divisão internacional do trabalho.</div>
+                    <div>( ) Expansão inicial das redes ferroviárias a vapor e canais fluviais artificiais que permitiam a circulação de matérias-primas industriais em massa de forma expedita, unificando os mercados nacionais internos e impulsionando a polarização das aglomerações fabris urbanas.</div>
+                </div>
+                <p>A sequência correta de preenchimento dos parênteses da segunda coluna, de cima para baixo, é:</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="A" class="option-input"> (A) 4 – 3 – 1 – 2.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="B" class="option-input"> (B) 3 – 4 – 1 – 2.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="C" class="option-input"> (C) 4 – 3 – 2 – 1.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="D" class="option-input"> (D) 1 – 3 – 4 – 2.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q5" value="E" class="option-input"> (E) 3 – 1 – 4 – 2.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 06 -->
+        <div class="question-card" id="card-q6">
+            <div class="question-title">Questão 06</div>
+            <div class="question-text">
+                <p>Considere as afirmações abaixo sobre a organização do espaço geográfico no Leste Europeu sob a influência soviética durante a Guerra Fria e a sua posterior transição económica.</p>
+                <div class="roman-list">
+                    <div>I - A criação do Conselho de Assistência Mútua Económica (CAME/COMECON) em 1949 impôs uma divisão territorial do trabalho planejada e centralizada a partir de Moscovo, na qual cada país satélite especializava-se em ramos específicos de produção fabril ou agrícola para suprir o bloco socialista.</div>
+                    <div>II - O Leste Europeu experimentou uma rápida industrialização pesada (indústrias siderúrgica, química e de base), com a implantação de complexos industriais altamente poluentes instalados sem considerações locacionais de mercado, gerando graves heranças de degradação ambiental e uma forte dependência das infraestruturas energéticas e petrolíferas da Sibéria soviética.</div>
+                    <div>III - A queda do Muro de Berlim (1989) e a desintegração do bloco socialista resultaram num processo de reestruturação do território marcado pela rápida modernização e dinamismo das capitais e regiões fronteiriças à União Europeia (como Praga e Varsóvia), em detrimento do declínio económico e da obsolescência espacial das antigas bacias industriais pesadas de cariz fordista-socialista.</div>
+                </div>
+                <p>Quais estão corretas?</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="A" class="option-input"> (A) Apenas I.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="B" class="option-input"> (B) Apenas II.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="C" class="option-input"> (C) Apenas I e III.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="D" class="option-input"> (D) Apenas II e III.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q6" value="E" class="option-input"> (E) I, II e III.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 07 -->
+        <div class="question-card" id="card-q7">
+            <div class="question-title">Questão 07</div>
+            <div class="question-text">
+                <p>A transição do regime fordista de acumulação para a acumulação flexível (pós-fordista) alterou profundamente a organização do espaço industrial e urbano mundial. Sobre as marcas territoriais que caracterizam essa transição de fase do modo de produção capitalista, assinale a alternativa correta.</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="A" class="option-input"> (A) Ocorre uma forte tendência de concentração espacial das fábricas nas metrópoles tradicionais para maximizar a constituição de vastos inventários de segurança (just-in-case).</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="B" class="option-input"> (B) Promove-se a desconcentração espacial da produção física (frequentemente relocalizada para regiões periféricas de menores custos) concomitante à centralização de funções estratégicas, investigação científica, serviços avançados e marketing em tecnopolos e cidades globais de comando.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="C" class="option-input"> (C) Observa-se a redução do desemprego de caráter estrutural e o consequente revigoramento demográfico e económico de antigas regiões industriais clássicas, tais como o Cinturão da Ferrugem (Rust Belt) nos Estados Unidos da América.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="D" class="option-input"> (D) Há um enfraquecimento acentuado das redes transnacionais de fluxos financeiros, uma vez que os Estados nacionais recuperaram a primazia absoluta sobre os seus territórios monetários soberanos e as respetivas dinâmicas cambiais.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q7" value="E" class="option-input"> (E) Consolida-se uma homogeneização socioespacial e económica do globo, que elimina de forma definitiva a clássica disparidade territorial entre as regiões do Norte desenvolvido e do Sul periférico.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 08 -->
+        <div class="question-card" id="card-q8">
+            <div class="question-title">Questão 08</div>
+            <div class="question-text">
+                <p>Numere a segunda coluna de acordo com a primeira, relacionando os tipos de assentamento, estruturas produtivas e estratégias de engenharia territorial desenvolvidas na União Soviética aos seus respetivos papéis no processo de apropriação e transformação do espaço geográfico.</p>
+                <div style="display: flex; gap: 40px; margin-bottom: 20px;">
+                    <div>
+                        <div>(1) Naukograds</div>
+                        <div>(2) Gulag</div>
+                        <div>(3) Ural-Kuznetsk Combine (UKK)</div>
+                        <div>(4) Evacuação Industrial de Guerra (1941-1942)</div>
+                    </div>
+                </div>
+                <div class="roman-list">
+                    <div>( ) Sistema de campos de trabalho forçado que atuou como um violento mecanismo de colonização pioneira de fronteiras minerais e florestais no Norte Ártico e na Sibéria soviética, forçando a construção de ferrovias e canais fluviais sob condições geográficas extremas.</div>
+                    <div>( ) Projeto de planeamento regional integrado que conectou, por via férrea de longo curso (cerca de 2.000 km), as jazidas de minério de ferro de alta qualidade dos Montes Urais às ricas jazidas de carvão mineral da Bacia de Kuznetsk, na Sibéria, estruturando o maior polo siderúrgico do interior soviético.</div>
+                    <div>( ) Cidades científicas planejadas de acesso reservado, implantadas de forma isolada na rede urbana soviética, dedicadas exclusivamente à investigação de ponta, física nuclear, engenharia aeronáutica e desenvolvimento de armamento militar avançado.</div>
+                    <div>( ) Deslocalização maciça e expedita de mais de 1.500 complexos industriais de grande porte e de milhões de trabalhadores da porção europeia ocidental da URSS para lá dos Montes Urais e Ásia Central, reordenando permanentemente o mapa do parque manufatureiro do país para fugir da invasão nazi.</div>
+                </div>
+                <p>A sequência correta de preenchimento dos parênteses da segunda coluna, de cima para baixo, é:</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="A" class="option-input"> (A) 2 – 3 – 1 – 4.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="B" class="option-input"> (B) 1 – 2 – 4 – 3.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="C" class="option-input"> (C) 2 – 4 – 1 – 3.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="D" class="option-input"> (D) 4 – 3 – 1 – 2.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q8" value="E" class="option-input"> (E) 2 – 3 – 4 – 1.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 09 -->
+        <div class="question-card" id="card-q9">
+            <div class="question-title">Questão 09</div>
+            <div class="question-text">
+                <p>Considere as afirmações abaixo sobre a estratégia de desenvolvimento territorial externo da República Popular da China no século XXI, especificamente por meio da iniciativa "One Belt, One Road" (Nova Rota da Seda).</p>
+                <div class="roman-list">
+                    <div>I - O projeto representa um clássico "ajuste espacial" (spatial fix) para lidar com a sobreacumulação de capital e o excedente de capacidade industrial pesada chinesa, canalizando recursos excedentes de aço, cimento e maquinaria para investimentos de grande escala fora das suas fronteiras nacionais.</div>
+                    <div>II - A iniciativa divide-se em duas grandes frentes físicas de circulação mundial: um cinturão terrestre que atravessa a Ásia Central e o Médio Oriente em direção à Europa, e uma rota marítima focada em assegurar o controlo de infraestruturas portuárias ao longo do Oceano Índico, Leste Africano e Mar Mediterrâneo.</div>
+                    <div>III - A estratégia tem como premissa o isolamento de investimentos nos países em desenvolvimento do Sul Global, concentrando a alocação de capitais de infraestrutura exclusivamente nos mercados consolidados da Europa Ocidental e dos Estados Unidos da América de forma a mitigar riscos financeiros.</div>
+                </div>
+                <p>Quais estão corretas?</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="A" class="option-input"> (A) Apenas I.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="B" class="option-input"> (B) Apenas II.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="C" class="option-input"> (C) Apenas I e II.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="D" class="option-input"> (D) Apenas II e III.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q9" value="E" class="option-input"> (E) I, II e III.</label></li>
+            </ul>
+        </div>
+
+        <!-- Questão 10 -->
+        <div class="question-card" id="card-q10">
+            <div class="question-title">Questão 10</div>
+            <div class="question-text">
+                <p>A reestruturação política e espacial ocorrida no Leste Europeu na viragem da década de 1980 para a de 1990 reconfigurou profundamente a geopolítica e a evolução do espaço geográfico europeu.</p>
+                <p>Sobre as marcas geográficas geradas pelo colapso do bloco socialista nessa porção do continente europeu, assinale a alternativa <strong>INCORRETA</strong>.</p>
+            </div>
+            <ul class="options-list">
+                <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="A" class="option-input"> (A) Houve um processo de obsolescência técnica imediata e consequente desindustrialização das bacias de indústria tradicional pesada e extrativa, que se revelaram incapazes de competir nos mercados integrados ocidentais.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="B" class="option-input"> (B) A reunificação alemã promoveu uma rápida homogeneização demográfica e económica, de modo que as disparidades de produtividade, salários, desemprego e infraestruturas territoriais entre o Leste (ex-RDA) e o Oeste (ex-RFA) foram completamente sanadas no decorrer da década de 1990.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="C" class="option-input"> (C) A desintegração de estados federais de cariz pluriétnico gerou uma fragmentação de fronteiras, desencadeando graves conflitos territoriais armados de base nacionalista, particularmente na Península Balcânica (antiga Iugoslávia).</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="D" class="option-input"> (D) A transição para a economia de mercado implicou a privatização das terras agrícolas coletivizadas e o desmonte das explorações agrícolas estatais, o que acelerou o êxodo rural em diversas províncias agrícolas tradicionais.</label></li>
+                <li class="option-item"><label class="option-label"><input type="radio" name="q10" value="E" class="option-input"> (E) O investimento estrangeiro canalizado para o Leste Europeu foi geograficamente seletivo, privilegiando metrópoles principais e zonas próximas das fronteiras ocidentais, o que exacerbou as disparidades socioespaciais internas no interior de cada país.</label></li>
+            </ul>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn">Finalizar e Ver Resultados</button>
+    </form>
+
+    <div id="results-section">
+        <div class="score-banner">
+            <h2>Seu Resultado</h2>
+            <div class="score-number"><span id="score-value">0</span> / 10</div>
+            <p>Confira abaixo a resolução detalhada de cada questão.</p>
+        </div>
+
+        <!-- Resoluções -->
+        <div id="resolutions-container">
+            
+            <div class="resolution-card">
+                <h3>Resolução - Questão 01</h3>
+                <span class="gabarito-tag">Gabarito: C</span>
+                <p><strong>Afirmativa I (Correta):</strong> Durante o Capitalismo Comercial (Séculos XV-XVIII), a organização do espaço global estruturou-se de forma colonial. As metrópoles exerciam o pacto colonial, proibindo manufaturas nas colônias e convertendo-as em áreas de extração. Isso estabeleceu a primeira DIT.</p>
+                <p><strong>Afirmativa II (Correta):</strong> Com a Primeira Revolução Industrial (séc. XIX), o espaço sofreu reorganização locacional. O uso de carvão e ferro exigia fábricas próximas das bacias carboníferas, gerando aglomerações e a DIT clássica (países industriais vs. agroexportadores).</p>
+                <p><strong>Afirmativa III (Correta):</strong> A fase Financeiro-Monopolista marcou a exportação de capitais para a periferia global (Imperialismo). A evolução do espaço periférico subordinou-se à instalação de ferrovias desenhadas para conectar o interior exportador aos portos, criando "economias de enclave".</p>
+                <p><strong>Afirmativa IV (Incorreta):</strong> No Capitalismo Informacional, a desconcentração industrial global SÓ é viável devido à <strong>intensa e total dependência</strong> em relação às redes de telecomunicações e fluxos de dados, ao contrário do que afirma a assertiva.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 02</h3>
+                <span class="gabarito-tag">Gabarito: B</span>
+                <p><strong>(4) Monograds:</strong> Cidades monoindustriais soviéticas concebidas para concentrar um único ramo de produção (ex: Magnitogorsk). Com o capitalismo, sofreram desindustrialização severa.</p>
+                <p><strong>(3) Gosplan:</strong> Comitê Estatal de Planeamento de Moscovo. A planificação centralizada substituía o mercado na apropriação territorial, elaborando os Planos Quinquenais.</p>
+                <p><strong>(1) Kolkhozes:</strong> Explorações agrícolas coletivas (cooperativas). A terra era do Estado, mas o usufruto perpétuo era dos camponeses, com quotas obrigatórias de entrega estatal.</p>
+                <p><strong>(2) Sovkhozes:</strong> Fazendas estatais modelo (fábricas agrícolas). Os camponeses eram assalariados públicos e recebiam pesados investimentos em mecanização estatal.</p>
+                <p>A correspondência gera a sequência: 4 – 3 – 1 – 2.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 03</h3>
+                <span class="gabarito-tag">Gabarito: C</span>
+                <p><strong>Afirmativa I (Correta):</strong> Sob Mao Tsé-Tung, o território focou no isolamento e na política da "Terceira Linha", deslocando instalações vitais para o interior montanhoso, além da coletivização no campo.</p>
+                <p><strong>Afirmativa II (Correta):</strong> Com Deng Xiaoping (1978), iniciou-se o "socialismo de mercado". A dinâmica mudou para a litoralização com as Zonas Econômicas Especiais (ZEEs) ao longo da costa para atrair capital estrangeiro.</p>
+                <p><strong>Afirmativa III (Incorreta):</strong> A inserção chinesa gerou profundas assimetrias geográficas ("país duplo"). O Leste costeiro concentra dinamismo e riqueza, enquanto o Oeste interior mantém-se como periferia pobre e agrícola, exigindo políticas ativas de reordenamento.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 04</h3>
+                <span class="gabarito-tag">Gabarito: B</span>
+                <p>A resposta correta é a B. Com o desmoronamento do bloco soviético, Cuba perdeu importações vitais de petróleo, maquinário e fertilizantes ("Período Especial"). A agricultura industrial cubana colapsou. A estratégia espacial de sucesso foi a intervenção estatal fomentando a agricultura sustentável e a ocupação de vazios urbanos com <strong>organopónicos</strong> (hortas intensivas e biológicas), descentralizando a produção alimentar na capital Havana e arredores.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 05</h3>
+                <span class="gabarito-tag">Gabarito: A</span>
+                <p><strong>(4) Socialista (Séc. XX):</strong> Ferrovias pesadas geridas pelo Estado ligando matérias-primas à siderurgia interna, isoladas e sem foco em consumo regional.</p>
+                <p><strong>(3) Capitalismo Flexível (Séc. XX-XXI):</strong> Intermodalidade, contêineres e infovias que permitem a fragmentação transnacional das cadeias (Fábrica Global).</p>
+                <p><strong>(1) Mercantilista (Séc. XV-XVIII):</strong> Rotas marítimas ligando metrópoles a colônias (esboço da DIT).</p>
+                <p><strong>(2) Industrial Clássica (Séc. XIX):</strong> Ferrovias a vapor e canais unificando os mercados nacionais pela primeira vez para escoar carvão e minérios.</p>
+                <p>Sequência: 4 – 3 – 1 – 2.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 06</h3>
+                <span class="gabarito-tag">Gabarito: E</span>
+                <p><strong>I (Correta):</strong> O COMECON estabeleceu divisão territorial do trabalho planejada a partir de Moscou, especializando os países satélites para suprir o bloco.</p>
+                <p><strong>II (Correta):</strong> Houve rápida industrialização pesada no Leste com fábricas altamente poluentes, gerando degradação ambiental e total dependência do petróleo/gás siberiano.</p>
+                <p><strong>III (Correta):</strong> Com o fim do bloco, a reestruturação foi seletiva: capitais próximas da Europa (Praga, Varsóvia) modernizaram-se, enquanto as antigas bacias de indústria pesada decaíram e tornaram-se obsoletas.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 07</h3>
+                <span class="gabarito-tag">Gabarito: B</span>
+                <p>A resposta correta é a B. O pós-fordismo fragmentou o espaço de forma reticular. As fases produtivas intensivas em mão de obra são deslocalizadas para a periferia (menores custos), enquanto as funções estratégicas, P&D e finanças (foco de alto valor) centralizam-se em tecnopolos e cidades globais.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 08</h3>
+                <span class="gabarito-tag">Gabarito: A</span>
+                <p><strong>(2) Gulag:</strong> Sistema penal que forçou a colonização pioneira de fronteiras minerais extremas na Sibéria.</p>
+                <p><strong>(3) UKK (Ural-Kuznetsk Combine):</strong> Megaprojeto que uniu via férrea o ferro dos Urais ao carvão da Sibéria, distantes 2.000 km.</p>
+                <p><strong>(1) Naukograds:</strong> Cidades científicas fechadas e isoladas da URSS, focadas em tecnologia e forças militares (ex: física nuclear).</p>
+                <p><strong>(4) Evacuação de Guerra:</strong> O desmonte e transferência de milhares de fábricas do lado europeu para além dos Urais para protegê-las da invasão nazista.</p>
+                <p>Sequência: 2 – 3 – 1 – 4.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 09</h3>
+                <span class="gabarito-tag">Gabarito: C</span>
+                <p><strong>I (Correta):</strong> A Nova Rota da Seda é um "ajuste espacial" para exportar o excedente chinês de aço, cimento e capital (sobreacumulação).</p>
+                <p><strong>II (Correta):</strong> Divide-se no Cinturão terrestre (ferrovias para a Europa) e Rota marítima (portos estratégicos no Índico e Mediterrâneo).</p>
+                <p><strong>III (Incorreta):</strong> A estratégia foca fundamentalmente nos países do Sul Global (África, Ásia e América Latina), trocando infraestrutura por dependência financeira e acesso a matérias-primas futuras, e não isolando-os.</p>
+            </div>
+
+            <div class="resolution-card">
+                <h3>Resolução - Questão 10</h3>
+                <span class="gabarito-tag">Gabarito: B</span>
+                <p>A assertiva INCORRETA é a B. A reunificação da Alemanha <strong>não promoveu homogeneização total</strong>. As disparidades estruturais permanecem até hoje: o Leste alemão (ex-RDA) continua a apresentar menores salários médios, maior desemprego e ausência de sedes de grandes multinacionais em comparação com o Oeste (ex-RFA).</p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('quiz-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const resultsSection = document.getElementById('results-section');
+        const scoreValueSpan = document.getElementById('score-value');
+
+        // Gabarito oficial
+        const gabarito = {
+            q1: 'C',
+            q2: 'B',
+            q3: 'C',
+            q4: 'B',
+            q5: 'A',
+            q6: 'E',
+            q7: 'B',
+            q8: 'A',
+            q9: 'C',
+            q10: 'B'
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            let acertos = 0;
+            let answeredAll = true;
+
+            // Verificar se todas as questões foram respondidas
+            for (let i = 1; i <= 10; i++) {
+                const questionName = `q${i}`;
+                const selected = document.querySelector(`input[name="${questionName}"]:checked`);
+                if (!selected) {
+                    answeredAll = false;
+                    break;
+                }
+            }
+
+            if (!answeredAll) {
+                alert("Por favor, responda todas as questões antes de finalizar o quiz.");
+                return;
+            }
+
+            // Desabilitar o botão e inputs
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Quiz Finalizado";
+            
+            const allInputs = document.querySelectorAll('.option-input');
+            allInputs.forEach(input => input.disabled = true);
+
+            // Calcular nota e aplicar estilos (verde para certo, vermelho para errado)
+            for (let i = 1; i <= 10; i++) {
+                const questionName = `q${i}`;
+                const selectedInput = document.querySelector(`input[name="${questionName}"]:checked`);
+                const selectedValue = selectedInput.value;
+                const correctValue = gabarito[questionName];
+
+                const parentLiSelected = selectedInput.closest('.option-item');
+                
+                // Pintar a alternativa correta de verde
+                const correctInput = document.querySelector(`input[name="${questionName}"][value="${correctValue}"]`);
+                const parentLiCorrect = correctInput.closest('.option-item');
+                parentLiCorrect.classList.add('correct');
+
+                if (selectedValue === correctValue) {
+                    acertos++;
+                } else {
+                    // Se errou, pintar a alternativa selecionada de vermelho
+                    parentLiSelected.classList.add('wrong');
+                }
+            }
+
+            // Mostrar pontuação e resoluções
+            scoreValueSpan.textContent = acertos;
+            resultsSection.style.display = 'block';
+
+            // Rolagem suave para a área de resultados
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+</script>
+
+</body>
+</html>

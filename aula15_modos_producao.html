@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Estudo IFSC FAURGS - Modos de Produção</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b; /* Slate 800 - Suave para os olhos */
+            background-color: #ffffff;
+        }
+        .highlight-yellow {
+            background-color: #fef08a; /* Yellow 200 */
+            color: #1e293b;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        .highlight-amber {
+            background-color: #fef3c7; /* Amber 100 */
+            border-left: 4px solid #f59e0b; /* Amber 500 */
+            padding: 0.75rem 1rem;
+            border-radius: 0 0.375rem 0.375rem 0;
+        }
+        /* Custom styles to prevent horizontal scroll in tables on small screens */
+        @media (max-width: 768px) {
+            .responsive-table {
+                display: block;
+            }
+            .responsive-table thead {
+                display: none;
+            }
+            .responsive-table tbody, .responsive-table tr, .responsive-table td {
+                display: block;
+                width: 100%;
+            }
+            .responsive-table tr {
+                margin-bottom: 1.5rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+                padding: 0.75rem;
+            }
+            .responsive-table td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .responsive-table td:last-child {
+                border-bottom: none;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0.75rem;
+                width: 45%;
+                text-align: left;
+                font-weight: 700;
+                color: #475569;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen selection:bg-yellow-200">
+
+<div class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+    
+    <!-- Cabeçalho Acadêmico -->
+    <header class="border-b border-slate-200 pb-6 mb-8">
+        <div class="inline-block bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-3">
+            Concurso Docente IFSC • Banca FAURGS
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-950 tracking-tight leading-tight">
+            Guia de Memorização Ativa
+        </h1>
+        <p class="text-xl text-slate-600 mt-2 font-light">
+            Modos de Produção e a Produção do Espaço Geográfico
+        </p>
+    </header>
+
+    <!-- Card de Audio Aula -->
+    <section class="border border-slate-200 rounded-xl p-5 mb-10 bg-slate-50 shadow-sm">
+        <h3 class="text-sm font-semibold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path></svg>
+            Audio-Aula Auxiliar (Estudo por Escuta Ativa)
+        </h3>
+        
+        <!-- Elemento de Áudio HTML Oculto -->
+        <audio id="audio-player" src="audio-modosaula.mp3" preload="metadata"></audio>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <!-- Controle de Arquivo e Input -->
+            <div class="md:col-span-5">
+                <label for="audio-src-input" class="block text-xs font-medium text-slate-500 mb-1">Nome do arquivo MP3 na mesma pasta:</label>
+                <input type="text" id="audio-src-input" value="audio-aula.mp3" class="w-full text-sm bg-white border border-slate-300 rounded px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-700 font-mono">
+            </div>
+            
+            <!-- Play/Pause e Slider de Progresso -->
+            <div class="md:col-span-4 flex items-center gap-3">
+                <button id="play-pause-btn" class="w-10 h-10 flex items-center justify-center bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
+                    <!-- Icone Play -->
+                    <svg id="play-icon" class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    <!-- Icone Pause (Oculto Inicialmente) -->
+                    <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
+                </button>
+                <div class="flex-1">
+                    <div class="flex justify-between text-[10px] text-slate-400 mb-1">
+                        <span id="current-time">0:00</span>
+                        <span id="total-duration">0:00</span>
+                    </div>
+                    <input type="range" id="progress-bar" value="0" min="0" max="100" class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none">
+                </div>
+            </div>
+
+            <!-- Velocidade de Reprodução -->
+            <div class="md:col-span-3 flex flex-col justify-end">
+                <span class="text-xs font-medium text-slate-500 mb-1">Velocidade de Reprodução:</span>
+                <div class="flex gap-1">
+                    <button data-speed="1" class="speed-btn flex-1 text-xs py-1.5 font-medium rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition active-speed">1.0x</button>
+                    <button data-speed="1.25" class="speed-btn flex-1 text-xs py-1.5 font-medium rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition">1.25x</button>
+                    <button data-speed="1.5" class="speed-btn flex-1 text-xs py-1.5 font-medium rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition">1.5x</button>
+                    <button data-speed="2" class="speed-btn flex-1 text-xs py-1.5 font-medium rounded border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition">2.0x</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção 1: Núcleo Teórico -->
+    <main class="space-y-12">
+        <section id="nucleo-teorico" class="scroll-mt-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-4">
+                1. Núcleo Teórico: O Espaço Como Produto Social
+            </h2>
+            <div class="space-y-4 text-slate-700 leading-relaxed text-base">
+                <p>
+                    Para a <span class="highlight-yellow">Geografia Crítica</span>, o espaço geográfico não é um palco neutro ou um simples receptáculo físico de objetos. Ele é um <span class="font-bold text-slate-900">produto social altamente dinâmico</span>, moldado ativamente pelas contradições históricas das forças produtivas e pelas relações de produção. 
+                </p>
+
+                <h3 class="text-lg font-bold text-slate-900 mt-6 mb-2">A Dinâmica de Crise e o Ajuste Espacial (David Harvey)</h3>
+                <p>
+                    O modo de produção capitalista é inerentemente instável, operando por meio de crises cíclicas de <span class="font-bold text-slate-900">sobreacumulação</span> — situação na qual há excedente de capital e de força de trabalho sem canais viáveis e lucrativos para reinvestimento.
+                </p>
+                <p>
+                    Para adiar ou mitigar estas crises, o capital recorre ao que David Harvey denomina <span class="highlight-yellow">Ajuste Espacial (spatial fix)</span>. Trata-se da canalização de capitais excedentes para a produção do espaço geográfico por meio de investimentos de longo prazo em infraestrutura, transportes, telecomunicações e novos mercados de consumo.
+                </p>
+
+                <!-- Box Informativo: Fórmula -->
+                <div class="highlight-amber my-6">
+                    <p class="font-semibold text-slate-900 mb-2">A Base Matemática da Crise: A Queda Tendencial da Taxa de Lucro</p>
+                    <p class="text-sm mb-4 leading-relaxed">
+                        A necessidade contínua de Ajustes Espaciais decorre diretamente da lei de queda tendencial da taxa de lucro explicada pela equação da composição orgânica do capital:
+                    </p>
+                    <div class="flex justify-center items-center py-4 bg-white rounded border border-slate-200 shadow-sm my-2 overflow-x-auto">
+                        <div class="text-center font-mono text-sm md:text-base px-4">
+                            <span class="font-bold text-indigo-700">Taxa de Lucro (r)</span> = 
+                            <div class="inline-block align-middle text-center mx-1">
+                                <div class="border-b border-slate-800 pb-0.5">s</div>
+                                <div class="pt-0.5">c + v</div>
+                            </div>
+                            =
+                            <div class="inline-block align-middle text-center mx-1">
+                                <div class="border-b border-slate-800 pb-0.5">s / v</div>
+                                <div class="pt-0.5">(c / v) + 1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="text-xs space-y-1 text-slate-600 mt-3 list-disc pl-5">
+                        <li><strong>s (Mais-Valia):</strong> O trabalho excedente não pago e extraído da força de trabalho.</li>
+                        <li><strong>c (Capital Constante):</strong> Maquinários, instalações, matérias-primas e tecnologias.</li>
+                        <li><strong>v (Capital Variável):</strong> Recursos despendidos no pagamento de salários.</li>
+                        <li><strong>c / v (Composição Orgânica do Capital):</strong> Representa a relação técnica e de valor entre tecnologia e força de trabalho.</li>
+                    </ul>
+                    <p class="text-xs text-slate-600 mt-2 italic">
+                        <strong>Gatilho de Memorização:</strong> Na busca por competitividade, o capitalista eleva o investimento tecnológico (<span class="font-semibold">c</span>) em detrimento da contratação de força de trabalho (<span class="font-semibold">v</span>). Como apenas a força de trabalho gera valor e mais-valia (<span class="font-semibold">s</span>), o aumento da composição orgânica do capital (<span class="font-semibold">c/v</span>) derruba tendencialmente a taxa de lucro (<span class="font-semibold">r</span>), impondo a urgência do Ajuste Espacial.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: A Evolução do Espaço: Os Três Meios de Milton Santos -->
+        <section id="milton-santos" class="scroll-mt-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-4">
+                2. A Evolução do Espaço: Os Três Meios de Milton Santos
+            </h2>
+            <div class="space-y-4 text-slate-700 leading-relaxed text-base">
+                <p>
+                    O geógrafo Milton Santos estabelece uma periodização essencial para as provas da FAURGS com base na progressiva <span class="highlight-yellow">artificialização do território</span>:
+                </p>
+
+                <!-- Esquema dos Três Meios sem Scroll Horizontal -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                    <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-indigo-600 uppercase">Fase 1</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-1">Meio Natural</h4>
+                        <p class="text-sm text-slate-600">
+                            As técnicas e as atividades de produção humana dependem intimamente dos <span class="font-semibold">ritmos biofísicos da natureza</span>. O ecossistema atua como o regulador externo predominante das ações sociais sobre o território.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-indigo-600 uppercase">Fase 2</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-1">Meio Técnico</h4>
+                        <p class="text-sm text-slate-600">
+                            Emergência do espaço mecanizado (Primeira e Segunda Revoluções Industriais). Os <span class="font-semibold">objetos respondem a uma racionalidade mercantil mecânica</span>. Construção de portos, ferrovias e infraestruturas físicas estruturantes.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
+                        <span class="text-xs font-bold text-indigo-600 uppercase">Fase 3</span>
+                        <h4 class="font-bold text-slate-900 text-lg mb-1">MTCI</h4>
+                        <p class="text-sm text-slate-600">
+                            <strong>Meio Técnico-Científico-Informacional</strong> (vigente desde os anos 1970). Fusão indissociável entre a <span class="font-semibold">ciência e a técnica sob suporte estrutural da informação</span>. Formação de redes globais de fluxos altamente seletivos e instantâneos.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-900 mt-6 mb-2">Conceito Chave para Concursos: Verticalidades vs. Horizontalidades</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 bg-red-50/50 rounded-lg border border-red-100">
+                        <h4 class="font-bold text-red-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+                            Verticalidades (Redes e Fluxos)
+                        </h4>
+                        <p class="text-sm text-slate-700">
+                            São vetores de integração e coordenação global. Exercem comandos lineares e de <span class="font-semibold text-slate-900">cima para baixo</span>, guiados pelas forças corporativas hegemônicas. Desestruturam dinâmicas locais para subordinar o espaço regional às exigências de acumulação de mercados distantes.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-green-50/50 rounded-lg border border-green-100">
+                        <h4 class="font-bold text-green-900 mb-1 flex items-center gap-1.5">
+                            <span class="w-2.5 h-2.5 bg-green-500 rounded-full"></span>
+                            Horizontalidades (Lugares e Práticas)
+                        </h4>
+                        <p class="text-sm text-slate-700">
+                            Espaços de contiguidade local, co-presença e solidariedade quotidiana. Tratam-se das relações sociais e produtivas locais que operam de forma horizontal e que resistem, ressignificam e se readaptam diante das tentativas de homogeneização promovidas pelas forças globais.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 3: Marcas Territoriais das Experiências Socialistas -->
+        <section id="marcas-socialistas" class="scroll-mt-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-4">
+                3. Marcas Territoriais das Experiências Socialistas
+            </h2>
+            <div class="space-y-6 text-slate-700 leading-relaxed text-base">
+                <p>
+                    A abolição da propriedade privada do solo urbano e rural, somada ao planejamento estatal direto, gerou marcas espaciais singulares e radicalmente distintas das marcas capitalistas.
+                </p>
+
+                <!-- A) URSS e Leste Europeu -->
+                <div class="space-y-2">
+                    <h3 class="text-lg font-bold text-indigo-950 flex items-center gap-2">
+                        <span class="text-indigo-600 font-mono">A)</span> União Soviética e Leste Europeu
+                    </h3>
+                    <ul class="list-disc pl-5 space-y-2 text-sm md:text-base">
+                        <li>
+                            <strong class="text-slate-900">Planejamento Centralizado pelo Gosplan:</strong> Toda a divisão regional do trabalho e espacialização industrial era decidida no topo de burocracias centrais, sem dinâmicas de mercado ou lógica de localização de custos e lucros privados.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Combinados Industriais (Complexos Territoriais de Produção):</strong> Grandes aglomerações planejadas que integravam em um mesmo espaço unidades de extração de matéria-prima, indústrias pesadas interdependentes, redes logísticas ferroviárias e imensos bairros habitacionais operários.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Especialização Coletivista da Terra:</strong> O território rural foi reordenado por meio de cooperativas agrícolas planejadas e mecanizadas, divididas entre <span class="highlight-yellow">Kolkhozy</span> (cooperativas onde o trabalhador compartilhava uma parcela do excedente) e <span class="highlight-yellow">Sovkhozy</span> (fazendas estatais massivas onde os trabalhadores eram funcionários assalariados diretos do Estado).
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- B) Cuba -->
+                <div class="space-y-2">
+                    <h3 class="text-lg font-bold text-indigo-950 flex items-center gap-2">
+                        <span class="text-indigo-600 font-mono">B)</span> Cuba: Resiliência Agroecológica no "Período Especial"
+                    </h3>
+                    <p class="text-sm md:text-base">
+                        A partir dos anos 1990, com a derrocada da União Soviética e o endurecimento de embargos comerciais, Cuba perdeu o fornecimento subsidiado de combustíveis e fertilizantes minerais sintéticos. Isto desencadeou uma transição espacial forçada para a <span class="font-bold text-slate-900">soberania alimentar agroecológica e descentralizada</span> dentro do espaço urbano.
+                    </p>
+                    <p class="text-sm md:text-base">
+                        A marca geográfica mais contundente desse processo são os <span class="highlight-yellow">Organopónicos</span>: canteiros de cultivo intensivo de hortaliças protegidos do escoamento pluvial e preenchidos integralmente com matéria orgânica e terra local fértil.
+                    </p>
+                    <!-- Organopónicos Classificação -->
+                    <div class="bg-indigo-50/50 rounded-lg p-4 border border-indigo-100 text-sm">
+                        <h4 class="font-bold text-indigo-950 mb-2">Classificação de Escala da Agricultura Urbana Cubana:</h4>
+                        <ol class="space-y-2 list-decimal pl-5 text-slate-700">
+                            <li><strong class="text-slate-900">Huertos Populares:</strong> Microescala (menor que 1.000 m²), voltados essencialmente para o autoconsumo e a subsistência familiar imediata.</li>
+                            <li><strong class="text-slate-900">Huertos Intensivos:</strong> Escala intermediária (menor que 2.000 m²), destinados ao suprimento de pequenos bairros locais.</li>
+                            <li><strong class="text-slate-900">Organopónicos Tradicionais:</strong> Escala comercial média (menor que 5.000 m²), caracterizados por canteiros de contenção física de alvenaria ou madeira e venda direta ao público.</li>
+                            <li><strong class="text-slate-900">Organopónicos de Alto Rendimento:</strong> Escala municipal avançada (pode atingir até 1 hectare), com gestão de alta produtividade para mercados locais.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- C) China -->
+                <div class="space-y-2">
+                    <h3 class="text-lg font-bold text-indigo-950 flex items-center gap-2">
+                        <span class="text-indigo-600 font-mono">C)</span> China: Socialismo de Mercado e Ajuste Multiescalar
+                    </h3>
+                    <ul class="list-disc pl-5 space-y-2 text-sm md:text-base">
+                        <li>
+                            <strong class="text-slate-900">ZEEs (Zonas Econômicas Especiais):</strong> Iniciadas nas áreas costeiras (como Shenzhen), caracterizam-se pela cessão seletiva e monitorada de amplos benefícios fiscais e facilidades logísticas estatais para atrair capital transnacional e promover a transferência tecnológica ao país.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Ajuste Espacial Multiescalar:</strong> Atuação coordenada do Estado chinês em megaprojetos de infraestrutura (redes metroviárias, redes ferroviárias de altíssima velocidade e portos gigantescos) que operam absorvendo excedentes de capital interno e projetando geopoliticamente o país (exemplo: Iniciativa do Cinturão e Rota).
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 4: Tabela de Equivalência de Memorização Rápida -->
+        <section id="tabela-memorizacao" class="scroll-mt-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-4">
+                4. Tabela de Equivalência de Memorização Rápida
+            </h2>
+            <div class="text-slate-700 mb-4 text-sm md:text-base">
+                Esta tabela está adaptada para caber inteiramente na tela, organizando-se em formato de cards de dados em celulares para evitar rolagem horizontal e melhorar o foco.
+            </div>
+
+            <!-- Tabela Fluida e Sem Scroll Horizontal -->
+            <table class="w-full text-left border-collapse border border-slate-200 responsive-table">
+                <thead>
+                    <tr class="bg-slate-100 text-slate-800 text-xs font-bold uppercase border-b border-slate-200">
+                        <th class="p-3 border border-slate-200">Fase / Modo de Produção</th>
+                        <th class="p-3 border border-slate-200">Agentes Dominantes</th>
+                        <th class="p-3 border border-slate-200">Infraestrutura e Marcas Geográficas</th>
+                        <th class="p-3 border border-slate-200">Relação com o Meio</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="p-3 border border-slate-200 font-bold" data-label="Fase / Modo">Capitalismo Comercial</td>
+                        <td class="p-3 border border-slate-200" data-label="Agentes Dominantes">Grandes mercadores, corporações de ofício e governos absolutistas colonizadores.</td>
+                        <td class="p-3 border border-slate-200" data-label="Infraestruturas">Cidades portuárias coloniais, fortalezas costeiras, feitorias de comércio e rotas de marinha mercantil.</td>
+                        <td class="p-3 border border-slate-200 font-medium" data-label="Relação com Meio"><strong class="text-indigo-600">Meio Natural:</strong> Dependência profunda e ajuste estrito às limitações do relevo, do clima e das marés.</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="p-3 border border-slate-200 font-bold" data-label="Fase / Modo">Capitalismo Industrial</td>
+                        <td class="p-3 border border-slate-200" data-label="Agentes Dominantes">Burguesias industriais fabris locais e sistemas de bancos industriais nacionais.</td>
+                        <td class="p-3 border border-slate-200" data-label="Infraestruturas">Cidades pretas (distritos fabris), redes interconectadas de ferrovias e canais fluviais navegáveis.</td>
+                        <td class="p-3 border border-slate-200 font-medium" data-label="Relação com Meio"><strong class="text-indigo-600">Meio Técnico:</strong> Surgimento de máquinas a vapor e motores no território. O espaço terrestre passa a ser artificializado mecanicamente.</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="p-3 border border-slate-200 font-bold" data-label="Fase / Modo">Capitalismo Informacional</td>
+                        <td class="p-3 border border-slate-200" data-label="Agentes Dominantes">Empresas transnacionais, megacorporações globais e grandes instituições do mercado financeiro.</td>
+                        <td class="p-3 border border-slate-200" data-label="Infraestruturas">Grandes tecnopolos de inovação, cabos oceânicos de fibra óptica, distritos corporativos financeiros de comando central.</td>
+                        <td class="p-3 border border-slate-200 font-medium" data-label="Relação com Meio"><strong class="text-indigo-600">MTCI:</strong> Formação de fluxos mundiais de dados. Espaço reconfigurado como redes logísticas altamente fluídas e elitizadas.</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="p-3 border border-slate-200 font-bold" data-label="Fase / Modo">Socialismo de Estado (URSS)</td>
+                        <td class="p-3 border border-slate-200" data-label="Agentes Dominantes">Mesa diretora do Gosplan e a elite de planejadores burocráticos estatais.</td>
+                        <td class="p-3 border border-slate-200" data-label="Infraestruturas">Combinados integrados de produção industrial, mono-gorods (cidades em torno de uma fábrica) e fazendas coletivas.</td>
+                        <td class="p-3 border border-slate-200 font-medium" data-label="Relação com Meio"><strong class="text-indigo-600">Mecanização Dirigida:</strong> Grandes projetos de infraestrutura sem regulação de mercado. Desconsideração frequente de impactos ecológicos locais.</td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="p-3 border border-slate-200 font-bold" data-label="Fase / Modo">Socialismo de Mercado (China)</td>
+                        <td class="p-3 border border-slate-200" data-label="Agentes Dominantes">Estado central chinês associado aos conglomerados nacionais e grupos multinacionais.</td>
+                        <td class="p-3 border border-slate-200" data-label="Infraestruturas">Zonas Econômicas Especiais (ZEEs) litorâneas, extensas redes ferroviárias de alta velocidade e megaportos integrados.</td>
+                        <td class="p-3 border border-slate-200 font-medium" data-label="Relação com Meio"><strong class="text-indigo-600">Ajuste Multiescalar:</strong> Investimento estatal focado em fixos espaciais com o objetivo de reter acumulação e expandir hegemonia global.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Seção 5: Roteiro Antipegadinhas: Como a FAURGS Cobra EBTT -->
+        <section id="antipegadinhas" class="scroll-mt-6">
+            <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-indigo-600 pl-3 mb-4">
+                5. Roteiro Antipegadinhas: Como a FAURGS Cobra EBTT
+            </h2>
+            <div class="space-y-4 text-slate-700 leading-relaxed text-base">
+                <p>
+                    A banca FAURGS possui forte viés acadêmico e rigor conceitual tradicional. Evite as seguintes armadilhas de prova:
+                </p>
+
+                <!-- Armadilha 1 -->
+                <div class="p-4 border border-slate-200 rounded-lg bg-white shadow-sm flex gap-3">
+                    <span class="text-red-500 font-bold text-xl leading-none">⚠</span>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">Armadilha 1: A ilusão da "Democratização" Territorial do MTCI</h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-1">
+                            A banca adora sugerir que a tecnologia da informação do MTCI encurtou as distâncias a ponto de democratizar o acesso e de homogeneizar o espaço urbano.
+                        </p>
+                        <p class="text-xs md:text-sm font-semibold text-indigo-700 mt-1">
+                            Gabarito Correto: O MTCI é intrinsecamente segregador e seletivo. Ele funciona de forma hegemônica e fragmentada, gerando macrocefalia urbana e novas divisões socioespaciais do trabalho no Sul Global.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Armadilha 2 -->
+                <div class="p-4 border border-slate-200 rounded-lg bg-white shadow-sm flex gap-3">
+                    <span class="text-red-500 font-bold text-xl leading-none">⚠</span>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">Armadilha 2: A farsa da "Desterritorialização" Total</h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-1">
+                            A banca pode sugerir que a circulação de capital financeiro flutuante desmaterializou totalmente as barreiras territoriais mundiais e tornou as infraestruturas físicas irrelevantes.
+                        </p>
+                        <p class="text-xs md:text-sm font-semibold text-indigo-700 mt-1">
+                            Gabarito Correto: Há um processo de "des-reterritorialização". A fluidez de dados nas redes e mercados financeiros virtuais exige infraestruturas físicas maciças, fixas e de alta eficiência material (cabos, servidores e conexões energéticas).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Armadilha 3 -->
+                <div class="p-4 border border-slate-200 rounded-lg bg-white shadow-sm flex gap-3">
+                    <span class="text-red-500 font-bold text-xl leading-none">⚠</span>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">Armadilha 3: O Ajuste Espacial como Equilíbrio Definitivo</h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-1">
+                            Afirmações que tratem o "Ajuste Espacial" (*spatial fix*) de Harvey como uma solução de resolução permanente das dinâmicas de crise capitalista.
+                        </p>
+                        <p class="text-xs md:text-sm font-semibold text-indigo-700 mt-1">
+                            Gabarito Correto: O Ajuste Espacial apenas empurra geograficamente e adia temporariamente a crise, ao mesmo tempo que lança as bases para novas e maiores crises geopolíticas futuras devido ao excesso de desvalorização em regiões abandonadas pelo capital.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Armadilha 4 -->
+                <div class="p-4 border border-slate-200 rounded-lg bg-white shadow-sm flex gap-3">
+                    <span class="text-red-500 font-bold text-xl leading-none">⚠</span>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm md:text-base">Armadilha 4: O Bloco Socialista como Monolítico</h4>
+                        <p class="text-xs md:text-sm text-slate-600 mt-1">
+                            Questões que simplificam ou igualam o ordenamento espacial de Cuba, da URSS e da China sob uma idêntica organização de planejamento.
+                        </p>
+                        <p class="text-xs md:text-sm font-semibold text-indigo-700 mt-1">
+                            Gabarito Correto: Cada país produziu marcas específicas: a URSS se estruturou em combinados industriais pesados e agricultura coletivizada mecanizada; Cuba em agricultura agroecológica descentralizada e hortas urbanas (organopónicos); e a China estruturou-se em ZEEs costeiras integradas ao mercado mundial.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé e Navegação Final -->
+    <footer class="mt-16 pt-8 border-t border-slate-200 text-center">
+        <p class="text-xs text-slate-500 mb-6">
+            Material sintetizado e grifado de forma personalizada com base no conteúdo para o concurso docente do IFSC (FAURGS).
+        </p>
+        
+        <!-- Botão de Ação para as Questões -->
+        <a href="modosquestoes.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3.5 rounded-lg shadow-md hover:shadow-lg transition duration-200 active:scale-[0.98]">
+            Ir para Questões Práticas
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path></svg>
+        </a>
+    </footer>
+</div>
+
+<!-- Lógica de Controle do Player de Áudio -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const audio = document.getElementById("audio-player");
+        const playPauseBtn = document.getElementById("play-pause-btn");
+        const playIcon = document.getElementById("play-icon");
+        const pauseIcon = document.getElementById("pause-icon");
+        const progressBar = document.getElementById("progress-bar");
+        const currentTimeEl = document.getElementById("current-time");
+        const totalDurationEl = document.getElementById("total-duration");
+        const speedBtns = document.querySelectorAll(".speed-btn");
+        const audioSrcInput = document.getElementById("audio-src-input");
+
+        // Atualizar o arquivo de áudio conforme digitação do usuário
+        audioSrcInput.addEventListener("change", function() {
+            const file = this.value.trim();
+            if(file) {
+                const wasPlaying = !audio.paused;
+                audio.src = file;
+                audio.load();
+                if(wasPlaying) {
+                    audio.play();
+                }
+            }
+        });
+
+        // Alternar Play / Pause
+        playPauseBtn.addEventListener("click", function() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playIcon.classList.add("hidden");
+                        pauseIcon.classList.remove("hidden");
+                    })
+                    .catch(err => {
+                        console.warn("Erro ao reproduzir o áudio. Verifique se o arquivo existe e o nome está correto: ", err);
+                        // Mostrar um aviso elegante em vez de usar alert()
+                        const warningBox = document.createElement("div");
+                        warningBox.className = "fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg text-sm z-50 transition duration-300";
+                        warningBox.innerHTML = `<strong>Aviso:</strong> Não foi possível carregar "${audioSrcInput.value}". Certifique-se de salvar o arquivo MP3 com este nome na mesma pasta do arquivo index.html.`;
+                        document.body.appendChild(warningBox);
+                        setTimeout(() => { warningBox.remove(); }, 6000);
+                    });
+            } else {
+                audio.pause();
+                playIcon.classList.remove("hidden");
+                pauseIcon.classList.add("hidden");
+            }
+        });
+
+        // Atualizar barra de progresso e tempo decorrido
+        audio.addEventListener("timeupdate", function() {
+            if (audio.duration) {
+                const percentage = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percentage;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
+        });
+
+        // Carregar duração do áudio ao carregar metadados
+        audio.addEventListener("loadedmetadata", function() {
+            totalDurationEl.textContent = formatTime(audio.duration);
+        });
+
+        // Permitir navegação arrastando a barra de progresso
+        progressBar.addEventListener("input", function() {
+            if (audio.duration) {
+                const time = (progressBar.value / 100) * audio.duration;
+                audio.currentTime = time;
+            }
+        });
+
+        // Controle de Velocidade de Reprodução
+        speedBtns.forEach(btn => {
+            btn.addEventListener("click", function() {
+                // Remover classe ativa dos botões de velocidade
+                speedBtns.forEach(b => {
+                    b.classList.remove("bg-indigo-600", "text-white");
+                    b.classList.add("bg-white", "text-slate-700");
+                });
+                
+                // Ativar este botão
+                this.classList.remove("bg-white", "text-slate-700");
+                this.classList.add("bg-indigo-600", "text-white");
+
+                const speed = parseFloat(this.dataset.speed);
+                audio.playbackRate = speed;
+            });
+        });
+
+        // Função auxiliar de formatação de tempo (MM:SS)
+        function formatTime(secs) {
+            if (isNaN(secs)) return "0:00";
+            const minutes = Math.floor(secs / 60);
+            const seconds = Math.floor(secs % 60);
+            return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+    });
+</script>
+
+</body>
+</html>

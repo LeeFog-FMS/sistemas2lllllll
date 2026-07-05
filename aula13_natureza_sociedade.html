@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Geografia Concurso IFSC - Relação Natureza-Sociedade</title>
+    <!-- Importação do Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importação do Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Garantindo que as tabelas se transformem em blocos empilhados no mobile para eliminar scroll */
+        @media (max-width: 768px) {
+            .responsive-table, .responsive-table thead, .responsive-table tbody, .responsive-table th, .responsive-table td, .responsive-table tr {
+                display: block;
+            }
+            .responsive-table thead {
+                display: none; /* Esconde o cabeçalho no mobile */
+            }
+            .responsive-table tr {
+                margin-bottom: 1.5rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+                padding: 1rem;
+                background-color: #f8fafc;
+            }
+            .responsive-table td {
+                display: flex;
+                flex-direction: column;
+                padding: 0.5rem 0;
+                border: none !important;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #1e293b;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                margin-bottom: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen selection:bg-amber-100 selection:text-amber-900 antialiased">
+
+<div class="max-w-4xl mx-auto px-4 py-8 md:py-12">
+    
+    <!-- Cabeçalho Principal -->
+    <header class="border-b border-slate-200 pb-8 mb-8 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-semibold mb-4 uppercase tracking-wider">
+            Foco de Prova • IFSC (Banca FAURGS)
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight mb-3">
+            Guia de Memorização: Relação Natureza-Sociedade e Dinâmicas Ambientais
+        </h1>
+        <p class="text-slate-600 text-base md:text-lg max-w-2xl leading-relaxed">
+            Material de estudo direcionado para o cargo de <span class="font-semibold text-slate-900">Professor de Geografia do IFSC</span>. Organização tática com foco em conversão de pontos na prova objetiva.
+        </p>
+    </header>
+
+    <!-- Painel do Reprodutor de Áudio -->
+    <section class="bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6 mb-10 shadow-sm">
+        <div class="flex items-center gap-2 mb-4">
+            <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+            </svg>
+            <h2 class="font-bold text-slate-900 text-lg">Audioaula de Memorização</h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            <!-- Input para Nome do Arquivo MP3 -->
+            <div class="md:col-span-5">
+                <label for="audio-source-input" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                    Nome do Arquivo MP3 (na mesma pasta):
+                </label>
+                <input type="text" id="audio-source-input" 
+                       value="aula-geografia-ifsc.mp3" 
+                       class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                       placeholder="Exemplo: audio.mp3">
+            </div>
+
+            <!-- Controles do Áudio -->
+            <div class="md:col-span-7 flex flex-wrap gap-3 items-center">
+                <!-- Botão de Reproduzir / Pausar -->
+                <button id="btn-play-pause" class="flex-1 md:flex-none inline-flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-lg text-sm shadow-sm transition-all">
+                    <span id="play-icon">▶</span>
+                    <span id="play-text">Ouvir Resumo</span>
+                </button>
+
+                <!-- Seletor de Velocidade -->
+                <div class="flex-1 md:flex-none">
+                    <label class="sr-only">Velocidade</label>
+                    <select id="audio-speed-select" class="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                        <option value="0.5">Vel: 0.5x</option>
+                        <option value="1.0" selected>Vel: 1.0x (Normal)</option>
+                        <option value="1.25">Vel: 1.25x</option>
+                        <option value="1.5">Vel: 1.5x</option>
+                        <option value="2.0">Vel: 2.0x</option>
+                    </select>
+                </div>
+
+                <!-- Botão de Recarregar Áudio -->
+                <button id="btn-reload-audio" title="Recarregar arquivo de áudio" class="p-2 border border-slate-300 rounded-lg hover:bg-slate-100 text-slate-700 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18.5"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Barra de Progresso Customizada -->
+        <div class="mt-4 pt-3 border-t border-slate-200/60">
+            <div class="flex items-center justify-between text-xs text-slate-500 mb-1">
+                <span id="current-time">0:00</span>
+                <span id="total-duration">0:00</span>
+            </div>
+            <input type="range" id="audio-timeline" min="0" max="100" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none">
+        </div>
+
+        <!-- Elemento de áudio invisível -->
+        <audio id="memorization-audio" src="aula-geografia-ifsc.mp3" preload="none"></audio>
+    </section>
+
+    <!-- Bloco de Perfil de Cobrança -->
+    <section class="mb-10">
+        <div class="flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+            <span class="text-slate-400 font-mono text-sm">01/</span>
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900">Ficha de Voo: Perfil de Cobrança FAURGS</h2>
+        </div>
+
+        <p class="text-slate-700 leading-relaxed mb-4">
+            A banca FAURGS, quando responsável por concursos voltados ao Ensino Básico, Técnico e Tecnológico (EBTT), possui uma identidade de avaliação bastante característica que você precisa dominar para garantir vantagens estratégicas na prova:
+        </p>
+
+        <ul class="space-y-3 pl-4 border-l-2 border-indigo-200">
+            <li class="text-slate-700 leading-relaxed">
+                <strong class="text-slate-900">Estilo de Formulação:</strong> Apresenta rigor acadêmico elevado, influenciado diretamente pelas linhas doutrinárias e publicações do <span class="bg-amber-100 font-medium px-1 rounded text-slate-900">Instituto de Geociências da UFRGS</span>.
+            </li>
+            <li class="text-slate-700 leading-relaxed">
+                <strong class="text-slate-900">Formato das Questões:</strong> Questões clássicas de múltipla escolha (A a E), que cobram de forma sistemática a <span class="bg-amber-100 font-medium px-1 rounded text-slate-900">articulação integrada entre a Geografia Física e as Dinâmicas Sociais</span>.
+            </li>
+            <li class="text-slate-700 leading-relaxed">
+                <strong class="text-slate-900">Foco Recorrente:</strong> Estabelecimento claro de relações de causa-efeito, uso literal de terminologias de referências bibliográficas nacionais e interpretação detalhada das <span class="bg-amber-100 font-medium px-1 rounded text-slate-900">bacias hidrográficas e feições geomorfológicas do Sul do país</span>.
+            </li>
+        </ul>
+    </section>
+
+    <!-- Bloco 1: Epistemologia e Análise Ecodinâmica -->
+    <section class="mb-10">
+        <div class="flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+            <span class="text-slate-400 font-mono text-sm">02/</span>
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900">Bloco 1: Epistemologia e Análise Ecodinâmica</h2>
+        </div>
+
+        <p class="text-slate-700 leading-relaxed mb-6">
+            Para a FAURGS, a natureza e a sociedade não operam em sistemas isolados. A dinâmica ambiental é abordada de forma holística, sob a ótica de sistemas complexos integrados. Memorize de forma definitiva as duas principais teorias:
+        </p>
+
+        <!-- Teoria 1: Jean Tricart -->
+        <div class="mb-6 bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-2">1. A Ecodinâmica de Jean Tricart</h3>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                Toda a análise ecodinâmica repousa no equilíbrio constante entre dois processos conflitantes na vertente: a <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">Morfogênese</span> (dinâmica de alteração, modelagem do relevo e perda de sedimentos) e a <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">Pedogênese</span> (processos químicos e biológicos de formação, evolução e fixação do solo).
+            </p>
+
+            <!-- Tabela Unidades Ecodinâmicas -->
+            <div class="overflow-hidden mb-4">
+                <table class="responsive-table w-full text-left border-collapse bg-white rounded-lg">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-3">Unidade Ecodinâmica</th>
+                            <th class="p-3">Mecânica da Vertente</th>
+                            <th class="p-3">Comportamento Vegetal</th>
+                            <th class="p-3">Ação Antrópica</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td data-label="Unidade Ecodinâmica" class="p-3 font-semibold text-indigo-900">Meios Estáveis</td>
+                            <td data-label="Mecânica da Vertente" class="p-3">Pedogênese > Morfogênese</td>
+                            <td data-label="Comportamento Vegetal" class="p-3">Cobertura vegetal densa e contínua</td>
+                            <td data-label="Ação Antrópica" class="p-3">Resiliência alta; equilíbrio preservado</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Unidade Ecodinâmica" class="p-3 font-semibold text-indigo-900">Meios Intermediários</td>
+                            <td data-label="Mecânica da Vertente" class="p-3">Pedogênese = Morfogênese</td>
+                            <td data-label="Comportamento Vegetal" class="p-3">Vegetação descontínua ou transição</td>
+                            <td data-label="Ação Antrópica" class="p-3">Alta sensibilidade; intervenções ativam erosão</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Unidade Ecodinâmica" class="p-3 font-semibold text-indigo-900">Meios Instáveis</td>
+                            <td data-label="Mecânica da Vertente" class="p-3">Morfogênese > Pedogênese</td>
+                            <td data-label="Comportamento Vegetal" class="p-3">Vegetação esparsa ou ausente</td>
+                            <td data-label="Ação Antrópica" class="p-3">Vulnerabilidade natural; degradação acelerada</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Gatilho de Memória -->
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg">
+                <p class="text-sm text-amber-900 leading-relaxed">
+                    <strong class="font-bold">💡 Gatilho de Memória:</strong><br>
+                    • <strong class="text-slate-900">Estável:</strong> O solo se forma (Pedogênese) mais rápido do que é desgastado (Morfogênese).<br>
+                    • <strong class="text-slate-900">Instável:</strong> O relevo é alterado e desgastado de forma acelerada, antes que o solo possa se estruturar.
+                </p>
+            </div>
+        </div>
+
+        <!-- Teoria 2: Jurandyr Ross -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-2">2. A Teoria da Fragilidade Ambiental (Jurandyr Ross)</h3>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                Ross transpôs a conceituação física de Tricart para uma metodologia aplicada ao planejamento territorial e uso da terra. A banca adora explorar a diferenciação rigorosa entre os dois níveis de fragilidade:
+            </p>
+
+            <div class="space-y-4">
+                <div class="bg-white p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-indigo-900 text-sm uppercase tracking-wider mb-1">Fragilidade Potencial</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        É a vulnerabilidade intrínseca e natural do ecossistema físico, <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">desconsiderando qualquer ação humana</span>. É o resultado direto da combinação de variáveis naturais como: declividade acentuada do relevo, presença de solos naturalmente erodíveis (como Neossolos) e altos índices de precipitação pluvial.
+                    </p>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg border border-slate-200">
+                    <h4 class="font-bold text-indigo-900 text-sm uppercase tracking-wider mb-1">Fragilidade Emergente</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Representa o estado de vulnerabilidade atual e real, gerado pela <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">associação direta entre a fragilidade potencial e as formas de ocupação ou exploração antrópica</span> (exemplo clássico: exploração agrícola desordenada, sem curvas de nível, sobre encostas íngremes e frágeis).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bloco 2: Processos Geomorfológicos e Vertentes -->
+    <section class="mb-10">
+        <div class="flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+            <span class="text-slate-400 font-mono text-sm">03/</span>
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900">Bloco 2: Processos Geomorfológicos e Vertentes</h2>
+        </div>
+
+        <p class="text-slate-700 leading-relaxed mb-6">
+            As alterações das encostas e encostas florestais envolvem o entendimento de processos dinâmicos e mecânicos complexos. A banca cobra a sequência lógica do escoamento e as tipologias de movimentos de massa.
+        </p>
+
+        <!-- 1. Erosão Linear -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-slate-900 mb-3">1. Erosão Linear: O Gradiente de Degradação Continua</h3>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                O desenvolvimento da erosão hídrica linear nas superfícies das vertentes obedece a uma gradação mecânica e morfológica muito específica, disposta no seguinte fluxo lógico:
+            </p>
+
+            <!-- Fluxo em blocos -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-2 text-center text-xs font-bold mb-6">
+                <div class="bg-slate-100 p-2 rounded border border-slate-200">1. Escoamento Difuso</div>
+                <div class="bg-slate-100 p-2 rounded border border-slate-200">2. Sulcos Pluviais</div>
+                <div class="bg-slate-100 p-2 rounded border border-slate-200">3. Ravinas (Perfil "V")</div>
+                <div class="bg-indigo-50 text-indigo-900 p-2 rounded border border-indigo-200">4. Voçorocas (Perfil "U")</div>
+            </div>
+
+            <!-- Tabela de Degradação Linear -->
+            <div class="overflow-hidden mb-6">
+                <table class="responsive-table w-full text-left border-collapse bg-white rounded-lg">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-3">Tipo de Feição</th>
+                            <th class="p-3">Geometria e Dimensão</th>
+                            <th class="p-3">Relação Hidrodinâmica</th>
+                            <th class="p-3">Mecanismos de Controle</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td data-label="Tipo de Feição" class="p-3 font-semibold text-indigo-900">Sulcos Pluviais</td>
+                            <td data-label="Geometria" class="p-3">Canais rasos, de escala centimétrica e paralelos.</td>
+                            <td data-label="Relação Hidrodinâmica" class="p-3">Sem contato com a água subsuperficial ou freática.</td>
+                            <td data-label="Controle" class="p-3">Aração convencional, gradagem e terraceamento simples.</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Tipo de Feição" class="p-3 font-semibold text-indigo-900">Ravinas</td>
+                            <td data-label="Geometria" class="p-3">Canais de maior profundidade, alongados e com seção transversal em "V".</td>
+                            <td data-label="Relação Hidrodinâmica" class="p-3">Processos concentrados superficiais; não interceptam o lençol freático.</td>
+                            <td data-label="Controle" class="p-3">Revegetação ativa, desvio controlado das bacias de contribuição superficial.</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Tipo de Feição" class="p-3 font-semibold text-indigo-900">Voçorocas</td>
+                            <td data-label="Geometria" class="p-3">Grandes incisões ou fossas, com perfil transversal alargado em "U" (tipo caixão).</td>
+                            <td data-label="Relação Hidrodinâmica" class="p-3"><span class="bg-amber-100 font-bold px-1 rounded text-slate-900">Obrigatório: interceptam o lençol freático</span>, mantendo fluxo hídrico basal contínuo.</td>
+                            <td data-label="Controle" class="p-3">Obras de bioengenharia de alta complexidade e drenagem de base/subterrânea profunda.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Alerta de Pegadinha: Voçoroca / Piping -->
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg mb-4">
+                <p class="text-sm text-red-900 leading-relaxed">
+                    <strong class="font-bold text-red-950">🔥 Alerta de Pegadinha de Concurso:</strong><br>
+                    A voçoroca difere de uma ravina principalmente pelo fato de envolver processos subsuperficiais estruturais em decorrência do afloramento freático. Um termo de extrema cobrança associado a isso é o <span class="bg-amber-100 font-bold px-1 rounded text-red-950">Piping (ou entubamento)</span>. Trata-se do fluxo interno de água subsuperficial que carreia materiais finos do solo por caminhos subterrâneos, abrindo dutos e provocando colapsos estruturais do solo de baixo para cima.
+                </p>
+            </div>
+        </div>
+
+        <!-- 2. Movimentos de Massa -->
+        <div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">2. Movimentos de Massa em Vertentes e Encostas</h3>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                Os movimentos de massa gravitacionais de encosta compreendem deslocamentos rápidos ou lentos de materiais superficiais e rochosos, condicionados pela gravidade e pela saturação hídrica:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="p-4 border border-slate-200 rounded-lg">
+                    <h4 class="font-bold text-slate-950 text-base mb-1">Rastejo (Creep)</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Processo extremamente <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">lento, imperceptível de forma instantânea</span> e contínuo da camada de solo superficial. Indicadores em campo incluem árvores com troncos em formato curvado ("troncos de pistola"), inclinação sistemática de postes de transmissão, cercas desestruturadas e muros rompidos.
+                    </p>
+                </div>
+
+                <div class="p-4 border border-slate-200 rounded-lg">
+                    <h4 class="font-bold text-slate-950 text-base mb-1">Escorregamento Translacional</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Movimento rápido caracterizado pelo deslizamento planar de blocos de solo ou rochas desestruturadas sobre uma <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">superfície de ruptura plana bem definida</span> (frequentemente no limite físico de contato direto entre o solo e a rocha sã subjacente).
+                    </p>
+                </div>
+
+                <div class="p-4 border border-slate-200 rounded-lg">
+                    <h4 class="font-bold text-slate-950 text-base mb-1">Escorregamento Rotacional</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Movimentação rápida de massas homogêneas de regolito ao longo de uma <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">superfície de ruptura côncava ou em concha (em formato semicircular)</span>. É um processo muito comum em encostas com espessas camadas de solo argiloso e uniforme.
+                    </p>
+                </div>
+
+                <div class="p-4 border border-slate-200 rounded-lg">
+                    <h4 class="font-bold text-slate-950 text-base mb-1">Corrida de Detritos / Lama (Flow)</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Deslocamento em massa de alta velocidade e fluidez viscosa de solos saturados por intensa chuva. Possui comportamento mecânico análogo a um líquido de alta viscosidade, apresentando <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">alto poder destrutivo</span> ao atingir fundos de vales.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Diferença Crítica de Planejamento -->
+            <div class="bg-indigo-50 border-l-4 border-indigo-600 p-4 rounded-r-lg">
+                <p class="text-sm text-indigo-900 leading-relaxed">
+                    <strong class="font-bold text-indigo-950">⚖️ Diferença Crítica de Planejamento Territorial para Provas:</strong><br>
+                    • <strong class="text-slate-900">Perigo (Hazard):</strong> É o evento físico em si, um processo puramente natural geológico ou geomorfológico ativo (ex.: deslizamento natural de encosta inabitada).<br>
+                    • <strong class="text-slate-900">Risco (Risk):</strong> É a probabilidade de danos socioeconômicos ou perdas de vidas humanas gerados pela <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">relação de sobreposição espacial entre o Perigo e uma População Vulnerável</span> exposta. Sem pessoas ou bens materiais ameaçados, há Perigo, mas estatisticamente não há Risco de desastre.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bloco 3: Processos de Degradação dos Solos -->
+    <section class="mb-10">
+        <div class="flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+            <span class="text-slate-400 font-mono text-sm">04/</span>
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900">Bloco 3: Processos de Degradação dos Solos</h2>
+        </div>
+
+        <p class="text-slate-700 leading-relaxed mb-6">
+            A desestruturação física e química dos horizontes de solo é intensamente explorada em certames da região Sul, exigindo do candidato o domínio completo de fenômenos específicos de intemperismo e uso inadequado da terra.
+        </p>
+
+        <!-- 1. Lixiviação vs Laterização -->
+        <div class="mb-8">
+            <h3 class="text-lg font-bold text-slate-900 mb-3">1. Lixiviação vs. Laterização</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border border-slate-200 rounded-lg">
+                    <h4 class="font-bold text-slate-950 text-base mb-1">Lixiviação</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Processo físico-químico de <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">lavagem e arraste mecânico-químico vertical</span> de minerais solúveis e bases trocáveis (tais como Cálcio $Ca^{2+}$, Magnésio $Mg^{2+}$, Potássio $K^{+}$ e Sódio $Na^{+}$) da porção superficial do solo em direção às camadas inferiores, provocando acentuado empobrecimento químico e consequente acidificação.
+                    </p>
+                </div>
+                
+                <div class="p-4 border border-slate-200 rounded-lg">
+                    <h4 class="font-bold text-slate-950 text-base mb-1">Laterização</h4>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Concentração e enriquecimento relativo de <span class="bg-amber-100 font-semibold px-1 rounded text-slate-900">óxidos e hidróxidos de ferro ($Fe$) e alumínio ($Al$)</span> nas camadas superficiais do solo em virtude da lixiviação sistemática de outros elementos (como a sílica). Sob regimes climáticos tropicais ou subtropicais com alternância bem definida de estações secas e úmidas, esse horizonte enriquecido desidrata, formando crostas e concreções duras extremamente difíceis de romper (denominadas de laterita, crosta ferruginosa ou canga).
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Confronto Campeão de Questões: Arenização vs Desertificação -->
+        <div>
+            <h3 class="text-lg font-bold text-slate-900 mb-3">2. Confronto Campeão de Questões: Arenização vs. Desertificação</h3>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                Esta é a distinção geográfica mais crucial para provas na Região Sul do Brasil. É imperativo que você memorize as diferenças estruturais abaixo para evitar confusões clássicas de nomenclatura e classificação:
+            </p>
+
+            <!-- Tabela de Diferenciação Técnica -->
+            <div class="overflow-hidden mb-4">
+                <table class="responsive-table w-full text-left border-collapse bg-white rounded-lg">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                            <th class="p-3">Parâmetro de Análise</th>
+                            <th class="p-3">Arenização</th>
+                            <th class="p-3">Desertificação</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <tr>
+                            <td data-label="Parâmetro de Análise" class="p-3 font-semibold text-indigo-900">Clima Regional</td>
+                            <td data-label="Arenização" class="p-3">Subtropical Úmido (alto índice e bom regime pluviométrico, sem seca estrutural).</td>
+                            <td data-label="Desertificação" class="p-3">Árido, Semiárido e Subúmido Seco (balanço hídrico acentuadamente negativo).</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Parâmetro de Análise" class="p-3 font-semibold text-indigo-900">Condicionante Geológica</td>
+                            <td data-label="Arenização" class="p-3">Presença de depósitos sedimentares de arenitos quartzosos pouco ou não consolidados (Formações Botucatu e Tupanciretã).</td>
+                            <td data-label="Desertificação" class="p-3">Envolve rochas de matriz cristalina ou coberturas sedimentares sob intemperismo predominantemente mecânico.</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Parâmetro de Análise" class="p-3 font-semibold text-indigo-900">Gênese do Fenômeno</td>
+                            <td data-label="Arenização" class="p-3"><span class="bg-amber-100 font-bold px-1 rounded text-slate-900">Processo morfogenético eminentemente natural</span> e preexistente, severamente potencializado pela ação antrópica de manejo incorreto do solo (ex.: pisoteio de gado).</td>
+                            <td data-label="Desertificação" class="p-3">Degradação sistêmica severa decorrente de processos de estresse ecológico e climático, e intensa exploração agrícola desordenada.</td>
+                        </tr>
+                        <tr>
+                            <td data-label="Parâmetro de Análise" class="p-3 font-semibold text-indigo-900">Localização Geográfica Br</td>
+                            <td data-label="Arenização" class="p-3"><span class="bg-amber-100 font-bold px-1 rounded text-slate-900">Sudoeste do Rio Grande do Sul</span> (Região da Campanha Gaúcha).</td>
+                            <td data-label="Desertificação" class="p-3">Sertão e áreas secas do Nordeste (Polígono das Secas) e bacias secas de Minas Gerais.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bloco 4: Radar de "Pega-Ratões" da FAURGS -->
+    <section class="mb-12">
+        <div class="flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+            <span class="text-slate-400 font-mono text-sm">05/</span>
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900">Radar de "Pega-Ratões" da FAURGS</h2>
+        </div>
+
+        <p class="text-slate-700 leading-relaxed mb-6">
+            Revise atentamente estes quatro pontos de vulnerabilidade recorrentemente cobrados pelas bancas de concursos gaúchos. Muitas alternativas corretas ou pegadinhas de anulação se sustentam nesses tópicos doutrinários:
+        </p>
+
+        <div class="space-y-4">
+            <div class="p-5 border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                    <h4 class="font-bold text-slate-900 text-base">1. Os Areais do Sudoeste Gaúcho e o Clima Úmido</h4>
+                </div>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    Se a questão citar cidades gaúchas como Alegrete, Quaraí, Manoel Viana, Cacequi, Maçambará ou São Francisco de Assis, <span class="bg-amber-100 font-bold px-1 rounded text-slate-900">descarte imediatamente qualquer alternativa que mencione "desertificação"</span>. A doutrina oficial adotada nos concursos locais (profundamente respaldada pelos trabalhos de pesquisa de referência da Profª Drª Dirce Suertegaray / UFRGS) classifica o processo de forma unânime e categórica como <span class="bg-amber-100 font-bold px-1 rounded text-slate-900">Arenização</span>. Isso ocorre pelo fato de o clima local ser subtropical úmido, com médias de chuva superiores a 1.400 mm anuais, impossibilitando qualquer correlação de deserto de caráter climatológico seco.
+                </p>
+            </div>
+
+            <div class="p-5 border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                    <h4 class="font-bold text-slate-900 text-base">2. Inversão dos Conceitos de Tricart e Ross</h4>
+                </div>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    As provas frequentemente trocam os conceitos de ecodinâmica e as premissas de Ross. Atente-se: a <span class="bg-amber-100 font-bold px-1 rounded text-slate-900">Fragilidade Emergente inclui obrigatoriamente a interferência social/antrópica</span>. Outro erro proposital recorrente é inverter as dinâmicas de Tricart nas alternativas de prova, alegando que nos "meios estáveis" a morfogênese supera a pedogênese. Memorize: Estável = Pedogênese ativa dominando a dinâmica local.
+                </p>
+            </div>
+
+            <div class="p-5 border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                    <h4 class="font-bold text-slate-900 text-base">3. Visão Integrada dos Riscos de Desastres Geomorfológicos</h4>
+                </div>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    Alternativas simplistas ou reducionistas que apontam determinismo climático ou de cunho estritamente natural (ex.: "deslizamentos ocorrem puramente devido à precipitação excessiva impossível de prever") ou culpabilização social exclusiva ("os desastres ocorrem somente por causa de ocupação desordenada de encostas") costumam estar erradas. A banca busca a análise sistêmica e integrada: o desastre de vertente ocorre devido à <span class="bg-amber-100 font-bold px-1 rounded text-slate-900">combinação simultânea de características físicas suscetíveis do meio físico</span> (geologia e relevo) potencializadas e desestabilizadas pelas <span class="bg-amber-100 font-bold px-1 rounded text-slate-900">práticas desordenadas e ausência de planejamento de uso do solo da sociedade vulnerável</span>.
+                </p>
+            </div>
+
+            <div class="p-5 border border-slate-200 rounded-lg hover:border-indigo-300 transition-colors">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="w-2 h-2 bg-indigo-600 rounded-full"></span>
+                    <h4 class="font-bold text-slate-900 text-base">4. Regulamentação e Legislação de Qualidade de Solos</h4>
+                </div>
+                <p class="text-slate-700 text-sm leading-relaxed">
+                    Em conformidade com as diretrizes do CONAMA, os VRQs (Valores de Referência de Qualidade do Solo) <span class="bg-amber-100 font-bold px-1 rounded text-slate-900">não são indexadores idênticos nacionais centralizados e unificados</span>. Eles devem ser mapeados e tabelados de forma independente por cada órgão ambiental estadual (no Rio Grande do Sul, a FEPAM; em Santa Catarina, o IMA), uma vez que a composição química natural básica e basal do solo varia enormemente conforme a litologia matriz regional.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapé de Ações -->
+    <footer class="border-t border-slate-200 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-slate-500 text-center sm:text-left">
+            Material integrado para fins de estudo autodidata — Professor EBTT.
+        </div>
+        <a href="natquestoes.html" class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-lg text-base shadow-sm transition-all">
+            Ir para Caderno de Questões
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+            </svg>
+        </a>
+    </footer>
+
+</div>
+
+<script>
+    // Inicialização do Script para Controle do Audioaula
+    const audio = document.getElementById('memorization-audio');
+    const audioSourceInput = document.getElementById('audio-source-input');
+    const btnPlayPause = document.getElementById('btn-play-pause');
+    const playIcon = document.getElementById('play-icon');
+    const playText = document.getElementById('play-text');
+    const btnReload = document.getElementById('btn-reload-audio');
+    const speedSelect = document.getElementById('audio-speed-select');
+    const timeline = document.getElementById('audio-timeline');
+    const currentTimeEl = document.getElementById('current-time');
+    const totalDurationEl = document.getElementById('total-duration');
+
+    // Função para formatar segundos em minutos e segundos
+    function formatTime(secs) {
+        if (isNaN(secs)) return "0:00";
+        const minutes = Math.floor(secs / 60);
+        const seconds = Math.floor(secs % 60);
+        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // Função para atualizar o arquivo de origem do áudio baseado no input
+    function updateAudioSource() {
+        const file = audioSourceInput.value.trim();
+        if (file) {
+            const currentPath = audio.src;
+            // Se o src atual for diferente, atualizamos
+            if (!currentPath.endsWith(file)) {
+                audio.src = file;
+                audio.load();
+                resetTimelineUI();
+                pauseAudio();
+            }
+        }
+    }
+
+    // Função para pausar áudio
+    function pauseAudio() {
+        audio.pause();
+        playIcon.textContent = "▶";
+        playText.textContent = "Ouvir Resumo";
+    }
+
+    // Função para reproduzir áudio
+    function playAudio() {
+        audio.play().catch(error => {
+            console.log("Erro ao tentar tocar o áudio. O arquivo pode não estar disponível ainda:", error);
+            // Mensagem de feedback limpa em tela (Substituição de alert)
+            const feedbackMessage = document.createElement('div');
+            feedbackMessage.className = "fixed bottom-4 right-4 bg-slate-900 text-white px-4 py-3 rounded-lg text-xs shadow-lg flex items-center gap-2 z-50 transition-all duration-300";
+            feedbackMessage.innerHTML = `
+                <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <span>Insira um arquivo de áudio chamado "${audioSourceInput.value}" na pasta raiz para reproduzir.</span>
+            `;
+            document.body.appendChild(feedbackMessage);
+            setTimeout(() => {
+                feedbackMessage.classList.add('opacity-0');
+                setTimeout(() => feedbackMessage.remove(), 300);
+            }, 5000);
+        });
+        playIcon.textContent = "❚❚";
+        playText.textContent = "Pausar";
+    }
+
+    // Função para resetar barra de timeline
+    function resetTimelineUI() {
+        timeline.value = 0;
+        currentTimeEl.textContent = "0:00";
+        totalDurationEl.textContent = "0:00";
+    }
+
+    // Listener de click no Play/Pause
+    btnPlayPause.addEventListener('click', () => {
+        updateAudioSource();
+        if (audio.paused) {
+            playAudio();
+        } else {
+            pauseAudio();
+        }
+    });
+
+    // Mudança de velocidade do áudio
+    speedSelect.addEventListener('change', () => {
+        audio.playbackRate = parseFloat(speedSelect.value);
+    });
+
+    // Atualização da timeline à medida que o áudio avança
+    audio.addEventListener('timeupdate', () => {
+        if (!isNaN(audio.duration)) {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            timeline.value = progress;
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        }
+    });
+
+    // Atualização da duração total do áudio quando carregado
+    audio.addEventListener('loadedmetadata', () => {
+        totalDurationEl.textContent = formatTime(audio.duration);
+    });
+
+    // Permite navegar no áudio clicando/arrastando na barra
+    timeline.addEventListener('input', () => {
+        if (!isNaN(audio.duration)) {
+            const newTime = (timeline.value / 100) * audio.duration;
+            audio.currentTime = newTime;
+        }
+    });
+
+    // Ao terminar o áudio, voltar ao estado inicial
+    audio.addEventListener('ended', () => {
+        pauseAudio();
+        timeline.value = 0;
+        currentTimeEl.textContent = "0:00";
+    });
+
+    // Botão para forçar carregamento / recarregar arquivo
+    btnReload.addEventListener('click', () => {
+        updateAudioSource();
+        audio.load();
+        audio.playbackRate = parseFloat(speedSelect.value);
+        resetTimelineUI();
+        pauseAudio();
+    });
+
+    // Ouvir alterações de campo do input para atualizar o source
+    audioSourceInput.addEventListener('change', () => {
+        updateAudioSource();
+    });
+</script>
+</body>
+</html>
