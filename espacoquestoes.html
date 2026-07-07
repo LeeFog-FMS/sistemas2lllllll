@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulado Geografia Industrial - Estilo FAURGS</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome para Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            serif: ['Merriweather', 'serif'],
+          },
+          colors: {
+            academic: {
+              50: '#FCFBFA', // Fundo quente tipo papel
+              100: '#F5F3EF', // Borda ou bloco secundário suave
+              800: '#2A2725', // Texto principal suave aos olhos
+              900: '#1C1A19', // Títulos
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilização suave para transições e rolagem */
+    html {
+      scroll-behavior: smooth;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    /* Efeito de strike-through atenuado */
+    .striked-option {
+      opacity: 0.45 !important;
+      text-decoration: line-through !important;
+      background-color: #f5f5f4 !important;
+    }
+    /* Animação suave de fade-in */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease forwards;
+    }
+  </style>
+</head>
+<body class="bg-academic-50 text-academic-800 font-sans min-h-screen antialiased selection:bg-indigo-100">
+
+  <!-- Header Acadêmico -->
+  <header class="border-b border-stone-200 bg-white py-6 shadow-xs sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">Padrão FAURGS</span>
+          <span class="text-stone-500 text-xs">• Geografia Humana & Econômica</span>
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold text-academic-900 font-serif">Dinâmicas do Espaço Industrial Mundial</h1>
+        <p class="text-sm text-stone-500 mt-1">Modelos de industrialização, produção espacial, reestruturação produtiva e geografia das potências</p>
+      </div>
+      
+      <!-- Timer & Progresso de Leitura -->
+      <div class="flex items-center gap-4 bg-stone-50 border border-stone-200 p-3 rounded-xl shadow-xs w-full md:w-auto justify-between">
+        <div class="text-left">
+          <span class="block text-[10px] uppercase font-bold tracking-wider text-stone-400">Tempo de Prova</span>
+          <span id="timer" class="text-lg font-mono font-semibold text-stone-700">00:00:00</span>
+        </div>
+        <div class="h-8 w-[1px] bg-stone-200"></div>
+        <div class="text-left">
+          <span class="block text-[10px] uppercase font-bold tracking-wider text-stone-400">Preenchimento</span>
+          <span id="completion-badge" class="text-lg font-semibold text-indigo-600">0 / 10</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Container Principal -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Coluna Esquerda: Lista de Questões -->
+      <section class="lg:col-span-3 space-y-8">
+        
+        <!-- Instruções Iniciais -->
+        <div class="bg-white border border-stone-200 rounded-xl p-6 shadow-xs leading-relaxed">
+          <h2 class="font-serif text-lg font-semibold text-academic-900 mb-2">Instruções aos Candidatos</h2>
+          <p class="text-stone-600 text-sm mb-3">
+            Este simulado contém <strong>10 questões de múltipla escolha</strong> desenvolvidas no padrão conceitual e vocabular da banca <strong>FAURGS</strong>. Cada questão possui 5 alternativas (A a E), contendo proposições integradas que exigem análise profunda de dinâmica locacional e produção do espaço.
+          </p>
+          <div class="flex flex-wrap gap-4 text-xs text-stone-500 font-medium">
+            <span class="flex items-center gap-1.5"><i class="fa-regular fa-lightbulb text-indigo-500"></i> Clique na alternativa para selecionar.</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-strikethrough text-stone-400"></i> Use o botão flutuante na direita de cada alternativa para descartá-la visivelmente.</span>
+          </div>
+        </div>
+
+        <!-- FORMULÁRIO DO QUIZ -->
+        <form id="quiz-form" onsubmit="event.preventDefault();">
+
+          <!-- QUESTÃO 1 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q1" data-correct="D">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 01</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">Industrialização Clássica</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as seguintes afirmações sobre o modelo de industrialização clássica e a consequente produção do espaço geográfico na Europa Ocidental durante os séculos XVIII e XIX.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> O carvão mineral e as jazidas de ferro atuaram como fatores locacionais centrípetos primordiais na Primeira Revolução Industrial, resultando na formação de densas aglomerações urbanas e industriais contíguas às bacias extrativas, conhecidas historicamente como <em>Black Countries</em> na Inglaterra.</p>
+              <p><strong>II -</strong> A transição para a Segunda Revolução Industrial, estruturada na difusão do petróleo e da energia elétrica, acentuou a rigidez locacional anterior, impedindo a dispersão das unidades fabris para além das bacias carboníferas originais.</p>
+              <p><strong>III -</strong> A consolidação da rede ferroviária e a navegação a vapor funcionaram como elementos de integração territorial, permitindo a aceleração do fluxo de matérias-primas e a expansão dos mercados consumidores europeus.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <!-- Alternativas -->
+            <div class="space-y-3" id="options-container-q1">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q1-A">
+                <input type="radio" name="q1" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q1')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q1-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+              
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q1-B">
+                <input type="radio" name="q1" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q1')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q1-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q1-C">
+                <input type="radio" name="q1" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q1')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q1-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q1-D">
+                <input type="radio" name="q1" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q1')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas I e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q1-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q1-E">
+                <input type="radio" name="q1" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q1')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q1-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <!-- Resolução Oculta -->
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q1">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 01 (Gabarito: D)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> Durante a Primeira Revolução Industrial, o carvão mineral representava a fonte de energia essencial para mover as máquinas a vapor, enquanto o ferro era a matéria-prima básica para a infraestrutura e maquinário. Devido aos elevados custos de transporte terrestre antes da generalização das ferrovias, as indústrias necessitavam de uma proximidade física rigorosa em relação às áreas de extração mineira. Esse fator locacional centrípeto originou aglomerações urbanas e industriais contíguas às bacias extrativas, marcando as paisagens da Europa setentrional e central com elevados índices de poluição fuliginosa, as quais foram historicamente chamadas de <em>Black Countries</em> na Inglaterra.</p>
+                  <p><strong>II - Incorreta:</strong> A transição para a Segunda Revolução Industrial caracterizou-se pela introdução da eletricidade e do motor a combustão interna alimentado por petróleo. Ao contrário do carvão, a energia elétrica pode ser transmitida por longas distâncias através de redes de cabos condutores, e o petróleo é facilmente transportado por oleodutos ou navios-tanques. Esse avanço tecnológico enfraqueceu a rigidez locacional anterior, atuando como um vetor de dispersão espacial que permitiu a instalação de fábricas próximas a grandes mercados de consumo urbanos ou zonas portuárias.</p>
+                  <p><strong>III - Correta:</strong> A expansão das redes ferroviárias e o surgimento dos navios a vapor revolucionaram a logística de transportes no século XIX. Essas inovações reduziram de forma drástica os tempos e os custos de circulação de mercadorias, articulando o território europeu e facilitando tanto o abastecimento contínuo de insumos industriais quanto a distribuição em larga escala da produção para as massas consumidoras urbanas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 2 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q2" data-correct="B">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 02</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">EUA - Manufacturing Belt</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as afirmações abaixo a respeito da evolução do espaço industrial nos Estados Unidos da América, no âmbito do modelo de industrialização clássica.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> O <em>Manufacturing Belt</em>, localizado no Nordeste e na região dos Grandes Lagos, estruturou-se a partir da sinergia espacial entre os recursos de carvão dos Apalaches, o minério de ferro de Mesabi e uma densa rede de transportes hidroferroviária.</p>
+              <p><strong>II -</strong> O modelo de produção fordista promoveu uma imediata dispersão geográfica das indústrias pesadas pelo território norte-americano, visando à fragmentação dos sindicatos operários e à redução dos custos de urbanização.</p>
+              <p><strong>III -</strong> O declínio relativo do <em>Manufacturing Belt</em> (gerando a designação contemporânea de <em>Rust Belt</em>) está diretamente associado à reestruturação produtiva global e à emergência do <em>Sun Belt</em>, que atraiu novos investimentos industriais de alta tecnologia e serviços para as regiões Sul e Oeste.</p>
+              <p><strong>IV -</strong> O surgimento do tecnopolo do Vale do Silício, na Califórnia, exemplifica a transição para um modelo de acumulação flexível, onde a proximidade com centros de excelência acadêmica e a disponibilidade de capital de risco constituem novos fatores locacionais prioritários.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q2">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q2-A">
+                <input type="radio" name="q2" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q2')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q2-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q2-B">
+                <input type="radio" name="q2" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q2')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas I, III e IV.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q2-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q2-C">
+                <input type="radio" name="q2" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q2')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q2-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q2-D">
+                <input type="radio" name="q2" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q2')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas II, III e IV.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q2-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q2-E">
+                <input type="radio" name="q2" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q2')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II, III e IV.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q2-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q2">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 02 (Gabarito: B)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> O chamado <em>Manufacturing Belt</em> (Cinturão da Manufatura) consolidou-se como o coração industrial clássico dos Estados Unidos. Sua localização geográfica estratégica aproveitou a rede de transporte fluvial e lacustre dos Grandes Lagos, conectando de forma barata o minério de ferro extraído nas minas de Mesabi (nas proximidades do Lago Superior) ao carvão mineral extraído na bacia dos Apalaches, estruturando um amplo complexo siderúrgico, metalúrgico e automobilístico.</p>
+                  <p><strong>II - Incorreta:</strong> O taylorismo-fordismo caracterizou-se por promover a concentração espacial e técnica da produção, e não a dispersão geográfica imediata. Grandes complexos fabris extremamente integrados e verticalizados, como as icônicas instalações de River Rouge da Ford, concentravam dezenas de milhares de operários em um único local geográfico, maximizando as economias de escala e gerando densas cidades industriais nos arredores de centros como Detroit.</p>
+                  <p><strong>III - Correta:</strong> A transição do modelo de acumulação fordista para o regime de flexibilidade produtiva, a partir das últimas décadas do século XX, desestruturou a economia industrial pesada do Nordeste norte-americano, transformando o outrora próspero <em>Manufacturing Belt</em> no degradado <em>Rust Belt</em> (Cinturão da Ferrugem). Simultaneamente, novos fluxos de capital migraram para o <em>Sun Belt</em> (Cinturão do Sol), abrangendo o Sul e o Oeste do país, motivados por salários mais baixos, fraca organização sindical, forte presença de subsídios de pesquisa e incentivos fiscais estaduais.</p>
+                  <p><strong>IV - Correta:</strong> O tecnopolo do Vale do Silício, localizado na Califórnia, é a representação espacial da Terceira Revolução Industrial e do modelo de acumulação flexível. Os fatores locacionais tradicionais, como proximidade de carvão e ferro, foram substituídos por fatores intangíveis e dinâmicos: a sinergia com instituições acadêmicas de pesquisa de ponta (como a Universidade de Stanford), a abundância de firmas de capital de risco e uma densa rede de comunicação e fluxo de informações, propiciando um ambiente favorável à inovação contínua.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 3 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q3" data-correct="D">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 03</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">América Latina - ISI</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as seguintes afirmações sobre as características da industrialização tardia por Substituição de Importações (ISI) na América Latina e a sua dinâmica de produção do espaço.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> O processo de industrialização ocorreu sob forte coordenação do Estado, que assumiu a responsabilidade direta pelos investimentos em indústrias de base e de bens de capital, além da infraestrutura de transportes e energia.</p>
+              <p><strong>II -</strong> Diferente do modelo clássico europeu, a industrialização latino-americana caracterizou-se por uma distribuição espacialmente equilibrada das fábricas pelo interior dos territórios nacionais, atenuando as disparidades regionais de renda.</p>
+              <p><strong>III -</strong> A transferência de mão de obra do campo para o setor fabril urbano acelerou o processo de urbanização, gerando forte concentração demográfica e industrial em poucas metrópoles, fenômeno associado à macrocefalia urbana.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q3">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q3-A">
+                <input type="radio" name="q3" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q3')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q3-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q3-B">
+                <input type="radio" name="q3" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q3')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q3-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q3-C">
+                <input type="radio" name="q3" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q3')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q3-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q3-D">
+                <input type="radio" name="q3" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q3')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas I e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q3-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q3-E">
+                <input type="radio" name="q3" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q3')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q3-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q3">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 03 (Gabarito: D)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> A industrialização tardia na América Latina, iniciada com maior vigor a partir da década de 1930 (notadamente no Brasil, México e Argentina), operou sob a égide do Estado Desenvolvimentista. Diante da fraqueza histórica do capital privado local para arcar com investimentos de alto risco e longa maturação, o Estado assumiu o papel de empresário industrial, fundando companhias estatais no setor de bens de produção (siderurgia, petroquímica, refino) e implantando os sistemas nacionais de energia e transportes terrestres.</p>
+                  <p><strong>II - Incorreta:</strong> A industrialização por substituição de importações foi marcada por uma intensa e persistente concentração territorial da produção. As fábricas instalaram-se preferencialmente nos principais centros urbanos pré-existentes, os quais ofereciam tanto a concentração do mercado de consumo nacional quanto a infraestrutura urbana básica e as redes de transportes herdadas dos ciclos agroexportadores anteriores. Esse processo gerou forte desigualdade regional e concentração espacial da riqueza.</p>
+                  <p><strong>III - Correta:</strong> O processo de industrialização acelerou expressivamente a transferência de mão de obra do campo para o setor urbano de comércio, serviços e manufatura. Essa intensa migração rural-urbana, contudo, ocorreu em ritmos muito superiores à capacidade de absorção de mão de obra formal e de provisão de habitação e saneamento pelo poder público, resultando no crescimento desordenado de periferias, na proliferação de favelas e no fenômeno geográfico da macrocefalia urbana.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 4 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q4" data-correct="D">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 04</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">Tigres Asiáticos</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as seguintes afirmações sobre o modelo de industrialização tardia adotado pelos Tigres Asiáticos de primeira geração (Coreia do Sul, Taiwan, Hong Kong e Cingapura).
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> O modelo estruturou-se sob a estratégia de plataformas de exportação, priorizando a inserção no comércio global através da produção de bens de consumo duráveis e não duráveis voltados ao mercado externo.</p>
+              <p><strong>II -</strong> O sucesso do modelo de promoção de exportações prescindiu de intervenção estatal, sendo coordenado exclusivamente pelas forças de livre mercado e pela desregulamentação financeira total na fase inicial de industrialização.</p>
+              <p><strong>III -</strong> O forte investimento público em educação básica de qualidade e na qualificação técnica da força de trabalho foi um pilar fundamental para garantir o rápido incremento da produtividade industrial e a posterior transição para setores de alta tecnologia.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q4">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q4-A">
+                <input type="radio" name="q4" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q4')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q4-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q4-B">
+                <input type="radio" name="q4" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q4')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q4-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q4-C">
+                <input type="radio" name="q4" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q4')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q4-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q4-D">
+                <input type="radio" name="q4" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q4')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas I e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q4-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q4-E">
+                <input type="radio" name="q4" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q4')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q4-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q4">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 04 (Gabarito: D)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> O modelo de industrialização dos Tigres Asiáticos de primeira geração estruturou-se a partir da década de 1960 com foco na estratégia de plataformas de exportação. Diferente do modelo latino-americano de substituição de importações (voltado essencialmente para abastecer os mercados domésticos protegidos), os Tigres Asiáticos desenharam parques fabris voltados prioritariamente para o comércio internacional, produzindo inicialmente bens de consumo leves e intensivos em mão de obra para os mercados de alta renda mundiais.</p>
+                  <p><strong>II - Incorreta:</strong> O sucesso econômico dos Tigres Asiáticos de primeira geração não decorreu da livre atuação pura das forças de mercado em um cenário de desregulamentação absoluta. A industrialização da região deu-se sob a coordenação do Estado Desenvolvimentista, que exerceu forte dirigismo macroeconômico, planejando as áreas prioritárias de investimento privado, controlando rigidamente o mercado financeiro e os fluxos de capitais estrangeiros, e concedendo subsídios estatais vinculados estritamente ao cumprimento de metas de exportação.</p>
+                  <p><strong>III - Correta:</strong> O desenvolvimento industrial e tecnológico acelerado dos Tigres Asiáticos exigiu um sólido investimento estatal em educação básica e de cunho técnico profissionalizante. A erradicação do analfabetismo e a formação técnica de alto nível permitiram à indústria local elevar de forma acelerada sua produtividade laboral e realizar a transição, a partir dos anos 1980, da produção de bens intensivos em mão de obra barata para a fabricação própria de componentes eletrônicos complexos e alta tecnologia.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 5 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q5" data-correct="E">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 05</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">União Soviética (URSS)</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as seguintes afirmações sobre a produção do espaço industrial e o planejamento territorial na antiga União Soviética (URSS).
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> O planejamento centralizado soviético (coordenado pelo <em>Gosplan</em>) priorizou de forma sistemática a indústria de bens de produção (indústria pesada) em detrimento da indústria de bens de consumo, gerando uma paisagem industrial marcada por gigantescos complexos siderúrgicos e metalúrgicos.</p>
+              <p><strong>II -</strong> Sob imperativos geopolíticos e de defesa estratégica nacional, o Estado soviético promoveu uma desconcentração industrial forçada em direção ao leste (Urais e Sibéria), visando a proteção do parque fabril e o aproveitamento de abundantes recursos minerais internos.</p>
+              <p><strong>III -</strong> Os chamados <em>Kombinats</em> industriais soviéticos representavam complexos produtivos territorialmente integrados verticalmente, nos quais a extração de matérias-primas e o processamento industrial ocorriam em uma mesma unidade espacialmente coordenada.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q5">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q5-A">
+                <input type="radio" name="q5" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q5')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q5-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q5-B">
+                <input type="radio" name="q5" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q5')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q5-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q5-C">
+                <input type="radio" name="q5" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q5')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q5-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q5-D">
+                <input type="radio" name="q5" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q5')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q5-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q5-E">
+                <input type="radio" name="q5" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q5')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q5-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q5">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 05 (Gabarito: E)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> O planejamento econômico centralizado na antiga União Soviética, conduzido através dos planos quinquenais do <em>Gosplan</em>, estabeleceu uma divisão setorial desequilibrada da produção, privilegiando maciçamente o chamado Setor A (bens de capital, energia, siderurgia e indústria militar) em detrimento do Setor B (bens de consumo para a população). Essa orientação econômica produziu uma paisagem industrial característica, marcada pela presença de colossais complexos de processamento fabril e pelo surgimento de cidades industriais planejadas inteiramente ao redor dessas atividades pesadas.</p>
+                  <p><strong>II - Correta:</strong> Durante as décadas de 1930 e 1940, o avanço militar alemão e as preocupações geopolíticas de segurança nacional do Estado soviético motivaram um processo de dispersão e relocalização industrial forçada em direção ao interior do continente. Indústrias inteiras foram desmontadas na parte europeia e transplantadas para além dos Montes Urais e na Sibéria profunda, aproximando as unidades fabris de ricas reservas minerais estratégicas e protegendo o parque industrial soviético de ataques ocidentais diretos.</p>
+                  <p><strong>III - Correta:</strong> Os chamados <em>Kombinats</em> industriais consistiam na materialização espacial da lógica de planejamento integrado soviética. Funcionavam como complexos integrados verticalmente que aglomeravam, dentro de um perímetro geográfico coordenado pelo Estado, desde as atividades extrativas das jazidas minerais até a siderurgia de transformação, laminação e fabricação de máquinas pesadas finais, visando eliminar custos desnecessários de circulação e maximizar a eficiência técnica planejada.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 6 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q6" data-correct="B">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 06</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">China pós-1978</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as seguintes afirmações sobre as dinâmicas espaciais da indústria chinesa após as reformas econômicas iniciadas a partir de 1978.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> A abertura econômica caracterizou-se pela criação das Zonas Econômicas Especiais (ZEEs) em províncias litorâneas estrategicamente selecionadas, com o objetivo de captar investimentos estrangeiros, absorver tecnologia e direcionar a produção para a exportação.</p>
+              <p><strong>II -</strong> A industrialização chinesa pós-reforma eliminou as desigualdades regionais históricas, uma vez que as diretrizes do Partido Comunista garantiram a distribuição equitativa das indústrias de alta tecnologia entre as províncias costeiras e as do interior agrícola.</p>
+              <p><strong>III -</strong> As Empresas de Vilas e Aldeias (<em>Township and Village Enterprises</em> - TVEs) desempenharam um papel fundamental na fase inicial de transição econômica, promovendo a industrialização dispersa do meio rural e absorvendo o excedente de mão de obra camponesa.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q6">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q6-A">
+                <input type="radio" name="q6" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q6')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q6-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q6-B">
+                <input type="radio" name="q6" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q6')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas I e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q6-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q6-C">
+                <input type="radio" name="q6" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q6')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q6-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q6-D">
+                <input type="radio" name="q6" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q6')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q6-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q6-E">
+                <input type="radio" name="q6" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q6')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q6-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q6">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 06 (Gabarito: B)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> Com o início das reformas liberalizantes lideradas por Deng Xiaoping a partir de 1978, a China criou as Zonas Econômicas Especiais (ZEEs) em pontos específicos do seu litoral sul (como Shenzhen, Zhuhai e Xiamen). Essas zonas funcionaram como espaços de exceção territorial e laboratórios de transição econômica para o capitalismo, oferecendo às empresas multinacionais isenções tributárias significativas, mão de obra extremamente barata e facilidades de infraestrutura para a exportação de bens manufaturados de consumo por vias marítimas globais.</p>
+                  <p><strong>II - Incorreta:</strong> Longe de promover um desenvolvimento espacial homogêneo, a abertura econômica e a criação das ZEEs aprofundaram as disparidades de desenvolvimento regional entre a porção costeira do país, que se urbanizou aceleradamente e concentrou os capitais e tecnologias globais, e a porção interior continental, que permaneceu predominantemente agrária, empobrecida e com menores níveis de investimento em infraestrutura.</p>
+                  <p><strong>III - Correta:</strong> As Empresas de Vilas e Aldeias (TVEs) constituíram uma especificidade estrutural decisiva do modelo chinês pós-reforma. Eram empresas industriais de caráter coletivo ou cooperativo geridas localmente por vilas rurais. Elas permitiram o avanço fabril descentralizado no interior agrícola chinês, absorvendo de forma eficiente o grande excedente de trabalhadores liberados pelas reformas agrárias e gerando renda local sem causar o êxodo rural descontrolado e imediato em direção às grandes cidades litorâneas do país.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 7 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q7" data-correct="E">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 07</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">Acumulação Flexível</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as seguintes afirmações sobre as transformações no espaço geográfico industrial decorrentes da transição do modelo fordista para o modelo de acumulação flexível.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> A introdução das tecnologias microeletrônicas e de telecomunicações reduziu a necessidade de contiguidade espacial das etapas produtivas, viabilizando a dispersão global das fábricas sob o comando centralizado das sedes corporativas.</p>
+              <p><strong>II -</strong> O modelo de gestão <em>just-in-time</em> demanda uma rígida infraestrutura logística de transportes e de fluxos de informação, tornando os nós de redes logísticas eficientes (portos, aeroportos e eixos rodoviários) fatores locacionais de alta relevância.</p>
+              <p><strong>III -</strong> A transição para a flexibilidade produtiva resultou na decadência de antigas regiões industriais tradicionais no mundo desenvolvido e na consequente emergência de novos espaços produtivos integrados à divisão internacional do trabalho.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q7">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q7-A">
+                <input type="radio" name="q7" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q7')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q7-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q7-B">
+                <input type="radio" name="q7" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q7')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q7-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q7-C">
+                <input type="radio" name="q7" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q7')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q7-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q7-D">
+                <input type="radio" name="q7" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q7')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas I e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q7-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q7-E">
+                <input type="radio" name="q7" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q7')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q7-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q7">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 07 (Gabarito: E)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> A revolução microeletrônica e de informática, pilares da Terceira Revolução Industrial, viabilizaram a fragmentação produtiva mundial. A produção pôde ser segmentada em differentes etapas geográficas, dispersando as atividades de montagem em países em desenvolvimento com baixos custos laborais, enquanto as atividades de alto valor agregado (P&D, design, marketing) permaneceram concentradas nos centros metropolitanos dos países avançados.</p>
+                  <p><strong>II - Correta:</strong> A flexibilização e a aplicação da lógica organizativa <em>just-in-time</em> aboliram os grandes estoques físicos do modelo fordista anterior, exigindo entregas rápidas de componentes em quantidades exatas de acordo com as flutuações cotidianas de mercado. Para que essa estrutura funcione, os custos e tempos de circulação espacial devem ser minimizados através de redes de infraestruturas logísticas de transporte rápido e de telecomunicações de alta tecnologia.</p>
+                  <p><strong>III - Correta:</strong> A transição flexível produziu uma profunda reconfiguração espacial e desindustrialização de antigas áreas industriais consolidadas na Europa setentrional e no leste norte-americano, desarticulando redes de solidariedade trabalhistas tradicionais. Em contrapartida, novos polos de dinamismo industrial emergiram na Ásia Oriental e outras áreas periféricas integradas às redes globais de valor corporativas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 8 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q8" data-correct="A">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 08</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">Análise Comparativa</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              O estudo comparativo dos modelos de industrialização tardia evidencia diferentes percursos na produção do espaço urbano-industrial nos países de desenvolvimento periférico. Enquanto a América Latina adotou predominantemente o modelo de Substituição de Importações (ISI), os Tigres Asiáticos de primeira geração orientaram-se para o modelo de Promoção de Exportações.
+            </p>
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Assinale a alternativa que indica corretamente a diferenciação espacial decorrente dessas estratégias industriais.
+            </p>
+
+            <div class="space-y-3" id="options-container-q8">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q8-A">
+                <input type="radio" name="q8" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q8')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> O modelo latino-americano gerou uma acentuada centralização e concentração industrial nas metrópoles nacionais e litorâneas, ao passo que o modelo dos Tigres Asiáticos estruturou eixos logísticos portuários altamente integrados às redes de comércio mundial.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q8-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q8-B">
+                <input type="radio" name="q8" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q8')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> A industrialização por substituição de importações promoveu a descentralização fabril de forma homogênea no interior do continente, enquanto os Tigres Asiáticos concentraram suas atividades nas bacias carboníferas tradicionais.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q8-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q8-C">
+                <input type="radio" name="q8" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q8')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> A estratégia de promoção de exportações baseou-se na autossuficiência energética e na desconexão das redes globais de transporte marítimo, ao passo que a substituição de importações dependeu fundamentalmente da importação continuada de produtos manufaturados de consumo.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q8-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q8-D">
+                <input type="radio" name="q8" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q8')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Ambos os modelos resultaram na eliminação das disparidades de desenvolvimento regional e na dispersão espacial completa das atividades industriais de alta intensidade tecnológica para as respectivas zonas rurais.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q8-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q8-E">
+                <input type="radio" name="q8" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q8')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> A dinâmica industrial latino-americana eliminou a transferência de mão de obra do campo para as cidades, mantendo uma estrutura demográfica predominantemente agrária até o final do século XX.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q8-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q8">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 08 (Gabarito: A)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>Gabarito: A</strong></p>
+                  <p>O modelo de industrialização latino-americano por <strong>Substituição de Importações (ISI)</strong> tendeu a se sobrepor à rede urbana e de transportes concentrada pré-existente da era agroexportadora primária, resultando na formação de complexos industriais altamente concentrados nas principais metrópoles de cada país (gerando desigualdades regionais e macrocefalia urbana). Em contrapartida, a estratégia dos Tigres Asiáticos estruturou-se em torno de <strong>plataformas de exportação</strong>, localizadas estrategicamente em complexos portuários modernos voltados ao fluxo marítimo internacional e integrados dinamicamente às cadeias globais de suprimento manufatureiras.</p>
+                  <p><strong>Análise das alternativas incorretas:</strong></p>
+                  <p>*(B) Incorreta*: A ISI gerou forte concentração territorial nas grandes capitais e eixos litorâneos e não distribuição equilibrada pelo interior continental.</p>
+                  <p>*(C) Incorreta*: A promoção de exportações dependeu fundamentalmente da rede logística de navios comerciais e comércio externo e não do isolamento ou autossuficiência econômica.</p>
+                  <p>*(D) Incorreta*: Ambos os modelos acentuaram as assimetrias espaciais regionais através da concentração fabril urbana e periférica portuária, longe de uma dispersão homogênea ou igualitária rural.</p>
+                  <p>*(E) Incorreta*: A industrialização latino-americana provocou uma das transições demográficas mais velozes do século XX, com massivo êxodo rural e rápido crescimento populacional urbano.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 9 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q9" data-correct="B">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 09</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">China no Século XXI</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as afirmações abaixo sobre a dinâmica territorial contemporânea da indústria chinesa no século XXI.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> Diante do aumento dos custos trabalhistas e da pressão sobre o uso do solo nas regiões costeiras, o governo chinês tem promovido políticas de interiorização do parque fabril, como a estratégia "Desenvolvimento do Oeste" (<em>Go West</em>).</p>
+              <p><strong>II -</strong> A iniciativa da Nova Rota da Seda (<em>Belt and Road Initiative</em>) constitui um projeto de grande escala de integração logística terrestre e marítima que visa expandir os mercados de escoamento para a gigantesca capacidade industrial chinesa.</p>
+              <p><strong>III -</strong> A estratégia de interiorização industrial chinesa eliminou integralmente a dependência do país em relação às rotas marítimas comerciais do Estreito de Malaca, uma vez que a totalidade das exportações industriais é agora escoada por via terrestre transcontinental.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q9">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q9-A">
+                <input type="radio" name="q9" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q9')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q9-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q9-B">
+                <input type="radio" name="q9" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q9')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q9-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q9-C">
+                <input type="radio" name="q9" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q9')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q9-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q9-D">
+                <input type="radio" name="q9" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q9')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas I e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q9-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q9-E">
+                <input type="radio" name="q9" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q9')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q9-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q9">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 09 (Gabarito: B)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> O forte aumento dos salários reais da mão de obra, os elevados custos habitacionais e de solo urbano, e a saturação da infraestrutura das metrópoles litorâneas costeiras levaram a China a incentivar a interiorização do seu parque fabril. Por meio da política estatal de desenvolvimento regional conhecida como "Go West", o governo chinês tem promovido vultosos investimentos em infraestruturas e subsídios para transferir fábricas de bens de consumo duráveis e tecnologia para importantes cidades do interior continental, como os polos de Chongqing, Chengdu e Xi'an.</p>
+                  <p><strong>II - Correta:</strong> A iniciativa "Cinturão e Rota" (<em>Belt and Road Initiative</em>), ou Nova Rota da Seda, constitui uma ambiciosa rede logística internacional financiada pela China. O projeto envolve a estruturação de ferrovias transcontinentais de cargas, novos portos, rodovias e gasodutos integrando a Ásia, Europa e África, funcionando como canais estratégicos para escoar os excedentes da imensa capacidade industrial instalada no país e assegurar rotas de fornecimento de energia e recursos minerais.</p>
+                  <p><strong>III - Incorreta:</strong> Embora o avanço das ferrovias transcontinentais de carga tenha criado alternativas terrestres mais céleres de conexão com o mercado europeu, as exportações e importações industriais da China continuam a depender esmagadoramente das rotas de transporte marítimo global. O fluxo de comércio de navios de carga de grande porte de contêineres pelo Estreito de Malaca e rotas meridionais mantém-se insubstituível em virtude do seu menor custo de frete por tonelada e incomensurável capacidade de transporte volumétrico comercial.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- QUESTÃO 10 -->
+          <div class="bg-white border border-stone-200 rounded-xl shadow-xs p-6 md:p-8 mb-8 transition-all relative question-card" id="card-q10" data-correct="C">
+            <div class="flex justify-between items-start gap-4 mb-4 border-b border-stone-100 pb-3">
+              <span class="bg-stone-100 text-stone-700 text-xs font-bold px-3 py-1 rounded">QUESTÃO 10</span>
+              <span class="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-1 rounded">URSS vs China</span>
+            </div>
+            
+            <p class="font-serif text-base md:text-lg text-academic-900 leading-relaxed mb-4">
+              Considere as afirmações abaixo sobre as especificidades do modelo de industrialização e organização espacial da antiga União Soviética e da China sob a égide do planejamento estatal.
+            </p>
+
+            <div class="bg-stone-50 border border-stone-200 rounded-lg p-4 mb-6 text-stone-700 space-y-3 font-serif text-sm md:text-base leading-relaxed">
+              <p><strong>I -</strong> Na União Soviética, a organização espacial da indústria obedeceu a um plano rígido de divisão regional do trabalho coordenado pelo Estado, visando à formação de distritos industriais integrados e à exploração coordenada das matérias-primas siberianas.</p>
+              <p><strong>II -</strong> Tanto o regime soviético quanto o regime chinês pré-1978 adotaram o modelo de planejamento centralizado com foco prioritário no desenvolvimento da indústria pesada, capturando excedentes da produção agrícola para financiar a expansão industrial urbana.</p>
+              <p><strong>III -</strong> O modelo espacial soviético baseou-se na livre mobilidade locacional de empresas em busca de custos logísticos reduzidos, enquanto o modelo chinês pós-reforma manteve o fechamento absoluto do país ao capital externo e às importações.</p>
+            </div>
+
+            <p class="font-semibold text-sm text-stone-500 uppercase tracking-wider mb-3">Quais estão corretas?</p>
+            
+            <div class="space-y-3" id="options-container-q10">
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q10-A">
+                <input type="radio" name="q10" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q10')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(A)</strong> Apenas I.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q10-A', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q10-B">
+                <input type="radio" name="q10" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q10')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(B)</strong> Apenas II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q10-B', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q10-C">
+                <input type="radio" name="q10" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q10')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(C)</strong> Apenas I e II.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q10-C', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q10-D">
+                <input type="radio" name="q10" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q10')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(D)</strong> Apenas II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q10-D', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+
+              <label class="group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150" id="wrapper-q10-E">
+                <input type="radio" name="q10" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-stone-300 focus:ring-indigo-500 rounded-full" onclick="updateProgress('q10')">
+                <span class="text-stone-700 font-sans text-sm md:text-base pr-8 option-text"><strong>(E)</strong> I, II e III.</span>
+                <button type="button" class="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 text-stone-400 hover:text-red-500 p-1 rounded transition-all text-xs" onclick="toggleStrike('wrapper-q10-E', event)" title="Eliminar alternativa"><i class="fa-solid fa-strikethrough"></i></button>
+              </label>
+            </div>
+
+            <div class="resolution-block hidden mt-6 border-t border-stone-200 pt-6 animate-fade-in" id="res-q10">
+              <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-xl">
+                <h4 class="font-bold text-indigo-900 text-sm md:text-base mb-2 flex items-center gap-2"><i class="fa-solid fa-circle-info"></i> Resolução Detalhada - Questão 10 (Gabarito: C)</h4>
+                <div class="text-stone-700 text-sm leading-relaxed space-y-2 font-serif">
+                  <p><strong>I - Correta:</strong> A União Soviética aboliu o livre mercado e as flutuações de preços comerciais privados como vetores de coordenação geográfica fabril. Toda a produção e distribuição espacial foi definida pelo planejamento central do Gosplan, distribuindo os distritos industriais de maneira integrada no território nacional para garantir o aproveitamento planejado de recursos e matérias-primas distantes, como o carvão e ferro do interior siberiano.</p>
+                  <p><strong>II - Correta:</strong> Ambas as experiências socialistas em meados do século XX compartilharam a estratégia de capturar os excedentes agrícolas gerados no meio rural para financiar a acumulação de capital industrial urbana nascente. Por meio da coletivização forçada das terras agrícolas (representada pelos <em>Kolkhozes</em> soviéticos e pelas Comunas Populares na China maoísta pré-1978), o Estado obteve controle direto do fornecimento de matérias-primas e gêneros alimentícios rurais a preços artificiais de compra mantidos baixos pelo governo central, canalizando a riqueza extraída para a indústria pesada.</p>
+                  <p><strong>III - Incorreta:</strong> O modelo socialista clássico de organização da União Soviética não permitia a livre localização de unidades corporativas conforme flutuações econômicas privadas, visto que toda a propriedade era pública estatal e o planejamento geográfico era rígido. Por outro lado, a China de Deng Xiaoping, pós-1978, implementou uma abertura ao comércio global e flexibilidade de mercado através das ZEEs costeiras, distanciando-se do isolamento absoluto comercial da era maoísta pré-reforma.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- PAINEL DE RESULTADOS (INICIALMENTE OCULTO) -->
+        <div id="results-dashboard" class="hidden bg-white border-2 border-indigo-600 rounded-xl p-6 md:p-8 shadow-md animate-fade-in">
+          <div class="text-center max-w-2xl mx-auto">
+            <div class="inline-flex items-center justify-center p-4 bg-indigo-50 text-indigo-600 rounded-full mb-4">
+              <i class="fa-solid fa-graduation-cap text-3xl"></i>
+            </div>
+            <h2 class="font-serif text-2xl md:text-3xl font-bold text-academic-900 mb-2">Simulado Concluído!</h2>
+            <p class="text-stone-600 text-sm mb-6">Confira abaixo o seu desempenho geral e revise os fundamentos geográficos de cada questão respondida.</p>
+            
+            <div class="grid grid-cols-3 gap-4 mb-8">
+              <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                <span class="block text-2xl md:text-3xl font-bold text-stone-800" id="score-correct">0</span>
+                <span class="text-xs font-semibold text-emerald-600 uppercase tracking-wider">Acertos</span>
+              </div>
+              <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                <span class="block text-2xl md:text-3xl font-bold text-stone-800" id="score-pct">0%</span>
+                <span class="text-xs font-semibold text-indigo-600 uppercase tracking-wider">Aproveitamento</span>
+              </div>
+              <div class="bg-stone-50 p-4 rounded-xl border border-stone-200">
+                <span class="block text-2xl md:text-3xl font-bold text-stone-800" id="score-time">00:00</span>
+                <span class="text-xs font-semibold text-stone-500 uppercase tracking-wider">Tempo Gasto</span>
+              </div>
+            </div>
+            
+            <div class="bg-indigo-50 text-indigo-950 p-4 rounded-xl text-sm leading-relaxed mb-6 border border-indigo-100" id="performance-feedback">
+              Análise pendente.
+            </div>
+          </div>
+        </div>
+
+        <!-- SEÇÃO MATRIZ COMPARATIVA -->
+        <div class="bg-white border border-stone-200 rounded-xl p-6 md:p-8 shadow-xs">
+          <h3 class="font-serif text-lg md:text-xl font-bold text-academic-900 mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-table text-indigo-500"></i> Matriz Comparativa de Síntese
+          </h3>
+          <p class="text-sm text-stone-500 mb-4">Esta tabela sintetiza estruturalmente as características de cada modelo de industrialização e sua respectiva produção geográfica.</p>
+          
+          <div class="overflow-x-auto border border-stone-200 rounded-lg custom-scrollbar">
+            <table class="w-full text-left border-collapse text-xs md:text-sm">
+              <thead>
+                <tr class="bg-stone-900 text-white font-sans uppercase tracking-wider text-[11px]">
+                  <th class="p-4 border-b border-stone-200 font-semibold">Modelo de Industrialização</th>
+                  <th class="p-4 border-b border-stone-200 font-semibold">Dinâmica de Produção do Espaço</th>
+                  <th class="p-4 border-b border-stone-200 font-semibold">Fatores Locacionais Principais</th>
+                  <th class="p-4 border-b border-stone-200 font-semibold">Papel do Estado</th>
+                  <th class="p-4 border-b border-stone-200 font-semibold">Inserção na DIT</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-stone-200 text-stone-700 bg-white font-serif">
+                <tr class="hover:bg-stone-50/50 transition-colors">
+                  <td class="p-4 font-bold text-stone-900 font-sans">Industrialização Clássica (Europa/EUA)</td>
+                  <td class="p-4">Concentração inicial em bacias carboníferas (<em>Black Countries</em>) e Grandes Lagos (<em>Manufacturing Belt</em>); transição contemporânea para tecnopolos (<em>Sun Belt</em>).</td>
+                  <td class="p-4">Carvão e ferro; acessos hidroferroviários; inovação técnica e capital de risco.</td>
+                  <td class="p-4 font-sans">Indutor inicial e regulador aduaneiro; financiador de infraestruturas estratégicas e pesquisa.</td>
+                  <td class="p-4 font-sans">Hegemônica e centralizada; exportação de alta tecnologia e controle financeiro global.</td>
+                </tr>
+                <tr class="hover:bg-stone-50/50 transition-colors bg-stone-50/30">
+                  <td class="p-4 font-bold text-stone-900 font-sans">Substituição de Importações (América Latina)</td>
+                  <td class="p-4">Intensa concentração nas metrópoles (macrocefalia urbana); disparidades espaciais regionais agudas.</td>
+                  <td class="p-4">Mercados consumidores metropolitanos; infraestrutura urbana herdada de ciclos agroexportadores.</td>
+                  <td class="p-4 font-sans">Protagonista direto; investidor em indústrias de base e infraestruturas nacionais integradas.</td>
+                  <td class="p-4 font-sans">Dependente; voltada ao mercado interno protegido com importação persistente de bens de capital.</td>
+                </tr>
+                <tr class="hover:bg-stone-50/50 transition-colors">
+                  <td class="p-4 font-bold text-stone-900 font-sans">Promoção de Exportações (Tigres Asiáticos)</td>
+                  <td class="p-4">Implantação de plataformas de exportação costeiras de grande porte integradas a fluxos portuários.</td>
+                  <td class="p-4">Mão de obra barata e qualificada; proximidade portuária; incentivos fiscais públicos.</td>
+                  <td class="p-4 font-sans">Estado Desenvolvimentista; planejamento macroeconômico e rígido direcionamento de créditos.</td>
+                  <td class="p-4 font-sans">Ativa e integrada; transição veloz para cadeias globais de alta tecnologia de semicondutores.</td>
+                </tr>
+                <tr class="hover:bg-stone-50/50 transition-colors bg-stone-50/30">
+                  <td class="p-4 font-bold text-stone-900 font-sans">Socialista Planificada (Antiga URSS)</td>
+                  <td class="p-4">Distribuição regional planejada pelo Estado; criação de <em>Kombinats</em> e interiorização para Sibéria.</td>
+                  <td class="p-4">Reservas minerais internas; imperativos geopolíticos e militares de defesa física nacional.</td>
+                  <td class="p-4 font-sans">Planejador absoluto centralizado (<em>Gosplan</em>); controle integral da localização e produção.</td>
+                  <td class="p-4 font-sans">Autárquica; focada na autossuficiência e complementaridade interna do bloco socialista (Comecon).</td>
+                </tr>
+                <tr class="hover:bg-stone-50/50 transition-colors">
+                  <td class="p-4 font-bold text-stone-900 font-sans">Socialista de Mercado (China)</td>
+                  <td class="p-4">Concentração costeira inicial (ZEEs); recente fomento à interiorização para o oeste (<em>Go West</em>).</td>
+                  <td class="p-4">Mão de obra farta; infraestrutura portuária/rodoferroviária; isenções fiscais nas ZEEs.</td>
+                  <td class="p-4 font-sans">Híbrido planejador; controle estatal de setores estratégicos associado ao livre mercado.</td>
+                  <td class="p-4 font-sans">Hub manufatureiro global; maior exportador de produtos físicos do mundo e líder tecnológico emergente.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coluna Direita: Painel Flutuante Lateral -->
+      <aside class="lg:col-span-1">
+        <div class="bg-white border border-stone-200 rounded-xl p-5 shadow-xs sticky top-28 space-y-6">
+          
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-3 flex items-center justify-between">
+              <span>Navegador de Questões</span>
+              <span id="nav-completion" class="font-mono text-indigo-600">0%</span>
+            </h3>
+            
+            <!-- Grid de Números -->
+            <div class="grid grid-cols-5 gap-2" id="navigation-grid">
+              <button onclick="scrollToQuestion(1)" id="btn-nav-1" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">1</button>
+              <button onclick="scrollToQuestion(2)" id="btn-nav-2" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">2</button>
+              <button onclick="scrollToQuestion(3)" id="btn-nav-3" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">3</button>
+              <button onclick="scrollToQuestion(4)" id="btn-nav-4" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">4</button>
+              <button onclick="scrollToQuestion(5)" id="btn-nav-5" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">5</button>
+              <button onclick="scrollToQuestion(6)" id="btn-nav-6" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">6</button>
+              <button onclick="scrollToQuestion(7)" id="btn-nav-7" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">7</button>
+              <button onclick="scrollToQuestion(8)" id="btn-nav-8" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">8</button>
+              <button onclick="scrollToQuestion(9)" id="btn-nav-9" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">9</button>
+              <button onclick="scrollToQuestion(10)" id="btn-nav-10" class="h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors">10</button>
+            </div>
+          </div>
+
+          <!-- Barra de Progresso Visual -->
+          <div class="space-y-1">
+            <div class="flex justify-between text-xs font-semibold text-stone-500">
+              <span>Progresso Realizado</span>
+              <span id="progress-percent">0%</span>
+            </div>
+            <div class="w-full bg-stone-100 rounded-full h-2">
+              <div id="progress-bar-fill" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Botões de Ação Principais -->
+          <div class="space-y-2 pt-2 border-t border-stone-100">
+            <button onclick="submitQuiz()" id="btn-submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl shadow-xs transition-colors text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-square-poll-vertical"></i> Finalizar Simulado
+            </button>
+            <button onclick="resetQuiz()" id="btn-reset" class="w-full border border-stone-200 hover:bg-stone-50 text-stone-600 font-medium py-3 px-4 rounded-xl transition-colors text-sm flex items-center justify-center gap-2">
+              <i class="fa-solid fa-rotate-left"></i> Reiniciar Simulado
+            </button>
+          </div>
+          
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- MODAL PARA QUESTÕES NÃO RESPONDIDAS -->
+  <div id="unanswered-modal" class="fixed inset-0 bg-stone-900/40 backdrop-blur-xs flex items-center justify-center hidden z-50 p-4 animate-fade-in">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-stone-200">
+      <div class="flex items-center gap-3 text-amber-500 mb-4">
+        <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+        <h3 class="text-lg font-bold text-stone-900">Questões Pendentes</h3>
+      </div>
+      <p class="text-stone-600 mb-4 text-sm leading-relaxed" id="modal-text">
+        Você ainda não respondeu a todas as questões deste simulado. Deseja finalizar mesmo assim ou voltar para completar o preenchimento das respostas?
+      </p>
+      <div class="flex flex-col sm:flex-row gap-2 justify-end">
+        <button onclick="closeModal()" class="px-4 py-2 border border-stone-300 rounded-lg text-stone-700 hover:bg-stone-100 transition-colors text-sm font-medium">
+          Voltar ao Simulado
+        </button>
+        <button onclick="forceSubmit()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors text-sm font-medium">
+          Finalizar Mesmo Assim
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-t border-stone-200 bg-white mt-16 py-8 text-center text-xs text-stone-400">
+    <div class="max-w-7xl mx-auto px-4">
+      <p class="font-serif italic text-stone-500 mb-2">"A produção do espaço é, simultaneamente, produto e produtora de relações de produção históricas."</p>
+      <p>© 2026 Simulado Acadêmico Estilo FAURGS. Desenvolvido para fins didáticos e preparação de alto rendimento.</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT INTERATIVO (JAVASCRIPT PURO) -->
+  <script>
+    let answeredQuestions = {};
+    let isSubmitted = false;
+    let startTime = Date.now();
+    let timerInterval;
+
+    // Configurações do Timer
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        let elapsed = Date.now() - startTime;
+        let sec = Math.floor(elapsed / 1000) % 60;
+        let min = Math.floor(elapsed / (1000 * 60)) % 60;
+        let hrs = Math.floor(elapsed / (1000 * 60 * 60));
+
+        let pad = (num) => String(num).padStart(2, '0');
+        document.getElementById('timer').textContent = `${pad(hrs)}:${pad(min)}:${pad(sec)}`;
+      }, 1000);
+    }
+
+    // Inicialização ao carregar a página
+    window.onload = function() {
+      startTimer();
+    };
+
+    function toggleStrike(elementId, event) {
+      event.preventDefault();
+      event.stopPropagation();
+      
+      const el = document.getElementById(elementId);
+      const textSpan = el.querySelector('.option-text');
+      const radio = el.querySelector('input[type="radio"]');
+      
+      // Impede modificação se o simulado já foi enviado
+      if (isSubmitted) return;
+
+      if (el.classList.contains('striked-option')) {
+        el.classList.remove('striked-option');
+        radio.disabled = false;
+      } else {
+        el.classList.add('striked-option');
+        radio.checked = false;
+        radio.disabled = true;
+        
+        // Verifica se a resposta àquela questão foi apagada e atualiza o progresso
+        const qName = radio.name;
+        const groupSelected = document.querySelector(`input[name="${qName}"]:checked`);
+        if (!groupSelected) {
+          delete answeredQuestions[qName];
+          updateUIProgress();
+        }
+      }
+    }
+
+    function updateProgress(qName) {
+      if (isSubmitted) return;
+      
+      // Garante que o wrapper remova o efeito riscado se o usuário clicou nela diretamente
+      const selectedRadio = document.querySelector(`input[name="${qName}"]:checked`);
+      if (selectedRadio) {
+        const wrapperId = 'wrapper-' + qName + '-' + selectedRadio.value;
+        const wrapperEl = document.getElementById(wrapperId);
+        if (wrapperEl.classList.contains('striked-option')) {
+          wrapperEl.classList.remove('striked-option');
+          selectedRadio.disabled = false;
+        }
+      }
+
+      answeredQuestions[qName] = true;
+      updateUIProgress();
+    }
+
+    function updateUIProgress() {
+      const qCount = Object.keys(answeredQuestions).length;
+      const pct = Math.round((qCount / 10) * 100);
+      
+      // Atualiza Badges e Barras
+      document.getElementById('completion-badge').textContent = `${qCount} / 10`;
+      document.getElementById('nav-completion').textContent = `${pct}%`;
+      document.getElementById('progress-percent').textContent = `${pct}%`;
+      document.getElementById('progress-bar-fill').style.width = `${pct}%`;
+
+      // Atualiza botões da barra flutuante lateral
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.getElementById(`btn-nav-${i}`);
+        if (answeredQuestions[`q${i}`]) {
+          btn.className = "h-10 border-2 border-indigo-600 bg-indigo-50 rounded-lg flex items-center justify-center font-bold text-indigo-700 hover:bg-indigo-100 transition-colors";
+        } else {
+          btn.className = "h-10 border border-stone-200 rounded-lg flex items-center justify-center font-semibold text-stone-600 hover:bg-stone-50 transition-colors";
+        }
+      }
+    }
+
+    // Navegação de rolagem suave
+    function scrollToQuestion(index) {
+      const el = document.getElementById(`card-q${index}`);
+      if (el) {
+        const offset = 120; // Espaço do topo (Header fixo)
+        const elementPosition = el.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+    function submitQuiz() {
+      if (isSubmitted) return;
+
+      const qCount = Object.keys(answeredQuestions).length;
+      if (qCount < 10) {
+        // Mostra o modal customizado para preenchimento de questões vazias
+        const missingCount = 10 - qCount;
+        document.getElementById('modal-text').innerHTML = `Você respondeu apenas <strong>${qCount} de 10</strong> questões. Faltam exatamente <strong>${missingCount} questões</strong> para finalizar.<br><br>Deseja fechar a prova e ver o gabarito mesmo assim?`;
+        document.getElementById('unanswered-modal').classList.remove('hidden');
+      } else {
+        processResults();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('unanswered-modal').classList.add('hidden');
+    }
+
+    function forceSubmit() {
+      closeModal();
+      processResults();
+    }
+
+    function processResults() {
+      clearInterval(timerInterval);
+      isSubmitted = true;
+      
+      let score = 0;
+      const totalQuestions = 10;
+      
+      // Desativa todos os inputs e faz correções
+      const allRadios = document.querySelectorAll('input[type="radio"]');
+      allRadios.forEach(radio => radio.disabled = true);
+
+      // Desativa botões de riscar alternativas
+      const strikeButtons = document.querySelectorAll('.question-card button');
+      strikeButtons.forEach(btn => btn.classList.add('hidden'));
+
+      for (let i = 1; i <= totalQuestions; i++) {
+        const card = document.getElementById(`card-q${i}`);
+        const correctVal = card.getAttribute('data-correct');
+        const selectedRadio = document.querySelector(`input[name="q${i}"]:checked`);
+        const userChoice = selectedRadio ? selectedRadio.value : null;
+        
+        const navBtn = document.getElementById(`btn-nav-${i}`);
+        const resBlock = document.getElementById(`res-${i}`);
+        
+        // Remove ocultação das resoluções
+        const resolutionBlock = document.getElementById(`res-q${i}`);
+        if (resolutionBlock) {
+          resolutionBlock.classList.remove('hidden');
+        }
+
+        // Resolução visual dos itens
+        if (userChoice === correctVal) {
+          score++;
+          // Atualiza botão de navegação
+          navBtn.className = "h-10 border-2 border-emerald-500 bg-emerald-50 rounded-lg flex items-center justify-center font-bold text-emerald-700 transition-colors";
+          navBtn.innerHTML = `${i} <i class="fa-solid fa-check text-[10px] ml-1"></i>`;
+          
+          // Estiliza a alternativa correta
+          const wrapper = document.getElementById(`wrapper-q${i}-${correctVal}`);
+          wrapper.className = "group relative flex items-start gap-3 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 cursor-not-allowed transition-all";
+          wrapper.querySelector('.option-text').innerHTML += ` <span class="text-xs font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded ml-2"><i class="fa-solid fa-check"></i> Sua Resposta Correta</span>`;
+        } else {
+          // Atualiza botão de navegação
+          navBtn.className = "h-10 border-2 border-rose-500 bg-rose-50 rounded-lg flex items-center justify-center font-bold text-rose-700 transition-colors";
+          navBtn.innerHTML = `${i} <i class="fa-solid fa-xmark text-[10px] ml-1"></i>`;
+          
+          // Estiliza a alternativa incorreta que o usuário marcou
+          if (userChoice) {
+            const badWrapper = document.getElementById(`wrapper-q${i}-${userChoice}`);
+            badWrapper.className = "group relative flex items-start gap-3 p-4 rounded-xl border-2 border-rose-400 bg-rose-50/50 cursor-not-allowed transition-all";
+            badWrapper.querySelector('.option-text').innerHTML += ` <span class="text-xs font-bold text-rose-600 bg-rose-100 px-1.5 py-0.5 rounded ml-2"><i class="fa-solid fa-xmark"></i> Sua Resposta Incorreta</span>`;
+          }
+
+          // Estiliza o gabarito oficial que não foi marcado
+          const goodWrapper = document.getElementById(`wrapper-q${i}-${correctVal}`);
+          goodWrapper.className = "group relative flex items-start gap-3 p-4 rounded-xl border-2 border-emerald-400 bg-emerald-50/20 cursor-not-allowed transition-all";
+          goodWrapper.querySelector('.option-text').innerHTML += ` <span class="text-xs font-bold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded ml-2"><i class="fa-solid fa-circle-check"></i> Gabarito Oficial</span>`;
+        }
+      }
+
+      // Preenche o painel de resultados
+      document.getElementById('score-correct').textContent = score;
+      const pct = Math.round((score / totalQuestions) * 100);
+      document.getElementById('score-pct').textContent = `${pct}%`;
+      document.getElementById('score-time').textContent = document.getElementById('timer').textContent;
+
+      // Feedbacks acadêmicos qualitativos
+      let feedback = "";
+      if (pct === 100) {
+        feedback = "<strong>Excelente! Desempenho espetacular.</strong> Você demonstrou domínio absoluto da dinâmica espacial industrial, compreendendo as nuances geográficas e locacionais cobradas pela FAURGS. Está pronto para gabaritar a prova oficial!";
+      } else if (pct >= 80) {
+        feedback = "<strong>Muito bom! Ótimo aproveitamento.</strong> Você tem uma sólida base teórica e compreende perfeitamente a produção espacial sob diferentes modelos. Ajuste pequenas desatenções revisando as questões incorretas.";
+      } else if (pct >= 50) {
+        feedback = "<strong>Aproveitamento razoável.</strong> Você possui compreensão dos pilares do desenvolvimento geográfico industrial, mas oscilou em proposições integradas mais complexas. Recomenda-se reler com atenção as resoluções detalhadas.";
+      } else {
+        feedback = "<strong>Precisa revisar o conteúdo.</strong> A dinâmica locacional industrial apresenta armadilhas vocabulares específicas nesta banca. Dedique mais tempo ao estudo da matriz comparativa no fim da página.";
+      }
+      document.getElementById('performance-feedback').innerHTML = feedback;
+
+      // Revela o dashboard
+      const resultsDashboard = document.getElementById('results-dashboard');
+      resultsDashboard.classList.remove('hidden');
+
+      // Scroll suave até o topo do dashboard de resultados
+      resultsDashboard.scrollIntoView({ behavior: 'smooth' });
+
+      // Atualiza o botão de finalização
+      document.getElementById('btn-submit').disabled = true;
+      document.getElementById('btn-submit').className = "w-full bg-stone-300 text-stone-500 font-medium py-3 px-4 rounded-xl cursor-not-allowed text-sm flex items-center justify-center gap-2";
+    }
+
+    function resetQuiz() {
+      // Reativa e desmarca inputs
+      const allRadios = document.querySelectorAll('input[type="radio"]');
+      allRadios.forEach(radio => {
+        radio.disabled = false;
+        radio.checked = false;
+      });
+
+      // Restaura wrappers de alternativas e remove notas de correção
+      const wrappers = document.querySelectorAll('label[id^="wrapper-"]');
+      wrappers.forEach(w => {
+        w.className = "group relative flex items-start gap-3 p-4 rounded-xl border border-stone-200 hover:border-indigo-300 hover:bg-indigo-50/10 cursor-pointer transition-all duration-150";
+        // Remove badges adicionados dinamicamente
+        const badge = w.querySelector('span.option-text span');
+        if (badge) badge.remove();
+        // Garante que remova riscado
+        w.classList.remove('striked-option');
+      });
+
+      // Reativa botões de riscar alternativas
+      const strikeButtons = document.querySelectorAll('.question-card button');
+      strikeButtons.forEach(btn => btn.classList.remove('hidden'));
+
+      // Esconde as resoluções comentadas
+      const resolutions = document.querySelectorAll('.resolution-block');
+      resolutions.forEach(res => res.classList.add('hidden'));
+
+      // Esconde o painel de resultados
+      document.getElementById('results-dashboard').classList.add('hidden');
+
+      // Reseta estado interno e tempo
+      answeredQuestions = {};
+      isSubmitted = false;
+      startTime = Date.now();
+      clearInterval(timerInterval);
+      startTimer();
+
+      // Atualiza UI
+      updateUIProgress();
+
+      // Habilita botão de submissão
+      const submitBtn = document.getElementById('btn-submit');
+      submitBtn.disabled = false;
+      submitBtn.className = "w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-xl shadow-xs transition-colors text-sm flex items-center justify-center gap-2";
+
+      // Rola para o topo do simulado
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>

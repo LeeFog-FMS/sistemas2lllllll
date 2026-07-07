@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espaço Agrário e Geopolítica dos Alimentos — IFSC FAURGS</title>
+    <!-- Tailwind CSS para Estilização Eficiente -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fontes do Google (Inter) para Máxima Legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para Ícones Didáticos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilização para o Modo Active Recall (Mascaramento de Palavras Chaves) */
+        .term-masked {
+            background-color: #1e293b;
+            color: #1e293b !important;
+            cursor: pointer;
+            border-radius: 0.25rem;
+            transition: all 0.2s ease-in-out;
+            user-select: none;
+        }
+        .term-masked:hover {
+            background-color: #475569;
+        }
+        .term-masked.revealed {
+            background-color: #fef3c7 !important;
+            color: #78350f !important;
+            border-bottom: 2px solid #f59e0b;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen">
+
+    <!-- Indicador de Progresso de Leitura -->
+    <div id="progressBar" class="fixed top-0 left-0 h-1.5 bg-indigo-600 transition-all duration-150 z-50 w-0"></div>
+
+    <!-- Cabeçalho Principal -->
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                    <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                </div>
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-indigo-600">IFSC — Banca FAURGS</span>
+                    <h1 class="text-xl font-extrabold text-slate-900 leading-tight">Geografia Agrária e Geopolítica</h1>
+                </div>
+            </div>
+            
+            <!-- Ferramentas de Estudo Rápido -->
+            <div class="flex flex-wrap items-center gap-2">
+                <!-- Modo Memorização Dinâmica (Active Recall) -->
+                <button id="toggleRecall" class="flex items-center gap-2 px-3 py-1.5 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg border border-slate-200 transition" title="Esconder termos grifados para testar sua memória. Clique neles para revelar!">
+                    <i class="fa-solid fa-eye-slash text-slate-500" id="recallIcon"></i>
+                    <span>Modo Memorização</span>
+                </button>
+                
+                <!-- Controle de Fonte -->
+                <div class="flex items-center bg-slate-100 rounded-lg border border-slate-200 overflow-hidden">
+                    <button onclick="changeFontSize(-1)" class="px-2.5 py-1.5 text-xs text-slate-600 hover:bg-slate-200 border-r border-slate-200 transition" title="Diminuir Texto">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <span class="px-2.5 py-1.5 text-xs font-semibold text-slate-700 select-none bg-white">A</span>
+                    <button onclick="changeFontSize(1)" class="px-2.5 py-1.5 text-xs text-slate-600 hover:bg-slate-200 border-l border-slate-200 transition" title="Aumentar Texto">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="flex-grow max-w-4xl mx-auto px-4 py-8 w-full">
+
+        <!-- Seção do Reprodutor de Áudio MP3 -->
+        <section class="bg-white border border-slate-200 rounded-2xl p-5 mb-8 shadow-sm">
+            <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                <div class="flex items-center gap-4 flex-grow">
+                    <div class="w-12 h-12 rounded-full bg-indigo-600 flex items-center justify-center text-white text-lg shadow-md shrink-0">
+                        <i class="fa-solid fa-volume-high animate-pulse" id="audioPulseIcon"></i>
+                    </div>
+                    <div class="flex-grow min-w-0">
+                        <h2 class="text-sm font-bold text-slate-900 leading-none mb-1">Áudio-Aula de Revisão</h2>
+                        <!-- Campo para trocar o nome do arquivo MP3 -->
+                        <div class="flex items-center gap-2">
+                            <label for="audioSourceInput" class="text-xs text-slate-500 whitespace-nowrap">Arquivo:</label>
+                            <input type="text" id="audioSourceInput" value="aula_geografia_agraria.mp3" 
+                                class="w-full text-xs bg-slate-50 border border-slate-200 rounded px-2 py-0.5 font-mono text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:bg-white transition"
+                                title="Altere para o nome do seu arquivo MP3 que estiver na mesma pasta" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controles do Áudio -->
+                <div class="flex flex-wrap items-center gap-3 shrink-0">
+                    <!-- Botão Play/Pause -->
+                    <button id="playPauseBtn" class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm px-4 py-2 rounded-xl transition shadow-sm">
+                        <i class="fa-solid fa-play" id="playIcon"></i>
+                        <span id="playText">Ouvir</span>
+                    </button>
+
+                    <!-- Seletor de Velocidade -->
+                    <div class="relative">
+                        <select id="speedSelect" class="appearance-none bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold py-2 pl-3 pr-8 rounded-xl focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                            <option value="0.5">0.5x</option>
+                            <option value="1.0" selected>1.0x (Normal)</option>
+                            <option value="1.25">1.25x</option>
+                            <option value="1.5">1.5x</option>
+                            <option value="1.75">1.75x</option>
+                            <option value="2.0">2.0x</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-500 border-l border-slate-150">
+                            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Progresso do Áudio -->
+            <div class="mt-4 flex items-center gap-3 text-xs text-slate-500 font-mono">
+                <span id="currentTime">00:00</span>
+                <div class="flex-grow bg-slate-100 rounded-full h-2 relative cursor-pointer group" id="progressContainer">
+                    <div class="bg-indigo-600 h-2 rounded-full w-0 transition-all duration-75 relative" id="audioProgress">
+                        <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-indigo-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
+                </div>
+                <span id="durationTime">00:00</span>
+            </div>
+
+            <!-- Elemento de Áudio Oculto -->
+            <audio id="mainAudio" src="aula_geografia_agraria.mp3" preload="metadata"></audio>
+        </section>
+
+        <!-- Bloco de Texto Principal do Resumo -->
+        <article id="contentArea" class="prose max-w-none text-slate-800 leading-relaxed space-y-8 text-base">
+            
+            <!-- Introdução do Guia -->
+            <section class="border-b border-slate-200 pb-6">
+                <div class="inline-block bg-indigo-50 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full mb-3">Guia de Memorização Ativa</div>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Espaço Agrário e Geopolítica dos Alimentos</h2>
+                <p class="text-slate-500 mt-2 text-sm md:text-base">
+                    Este documento condensa os conceitos estruturantes mais cobrados no concurso de <span class="highlight font-semibold border-b-2 border-indigo-200 text-slate-900">Professor de Geografia do IFSC</span>, com foco metodológico na banca <span class="font-bold text-slate-900">FAURGS</span>. Leia com atenção as partes destacadas.
+                </p>
+            </section>
+
+            <!-- Seção 1 -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-sm">1</span>
+                    <h3 class="text-xl font-bold text-slate-950">O Espaço Agrário Contemporâneo: Conceitos Estruturantes</h3>
+                </div>
+                <p>
+                    A análise moderna do espaço agrário exige superar de forma definitiva a dicotomia reducionista "rural-urbano". O campo contemporâneo é altamente dinâmico, marcado pela tensão intrínseca entre duas forças geográficas fundamentais:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-slate-900 flex items-center gap-2 text-sm uppercase tracking-wide text-indigo-600 mb-2">
+                            <i class="fa-solid fa-arrows-left-right-to-line"></i> Horizontalidades
+                        </h4>
+                        <p class="text-sm text-slate-600">
+                            Refere-se às relações de proximidade, identidade, redes sociais locais e à reprodução social da <span class="highlight font-semibold text-slate-900 border-b-2 border-indigo-200">agricultura familiar</span>, camponeses e povos e comunidades tradicionais. Prevalece o território como abrigo e espaço de vida.
+                        </p>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <h4 class="font-bold text-slate-900 flex items-center gap-2 text-sm uppercase tracking-wide text-indigo-600 mb-2">
+                            <i class="fa-solid fa-arrows-up-down"></i> Verticalidades
+                        </h4>
+                        <p class="text-sm text-slate-600">
+                            Representa os fluxos globais de capital, tecnologia de ponta, pacotes biogenéticos e informações que são controlados por grandes corporações transnacionais, estruturando os chamados <span class="highlight font-semibold text-slate-900 border-b-2 border-indigo-200">Complexos Agroindustriais (CAIs)</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card de Alerta sobre o Viés da Banca -->
+                <div class="bg-amber-50/70 border-l-4 border-amber-500 p-4 rounded-r-xl my-4">
+                    <div class="flex gap-3">
+                        <div class="text-amber-600 shrink-0"><i class="fa-solid fa-lightbulb text-lg"></i></div>
+                        <div>
+                            <h4 class="font-bold text-amber-900 text-sm">💡 O Viés da Banca FAURGS</h4>
+                            <p class="text-xs text-amber-800 mt-1 leading-relaxed">
+                                A banca costuma valorizar abordagens que tratam do <span class="highlight font-semibold text-slate-950 border-b-2 border-amber-200">desenvolvimento territorial</span>, regularização fundiária de territórios tradicionais (como quilombolas e indígenas) e a salvaguarda da soberania camponesa. As questões tendem a destacar os conflitos pelo controle da terra e a resistência contra a expropriação comandada pelo grande capital.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção 2 -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-sm">2</span>
+                    <h3 class="text-xl font-bold text-slate-950">Sistemas Agrícolas Mundiais: Quadro Comparativo</h3>
+                </div>
+                <p>
+                    Memorize as principais características distintivas de cada sistema agrícola para classificar rapidamente as alternativas nas provas:
+                </p>
+
+                <!-- Tabela Responsiva (Evita Rolagem Horizontal convertendo-se em blocos no Mobile) -->
+                <div class="overflow-hidden border border-slate-200 rounded-xl bg-white shadow-sm">
+                    <!-- Versão Desktop (Tabela) -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase border-b border-slate-200">
+                                    <th class="p-3">Sistema Agrícola</th>
+                                    <th class="p-3">Técnica e Insumos</th>
+                                    <th class="p-3">Estrutura e Trabalho</th>
+                                    <th class="p-3">Destino da Produção</th>
+                                    <th class="p-3">Impacto Territorial</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-xs text-slate-600">
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 bg-slate-50/50">Tradicionais / Subsistência</td>
+                                    <td class="p-3">Baixa tecnologia, queimadas e pousio (rotação de terras).</td>
+                                    <td class="p-3">Minifúndios, trabalho familiar.</td>
+                                    <td class="p-3">Autoconsumo e pequenos mercados locais.</td>
+                                    <td class="p-3">Degradação do solo por pousio curto; dependência climática.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 bg-slate-50/50">Jardinagem (Monções Asiáticas)</td>
+                                    <td class="p-3">Intenso controle hídrico e fertilizantes orgânicos.</td>
+                                    <td class="p-3">Pequenas propriedades familiares de alta densidade.</td>
+                                    <td class="p-3">Rizicultura focada nos mercados internos densos.</td>
+                                    <td class="p-3">Altíssima produtividade por área e coesão comunitária.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 bg-slate-50/50">Plantation Reconfigurada</td>
+                                    <td class="p-3">Mecoforça intermediária, sementes selecionadas comerciais.</td>
+                                    <td class="p-3">Latifúndios monoculturais de herança colonial.</td>
+                                    <td class="p-3">Exportação global de matérias-primas tropicais.</td>
+                                    <td class="p-3">Concentração fundiária extrema e trabalho precário temporário.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 bg-slate-50/50">Agronegócio / CAI</td>
+                                    <td class="p-3">Agricultura de precisão, transgênicos, IoT e insumos industriais.</td>
+                                    <td class="p-3">Latifúndios geridos por fundos e corporações financeiras.</td>
+                                    <td class="p-3">Exportação em larga escala de <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">commodities</span>.</td>
+                                    <td class="p-3">Expropriação camponesa e controle corporativo das patentes.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold text-slate-900 bg-slate-50/50">Agroecologia / SAFs</td>
+                                    <td class="p-3">Conhecimento ecológico avançado, policulturas e manejo sustentável.</td>
+                                    <td class="p-3">Pequenas e médias propriedades cooperativas.</td>
+                                    <td class="p-3">Foco direto na <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">soberania alimentar</span> local.</td>
+                                    <td class="p-3">Resiliência ecológica e alta diversidade sociobiodiversa.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Versão Mobile (Cards Inteligentes para Evitar Rolagem Horizontal) -->
+                    <div class="block md:hidden divide-y divide-slate-200">
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-indigo-600 uppercase">Tradicionais / Subsistência</span></div>
+                            <p class="text-xs text-slate-600"><strong>Técnica:</strong> Baixa tecnologia, queimadas e rotação.</p>
+                            <p class="text-xs text-slate-600"><strong>Estrutura:</strong> Minifúndios familiares de subsistência.</p>
+                            <p class="text-xs text-slate-600"><strong>Destino:</strong> Autoconsumo e feiras locais.</p>
+                            <p class="text-xs text-slate-600"><strong>Impacto:</strong> Perda de fertilidade e dependência climática.</p>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-indigo-600 uppercase">Jardinagem (Monções)</span></div>
+                            <p class="text-xs text-slate-600"><strong>Técnica:</strong> Irrigação intensiva, adubos biológicos.</p>
+                            <p class="text-xs text-slate-600"><strong>Estrutura:</strong> Pequenas propriedades familiares de alta densidade.</p>
+                            <p class="text-xs text-slate-600"><strong>Destino:</strong> Abastecimento dos mercados asiáticos (rizicultura).</p>
+                            <p class="text-xs text-slate-600"><strong>Impacto:</strong> Elevada coesão social e alto rendimento.</p>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-indigo-600 uppercase">Plantation Reconfigurada</span></div>
+                            <p class="text-xs text-slate-600"><strong>Técnica:</strong> Mecanização parcial, defensivos químicos.</p>
+                            <p class="text-xs text-slate-600"><strong>Estrutura:</strong> Latifúndio monocultor.</p>
+                            <p class="text-xs text-slate-600"><strong>Destino:</strong> Exportação de mercadorias tropicais.</p>
+                            <p class="text-xs text-slate-600"><strong>Impacto:</strong> Conflitos de terra e precarização do trabalho.</p>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-indigo-600 uppercase">Agronegócio / CAI</span></div>
+                            <p class="text-xs text-slate-600"><strong>Técnica:</strong> Maquinários autônomos, sementes transgênicas, insumos químicos.</p>
+                            <p class="text-xs text-slate-600"><strong>Estrutura:</strong> Propriedades corporativas de fundos globais.</p>
+                            <p class="text-xs text-slate-600"><strong>Destino:</strong> Mercado financeiro e de <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">commodities</span> globais.</p>
+                            <p class="text-xs text-slate-600"><strong>Impacto:</strong> Exclusão camponesa e monopolização agroalimentar.</p>
+                        </div>
+                        <div class="p-4 space-y-2">
+                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-indigo-600 uppercase">Agroecologia / SAFs</span></div>
+                            <p class="text-xs text-slate-600"><strong>Técnica:</strong> Rotação biológica, policultura integrada, ausência de químicos.</p>
+                            <p class="text-xs text-slate-600"><strong>Estrutura:</strong> Assentamentos, pequenas cooperativas camponesas.</p>
+                            <p class="text-xs text-slate-600"><strong>Destino:</strong> <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">Soberania alimentar</span> e redes de consumo agroecológico.</p>
+                            <p class="text-xs text-slate-600"><strong>Impacto:</strong> Conservação da água, do solo e regeneração da biodiversidade.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção 3 -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-sm">3</span>
+                    <h3 class="text-xl font-bold text-slate-950">Modernização Agrícola e Complexos Agroindustriais (CAI)</h3>
+                </div>
+                
+                <h4 class="font-bold text-slate-900 text-lg">A Revolução Verde</h4>
+                <p>
+                    Implementada globalmente a partir da segunda metade do século XX (no contexto geopolítico da Guerra Fria), sob a bandeira humanitária de "erradicar a fome mundial", consistiu na disseminação acelerada de um <span class="highlight font-semibold text-slate-900 border-b-2 border-indigo-200">pacote tecnológico industrial</span> para países em desenvolvimento.
+                </p>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600 text-sm">
+                    <li><strong>Pilares do Pacote:</strong> Mecanização pesada (tratores e colheitadeiras), adubos e fertilizantes solúveis de síntese petroquímica, agrotóxicos sistêmicos e sementes modificadas/híbridas de alto rendimento.</li>
+                    <li><strong>No Brasil (Modernização Conservadora):</strong> Ocorreu de forma massiva entre 1970 e 1980. O termo "conservadora" se refere diretamente à modernização tecnológica que <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">não alterou a estrutura fundiária concentrada</span>, gerando ampliação dos latifúndios e privilégios de crédito do Estado aos grandes proprietários rurais.</li>
+                    <li><strong>Impactos Socioespaciais:</strong> Desencadeou o êxodo rural maciço, crescimento das periferias urbanas precárias, contaminação hídrica severa, salinização do solo e destruição de biomas ricos (especialmente o Cerrado e o Pampa).</li>
+                </ul>
+
+                <h4 class="font-bold text-slate-900 text-lg mt-4">Os Complexos Agroindustriais (CAIs) e a Integração Vertical</h4>
+                <p>
+                    Os CAIs representam a completa subordinação e interdependência da produção biológica agrária em relação aos fluxos de capital industrial e corporativo, dividindo-se tradicionalmente em:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 my-2">
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs">
+                        <strong class="block text-slate-900 mb-1">1. Montante (Antes da porteira)</strong>
+                        Fábricas de defensivos agrícolas, tratores, sementes patenteadas e laboratórios biotecnológicos.
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs">
+                        <strong class="block text-slate-900 mb-1">2. Produção Agrícola (Dentro)</strong>
+                        O processo em si da lavoura e da criação animal no espaço rural.
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg text-xs">
+                        <strong class="block text-slate-900 mb-1">3. Jusante (Depois da porteira)</strong>
+                        Logística de portos, silos de armazenamento, grandes redes de supermercados e mercado financeiro de futuros.
+                    </div>
+                </div>
+
+                <!-- Box de Estudo de Caso (Foco Santa Catarina / Região do IFSC) -->
+                <div class="bg-indigo-50/70 border-l-4 border-indigo-600 p-4 rounded-r-xl">
+                    <h5 class="font-bold text-indigo-900 text-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-piggy-bank"></i> Estudo de Caso de SC: O Sistema de Integração do Oeste Catarinense
+                    </h5>
+                    <p class="text-xs text-indigo-950 mt-1.5 leading-relaxed">
+                        A ocupação demográfica original do Oeste de SC baseou-se na pequena propriedade de policultura de imigrantes europeus. A partir de meados do século XX, indústrias alimentícias (como as pioneiras do setor frigorífico) integraram verticalmente as famílias agricultoras. 
+                    </p>
+                    <p class="text-xs text-indigo-950 mt-1 leading-relaxed">
+                        No <strong>arranjo integrado</strong>, a agroindústria fornece os animais, a ração e a assistência técnica de controle. O camponês entra com a terra, as instalações tecnológicas caras, energia, água e a força de trabalho familiar direta. 
+                    </p>
+                    <p class="text-xs text-indigo-950 mt-1 leading-relaxed">
+                        <strong>Contradição para a prova:</strong> Há uma severa <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">perda de autonomia camponesa</span> (o produtor torna-se um operário terceirizado em sua própria terra), transferência de riscos biológicos e de passivos ambientais (dejetos de suínos) para as famílias agrícolas, e exclusão daqueles incapazes de se endividar para modernizar os galpões conforme as exigências das corporações.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Seção 4 -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-sm">4</span>
+                    <h3 class="text-xl font-bold text-slate-950">Geopolítica dos Alimentos e Geografia da Fome</h3>
+                </div>
+
+                <h4 class="font-bold text-slate-900 text-lg">Josué de Castro e a Fome como Construção Política</h4>
+                <p>
+                    Nas suas célebres obras <em>"Geografia da Fome"</em> e <em>"Geopolítica da Fome"</em>, Josué de Castro derrubou os mitos neomalthusianos e naturalizantes do fenômeno da fome. O autor provou de forma científica que a fome não se deve à incapacidade natural dos solos, aos climas severos ou ao crescimento populacional, mas é uma <span class="highlight font-semibold text-slate-900 border-b-2 border-indigo-200">criação política e social artificial</span> decorrente de estruturas de desigualdade social, latifúndios improdutivos e da exportação de matérias-primas coloniais em detrimento da produção de subsistência.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-2">
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 text-indigo-600">Segurança Alimentar (SAN)</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Refere-se ao direito e à garantia de <strong>acesso físico e econômico constante</strong> a alimentos seguros e nutritivos. Trata-se de uma métrica quantitativa e técnica compatível com a importação de alimentos no mercado aberto, o que pode ocorrer sob controle de megas-empresas alimentares.
+                        </p>
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <h5 class="font-bold text-slate-900 text-sm mb-1 text-indigo-600">Soberania Alimentar</h5>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Conceito eminentemente político cunhado pela <em>La Via Campesina</em>. Representa o direito inalienável dos povos e comunidades de <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">definirem suas próprias políticas de produção e consumo</span> de alimentos de modo ecológico, protegendo as sementes crioulas, a agricultura familiar e rejeitando patentes biotecnológicas.
+                        </p>
+                    </div>
+                </div>
+
+                <h4 class="font-bold text-slate-900 text-lg">Ambientes Alimentares e Tipologias Espaciais</h4>
+                <p>
+                    As transformações espaciais geraram as seguintes zonas de acesso ao alimento nos centros urbanos e rurais:
+                </p>
+                <ul class="list-disc pl-5 space-y-2 text-slate-600 text-sm">
+                    <li><strong>Desertos Alimentares (*Food Deserts*):</strong> Regiões periféricas de baixa renda onde há <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">ausência de pontos comerciais estáveis</span> de venda de produtos <em>in natura</em> ou minimamente processados (legumes, frutas, verduras frescos).</li>
+                    <li><strong>Pântanos Alimentares (*Food Swamps*):</strong> Zonas densamente ocupadas por comércios que ofertam alimentos ultraprocessados de baixa qualidade nutricional e alta densidade calórica (salgadinhos, fast-food, refrigerantes).</li>
+                    <li><strong>Ilhas de Abundância:</strong> Enclaves urbanos de alta renda que dispõem de ampla oferta de produtos orgânicos de alto valor, alimentos gourmet e feiras de alta qualidade.</li>
+                    <li><strong>Hotspots de Insegurança Alimentar:</strong> Áreas geográficas críticas sob risco de escassez alimentar severa devido a desastres de infraestrutura de transporte ou crises climáticas locais.</li>
+                </ul>
+            </section>
+
+            <!-- Seção 5 -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-sm">5</span>
+                    <h3 class="text-xl font-bold text-slate-950">Legislação Agrária Essencial</h3>
+                </div>
+                <p>
+                    A banca FAURGS costuma explorar as distinções jurídicas básicas e as diretrizes do <span class="font-semibold text-slate-900">Estatuto da Terra (Lei 4.504/1964)</span> e da Constituição Federal de 1988:
+                </p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <strong class="text-indigo-600 block mb-1">Módulo Rural</strong>
+                        Unidade que calcula a extensão mínima de terra capaz de absorver a força de trabalho de uma família média na região, garantindo o seu sustento e o progresso social. Varia geograficamente.
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <strong class="text-indigo-600 block mb-1">Módulo Fiscal</strong>
+                        Unidade fixada pelo INCRA para cada município. É utilizada como padrão regulatório básico para classificar a dimensão de imóveis rurais rústicos e para os cálculos do Imposto Territorial Rural (ITR).
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <strong class="text-indigo-600 block mb-1">Função Social da Terra (Art. 186 da CF/88)</strong>
+                        A propriedade privada é assegurada apenas se cumprir concomitantemente: aproveitamento racional/adequado; uso sustentável do meio ambiente; conformidade com as leis trabalhistas; bem-estar coletivo.
+                    </div>
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <strong class="text-indigo-600 block mb-1">Definição de Agricultura Familiar (Lei 11.326/06)</strong>
+                        Propriedade gerida predominantemente por familiares, cuja mão de obra é da própria família, possuindo dimensão territorial <span class="highlight font-semibold text-slate-950 border-b-2 border-indigo-200">inferior a 4 módulos fiscais</span>.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção 6 -->
+            <section class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-sm">6</span>
+                    <h3 class="text-xl font-bold text-slate-950">Blitz de Pegadinhas FAURGS: Pontos de Acerto Imediato</h3>
+                </div>
+                <p class="text-sm text-slate-600">
+                    Abaixo estão reunidos os principais distratores e pegadinhas criados pela banca FAURGS para confundir candidatos desatentos. Memorize essas distinções técnicas cruciais:
+                </p>
+
+                <div class="space-y-4">
+                    <!-- Pegadinha 1 -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 font-bold text-sm text-rose-600 mb-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Quem realiza a avaliação de agrotóxicos?
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div class="bg-rose-50/50 p-3 rounded-lg border border-rose-100">
+                                <span class="font-bold text-rose-900 block mb-1">❌ Distrator Comum</span>
+                                Afirmar que o Ministério da Agricultura (MAPA) avalia e classifica a toxidade de agrotóxicos por gerir as commodities.
+                            </div>
+                            <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
+                                <span class="font-bold text-emerald-950 block mb-1">✔️ Fato Correto para a Prova</span>
+                                A avaliação e classificação toxicológica exclusiva é de responsabilidade da <span class="highlight font-semibold text-slate-950 border-b-2 border-emerald-200">ANVISA</span> (Saúde). O IBAMA faz a análise ecotoxicológica e o MAPA apenas emite o registro final.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pegadinha 2 -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 font-bold text-sm text-rose-600 mb-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Lixiviação vs. Escoamento Superficial (Erosão)
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div class="bg-rose-50/50 p-3 rounded-lg border border-rose-100">
+                                <span class="font-bold text-rose-900 block mb-1">❌ Distrator Comum</span>
+                                Definir a lixiviação como o processo horizontal de lavagem e erosão das camadas mais ricas e superficiais do solo.
+                            </div>
+                            <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
+                                <span class="font-bold text-emerald-950 block mb-1">✔️ Fato Correto para a Prova</span>
+                                A lixiviação é especificamente a lavagem e dissolução de nutrientes no <span class="highlight font-semibold text-slate-950 border-b-2 border-emerald-200">sentido vertical</span>, ocasionada pela água que infiltra e infiltra no subsolo. O processo horizontal é a erosão ou deflúvio superficial.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pegadinha 3 -->
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+                        <div class="flex items-center gap-2 font-bold text-sm text-rose-600 mb-2">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Paradoxo do Censo Agropecuário Brasileiro
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                            <div class="bg-rose-50/50 p-3 rounded-lg border border-rose-100">
+                                <span class="font-bold text-rose-900 block mb-1">❌ Distrator Comum</span>
+                                Dizer que como a agricultura familiar representa mais de 75% das propriedades rurais, ela ocupa a maior parte do espaço agrícola.
+                            </div>
+                            <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
+                                <span class="font-bold text-emerald-950 block mb-1">✔️ Fato Correto para a Prova</span>
+                                Trata-se de um paradoxo clássico: a agricultura familiar é imensa em número absoluto de estabelecimentos rurais, porém ela ocupa <span class="highlight font-semibold text-slate-950 border-b-2 border-emerald-200">menos de um quarto do território agrário total</span>, revelando a crônica concentração de terras nas mãos do latifúndio corporativo.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- Botão de Ação / Prática ao Final -->
+        <section class="mt-12 pt-6 border-t border-slate-200 flex flex-col items-center gap-4 text-center">
+            <h4 class="font-bold text-slate-900 text-lg">Pronto para testar seus conhecimentos e fixar o conteúdo?</h4>
+            <p class="text-xs text-slate-500 max-w-md">Pratique com questões especialmente modeladas no perfil da banca FAURGS para garantir a sua aprovação no IFSC.</p>
+            <a href="agroquestoes.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-8 rounded-xl transition shadow-lg shadow-indigo-100 text-sm md:text-base tracking-wide group">
+                Começar Simulado Prático
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-16 text-center text-xs text-slate-400">
+        <p>© 2026 IFSC Professor de Geografia — Preparação de Alto Nível.</p>
+    </footer>
+
+    <!-- Script para Controles Interativos -->
+    <script>
+        const audio = document.getElementById('mainAudio');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const playIcon = document.getElementById('playIcon');
+        const playText = document.getElementById('playText');
+        const speedSelect = document.getElementById('speedSelect');
+        const audioSourceInput = document.getElementById('audioSourceInput');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationTimeEl = document.getElementById('durationTime');
+        const audioProgress = document.getElementById('audioProgress');
+        const progressContainer = document.getElementById('progressContainer');
+        const audioPulseIcon = document.getElementById('audioPulseIcon');
+
+        // Sincronizar o nome do arquivo MP3 ao digitar no input
+        audioSourceInput.addEventListener('input', () => {
+            const currentSec = audio.currentTime;
+            const isPlaying = !audio.paused;
+            audio.src = audioSourceInput.value;
+            audio.load();
+            if (isPlaying) {
+                audio.play().catch(e => console.log("Áudio não encontrado no caminho especificado"));
+            }
+        });
+
+        // Alternar Play e Pause
+        playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playIcon.className = 'fa-solid fa-pause';
+                        playText.textContent = 'Pausar';
+                        audioPulseIcon.classList.add('animate-pulse');
+                    })
+                    .catch(error => {
+                        console.error("Falha ao reproduzir áudio:", error);
+                        // Mostrar notificação amigável na tela
+                        showNotification("Por favor, verifique se o arquivo '" + audioSourceInput.value + "' está na mesma pasta desta página.", "warning");
+                    });
+            } else {
+                audio.pause();
+                playIcon.className = 'fa-solid fa-play';
+                playText.textContent = 'Ouvir';
+                audioPulseIcon.classList.remove('animate-pulse');
+            }
+        });
+
+        // Atualizar velocidade de reprodução
+        speedSelect.addEventListener('change', () => {
+            audio.playbackRate = parseFloat(speedSelect.value);
+        });
+
+        // Formatação de Tempo de Reprodução (Minutos:Segundos)
+        function formatTime(secs) {
+            if (isNaN(secs)) return "00:00";
+            const m = Math.floor(secs / 60);
+            const s = Math.floor(secs % 60);
+            return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
+
+        // Atualizar progresso visual do player
+        audio.addEventListener('timeupdate', () => {
+            const current = audio.currentTime;
+            const duration = audio.duration;
+            currentTimeEl.textContent = formatTime(current);
+            if (duration) {
+                const percent = (current / duration) * 100;
+                audioProgress.style.width = percent + '%';
+                durationTimeEl.textContent = formatTime(duration);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        // Permitir clique na barra para pular para trechos do áudio
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            const duration = audio.duration;
+            if (duration) {
+                audio.currentTime = (clickX / width) * duration;
+            }
+        });
+
+        // Alternar modo de Memorização (Ocultação de Termos Grifados)
+        const toggleRecallBtn = document.getElementById('toggleRecall');
+        const recallIcon = document.getElementById('recallIcon');
+        let activeRecallEnabled = false;
+
+        // Mapear todos os termos grifados para aplicar o filtro dinamicamente
+        const highlights = document.querySelectorAll('.highlight');
+
+        toggleRecallBtn.addEventListener('click', () => {
+            activeRecallEnabled = !activeRecallEnabled;
+            
+            if (activeRecallEnabled) {
+                toggleRecallBtn.classList.remove('bg-slate-100', 'text-slate-700');
+                toggleRecallBtn.classList.add('bg-indigo-600', 'text-white');
+                recallIcon.className = 'fa-solid fa-eye';
+                
+                // Mascarar todos os termos importantes com a tarja preta
+                highlights.forEach(el => {
+                    el.classList.add('term-masked');
+                    el.classList.remove('revealed');
+                    el.title = "Clique para revelar o termo escondido!";
+                    
+                    // Revelar ao clique individual
+                    el.addEventListener('click', handleReveal);
+                });
+                
+                showNotification("Modo Memorização Ativado! Os conceitos grifados foram ocultados. Clique neles para testar seu conhecimento.", "info");
+            } else {
+                toggleRecallBtn.classList.add('bg-slate-100', 'text-slate-700');
+                toggleRecallBtn.classList.remove('bg-indigo-600', 'text-white');
+                recallIcon.className = 'fa-solid fa-eye-slash';
+                
+                // Desfazer o mascaramento
+                highlights.forEach(el => {
+                    el.classList.remove('term-masked', 'revealed');
+                    el.removeAttribute('title');
+                    el.removeEventListener('click', handleReveal);
+                });
+            }
+        });
+
+        function handleReveal() {
+            if (activeRecallEnabled) {
+                this.classList.toggle('revealed');
+            }
+        }
+
+        // Controle dinâmico do tamanho das fontes do texto
+        let currentFontSizeLevel = 0; // 0 é normal, -1 menor, 1+ maior
+        const contentArea = document.getElementById('contentArea');
+
+        function changeFontSize(direction) {
+            currentFontSizeLevel += direction;
+            if (currentFontSizeLevel < -1) currentFontSizeLevel = -1;
+            if (currentFontSizeLevel > 3) currentFontSizeLevel = 3;
+
+            // Mapear níveis de fontes usando classes CSS do Tailwind
+            contentArea.classList.remove('text-sm', 'text-base', 'text-lg', 'text-xl');
+            
+            if (currentFontSizeLevel === -1) {
+                contentArea.classList.add('text-sm');
+            } else if (currentFontSizeLevel === 0) {
+                contentArea.classList.add('text-base');
+            } else if (currentFontSizeLevel === 1) {
+                contentArea.classList.add('text-lg');
+            } else if (currentFontSizeLevel >= 2) {
+                contentArea.classList.add('text-xl');
+            }
+        }
+
+        // Barra superior que exibe o progresso de leitura conforme rola a página
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Função utilitária para exibir caixas de mensagem elegantes de aviso (substitutos de alerts)
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed bottom-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold max-w-sm transition-all duration-300 transform translate-y-10 opacity-0`;
+            
+            if (type === "warning") {
+                notification.classList.add('bg-amber-50', 'text-amber-800', 'border-amber-200');
+                notification.innerHTML = `<i class="fa-solid fa-circle-exclamation text-amber-500 text-sm"></i> <span>${message}</span>`;
+            } else {
+                notification.classList.add('bg-indigo-50', 'text-indigo-900', 'border-indigo-200');
+                notification.innerHTML = `<i class="fa-solid fa-circle-info text-indigo-500 text-sm"></i> <span>${message}</span>`;
+            }
+
+            document.body.appendChild(notification);
+            
+            // Forçar reflow para animação
+            setTimeout(() => {
+                notification.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            // Sumir após 6 segundos
+            setTimeout(() => {
+                notification.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 6000);
+        }
+    </script>
+</body>
+</html>

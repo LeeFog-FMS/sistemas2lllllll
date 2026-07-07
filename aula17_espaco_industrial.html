@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparatório Geografia IFSC - FAURGS</title>
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para melhor legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilização fina para seleção de texto */
+        ::selection {
+            background-color: #fef08a;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header Principal -->
+    <header class="border-b border-slate-200 bg-white sticky top-0 z-50 py-4 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="bg-slate-900 text-white font-bold px-2.5 py-1 rounded text-sm tracking-wider">IFSC</span>
+                <h1 class="font-bold text-lg text-slate-900 tracking-tight">Geografia — Professor EBTT</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest bg-slate-100 px-2 py-1 rounded">Banca FAURGS</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Container do Conteúdo Principal -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-8 flex-grow w-full">
+
+        <!-- Seção do Reprodutor de Áudio Customizado -->
+        <section class="mb-10 p-5 rounded-2xl border-2 border-slate-200 bg-white shadow-sm">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-headphones text-slate-700"></i> Reprodutor de Áudio da Aula / Resumo
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                <!-- Controle de Arquivo -->
+                <div class="md:col-span-5">
+                    <label for="audio-src" class="block text-xs font-medium text-slate-600 mb-1">Nome/Caminho do Arquivo MP3:</label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-file-audio text-slate-400"></i>
+                        </div>
+                        <input type="text" id="audio-src" value="audio-revisao.mp3" 
+                               class="block w-full pl-9 pr-3 py-1.5 text-sm rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 bg-white" 
+                               placeholder="Ex: audio-revisao.mp3">
+                    </div>
+                </div>
+
+                <!-- Controles do Player -->
+                <div class="md:col-span-7 flex flex-wrap items-center justify-between sm:justify-start gap-3 mt-2 md:mt-0">
+                    <div class="flex items-center gap-2">
+                        <!-- Botão Play/Pause -->
+                        <button id="btn-play-pause" class="w-10 h-10 rounded-full bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center transition-colors focus:outline-none shadow-sm" title="Play/Pause">
+                            <i id="play-icon" class="fa-solid fa-play ml-0.5 text-sm"></i>
+                        </button>
+                        
+                        <!-- Progresso do Tempo -->
+                        <div class="text-xs font-mono text-slate-600 min-w-[75px]" id="audio-time">
+                            0:00 / 0:00
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso Customizada -->
+                    <div class="flex-grow min-w-[120px] max-w-xs relative py-2">
+                        <input type="range" id="audio-progress" min="0" max="100" value="0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-950">
+                    </div>
+
+                    <!-- Controle de Velocidade -->
+                    <div class="flex items-center gap-1.5">
+                        <label for="audio-speed" class="text-xs font-medium text-slate-600 hidden sm:inline">Velocidade:</label>
+                        <select id="audio-speed" class="text-xs py-1.5 px-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500 bg-white cursor-pointer font-semibold text-slate-700">
+                            <option value="0.5">0.5x</option>
+                            <option value="1.0" selected>1.0x (Normal)</option>
+                            <option value="1.25">1.25x</option>
+                            <option value="1.5">1.5x</option>
+                            <option value="1.75">1.75x</option>
+                            <option value="2.0">2.0x</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tag de Áudio Nativa Oculta -->
+            <audio id="audio-element" src="audio-espaco.mp3" preload="metadata"></audio>
+            
+            <!-- Mensagem de status discreta -->
+            <div id="player-status-msg" class="text-xxs text-slate-400 mt-2 italic flex items-center gap-1">
+                <i class="fa-solid fa-circle-info"></i> Edite o nome do arquivo acima para apontar para o seu áudio local na mesma pasta.
+            </div>
+        </section>
+
+
+        <!-- Título do Documento -->
+        <div class="border-b-2 border-slate-950 pb-6 mb-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">Guia de Revisão Rápida: Dinâmicas do Espaço Industrial Mundial</h1>
+            <p class="text-slate-500 mt-2 text-md font-medium italic">Foco de Memorização de Alto Impacto para o Concurso de Professor do IFSC — Banca FAURGS</p>
+        </div>
+
+        <!-- SEÇÃO 1: Perfil Estratégico -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                <span class="text-slate-400">01.</span> Perfil Estratégico do Concurso (IFSC/FAURGS)
+            </h2>
+            <div class="space-y-4 text-base leading-relaxed text-slate-700">
+                <p>
+                    A aprovação no concurso de Geologia/Geografia do IFSC exige que o candidato compreenda o peso absoluto da prova teórica e saiba transpor esse conhecimento para a etapa prática. Mapeamos os pontos essenciais da estrutura que você deve reter:
+                </p>
+                <ul class="list-disc pl-5 space-y-2">
+                    <li>
+                        <strong class="text-slate-900">Estrutura da Prova Escrita:</strong> Consiste em <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">50 questões de múltipla escolha</mark> (cinco alternativas), divididas estritamente em 20 de conhecimentos gerais (Português, Legislação da Educação Profissional, Conhecimentos Pedagógicos) e <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">30 de conhecimentos específicos de Geografia</mark>. Adicionalmente, há uma <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">questão discursiva pedagógica</mark> resolvida de forma integrada (exigindo síntese direta de 10 a 15 linhas).
+                    </li>
+                    <li>
+                        <strong class="text-slate-900">Prova de Desempenho Didático (2ª Etapa):</strong> Uma simulação de aula prática presencial de <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">30 a 35 minutos</mark> baseada em ponto sorteado previamente. O domínio dessa <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">transposição didática</mark> ligando os modelos industriais à sala de aula é um diferencial avaliado com rigor pela banca.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 2: Síntese dos Modelos de Industrialização -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                <span class="text-slate-400">02.</span> Síntese dos Modelos de Industrialização e Produção do Espaço
+            </h2>
+            
+            <div class="space-y-8 text-base leading-relaxed text-slate-700">
+                
+                <!-- Bloco A -->
+                <div class="p-5 rounded-xl border border-slate-200 bg-white">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-industry text-slate-500"></i> A. Modelo Clássico ou Original (Europa Ocidental e EUA)
+                    </h3>
+                    <ul class="list-disc pl-5 space-y-2 mt-3">
+                        <li>
+                            <strong class="text-slate-900">Gênese:</strong> Desenvolvimento caracterizado como <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">endógeno, gradual e de longa maturação histórica</mark>, estruturado sem dependência primária de capitais ou mercados externos iniciais.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Geografia Original:</strong> Forte <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">concentração espacial junto a bacias carboníferas</mark> e jazidas de minério de ferro devido ao elevado custo de transporte e a dependência de fontes energéticas pesadas. Exemplos categóricos: o <em class="not-italic font-semibold text-slate-900">Manufacturing Belt</em> nos EUA e o <em class="not-italic font-semibold text-slate-900">Vale do Ruhr</em> na Alemanha.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Regimes de Produção:</strong>
+                            <ul class="list-circle pl-5 mt-2 space-y-1">
+                                <li>
+                                    <span class="font-semibold text-slate-900">Fordismo:</span> Produção e acumulação rígida, linhas de montagem padronizadas, <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">integração verticalizada de imensas plantas fabris</mark> e forte regulação macroeconômica baseada no Estado de Bem-Estar Social (<em class="italic">Welfare State</em>).
+                                </li>
+                                <li>
+                                    <span class="font-semibold text-slate-900">Toyotismo:</span> Regime de acumulação flexível sustentado por automação microeletrônica, lógica produtiva <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">just-in-time, terceirização e horizontalização</mark> fabril. Esse arranjo gerou a desindustrialização de bacias antigas (<em class="not-italic font-semibold text-slate-900">Rust Belt</em> nos EUA) e estimulou a fragmentação espacial global das etapas de montagem.
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bloco B -->
+                <div class="p-5 rounded-xl border border-slate-200 bg-white">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-earth-americas text-slate-500"></i> B. Modelo Tardio ou Periférico (Industrialização Recente)
+                    </h3>
+                    <p class="text-slate-600 mb-3">
+                        Iniciada majoritariamente a partir de meados do século XX com forte dependência de tecnologia e capitais externos, cindida em dois eixos geográficos opostos:
+                    </p>
+                    <ul class="list-disc pl-5 space-y-3">
+                        <li>
+                            <strong class="text-slate-900">Substituição de Importações (América Latina):</strong> Direcionou o foco produtivo ao <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">mercado consumidor doméstico protegido</mark> por pesadas barreiras alfandegárias. O Estado atuou diretamente como empresário na infraestrutura estratégica e na indústria de base (siderurgia, petroquímica), enquanto as filiais transnacionais dominaram o segmento de bens de consumo duráveis. Espacialmente, promoveu uma <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">hiperconcentração metropolitana desordenada</mark> e um intenso êxodo rural desregulado.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Plataformas de Exportação (Tigres Asiáticos):</strong> Direcionamento absoluto ao <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">mercado consumidor global</mark>. O Estado planejador atuou de forma decisiva por meio de profundas reformas agrárias e pesados investimentos estatais em educação básica, ciência e tecnologia. Espacialmente, estruturou-se através de <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Zonas de Processamento de Exportações (ZPEs)</mark> litorâneas e portuárias, possibilitando uma transição rápida da montagem simples de baixo custo para marcas e tecnologias próprias altamente inovadoras.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bloco C -->
+                <div class="p-5 rounded-xl border border-slate-200 bg-white">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-landmark text-slate-500"></i> C. Modelo Planificado (Antiga União Soviética)
+                    </h3>
+                    <ul class="list-disc pl-5 space-y-2 mt-3">
+                        <li>
+                            <strong class="text-slate-900">Lógica:</strong> Estatização integral dos meios de produção, com eliminação de mecanismos de mercado concorrencial. A alocação de recursos e metas era <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">ditada diretamente pelos Planos Quinquenais (Gosplan)</mark>, priorizando a indústria pesada e bélica em detrimento crônico dos bens de consumo.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Unidade Espacial - O Kombinat:</strong> Grandes complexos multi-industriais que <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">integravam fisicamente todas as etapas</mark> da cadeia produtiva em um mesmo perímetro geográfico limitado (desde a extração mineral, passando pelo refino, até a metalurgia final). Essa lógica visava neutralizar os custos geográficos e logísticos de circulação de materiais semitransformados pelas imensas distâncias territoriais siberianas.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Bloco D -->
+                <div class="p-5 rounded-xl border border-slate-200 bg-white">
+                    <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-dragon text-slate-500"></i> D. Socialismo de Mercado (China)
+                    </h3>
+                    <ul class="list-disc pl-5 space-y-2 mt-3">
+                        <li>
+                            <strong class="text-slate-900">Fase Maoísta (1949-1976):</strong> Adoção inicial da planificação soviética clássica, concentrando indústrias pesadas de base na província da Manchúria e instituindo as <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Comunas Populares rurais</mark> para fixar o camponês ao solo e garantir a autossuficiência alimentar.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Abertura de Deng Xiaoping (A partir de 1978):</strong> Transição e consolidação sob o modelo de <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Socialismo de Mercado</mark>, combinando o controle estatal e autoritário do Partido Comunista Chinês com fluxos internacionais de investimento estrangeiro e regras de mercado.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Zonas Econômicas Especiais (ZEEs):</strong> Enclaves costeiros estratégicos abertos ao comércio global visando atrair multinacionais por meio de robustas vantagens tributárias e uma <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">abundante e controlada força de trabalho</mark>. Esse processo converteu o país na "fábrica global", mas gerou um profundo desequilíbrio geográfico entre o Leste (litorâneo e rico) e o Oeste (interiorano e empobrecido).
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Made in China 2025:</strong> Estratégia geopolítica e industrial contemporânea de transição estrutural: deixar de ser apenas montadora de patentes externas e <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">tornar-se polo de alta tecnologia própria</mark> global (liderando setores como veículos elétricos, robótica e Inteligência Artificial).
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 3: Matriz Comparativa (Garantia de Zero Scroll Horizontal) -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                <span class="text-slate-400">03.</span> Matriz Comparativa para Memorização Rápida
+            </h2>
+            
+            <p class="text-sm text-slate-500 mb-4 italic">
+                Abaixo, a comparação sintética dos modelos. Em telas de celular, os dados se reorganizam em blocos verticais para evitar qualquer tipo de rolagem horizontal desconfortável.
+            </p>
+
+            <!-- Tabela Adaptável (Table no Desktop, Cards no Mobile) -->
+            <div class="hidden md:block border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                <table class="w-full text-left border-collapse bg-white">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-700">
+                            <th class="p-4 w-1/4">Modelo Industrial</th>
+                            <th class="p-4 w-1/4">Direcionamento de Mercado</th>
+                            <th class="p-4 w-1/4">Papel do Estado</th>
+                            <th class="p-4 w-1/4">Dinâmica Espacial Típica</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 text-sm text-slate-700">
+                        <tr>
+                            <td class="p-4 font-bold text-slate-900">Clássico</td>
+                            <td class="p-4">Mercado interno original e posterior hegemonia/liderança global.</td>
+                            <td class="p-4">Regulador macro e financiador estratégico (<em class="italic">Welfare State</em>).</td>
+                            <td class="p-4">Forte concentração histórica em jazidas (carvão/ferro); posterior dispersão flexível.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-slate-900">Tardio (Substituição)</td>
+                            <td class="p-4">Atendimento ao mercado de consumo interno protegido.</td>
+                            <td class="p-4">Empresário direto (provendo infraestrutura básica e indústrias de base).</td>
+                            <td class="p-4">Hiperconcentração metropolitana desordenada e migração rural em massa.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-slate-900">Tardio (Plataforma)</td>
+                            <td class="p-4">Voltado ao mercado externo e exportação global em larga escala.</td>
+                            <td class="p-4">Planejador central, promovendo educação e infraestrutura exportadora.</td>
+                            <td class="p-4">ZPEs litorâneas integradas a complexos portuários modernos.</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-slate-900">Planificado</td>
+                            <td class="p-4">Abastecimento interno regulado estritamente pelo plano central.</td>
+                            <td class="p-4">Proprietário universal absoluto e controlador direto de todas as metas.</td>
+                            <td class="p-4"><em class="not-italic font-semibold">Kombinats</em> (verticalização e união física de cadeias no espaço).</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-bold text-slate-900">Socialismo de Mercado</td>
+                            <td class="p-4">Modelo misto (exportação global e consolidação do mercado interno).</td>
+                            <td class="p-4">Proprietário de setores de base e planejador macro das diretrizes nacionais.</td>
+                            <td class="p-4">Zonas Econômicas Especiais costeiras; grande fosso socioespacial Leste-Oeste.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Layout alternativo em formato de Cards para Mobile (garante que não ocorra scroll horizontal) -->
+            <div class="block md:hidden space-y-4">
+                
+                <!-- Card 1 -->
+                <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                    <div class="font-bold text-base text-slate-900 border-b border-slate-100 pb-2 mb-2">Modelo Clássico</div>
+                    <div class="space-y-1.5 text-sm">
+                        <p><strong class="text-slate-800">Mercado:</strong> Interno original e posterior hegemonia global.</p>
+                        <p><strong class="text-slate-800">Estado:</strong> Regulador macro e financiador estratégico (Welfare State).</p>
+                        <p><strong class="text-slate-800">Espaço:</strong> Concentração em jazidas de carvão/ferro; posterior dispersão flexível.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                    <div class="font-bold text-base text-slate-900 border-b border-slate-100 pb-2 mb-2">Modelo Tardio (Substituição)</div>
+                    <div class="space-y-1.5 text-sm">
+                        <p><strong class="text-slate-800">Mercado:</strong> Atendimento ao mercado de consumo interno protegido.</p>
+                        <p><strong class="text-slate-800">Estado:</strong> Empresário de base e infraestrutura.</p>
+                        <p><strong class="text-slate-800">Espaço:</strong> Hiperconcentração metropolitana e êxodo desregulado.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                    <div class="font-bold text-base text-slate-900 border-b border-slate-100 pb-2 mb-2">Modelo Tardio (Plataforma)</div>
+                    <div class="space-y-1.5 text-sm">
+                        <p><strong class="text-slate-800">Mercado:</strong> Voltado ao mercado externo e exportação global em escala.</p>
+                        <p><strong class="text-slate-800">Estado:</strong> Planejador de educação de base e fomento industrial.</p>
+                        <p><strong class="text-slate-800">Espaço:</strong> ZPEs litorâneas ligadas a portos modernos.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                    <div class="font-bold text-base text-slate-900 border-b border-slate-100 pb-2 mb-2">Modelo Planificado</div>
+                    <div class="space-y-1.5 text-sm">
+                        <p><strong class="text-slate-800">Mercado:</strong> Consumo regulado rigidamente pelo plano central.</p>
+                        <p><strong class="text-slate-800">Estado:</strong> Proprietário absoluto de todos os meios de produção.</p>
+                        <p><strong class="text-slate-800">Espaço:</strong> Kombinats (integração física local de insumo e produto).</p>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                    <div class="font-bold text-base text-slate-900 border-b border-slate-100 pb-2 mb-2">Socialismo de Mercado</div>
+                    <div class="space-y-1.5 text-sm">
+                        <p><strong class="text-slate-800">Mercado:</strong> Misto (foco exportador robusto e mercado interno crescente).</p>
+                        <p><strong class="text-slate-800">Estado:</strong> Detentor das indústrias de base e controlador macro.</p>
+                        <p><strong class="text-slate-800">Espaço:</strong> ZEEs costeiras; discrepância acentuada Leste-Oeste.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 4: Glossário Flashcards Interativos -->
+        <section class="mb-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-2 pb-2 border-b border-slate-200 flex items-center gap-2">
+                <span class="text-slate-400">04.</span> Glossário "Flashcards" — Conceitos Fundamentais
+            </h2>
+            <p class="text-xs text-slate-500 mb-5 italic">
+                Clique em qualquer card para revelar ou ocultar a definição técnica detalhada do conceito. Excelente para simular memorização ativa!
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- Flashcard 1 -->
+                <div class="flashcard border border-slate-200 hover:border-slate-400 rounded-xl p-4 cursor-pointer transition-all bg-white shadow-sm flex flex-col justify-between" onclick="toggleFlashcard(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xxs font-bold text-slate-400 uppercase tracking-widest">Globalização</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-eye"></i></span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 mb-2 card-title">Nova Divisão Internacional do Trabalho (NDIT)</h4>
+                        <p class="text-sm text-slate-600 hidden card-definition mt-2 pt-2 border-t border-slate-100">
+                            Reconfiguração produtiva planetária em que as matrizes (Norte Global) <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">centralizam a inovação, tecnologia, marcas e o controle do capital financeiro</mark>, ao passo que os territórios periféricos ou em desenvolvimento executam as tarefas físicas industriais subordinadas de montagem secundária.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flashcard 2 -->
+                <div class="flashcard border border-slate-200 hover:border-slate-400 rounded-xl p-4 cursor-pointer transition-all bg-white shadow-sm flex flex-col justify-between" onclick="toggleFlashcard(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xxs font-bold text-slate-400 uppercase tracking-widest">Produção</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-eye"></i></span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 mb-2 card-title">Cadeias Globais de Valor (CGVs)</h4>
+                        <p class="text-sm text-slate-600 hidden card-definition mt-2 pt-2 border-t border-slate-100">
+                            Fragmentação e dispersão geográfica internacionalizada das variadas etapas de elaboração e fabricação de um produto complexo. Essas redes são geridas, <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">coordenadas e controladas de forma centralizada</mark> por corporações transnacionais, buscando custos ótimos em escala.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flashcard 3 -->
+                <div class="flashcard border border-slate-200 hover:border-slate-400 rounded-xl p-4 cursor-pointer transition-all bg-white shadow-sm flex flex-col justify-between" onclick="toggleFlashcard(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xxs font-bold text-slate-400 uppercase tracking-widest">Demografia / China</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-eye"></i></span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 mb-2 card-title">Sistema Hukou</h4>
+                        <p class="text-sm text-slate-600 hidden card-definition mt-2 pt-2 border-t border-slate-100">
+                            Mecanismo institucional de registro de residência chinês que <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">impede legalmente os camponeses migrantes</mark> de acessar direitos e serviços públicos básicos nas áreas urbanas costeiras. Isso forma uma força de trabalho altamente barata, dócil e flexível para as indústrias, impedindo a favelização das grandes cidades.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flashcard 4 -->
+                <div class="flashcard border border-slate-200 hover:border-slate-400 rounded-xl p-4 cursor-pointer transition-all bg-white shadow-sm flex flex-col justify-between" onclick="toggleFlashcard(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xxs font-bold text-slate-400 uppercase tracking-widest">Estrutura / China</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-eye"></i></span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 mb-2 card-title">TVEs vs SOEs</h4>
+                        <p class="text-sm text-slate-600 hidden card-definition mt-2 pt-2 border-t border-slate-100">
+                            As <strong class="text-slate-900">SOEs</strong> (<em class="italic">State-owned Enterprises</em>) são as gigantescas indústrias estatais da China que exercem monopólio estratégico de recursos e indústrias pesadas. Já as <strong class="text-slate-900">TVEs</strong> (<em class="italic">Township and Village Enterprises</em>) são cooperativas/empresas coletivas rurais geridas localmente que introduziram e capilarizaram a competição de mercado nas regiões interiores do país.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flashcard 5 -->
+                <div class="flashcard border border-slate-200 hover:border-slate-400 rounded-xl p-4 cursor-pointer transition-all bg-white shadow-sm flex flex-col justify-between" onclick="toggleFlashcard(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xxs font-bold text-slate-400 uppercase tracking-widest">Estrutural</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-eye"></i></span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 mb-2 card-title">Desindustrialização Precoce</h4>
+                        <p class="text-sm text-slate-600 hidden card-definition mt-2 pt-2 border-t border-slate-100">
+                            Retração acelerada da representação do setor de manufatura e transformação no PIB nacional e no volume de empregos de um país, ocorrendo <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">antes do amadurecimento completo de serviços avançados</mark> e inovação local (como verificado historicamente na economia brasileira pós-anos 1990).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flashcard 6 -->
+                <div class="flashcard border border-slate-200 hover:border-slate-400 rounded-xl p-4 cursor-pointer transition-all bg-white shadow-sm flex flex-col justify-between" onclick="toggleFlashcard(this)">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xxs font-bold text-slate-400 uppercase tracking-widest">Geopolítica Econômica</span>
+                            <span class="text-xs text-slate-400"><i class="fa-solid fa-eye"></i></span>
+                        </div>
+                        <h4 class="font-bold text-base text-slate-900 mb-2 card-title">Doença Holandesa</h4>
+                        <p class="text-sm text-slate-600 hidden card-definition mt-2 pt-2 border-t border-slate-100">
+                            Efeito macroeconômico nocivo provocado por uma <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">forte e repentina valorização da moeda nacional</mark> em decorrência do aumento das exportações de um único recurso primário ou commodity. Essa valorização destrói a competitividade do setor industrial de transformação e manufatura local, estrangulando as indústrias nativas.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SEÇÃO 5: Checklist Antipegadinhas (Foco no Acerto) -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                <span class="text-slate-400">05.</span> Checklist Antipegadinhas da FAURGS
+            </h2>
+            <p class="text-sm text-slate-500 mb-4">
+                Assinale cada item à medida que consolidar o conhecimento e dominar a diferenciação proposta. A banca FAURGS frequentemente elabora armadilhas com estes temas específicos:
+            </p>
+
+            <div class="space-y-4">
+                
+                <!-- Item 1 -->
+                <div class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors">
+                    <div class="flex items-center h-5 mt-0.5">
+                        <input id="chk-1" type="checkbox" class="w-4 h-4 rounded text-slate-950 focus:ring-slate-800 border-slate-300 bg-white cursor-pointer checklist-item">
+                    </div>
+                    <label for="chk-1" class="text-sm text-slate-700 cursor-pointer select-none">
+                        <strong class="text-slate-950 block text-base mb-1">A "Pegadinha da Dispersão Democrática"</strong>
+                        A banca tentará induzir que as Cadeias Globais de Valor dispersaram a riqueza de maneira igualitária mundialmente. <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Lembre-se:</mark> dispersar as plantas fabris e a montagem física serve para descentralizar a operação técnica, mas as decisões estratégicas e a maior parte do lucro econômico permanecem <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">extremamente centralizados e concentrados</mark> nas sedes financeiras das transnacionais localizadas no Norte Global.
+                    </label>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors">
+                    <div class="flex items-center h-5 mt-0.5">
+                        <input id="chk-2" type="checkbox" class="w-4 h-4 rounded text-slate-950 focus:ring-slate-800 border-slate-300 bg-white cursor-pointer checklist-item">
+                    </div>
+                    <label for="chk-2" class="text-sm text-slate-700 cursor-pointer select-none">
+                        <strong class="text-slate-950 block text-base mb-1">A "Pegadinha da Homogeneização Tardia"</strong>
+                        Classificar os processos de industrialização tardia da América Latina e dos Tigres Asiáticos como idênticos. <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Diferencie categoricamente:</mark> a América Latina focou no mercado doméstico (Substituição) via investimento estatal e capital tripartite privado nacional/multinacional, sem reforma estrutural de terras ou prioridade científica inicial profunda. Os Tigres estruturaram Plataformas de Exportação ao mercado externo com tecnologia/marcas próprias desenvolvidas localmente a partir de intensos investimentos estatais em educação básica, ciência aplicada e reforma agrária precoce.
+                    </label>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors">
+                    <div class="flex items-center h-5 mt-0.5">
+                        <input id="chk-3" type="checkbox" class="w-4 h-4 rounded text-slate-950 focus:ring-slate-800 border-slate-300 bg-white cursor-pointer checklist-item">
+                    </div>
+                    <label for="chk-3" class="text-sm text-slate-700 cursor-pointer select-none">
+                        <strong class="text-slate-950 block text-base mb-1">A "Pegadinha da Privatização Total Chinesa"</strong>
+                        Afirmar que as reformas promovidas por Deng Xiaoping desintegraram o socialismo e criaram um capitalismo de mercado plenamente liberal. <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Lembre-se:</mark> as chamadas SOEs (grandes estatais chinesas) permanecem dominantes e o Estado <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">mantém controle absoluto e irrevogável</mark> sobre as fatias estratégicas (bancos, energia, siderurgia) e realiza o planejamento de metas quinquenais centralizadas.
+                    </label>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors">
+                    <div class="flex items-center h-5 mt-0.5">
+                        <input id="chk-4" type="checkbox" class="w-4 h-4 rounded text-slate-950 focus:ring-slate-800 border-slate-300 bg-white cursor-pointer checklist-item">
+                    </div>
+                    <label for="chk-4" class="text-sm text-slate-700 cursor-pointer select-none">
+                        <strong class="text-slate-950 block text-base mb-1">A "Pegadinha do Hukou Assistencialista"</strong>
+                        Descrever o mecanismo do *Hukou* como um programa governamental de inserção social urbana ou benefício habitacional. <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">O fato real:</mark> ele opera como um violento mecanismo de exclusão institucional que restringe a mobilidade dos migrantes do campo, forçando-os a aceitar salários ínfimos sem rede de apoio do Estado, impulsionando a lucratividade fabril do litoral chinês e isolando as grandes cidades litorâneas do risco de favelização.
+                    </label>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors">
+                    <div class="flex items-center h-5 mt-0.5">
+                        <input id="chk-5" type="checkbox" class="w-4 h-4 rounded text-slate-950 focus:ring-slate-800 border-slate-300 bg-white cursor-pointer checklist-item">
+                    </div>
+                    <label for="chk-5" class="text-sm text-slate-700 cursor-pointer select-none">
+                        <strong class="text-slate-950 block text-base mb-1">A "Pegadinha do Kombinat Comercial"</strong>
+                        Confundir ou associar o modelo de *Kombinat* soviético a um conglomerado financeiro, cartel ou holding oligopolista de lógica ocidental capitalista. <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Atenção:</mark> o Kombinat é puramente uma <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">unidade técnica, física e espacial de integração</mark> forçada de etapas de processamento manufatureiro sem transações monetárias ou de mercado, instituído para otimizar fluxos sob as grandes e gélidas distâncias do território soviético.
+                    </label>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="flex items-start gap-3 p-4 rounded-xl border border-slate-200 bg-white shadow-xs hover:border-slate-300 transition-colors">
+                    <div class="flex items-center h-5 mt-0.5">
+                        <input id="chk-6" type="checkbox" class="w-4 h-4 rounded text-slate-950 focus:ring-slate-800 border-slate-300 bg-white cursor-pointer checklist-item">
+                    </div>
+                    <label for="chk-6" class="text-sm text-slate-700 cursor-pointer select-none">
+                        <strong class="text-slate-950 block text-base mb-1">A "Pegadinha da Desindustrialização Linear"</strong>
+                        Equiparar teoricamente o declínio industrial do Brasil à desindustrialização vivida por países desenvolvidos (EUA ou Reino Unido). <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">Diferencie:</mark> nos países ricos, reflete a maturação econômica para serviços de alta sofisticação tecnológica e controle de marcas; no caso brasileiro, é caracterizada como <mark class="bg-yellow-100 text-slate-900 px-1 rounded font-medium">precoce, desestruturada e causadora de reprimarização</mark> econômica (retorno à dependência exclusiva de commodities agrícolas e minerais brutas).
+                    </label>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CTA Final: Botão para Questões -->
+        <div class="text-center py-6 border-t border-slate-200">
+            <p class="text-sm text-slate-600 mb-4">Finalizou a revisão do material teórico? Pratique para fixar!</p>
+            <a href="espacoquestoes.html" class="inline-flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-slate-500">
+                <span>Ir para Exercícios e Questões FAURGS</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="border-t border-slate-200 bg-slate-50 py-6 text-center text-xs text-slate-500">
+        <div class="max-w-4xl mx-auto px-4">
+            <p>© 2026 Preparatório de Geografia EBTT. Guia adaptado para o Concurso do IFSC — Banca FAURGS.</p>
+            <p class="mt-1">Design neutro, responsivo e adaptável. Desenvolvido para máxima absorção cognitiva.</p>
+        </div>
+    </footer>
+
+
+    <script>
+        // ELEMENTOS DO REPRODUTOR DE ÁUDIO
+        const audio = document.getElementById('audio-element');
+        const btnPlayPause = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const audioSrcInput = document.getElementById('audio-src');
+        const audioProgress = document.getElementById('audio-progress');
+        const audioTime = document.getElementById('audio-time');
+        const audioSpeedSelect = document.getElementById('audio-speed');
+
+        // Formatar tempo em mm:ss
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Sincronizar mudança de arquivo no Input de texto
+        audioSrcInput.addEventListener('change', () => {
+            const currentPath = audioSrcInput.value.trim();
+            if (currentPath) {
+                const wasPlaying = !audio.paused;
+                audio.src = currentPath;
+                audio.load();
+                if (wasPlaying) {
+                    audio.play().catch(err => console.log("Erro ao iniciar áudio após alteração: ", err));
+                } else {
+                    playIcon.className = "fa-solid fa-play ml-0.5 text-sm";
+                }
+            }
+        });
+
+        // Alternar Play/Pause
+        btnPlayPause.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playIcon.className = "fa-solid fa-pause text-sm";
+                }).catch(err => {
+                    // Trata o erro caso o arquivo local não tenha sido encontrado
+                    alert("Aviso: O arquivo '" + audioSrcInput.value + "' não foi encontrado localmente ou o navegador impediu a reprodução.\nPor favor, certifique-se de colocar o arquivo de áudio correto com esse nome no mesmo diretório desta página.");
+                });
+            } else {
+                audio.pause();
+                playIcon.className = "fa-solid fa-play ml-0.5 text-sm";
+            }
+        });
+
+        // Atualizar barra de progresso e tempo do áudio
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percentage = (audio.currentTime / audio.duration) * 100;
+                audioProgress.value = percentage;
+                audioTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+            }
+        });
+
+        // Carregar metadados iniciais
+        audio.addEventListener('loadedmetadata', () => {
+            audioTime.textContent = `0:00 / ${formatTime(audio.duration)}`;
+            audio.playbackRate = parseFloat(audioSpeedSelect.value);
+        });
+
+        // Controle manual do progresso pelo usuário (Scrubbing)
+        audioProgress.addEventListener('input', () => {
+            if (audio.duration) {
+                const newTime = (audioProgress.value / 100) * audio.duration;
+                audio.currentTime = newTime;
+            }
+        });
+
+        // Controle de velocidade de reprodução
+        audioSpeedSelect.addEventListener('change', () => {
+            audio.playbackRate = parseFloat(audioSpeedSelect.value);
+        });
+
+        // Quando o áudio termina
+        audio.addEventListener('ended', () => {
+            playIcon.className = "fa-solid fa-play ml-0.5 text-sm";
+            audioProgress.value = 0;
+            audio.currentTime = 0;
+        });
+
+
+        // FUNÇÃO DOS FLASHCARDS INTERATIVOS
+        function toggleFlashcard(cardElement) {
+            const definition = cardElement.querySelector('.card-definition');
+            const icon = cardElement.querySelector('.fa-eye, .fa-eye-slash');
+            
+            if (definition.classList.contains('hidden')) {
+                definition.classList.remove('hidden');
+                cardElement.classList.add('border-slate-900', 'shadow-md');
+                if (icon) icon.className = "fa-solid fa-eye-slash";
+            } else {
+                definition.classList.add('hidden');
+                cardElement.classList.remove('border-slate-900', 'shadow-md');
+                if (icon) icon.className = "fa-solid fa-eye";
+            }
+        }
+
+        // SALVAR STATUS DO CHECKLIST NO LOCALSTORAGE (Persistência básica de estudos)
+        const checkItems = document.querySelectorAll('.checklist-item');
+        
+        // Carrega estado anterior
+        checkItems.forEach(item => {
+            const savedState = localStorage.getItem(`ifsc-faurgs-${item.id}`);
+            if (savedState === 'true') {
+                item.checked = true;
+                item.closest('.flex').classList.add('bg-slate-50');
+            }
+            
+            // Ouvinte de mudança para salvar
+            item.addEventListener('change', () => {
+                localStorage.setItem(`ifsc-faurgs-${item.id}`, item.checked);
+                if (item.checked) {
+                    item.closest('.flex').classList.add('bg-slate-50');
+                } else {
+                    item.closest('.flex').classList.remove('bg-slate-50');
+                }
+            });
+        });
+
+        // Ajuste no Onload para aplicar as taxas de reprodução iniciais e verificar fontes
+        window.onload = function() {
+            if(audio) {
+                audio.playbackRate = parseFloat(audioSpeedSelect.value);
+            }
+        }
+    </script>
+</body>
+</html>
