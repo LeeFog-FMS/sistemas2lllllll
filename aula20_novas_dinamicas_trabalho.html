@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novas Dinâmicas Espaciais no Mundo do Trabalho - Foco IFSC (Banca FAURGS)</title>
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para leitura agradável e sem fadiga visual -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b; /* Slate 800 - Escuro e confortável para leitura */
+        }
+        h1, h2, h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+        }
+        /* Estilização personalizada para as partes grifadas (marca-texto pedagógico) */
+        .grifado {
+            background-color: #fef08a; /* Amarelo suave pastel */
+            padding-left: 4px;
+            padding-right: 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .grifado-laranja {
+            background-color: #fed7aa; /* Laranja suave pastel */
+            padding-left: 4px;
+            padding-right: 4px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        /* Responsividade total da tabela sem scroll horizontal */
+        @media (max-width: 768px) {
+            .tabela-responsiva thead {
+                display: none;
+            }
+            .tabela-responsiva, .tabela-responsiva tbody, .tabela-responsiva tr, .tabela-responsiva td {
+                display: block;
+                width: 100%;
+            }
+            .tabela-responsiva tr {
+                margin-bottom: 1.5rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+                padding: 1rem;
+                background-color: #fafafa;
+            }
+            .tabela-responsiva td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .tabela-responsiva td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 1rem;
+                width: 45%;
+                text-align: left;
+                font-weight: 700;
+                color: #475569;
+            }
+            .tabela-responsiva td:last-child {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-yellow-200">
+
+    <!-- PLAYER DE ÁUDIO (Topo Fixo/Ajustado) -->
+    <div class="sticky top-0 z-50 bg-white border-b border-slate-200 py-4 px-6 shadow-sm">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <!-- Ícone de Microfone de Aula -->
+                <div class="bg-amber-100 text-amber-800 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="24 24 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-800">Audio-Aula Teórica</h3>
+                    <p class="text-xs text-slate-500">Ouça e acompanhe o material grifado abaixo</p>
+                </div>
+            </div>
+
+            <!-- CONTROLES DO AUDIO PLAYER -->
+            <div class="flex items-center gap-4 w-full md:w-auto justify-end">
+                <!-- ÁUDIO HTML5 EMBUTIDO -->
+                <audio id="audio-aula" preload="metadata">
+                    <!-- ================================================================= -->
+                    <!-- EDITE AQUI: Substitua o "seu_arquivo_de_audio.mp3" pelo nome exato do seu arquivo -->
+                    <source src="dinamicas_audio.mp3" type="audio/mpeg">
+                    <!-- ================================================================= -->
+                    Seu navegador não suporta a tag de áudio.
+                </audio>
+
+                <!-- Botão Play/Pause -->
+                <button id="btn-play-pause" class="bg-slate-900 hover:bg-slate-800 text-white px-5 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all">
+                    <span id="play-icon">▶</span>
+                    <span id="play-text">Ouvir Resumo</span>
+                </button>
+
+                <!-- Seletor de Velocidade -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-slate-500 font-semibold">Velocidade:</span>
+                    <select id="select-speed" class="border border-slate-300 rounded px-2 py-1 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400">
+                        <option value="0.75">0.75x</option>
+                        <option value="1.0" selected>1.0x (Normal)</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="1.75">1.75x</option>
+                        <option value="2.0">2.0x</option>
+                    </select>
+                </div>
+
+                <!-- Indicador de tempo do áudio -->
+                <span id="audio-time" class="text-xs text-slate-600 font-mono hidden sm:inline">00:00 / 00:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO PRINCIPAL DA AULA -->
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        
+        <!-- Cabeçalho de Identificação Escolar/Concurso -->
+        <div class="border-b border-slate-200 pb-8 mb-8">
+            <span class="text-xs font-bold tracking-wider text-amber-600 uppercase">Concurso IFSC (Instituto Federal de Santa Catarina)</span>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-950 mt-2 mb-4 leading-tight">
+                Novas Dinâmicas Espaciais no Mundo do Trabalho
+            </h1>
+            <p class="text-slate-600 text-base md:text-lg">
+                Foco de Pesquisa Especializada: Impactos da 3ª e 4ª Revoluções Industriais; flexibilização, precarização, desterritorialização e o desemprego estrutural.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <span class="bg-slate-100 text-slate-800 text-xs font-semibold px-2.5 py-1 rounded-md">Banca: FAURGS</span>
+                <span class="bg-slate-100 text-slate-800 text-xs font-semibold px-2.5 py-1 rounded-md">Cargo: Professor de Geografia (EBTT)</span>
+                <span class="bg-amber-100 text-amber-900 text-xs font-bold px-2.5 py-1 rounded-md">Foco em Memorização Ativa</span>
+            </div>
+        </div>
+
+        <!-- Alerta Importante da Banca -->
+        <div class="bg-slate-50 border-l-4 border-amber-500 p-5 rounded-r-lg mb-10">
+            <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wide">🔍 Direcionamento do Tutor (FAURGS)</h4>
+            <p class="text-slate-700 text-sm mt-1">
+                A FAURGS cobra a Geografia do Trabalho unindo a teoria clássica (David Harvey, Milton Santos) a análises empíricas brutas. Nas provas do IFSC, os examinadores buscam desmistificar a retórica corporativa de "autonomia" ou "empreendedorismo" do trabalhador contemporâneo, preferindo termos críticos como <span class="grifado">"infoproletariado"</span> e <span class="grifado">"plataformização"</span>. Foco absoluto nos detalhes conceituais a seguir.
+            </p>
+        </div>
+
+        <!-- Bloco 1: Definição e Transição Revolucionária -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4 flex items-center gap-2">
+                <span class="text-amber-500">01.</span> As Duas Grandes Rupturas Contemporâneas
+            </h2>
+            <p class="text-slate-700 leading-relaxed mb-4">
+                Para responder às questões da FAURGS sobre o espaço geográfico do trabalho, você deve mapear as transições de paradigma tecnológico que redefinem as dinâmicas espaciais e produtivas:
+            </p>
+            <ul class="space-y-4 text-slate-700 pl-4 list-disc marker:text-amber-500">
+                <li>
+                    <strong>A Terceira Revolução Industrial (Técnico-Científico-Informacional):</strong> Iniciada na segunda metade do século XX, une a ciência à produção por meio da informática, robótica e telecomunicações. Marca o <span class="grifado">declínio do Fordismo (rigidez)</span> e a ascensão do <span class="grifado">Toyotismo (acumulação flexível)</span>. A fábrica espalha-se globalmente através de redes logísticas eficientes.
+                </li>
+                <li>
+                    <strong>A Quarta Revolução Industrial (Indústria 4.0):</strong> Caracteriza-se pela fusão de tecnologias físicas, digitais e biológicas. O cerne espacial está na <span class="grifado">conectividade em tempo real</span>, Big Data, Inteligência Artificial, Internet das Coisas (IoT) e automação de sistemas cognitivos. O espaço fabril virtualiza-se e as redes de dados passam a comandar o fluxo produtivo em escala microscópica.
+                </li>
+            </ul>
+        </section>
+
+        <!-- Bloco 2: Termos Clássicos de Prova (Memorização de Ouro) -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4 flex items-center gap-2">
+                <span class="text-amber-500">02.</span> Conceitos Fundamentais para Gabaritar
+            </h2>
+            <p class="text-slate-700 leading-relaxed mb-6">
+                Decore estas definições precisas. A FAURGS frequentemente troca um conceito por outro nas opções de múltipla escolha para criar armadilhas (peguinhas).
+            </p>
+
+            <div class="space-y-6">
+                <!-- Conceito 1 -->
+                <div class="p-5 border border-slate-200 rounded-lg bg-white">
+                    <h3 class="font-bold text-slate-950 text-lg mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Flexibilização da Produção
+                    </h3>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        É a capacidade do sistema produtivo se adaptar instantaneamente às demandas do mercado. Substitui o estoque em massa (Fordismo) pelo modelo <span class="grifado">just-in-time</span>. Ramifica-se em: <span class="font-semibold">flexibilidade contratual</span> (trabalho intermitente, terceirização) e <span class="font-semibold">flexibilidade espacial</span> (fragmentação espacial da planta produtiva global).
+                    </p>
+                </div>
+
+                <!-- Conceito 2 -->
+                <div class="p-5 border border-slate-200 rounded-lg bg-white">
+                    <h3 class="font-bold text-slate-950 text-lg mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Precarização do Trabalho
+                    </h3>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Perda progressiva dos direitos trabalhistas históricos, redução de salários reais, ampliação da jornada informal e precarização das condições de segurança. Na Quarta Revolução, manifesta-se criticamente por meio da <span class="grifado">"Plataformização" ou "Uberização"</span>, processo onde o trabalhador assume todos os riscos e custos operacionais da atividade produtiva enquanto os lucros são centralizados por corporações tecnológicas globais.
+                    </p>
+                </div>
+
+                <!-- Conceito 3 -->
+                <div class="p-5 border border-slate-200 rounded-lg bg-white">
+                    <h3 class="font-bold text-slate-950 text-lg mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Desterritorialização
+                    </h3>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        Processo geográfico em que as relações econômicas e de trabalho desvinculam-se de barreiras físicas ou locais fixos específicos. O capital pode fechar uma planta em um país e abri-la em outro instantaneamente (alta mobilidade espacial). Para o trabalhador, reflete-se na fragmentação territorial e no <span class="grifado">trabalho remoto desregulado</span>, onde o espaço de moradia funde-se ao espaço do trabalho produtivo sob submissão das redes informacionais globais.
+                    </p>
+                </div>
+
+                <!-- Conceito 4 -->
+                <div class="p-5 border border-slate-200 rounded-lg bg-white">
+                    <h3 class="font-bold text-slate-950 text-lg mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Desemprego Estrutural vs. Conjuntural
+                    </h3>
+                    <p class="text-slate-700 text-sm leading-relaxed">
+                        A FAURGS adora contrapor estes dois fenômenos. O <span class="grifado">Desemprego Estrutural</span> ocorre quando a tecnologia, a automação ou a reestruturação produtiva eliminam permanentemente postos de trabalho que não voltarão a existir (é irreversível sem requalificação severa). Já o <span class="font-semibold text-slate-800">Desemprego Conjuntural</span> é fruto de crises temporárias e flutuações econômicas.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bloco 3: Tabela de Diferenciação Espacial de Modelos (Sem Scroll Horizontal) -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-6 flex items-center gap-2">
+                <span class="text-amber-500">03.</span> Matriz de Diferenciação Espacial de Trabalho
+            </h2>
+            <div class="border border-slate-200 rounded-lg overflow-hidden">
+                <table class="tabela-responsiva w-full text-left border-collapse bg-white">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-800 uppercase text-xs font-bold border-b border-slate-200">
+                            <th class="p-4">Variável Espacial</th>
+                            <th class="p-4">Modelo Fordista (2ª Rev.)</th>
+                            <th class="p-4">Modelo Toyotista (3ª Rev.)</th>
+                            <th class="p-4">Modelo Plataforma (4ª Rev.)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm text-slate-700">
+                        <tr>
+                            <td class="p-4 font-semibold" data-label="Variável Espacial">Organização do Espaço</td>
+                            <td class="p-4" data-label="Modelo Fordista (2ª Rev.)">Concentração espacial da fábrica (Grandes complexos)</td>
+                            <td class="p-4" data-label="Modelo Toyotista (3ª Rev.)">Dispersão geográfica / Desconcentração industrial</td>
+                            <td class="p-4" data-label="Modelo Plataforma (4ª Rev.)">Hiperdispersão / Trabalho residencial e em trânsito</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold" data-label="Variável Espacial">Relação Laboral Dominante</td>
+                            <td class="p-4" data-label="Modelo Fordista (2ª Rev.)">Contrato fixo, carteira assinada, sindicatos fortes</td>
+                            <td class="p-4" data-label="Modelo Toyotista (3ª Rev.)">Flexibilização contratual, terceirização extensiva</td>
+                            <td class="p-4" data-label="Modelo Plataforma (4ª Rev.)">Subsunção mediada por algoritmos (Trabalho invisível)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-semibold" data-label="Variável Espacial">Logística de Estoques</td>
+                            <td class="p-4" data-label="Modelo Fordista (2ª Rev.)">Estocagem física massiva integrada</td>
+                            <td class="p-4" data-label="Modelo Toyotista (3ª Rev.)">Logística "Just-in-Time" física integrada</td>
+                            <td class="p-4" data-label="Modelo Plataforma (4ª Rev.)">Just-in-Time algorítmico (Demanda instantânea)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Bloco 4: Análise das Pegadinhas e Tendências de Cobrança da FAURGS -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4 flex items-center gap-2">
+                <span class="text-amber-500">04.</span> Como a FAURGS Tenta Te Derrubar?
+            </h2>
+            <p class="text-slate-700 leading-relaxed mb-6">
+                Examine atentamente estes três padrões de pegadinhas mapeados em concursos anteriores elaborados pela FAURGS para a área de Geografia humana/econômica:
+            </p>
+
+            <div class="space-y-4">
+                <div class="p-5 border-l-4 border-red-500 bg-slate-50 rounded-r-lg">
+                    <p class="text-xs font-bold uppercase text-red-600 tracking-wider">🚫 Armadilha de Prova nº 1: A "Falsa Autonomia"</p>
+                    <p class="text-slate-700 text-sm mt-2">
+                        A banca colocará uma alternativa afirmando que a "flexibilização das relações de trabalho decorrentes do avanço tecnológico trouxe liberdade geográfica e de tempo para o trabalhador autônomo, rompendo com as cadeias de opressão tradicionais". <span class="font-semibold text-red-700">Incorreto!</span> Para fins de concurso público EBTT (especialmente no IFSC), a flexibilização é lida criticamente como um <span class="grifado-laranja">disfarce para a destituição de garantias sociais</span> e transferência do custo de produção do patrão para o proletariado.
+                    </p>
+                </div>
+
+                <div class="p-5 border-l-4 border-red-500 bg-slate-50 rounded-r-lg">
+                    <p class="text-xs font-bold uppercase text-red-600 tracking-wider">🚫 Armadilha de Prova nº 2: Confundir Milton Santos</p>
+                    <p class="text-slate-700 text-sm mt-2">
+                        A banca costuma atribuir a <span class="font-semibold">Milton Santos</span> conceitos que na verdade pertencem a <span class="font-semibold">David Harvey</span> (como "acumulação flexível" e "compressão espaço-tempo"). Milton Santos analisa este fenômeno através da perspectiva do <span class="grifado">Meio Técnico-Científico-Informacional (MTCI)</span>, da "Globalização como fábula, perversidade e possibilidade", e do conceito de <span class="grifado">"espaço de fluxos"</span> e fixos. Atenção às conexões teóricas corretas!
+                    </p>
+                </div>
+
+                <div class="p-5 border-l-4 border-red-500 bg-slate-50 rounded-r-lg">
+                    <p class="text-xs font-bold uppercase text-red-600 tracking-wider">🚫 Armadilha de Prova nº 3: O Caráter Geográfico do Desemprego</p>
+                    <p class="text-slate-700 text-sm mt-2">
+                        O examinador adora alegar que o desemprego estrutural ocorre apenas devido à incapacidade educacional de qualificação do indivíduo (culpabilização neoliberal). A geografia crítica aponta que o desemprego estrutural é inerente à <span class="grifado-laranja">lógica da contradição capital-trabalho</span> e decorrente da aceleração tecnológica em busca da maximização da mais-valia relativa, independente do nível de qualificação nacional básico.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bloco 5: Checklist do Candidato de Elite (Para ler 10 minutos antes da prova) -->
+        <section class="mb-12 bg-slate-50 p-6 rounded-lg border border-slate-200">
+            <h2 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <span class="text-amber-500">✓</span> Checklist Rápido de Memorização
+            </h2>
+            <ul class="space-y-3 text-sm text-slate-700">
+                <li class="flex items-start gap-2">
+                    <span class="text-green-600 font-bold">✔</span>
+                    <span><strong>Meio Técnico-Científico-Informacional (Santos):</strong> Base material e geográfica que viabilizou a 3ª e 4ª Revoluções Industriais através do controle de dados.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-green-600 font-bold">✔</span>
+                    <span><strong>Acumulação Flexível (Harvey):</strong> Resposta capitalista à crise do fordismo rígido na década de 1970.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-green-600 font-bold">✔</span>
+                    <span><strong>Trabalho de Plataforma (Antunes):</strong> Infoproletariado conectado que gera lucros massivos para o capital imaterial à custa da sua própria degradação e desgaste físico.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-green-600 font-bold">✔</span>
+                    <span><strong>Divisão Territorial do Trabalho:</strong> Redesenhada com a descentralização espacial produtiva de ponta nas metrópoles inteligentes e a transferência de indústrias poluentes e manufaturas básicas para as periferias globais.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Botão Finalizado para Praticar Questões -->
+        <div class="mt-12 text-center border-t border-slate-200 pt-8">
+            <p class="text-slate-600 text-sm mb-4">Fixe a teoria estudada na mente através da resolução imediata de simulações.</p>
+            <a href="dinamicasquestoes.html" class="inline-flex items-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-bold px-8 py-4 rounded-xl shadow-md transition-all transform hover:-translate-y-1">
+                <span>Ir para o Caderno de Questões</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white border-t border-slate-100 py-6 mt-16 text-center text-xs text-slate-400">
+        <div class="max-w-4xl mx-auto px-6">
+            <p>© 2026 Material Preparatório de Geografia EBTT. Foco no IFSC e IFSC-PR.</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE CONTROLE DO PLAYER DE ÁUDIO -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('audio-aula');
+            const btnPlayPause = document.getElementById('btn-play-pause');
+            const playIcon = document.getElementById('play-icon');
+            const playText = document.getElementById('play-text');
+            const selectSpeed = document.getElementById('select-speed');
+            const audioTime = document.getElementById('audio-time');
+
+            // Formatação do tempo do áudio (ex: 02:35)
+            function formatTime(seconds) {
+                if (isNaN(seconds)) return '00:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            // Atualiza os indicadores de tempo
+            function updateTimeDisplay() {
+                audioTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+            }
+
+            // Ação de Play/Pause
+            btnPlayPause.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play()
+                        .then(() => {
+                            playIcon.textContent = '⏸';
+                            playText.textContent = 'Pausar Aula';
+                        })
+                        .catch(err => {
+                            console.log("Arquivo de áudio não foi encontrado ou está ausente no diretório. Por favor, adicione o áudio correspondente.");
+                            // Modifiquei para um aviso amigável na tela em vez de um alert clássico
+                            const feedback = document.createElement('div');
+                            feedback.className = 'fixed bottom-4 right-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-lg z-50 text-sm';
+                            feedback.innerHTML = `<strong>Aviso de áudio:</strong> Insira o arquivo correspondente na mesma pasta de arquivo para que a reprodução funcione perfeitamente.`;
+                            document.body.appendChild(feedback);
+                            setTimeout(() => feedback.remove(), 5000);
+                        });
+                } else {
+                    audio.pause();
+                    playIcon.textContent = '▶';
+                    playText.textContent = 'Ouvir Resumo';
+                }
+            });
+
+            // Controle de Velocidade de Reprodução
+            selectSpeed.addEventListener('change', (e) => {
+                audio.playbackRate = parseFloat(e.target.value);
+            });
+
+            // Escuta eventos de metadados carregados para sincronizar o tempo
+            audio.addEventListener('loadedmetadata', updateTimeDisplay);
+            audio.addEventListener('timeupdate', updateTimeDisplay);
+        });
+    </script>
+</body>
+</html>

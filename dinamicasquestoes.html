@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado FAURGS - Novas Dinâmicas Espaciais no Mundo do Trabalho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f5f7fa',
+                            100: '#e4e8ee',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #faf9f6; /* Soft warm reading background to reduce eye strain */
+            color: #1c1917; /* High contrast but softer than solid black */
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-indigo-100 min-h-screen flex flex-col">
+
+    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-stone-200/80 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-stone-900 rounded-lg flex items-center justify-center text-stone-100 font-serif font-bold text-lg shadow-sm">F</div>
+                <div>
+                    <h1 class="text-sm sm:text-base font-bold text-stone-900 leading-tight">Simulador de Questões FAURGS</h1>
+                    <p class="text-xs text-stone-500">Mundo do Trabalho e Novas Dinâmicas Espaciais</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- Stopwatch/Timer -->
+                <div class="flex items-center space-x-2 bg-stone-100/80 px-3 py-1.5 rounded-lg border border-stone-200">
+                    <svg class="w-4 h-4 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span id="timer-display" class="font-mono text-sm font-semibold text-stone-700">00:00:00</span>
+                </div>
+                
+                <!-- Progress counter -->
+                <div class="hidden md:flex items-center space-x-2 bg-stone-100/80 px-3 py-1.5 rounded-lg border border-stone-200">
+                    <span class="text-xs text-stone-500 uppercase tracking-wider font-semibold">Progresso:</span>
+                    <span id="progress-text" class="text-sm font-bold text-stone-800">0/10</span>
+                </div>
+            </div>
+        </div>
+        <!-- Progress bar line -->
+        <div class="w-full bg-stone-100 h-1">
+            <div id="progress-bar" class="bg-amber-600 h-1 w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Sidebar Navigation: Question map and Instructions -->
+        <aside class="w-full lg:w-72 shrink-0 order-2 lg:order-1">
+            <div class="sticky top-24 space-y-6">
+                <!-- Guidelines card -->
+                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs">
+                    <h3 class="text-xs font-semibold text-stone-400 uppercase tracking-widest mb-3">Instruções de Prova</h3>
+                    <ul class="space-y-2 text-xs text-stone-600">
+                        <li class="flex items-start">
+                            <span class="text-amber-600 mr-2 font-bold">•</span>
+                            <span>Estilo rigoroso e conceitual de Geografia e Sociologia do Trabalho no modelo FAURGS.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-600 mr-2 font-bold">•</span>
+                            <span>Selecione uma opção por questão. O progresso é salvo instantaneamente.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-amber-600 mr-2 font-bold">•</span>
+                            <span>Clique em <strong>"Finalizar e Ver Resolução"</strong> ao final para receber sua nota e liberar os comentários pedagógicos aprofundados.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Navigation grid (Map of questions) -->
+                <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-xs">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xs font-semibold text-stone-400 uppercase tracking-widest">Mapa de Questões</h3>
+                        <button onclick="resetQuiz()" class="text-xs text-stone-400 hover:text-stone-800 underline transition">Reiniciar</button>
+                    </div>
+                    <div class="grid grid-cols-5 gap-2" id="question-navigation-grid">
+                        <!-- Navigation bubbles injected by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Live stats placeholder -->
+                <div id="score-sidebar-panel" class="hidden bg-stone-900 text-stone-100 p-5 rounded-2xl shadow-md transition-all duration-500">
+                    <h4 class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Seu Desempenho</h4>
+                    <div class="flex items-baseline space-x-1">
+                        <span id="sidebar-correct-score" class="text-3xl font-bold text-amber-400">0</span>
+                        <span class="text-stone-400">/ 10 acertos</span>
+                    </div>
+                    <div class="mt-2 text-xs text-stone-300" id="sidebar-performance-text">
+                        Aguardando conclusão...
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <section class="flex-grow order-1 lg:order-2 space-y-8 max-w-3xl">
+            <!-- Title Header -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs">
+                <span class="bg-stone-100 text-stone-800 text-xs px-2.5 py-1 rounded-full font-semibold uppercase tracking-wider border border-stone-200">
+                    Banca Simulada: FAURGS Estilo Técnico
+                </span>
+                <h2 class="font-serif text-2xl sm:text-3xl text-stone-950 font-bold mt-4 mb-3">
+                    Novas Dinâmicas Espaciais no Mundo do Trabalho
+                </h2>
+                <p class="text-stone-600 leading-relaxed text-sm sm:text-base">
+                    Simulado preparatório de alto nível abrangendo os impactos das Revoluções Industriais (III e IV), regimes de acumulação flexível de David Harvey, meio técnico-científico-informacional de Milton Santos, uberização por Ricardo Antunes e precarização territorial no cenário brasileiro.
+                </p>
+            </div>
+
+            <!-- Quiz form/container -->
+            <form id="quiz-form" onsubmit="submitQuiz(event)" class="space-y-8">
+                <div id="questions-container" class="space-y-8">
+                    <!-- Questions will be dynamically loaded here by the JavaScript engine to assure strict content compliance -->
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-left">
+                        <span id="submit-warning" class="text-xs text-stone-500 font-medium">Responda a todas as questões antes de finalizar para um melhor resultado.</span>
+                    </div>
+                    <button type="submit" id="btn-submit" class="w-full sm:w-auto px-8 py-3 bg-stone-900 hover:bg-stone-800 text-white rounded-xl font-semibold shadow-md transition-all active:translate-y-px hover:shadow-lg flex items-center justify-center space-x-2">
+                        <span>Finalizar e Ver Resolução</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </form>
+
+            <div id="result-card" class="hidden bg-white p-6 sm:p-8 rounded-3xl border-2 border-stone-900 shadow-md space-y-6 scroll-mt-24">
+                <div class="text-center space-y-2">
+                    <span class="text-3xl sm:text-4xl">📊</span>
+                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-stone-950">Resultado do Simulado</h3>
+                    <p class="text-stone-500 text-sm">Desempenho calculado com base nos critérios de pontuação integral.</p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-center">
+                        <span class="text-xs text-stone-500 font-semibold block uppercase">Acertos</span>
+                        <span id="result-score" class="text-2xl sm:text-3xl font-extrabold text-stone-900">0/10</span>
+                    </div>
+                    <div id="result-pct-card" class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-center">
+                        <span class="text-xs text-stone-500 font-semibold block uppercase">Aproveitamento</span>
+                        <span id="result-percentage" class="text-2xl sm:text-3xl font-extrabold text-stone-900">0%</span>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-center">
+                        <span class="text-xs text-stone-500 font-semibold block uppercase">Tempo Decorrido</span>
+                        <span id="result-time" class="text-2xl sm:text-3xl font-extrabold text-stone-900">00:00</span>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 text-center">
+                        <span class="text-xs text-stone-500 font-semibold block uppercase">Status Final</span>
+                        <span id="result-status" class="text-base sm:text-lg font-bold text-stone-900 flex items-center justify-center h-8">Aprovado</span>
+                    </div>
+                </div>
+
+                <!-- Feedbacks and Review Prompts -->
+                <div id="general-feedback" class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-stone-700 leading-relaxed">
+                    <!-- Dynamic feedback statement -->
+                </div>
+
+                <div class="pt-4 border-t border-stone-100 flex flex-col sm:flex-row gap-4 justify-between items-center">
+                    <p class="text-xs text-stone-500 text-center sm:text-left">
+                        Role a página para baixo para analisar os comentários pedagógicos detalhados de cada questão.
+                    </p>
+                    <button onclick="resetQuiz()" class="w-full sm:w-auto px-6 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-800 rounded-xl font-medium text-sm transition">
+                        Fazer Novamente
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-900 text-stone-400 py-8 border-t border-stone-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <p class="text-xs sm:text-sm font-light">
+                Desenvolvido com foco em Ergonomia Cognitiva e Leitura Acadêmica de Alta Performance.
+            </p>
+            <p class="text-[11px] text-stone-600">
+                Questões construídas no estilo formal da Fundação de Apoio à Universidade Federal do Rio Grande do Sul (FAURGS).
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let answersState = {}; // Stores user selected choices
+        let hasSubmitted = false;
+        let timerInterval = null;
+        let elapsedSeconds = 0;
+
+        const questionsData = [
+            {
+                id: 1,
+                type: "multiple",
+                title: "Questão 01",
+                correctAnswer: "C",
+                text: "Com base nas formulações teóricas de Milton Santos acerca da transição para o meio técnico-científico-informacional e suas repercussões na organização socioespacial da produção, considere as seguintes afirmações sobre o mercado de trabalho contemporâneo.",
+                subtext: `I - O meio técnico-científico-informacional caracteriza-se pela inserção indissociável da ciência e da tecnologia nos objetos geográficos e nas ações hegemônicas, transformando o espaço em um suporte fluido para a circulação rápida de fluxos de capitais, mercadorias e informações.<br><br>
+                II - A expansão das redes de informação promoveu uma homogeneização espacial absoluta das infraestruturas produtivas, mitigando as disparidades regionais e permitindo a integração equitativa dos trabalhadores da periferia global nos postos mais qualificados da divisão internacional do trabalho.<br><br>
+                III - A tecnificação do território contemporâneo, ao subordinar as atividades tanto urbanas quanto rurais à lógica de redes informacionais integradas, gera uma demanda por trabalhadores dotados de maior plasticidade cognitiva, em detrimento daqueles voltados a tarefas manuais e repetitivas.<br><br>
+                IV - A singularidade globalizada dos lugares, ao articular o local e o global, impõe dinâmicas produtivas que redefinem o mercado de trabalho local a partir de imperativos definidos por agentes hegemônicos distantes, intensificando os processos de exclusão socioespacial.`,
+                options: [
+                    { key: "A", text: "Apenas I e II." },
+                    { key: "B", text: "Apenas II e III." },
+                    { key: "C", text: "Apenas I, III e IV." },
+                    { key: "D", text: "Apenas II, III e IV." },
+                    { key: "E", text: "I, II, III e IV." }
+                ],
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-sm text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Análise Crítica da Questão:</strong>
+                            A análise da questão exige o domínio dos conceitos estruturais de Milton Santos sobre o meio técnico-científico-informacional (MTCI) e a reorganização do espaço geográfico global.
+                        </div>
+                        <ul class="space-y-2 text-sm text-stone-700">
+                            <li><strong>Item I: Correto.</strong> O MTCI representa o atual período histórico do espaço geográfico, caracterizado pela fusão indissociável entre ciência, tecnologia e informação. Sob o império do capital financeiro e da globalização, o território é dotado de próteses técnicas (infovias, satélites, redes de fibra ótica) que garantem a fluidez necessária para a mobilidade espacial acelerada dos capitais e mercadorias.</li>
+                            <li><strong>Item II: Incorreto.</strong> A globalização e o advento do MTCI não eliminam as disparidades territoriais nem produzem homogeneidade espacial. Conforme as formulações de Milton Santos, o processo de globalização é seletivo por excelência. As redes globais interligam apenas os pontos mais dinâmicos e lucrativos do espaço geográfico (os "espaços luminosos"), relegando vastas regiões e populações à condição de "espaços opacos", caracterizados pela exclusão digital, desemprego e subinformação.</li>
+                            <li><strong>Item III: Correto.</strong> A reestruturação produtiva assentada no MTCI exige um perfil de trabalhador dotado de adaptabilidade e capacidade de responder a mudanças contínuas (trabalhador multifuncional). As funções estritamente mecânicas e operacionais, típicas do fordismo, são progressivamente substituídas por automação eletrônica, elevando as exigências de qualificação técnica para a inserção no núcleo dinâmico do mercado de trabalho.</li>
+                            <li><strong>Item IV: Correto.</strong> A "singularidade globalizada" dos lugares reflete a dialética local-global postulada por Milton Santos. Cada lugar vivencia de forma singular os impactos da totalidade do mundo, sofrendo a imposição de lógicas normativas exógenas que determinam as relações laborais, a divisão do trabalho e os fluxos de renda locais, gerando novas fraturas sociais no território.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                type: "matching",
+                title: "Questão 02",
+                correctAnswer: "A",
+                text: "A transição do padrão de acumulação fordista para o regime de acumulação flexível, desencadeada a partir da crise estrutural da década de 1970, reconfigurou as estruturas produtivas e as relações laborais. Tendo em vista as análises do geógrafo David Harvey sobre esse processo, assinale com V (verdadeiro) ou F (falso) as afirmações abaixo.",
+                subtext: `
+                <div class="space-y-2 bg-stone-50 p-4 rounded-xl border border-stone-200">
+                    <p class="text-sm"><strong>( )</strong> O regime de acumulação flexível caracteriza-se pelo enfraquecimento da rigidez fordista, apoiando-se na flexibilidade dos processos de trabalho, dos mercados de mão de obra, dos produtos e dos padrões de consumo.</p>
+                    <p class="text-sm"><strong>( )</strong> A "compressão do tempo-espaço", viabilizada pelas inovações logísticas e de telecomunicação da Terceira Revolução Industrial, reduz as barreiras geográficas e acelera a rotação do capital, intensificando a volatilidade do mercado de trabalho.</p>
+                    <p class="text-sm"><strong>( )</strong> A flexibilização do mercado de trabalho sob o padrão pós-fordista promove a expansão de mercados de trabalho internos altamente estáveis e protegidos pelas corporações, reduzindo o contingente de trabalhadores temporários e subcontratados.</p>
+                    <p class="text-sm"><strong>( )</strong> A dispersão espacial das unidades de produção e a fragmentação dos processos de trabalho em redes globais facilitam a mobilização coletiva dos trabalhadores, fortalecendo a atuação territorial das representações sindicais.</p>
+                </div>
+                <p class="text-xs text-stone-500 mt-2">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                `,
+                options: [
+                    { key: "A", text: "V – V – F – F." },
+                    { key: "B", text: "V – F – V – F." },
+                    { key: "C", text: "F – V – F – V." },
+                    { key: "D", text: "F – F – V – V." },
+                    { key: "E", text: "V – V – V – F." }
+                ],
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-sm text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Análise Crítica da Questão:</strong>
+                            A questão avalia a transição do modelo fordista de acumulação para o regime de acumulação flexível, conceituação elaborada por David Harvey em sua obra <em>A Condição Pós-Moderna</em>.
+                        </div>
+                        
+                        <!-- Comparison Table -->
+                        <div class="overflow-x-auto border border-stone-200 rounded-xl my-4">
+                            <table class="w-full text-xs text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-stone-100 border-b border-stone-200 text-stone-700 font-bold uppercase">
+                                        <th class="p-3">Dimensão de Análise</th>
+                                        <th class="p-3">Regime Fordista (Século XX)</th>
+                                        <th class="p-3">Regime Flexível (Pós-1973)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-100 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Organização</td>
+                                        <td class="p-3">Divisão rígida do trabalho, tarefas repetitivas (Taylorismo), separação estrita entre concepção e execução.</td>
+                                        <td class="p-3">Multifuncionalidade, rotatividade de postos, trabalho sob demanda (<em>just-in-time</em>), eliminação de barreiras funcionais.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Espacialidade</td>
+                                        <td class="p-3">Concentração geográfica em grandes plantas fabris (distritos industriais integrados e contíguos).</td>
+                                        <td class="p-3">Dispersão espacial, fragmentação em redes globais de subcontratação, terceirização internacional.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Relação Laboral</td>
+                                        <td class="p-3">Contratos de longa duração, salários indexados à produtividade, forte amparo coletivo e sindical.</td>
+                                        <td class="p-3">Contratação atípica, intermitente, precarização de vínculos, redução de encargos e desregulamentação jurídica.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Logística</td>
+                                        <td class="p-3">Grandes estoques de segurança (<em>just-in-case</em>), dependência de mercados nacionais protegidos.</td>
+                                        <td class="p-3">Produção enxuta, estoques mínimos, controle logístico digital instantâneo direcionado ao mercado global.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <ul class="space-y-2 text-sm text-stone-700">
+                            <li><strong>Primeira afirmativa: Verdadeira.</strong> A acumulação flexível baseia-se no enfraquecimento das rigidezes de tempo, contrato e organização técnica que caracterizaram o compromisso fordista do pós-guerra.</li>
+                            <li><strong>Segunda afirmativa: Verdadeira.</strong> A "compressão do tempo-espaço" decorre da aceleração da velocidade dos transportes e das comunicações. Esse fenômeno diminui o tempo de rotação do capital, permitindo que as corporações coordenem a produção em tempo real no globo, gerando volatilidade nos empregos locais devido à mobilidade de capitais.</li>
+                            <li><strong>Terceira afirmativa: Falsa.</strong> Sob a acumulação flexível, os mercados de trabalho internos estáveis e protegidos encolhem dramaticamente. Em contrapartida, expande-se o mercado de trabalho periférico ou flexível, caracterizado por subcontratações, terceirizações, trabalho temporário e empregos de curto prazo com ausência de garantias sociais.</li>
+                            <li><strong>Quarta afirmativa: Falsa.</strong> A dispersão espacial e a deslocalização fabril em redes fragmentadas funcionam como uma estratégia consciente do capital para enfraquecer o poder coletivo dos trabalhadores. Ao pulverizar o chão de fábrica físico por múltiplos territórios nacionais e ao incentivar a competição entre trabalhadores, o capital desarticula as bases de solidariedade territorial que sustentavam a organização sindical de base fabril.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                type: "matching",
+                title: "Questão 03",
+                correctAnswer: "A",
+                text: "As transformações no mundo do trabalho decorrentes das inovações tecnológicas da Terceira e da Quarta Revoluções Industriais exigem o domínio de categorias conceituais precisas para a interpretação das novas espacialidades. Relacione as colunas abaixo, associando cada conceito à sua respectiva definição ou dinâmica correspondente.",
+                subtext: `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-stone-200 text-xs text-stone-700">
+                    <div>
+                        <strong class="block text-stone-900 font-bold mb-2">Coluna 1 − Conceito</strong>
+                        <ul class="space-y-1">
+                            <li><strong>1.</strong> Flexibilização laboral</li>
+                            <li><strong>2.</strong> Precarização social do trabalho</li>
+                            <li><strong>3.</strong> Desterritorialização produtiva</li>
+                            <li><strong>4.</strong> Desemprego estrutural</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong class="block text-stone-900 font-bold mb-2">Coluna 2 − Caracterização</strong>
+                        <ul class="space-y-2">
+                            <li><strong>( )</strong> Perda sistemática de direitos e garantias socioassistenciais, associada à expansão de formas atípicas e instáveis de contratação, que convertem a força de trabalho em um recurso intermitente e desprotegido.</li>
+                            <li><strong>( )</strong> Ajuste contínuo da jornada de trabalho, das remunerações e dos contratos de acordo com as oscilações imediatas da demanda do mercado global, desregulando os parâmetros de proteção coletiva.</li>
+                            <li><strong>( )</strong> Eliminação crônica e irreversível de postos de trabalho gerada pela introdução de tecnologias poupadoras de mão de obra (automação e inteligência artificial), tornando certas qualificações obsoletas.</li>
+                            <li><strong>( )</strong> Desconexão geográfica de etapas da cadeia de valor de suas bases territoriais tradicionais, operada por transnacionais através do controle remoto de redes logísticas e informacionais.</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="text-xs text-stone-500 mt-2">Assinale a alternativa que apresenta a sequência correta de cima para baixo:</p>
+                `,
+                options: [
+                    { key: "A", text: "2 – 1 – 4 – 3." },
+                    { key: "B", text: "1 – 2 – 3 – 4." },
+                    { key: "C", text: "2 – 4 – 1 – 3." },
+                    { key: "D", text: "4 – 1 – 2 – 3." },
+                    { key: "E", text: "3 – 2 – 4 – 1." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Associação de Conceitos Básicos:</strong>
+                            A correspondência conceitual correta fundamenta-se na bibliografia clássica da Geografia e da Sociologia do Trabalho contemporâneas.
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>(2) Precarização social do trabalho:</strong> Corresponde ao primeiro parêntese. Consiste na desestruturação sistemática da legislação social e trabalhista, na perda de garantias previdenciárias e na generalização de vínculos de trabalho temporários, informais e instáveis.</li>
+                            <li><strong>(1) Flexibilização laboral:</strong> Associa-se ao segundo parêntese. Reflete a capacidade do capital de ajustar a quantidade, o tempo e a remuneração da força de trabalho às oscilações da demanda concorrencial, eliminando as "rigidezes" normativas.</li>
+                            <li><strong>(4) Desemprego estrutural:</strong> Corresponde ao terceiro parêntese. Refere-se à eliminação de postos de trabalho gerada pela mudança profunda na base tecnológica da produção, o que significa que o trabalhador demitido não consegue mais reingressar no mercado devido à obsolescência de sua atividade tradicional.</li>
+                            <li><strong>(3) Desterritorialização produtiva:</strong> Associa-se ao quarto parêntese. Reflete a desvinculação geográfica das cadeias de montagem e das etapas produtivas em relação aos territórios nacionais de origem das transnacionais, propiciada por sistemas ciber-físicos e logísticos transnacionais.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                type: "multiple",
+                title: "Questão 04",
+                correctAnswer: "C",
+                text: "Conforme as análises de Ricardo Antunes sobre a \"uberização do trabalho\" e a emergência do \"infoproletariado\" no contexto do capitalismo de plataforma e da Indústria 4.0, assinale a alternativa correta.",
+                options: [
+                    { key: "A", text: "A uberização constitui um fenômeno restrito aos trabalhadores de aplicativos de transporte e entrega, não apresentando tendência de expansão para profissões intelectuais altamente qualificadas." },
+                    { key: "B", text: "O controle algorítmico do trabalho elimina as assimetrias de poder entre capital e trabalho, uma vez que a gestão automatizada opera de forma neutra, transparente e isenta de pressões por produtividade." },
+                    { key: "C", text: "O avanço do capitalismo de plataforma promove o resgate de formas pretéritas de exploração do trabalho (protoforma do capitalismo), combinando tecnologia informacional de ponta com a perda de garantias e a extensão desmedida da jornada diária." },
+                    { key: "D", text: "A introjeção da subjetividade empreendedora faz com que os trabalhadores uberizados prescindam de canais de solidariedade de classe e de redes de comunicação mútua para a resistência coletiva." },
+                    { key: "E", text: "O infoproletariado beneficia-se da flexibilidade das plataformas digitais para reduzir a sua jornada semanal e obter remunerações proporcionais ao seu ganho real de produtividade intelectual." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Mecanismos da Plataformização:</strong>
+                            A questão aborda os desdobramentos socioterritoriais da Quarta Revolução Industrial, sintetizados na obra de Ricardo Antunes sobre a uberização e a expansão do trabalho digital.
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>Alternativa A: Incorreta.</strong> A uberização não é um fenômeno setorial restrito aos motoristas ou entregadores de mercadorias. Conforme Antunes indica, a uberização constitui uma tendência geral para onde caminha o conjunto da força de trabalho na era digital, atingindo médicos, professores, jornalistas, engenheiros e arquitetos, que passam a prestar serviços sob demanda geridos por plataformas algorítmicas.</li>
+                            <li><strong>Alternativa B: Incorreta.</strong> O gerenciamento algorítmico do trabalho oculta relações de profunda subordinação e assimetria sob o manto da "neutralidade tecnológica". Os algoritmos determinam, de forma centralizada e sem espaço para contestação, os ritmos de trabalho, os valores de pagamento, as rotas, os sistemas de pontuação e as punições de exclusão do trabalhador.</li>
+                            <li><strong>Alternativa C: Correta.</strong> A contradição central da uberização consiste no uso de tecnologias de ponta (smartphones, satélites, inteligência artificial) para restabelecer condições históricas brutais de exploração que remontam ao início do capitalismo fabril do século XIX (protoforma), caracterizadas por jornadas de 12 a 16 horas diárias, ausência total de férias, descanso remunerado, previdência e proteção à saúde.</li>
+                            <li><strong>Alternativa D: Incorreta.</strong> Apesar do esforço ideológico do capital de introjetar a subjetividade empreendedora individualista, os trabalhadores criam novos mecanismos coletivos de solidariedade, de suporte mútuo e de resistência utilizando as próprias mídias digitais para o agenciamento de lutas políticas.</li>
+                            <li><strong>Alternativa E: Incorreta.</strong> O infoproletariado vivencia a intensificação do trabalho com a diluição das fronteiras entre o tempo de vida pessoal e o tempo de trabalho produtivo, sofrendo com baixas remunerações determinadas discricionariamente pelos algoritmos de precificação dinâmica das plataformas.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                type: "multiple",
+                title: "Questão 05",
+                correctAnswer: "B",
+                text: "Assinale a alternativa correta quanto à exposição de Santos (2012) sobre o desemprego como expressão da \"questão social\" no Brasil contemporâneo e sua relação com as dinâmicas de acumulação flexível.",
+                options: [
+                    { key: "A", text: "As características da \"questão social\" no Brasil que determinam a exploração da força de trabalho não devem ser tributadas, em primeira instância, ao \"padrão de acumulação flexível\"." },
+                    { key: "B", text: "A precariedade das ocupações e as relações sociais de classe, gênero e raça/etnia são características centrais na determinação das desigualdades de inserção e exclusão no mercado de trabalho brasileiro." },
+                    { key: "C", text: "Embora centralize suas análises sobre o desemprego, a autora discorda de que a lei geral de acumulação capitalista seja o mecanismo básico de reprodução da \"questão social\" no Brasil." },
+                    { key: "D", text: "O enfrentamento do desemprego estrutural no Brasil prescinde de políticas macroeconômicas de redistribuição espacial e foca exclusivamente na requalificação técnica individual dos trabalhadores desempregados." },
+                    { key: "E", text: "A precarização das ocupações decorre diretamente da incapacidade de modernização tecnológica do parque industrial brasileiro, permanecendo alheia aos ditames das finanças globais." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Questão Social e Desigualdade Estrutural:</strong>
+                            A questão avalia a Sociologia e o Serviço Social aplicados ao território brasileiro, com foco no tratamento analítico do desemprego e da "questão social".
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>Alternativa A: Incorreta.</strong> Conforme as análises críticas do desemprego no Brasil contemporâneo, a explosão e a metamorfose da "questão social" estão umbilicalmente ligadas à transição para o padrão de acumulação flexível e às contrarreformas neoliberais que reestruturaram o mercado de trabalho nacional.</li>
+                            <li><strong>Alternativa B: Correta.</strong> A inserção ou exclusão no mercado de trabalho brasileiro não ocorre de forma abstrata ou neutra. Ela é estruturalmente perpassada pelas relações sociais e marcadores interseccionais de classe, gênero e raça/etnia. Mulheres e populações negras constituem historicamente os contingentes mais penalizados pela informalidade, pelo subemprego e pela precariedade das ocupações periféricas.</li>
+                            <li><strong>Alternativa C: Incorreta.</strong> As correntes críticas brasileiras reconhecem que a lei geral de acumulação capitalista permanece como o mecanismo basilar de reprodução das desigualdades estruturais e da "questão social" no país, a qual se expressa de maneira aguda nas elevadas taxas de desemprego e subemprego.</li>
+                            <li><strong>Alternativa D: Incorreta.</strong> A análise estrutural defende que o desemprego contemporâneo não decorre de meras falhas de capacitação técnica individual, mas sim da própria lógica intrínseca ao regime financeirizado de acumulação, demandando profundas transformações macroeconômicas de redistribuição de renda e políticas espaciais de fomento ao emprego estável.</li>
+                            <li><strong>Alternativa E: Incorreta.</strong> A precarização das ocupações no Brasil é parte orgânica do processo global de reestruturação produtiva de plataformas e finanças, na qual capitais transnacionais se apropriam das dinâmicas do território nacional para intensificar a exploração sob amparo de contrarreformas institucionais.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                type: "multiple",
+                title: "Questão 06",
+                correctAnswer: "C",
+                text: "A Terceira Revolução Industrial promoveu uma reconfiguração da Divisão Internacional do Trabalho (DIT) e das espacialidades da produção global. Considere as seguintes afirmações sobre a desterritorialização e a divisão espacial do trabalho nesse contexto.",
+                subtext: `I - A desterritorialização possibilitou a desconcentração industrial geográfica, permitindo às corporações fracionar as etapas do processo produtivo e instalá-las em territórios que oferecem vantagens locacionais, como isenções fiscais e mão de obra barata.<br><br>
+                II - A nova divisão internacional do trabalho promoveu uma ruptura com a dependência econômica das regiões periféricas, visto que a transferência de plantas fabris de montagem garantiu a transferência autônoma de tecnologia e o desenvolvimento de centros de pesquisa independentes na periferia global.<br><br>
+                III - A desconcentração espacial da produção é acompanhada por uma centralização rígida das decisões financeiras, logísticas e estratégicas de gestão nas sedes das corporações transnacionais, comumente localizadas nas metrópoles dos países centrais.`,
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">A Dialética da Desconcentração e Centralização:</strong>
+                            A questão investiga os conceitos geográficos de desterritorialização e divisão territorial do trabalho no âmbito da Terceira Revolução Industrial.
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>Item I: Correto.</strong> A desterritorialização indica a capacidade adquirida pelas corporações de desvincular a atividade econômica de bases territoriais fixas. A expansão dos transportes (containerização) e a revolução nas comunicações (internet) permitiram fracionar a fabricação em escala mundial, transferindo plantas de montagem intensivas em mão de obra para territórios de industrialização tardia na busca de menores custos produtivos.</li>
+                            <li><strong>Item II: Incorreto.</strong> A transferência de plantas industriais de montagem para países periféricos não rompe com a dependência econômica nem garante a soberania tecnológica desses territórios. Esse processo consagra uma Nova Divisão Internacional do Trabalho, na qual os países da periferia se inserem na base da cadeia global (etapas de baixa agregação de valor e montagem mecânica), mantendo-se dependentes da tecnologia, das patentes e dos investimentos concebidos nos países de capitalismo avançado.</li>
+                            <li><strong>Item III: Correto.</strong> A dispersão espacial e a descentralização das atividades manufatureiras pelo globo são contraditoriamente acompanhadas por uma extrema centralização do poder de decisão e das finanças. O controle acionário, o planejamento estratégico de marketing e o núcleo de pesquisa e desenvolvimento de alta tecnologia permanecem rigidamente centralizados nas cidades globais e metrópoles dos países centrais.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                type: "matching",
+                title: "Questão 07",
+                correctAnswer: "A",
+                text: "A transição para as bases técnicas da Quarta Revolução Industrial consolidou novas dinâmicas de gerenciamento da força de trabalho no território. Sobre o papel dos algoritmos e a subsunção do trabalho pelas plataformas digitais, assinale com V (verdadeiro) ou F (falso) as seguintes afirmações.",
+                subtext: `
+                <div class="space-y-2 bg-stone-50 p-4 rounded-xl border border-stone-200 text-sm">
+                    <p><strong>( )</strong> O gerenciamento algorítmico do trabalho opera como um panóptico digital, monitorando o comportamento do trabalhador em tempo real por meio de dados, geolocalização e avaliações contínuas efetuadas pelos usuários.</p>
+                    <p><strong>( )</strong> A gamificação do trabalho de plataforma, ao utilizar desafios, pontuações e metas virtuais, constitui uma estratégia corporativa que visa mascarar a subordinação trabalhista e incentivar o prolongamento voluntário da jornada de trabalho.</p>
+                    <p><strong>( )</strong> O capitalismo de plataforma necessita de uma rígida centralização espacial da força de trabalho em edifícios industriais para assegurar a produtividade, prescindindo de dispositivos de comunicação móvel.</p>
+                    <p><strong>( )</strong> O modelo de negócios das plataformas de serviços assenta-se na negação do vínculo empregatício, transferindo para o trabalhador individual os riscos de acidentes, o desgaste dos instrumentos de trabalho e os períodos de inatividade.</p>
+                </div>
+                <p class="text-xs text-stone-500 mt-2">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                `,
+                options: [
+                    { key: "A", text: "V – V – F – V." },
+                    { key: "B", text: "V – F – V – F." },
+                    { key: "C", text: "F – V – F – V." },
+                    { key: "D", text: "F – F – V – V." },
+                    { key: "E", text: "V – V – V – F." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Tecnopolíticas de Controle:</strong>
+                            A questão aborda de forma analítica o controle exercido pelas plataformas corporativas sobre os trabalhadores via infraestruturas de dados e algoritmos de controle, no contexto da Quarta Revolução Industrial.
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>Primeira afirmativa: Verdadeira.</strong> O gerenciamento algorítmico opera de forma ubíqua e contínua. Através de smartphones, o capital monitora em tempo real a geolocalização do trabalhador, seu tempo de deslocamento, sua taxa de aceitação de chamadas e as avaliações subjetivas efetuadas pelos clientes, convertendo esses dados em mecanismos de controle e punição automatizada.</li>
+                            <li><strong>Segunda afirmativa: Verdadeira.</strong> A gamificação constitui uma sofisticação da dominação ideológica e técnica. Ao criar missões dinâmicas, prêmios virtuais e rankings concorrenciais, as plataformas manipulam a subjetividade do trabalhador de modo a levá-lo a estender a sua própria jornada de trabalho por iniciativa individual, mascarando a subordinação hierárquica.</li>
+                            <li><strong>Terceira afirmativa: Falsa.</strong> A uberização opera exatamente sob a lógica oposta à centralização física da fábrica fordista. O "chão de fábrica" virtualiza-se e espalha-se difusamente pelo espaço urbano. O capital dispensa os custos de controle físico direto, visto que os trabalhadores dispersos e em trânsito permanente são vigiados por dispositivos eletrônicos móveis.</li>
+                            <li><strong>Quarta afirmativa: Verdadeira.</strong> O modelo jurídico-econômico das corporações de plataforma nega terminantemente o vínculo empregatício tradicional. Essa negação permite externalizar os riscos da atividade de serviços para as costas do próprio prestador individual, que arca sozinho com os custos de depreciação do automóvel ou da motocicleta, seguro de acidentes, ausência por adoecimento e períodos de espera sem remuneração.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                type: "multiple",
+                title: "Questão 08",
+                correctAnswer: "B",
+                text: "A reestruturação produtiva e a adoção de novas tecnologias da informação impactaram decisivamente os índices e a natureza do desemprego na contemporaneidade. Tendo em vista a dinâmica do desemprego estrutural no capitalismo financeirizado e globalizado, assinale a afirmação correta.",
+                options: [
+                    { key: "A", text: "O desemprego estrutural manifesta-se temporariamente durante fases de recessão cíclica do capitalismo, sendo superado automaticamente com o restabelecimento do crescimento econômico." },
+                    { key: "B", text: "A automação microeletrônica e a inteligência artificial elevam a composição orgânica do capital, substituindo a força de trabalho viva e reduzindo sistematicamente a capacidade de absorção de mão de obra nos setores industrial e de serviços básicos." },
+                    { key: "C", text: "A expansão do setor terciário nos países de industrialização periférica garante a absorção estável e altamente produtiva dos trabalhadores deslocados pela automação do setor secundário." },
+                    { key: "D", text: "A introdução de inovações tecnológicas poupadoras de mão de obra resulta na redução uniforme da jornada semanal de trabalho global e no correspondente aumento da massa salarial." },
+                    { key: "E", text: "O desemprego estrutural é anulado pelas dinâmicas de economia colaborativa, que restabelecem o pleno emprego estável por meio de empreendimentos autogestionários desvinculados do capital global." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Mutações do Desemprego:</strong>
+                            Esta questão avalia a dinâmica estrutural do desemprego nas fases avançadas das revoluções industriais e suas especificidades socioespaciais.
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>Alternativa A: Incorreta.</strong> O desemprego estrutural não é um fenômeno cíclico ou temporário. Ele decorre da elevação irreversível da composição técnica e orgânica do capital, substituindo de forma sistemática a força de trabalho viva por maquinários automatizados e sistemas ciber-físicos, de modo que o reaquecimento da economia não promove a reabsorção dos demitidos.</li>
+                            <li><strong>Alternativa B: Correta.</strong> Conforme formulado nas teorias de desenvolvimento tecnológico do capitalismo, a transição para a Quarta Revolução Industrial (IA, machine learning e robôs cooperativos) expande a substituição do trabalho humano. Se na Terceira Revolução a automação eliminou postos operacionais da linha de montagem industrial, o avanço contemporâneo passa a eliminar postos de natureza cognitiva e de rotina administrativa no setor de serviços, reduzindo a capacidade geral de absorção de empregos.</li>
+                            <li><strong>Alternativa C: Incorreta.</strong> O setor de serviços (terciarização) nos países de industrialização periférica cresce substancialmente como um refúgio informal e precário da força de trabalho deslocada, incapaz de garantir uma inserção estável ou de alta produtividade.</li>
+                            <li><strong>Alternativa D: Incorreta.</strong> A introdução de inovações poupadoras de mão de obra não resulta de forma natural ou linear na redução da jornada de trabalho ou no aumento da massa salarial de forma equitativa. Pelo contrário, as inovações tecnológicas aumentam a produtividade horária e, sob o padrão de acumulação flexível, tendem a alongar as jornadas de trabalho dos que permanecem empregados ao mesmo tempo em que rebaixam a massa salarial geral por meio da criação de um vasto exército industrial de reserva globalizado.</li>
+                            <li><strong>Alternativa E: Incorreta.</strong> As dinâmicas de economia colaborativa de plataforma são amplamente hegemonizadas por grandes oligopólios de tecnologia globalizado (como a Alphabet, Uber, Amazon e Tencent), distantes do ideal de pleno emprego estável ou de autogestão anticapitalista.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                type: "multiple",
+                title: "Questão 09",
+                correctAnswer: "C",
+                text: "As transformações no mercado de trabalho brasileiro e as reformas institucionais levadas a cabo no período neoliberal alteraram o arcabouço jurídico de regulação das relações laborais. Considere as seguintes afirmações sobre o papel do Estado e a precarização do trabalho no Brasil contemporâneo.",
+                subtext: `I - As contrarreformas trabalhistas implementadas pelo Estado buscaram conferir "segurança jurídica" e flexibilidade ilimitada às novas modalidades de contratação exigidas pelo capital, como o trabalho intermitente e a terceirização irrestrita da atividade-fim.<br><br>
+                II - A desregulamentação das leis sociais protetoras do trabalho funciona como um mecanismo de atração de investimentos no cenário de competição global entre territórios, resultando em um nivelamento por baixo das condições de vida da classe trabalhadora.<br><br>
+                III - A expansão do trabalho uberizado e por plataformas digitais estimulou o fortalecimento das instituições de fiscalização trabalhista e a universalização das garantias da Consolidação das Leis do Trabalho (CLT) a todos os prestadores de serviços informais.`,
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">O Papel Institucional do Estado:</strong>
+                            A questão analisa os aspectos institucionais e políticos que pavimentaram a precarização e a flexibilização do mercado de trabalho brasileiro.
+                        </div>
+                        <ul class="space-y-2">
+                            <li><strong>Item I: Correto.</strong> O Estado brasileiro atuou como um agente facilitador da flexibilização por meio de reformas legislativas, notadamente com a aprovação de contrarreformas trabalhistas recentes. Essas alterações inseriram modalidades contratuais altamente instáveis, tais como o trabalho intermitente (no qual o trabalhador fica à disposição permanente do empregador, mas recebe apenas pelas horas efetivamente trabalhadas) e a autorização para a terceirização irrestrita de atividades-fim, precarizando vínculos outrora protegidos.</li>
+                            <li><strong>Item II: Correto.</strong> No cenário de globalização financeira, os territórios concorrem entre si para atrair investimentos externos. O enfraquecimento das legislações sociais protetoras constitui um dos trunfos oferecidos pelos Estados nacionais para aumentar a rentabilidade das empresas transnacionais, o que resulta em um desmonte sistemático dos sistemas de seguridade e proteção coletiva da classe trabalhadora.</li>
+                            <li><strong>Item III: Incorreto.</strong> A expansão da uberização ocorreu à margem dos sistemas tradicionais de fiscalização protetiva e sem a universalização das garantias da Consolidação das Leis do Trabalho (CLT). As empresas de plataforma sustentam a tese jurídica de que são meras intermediárias de tecnologia, desobrigando-se de fornecer o salário-mínimo constitucional, limitação de jornada, indenização por demissão sem justa causa ou licença médica.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                type: "multiple",
+                title: "Questão 10",
+                correctAnswer: "E",
+                text: "As dinâmicas socioespaciais da Terceira e da Quarta Revoluções Industriais impuseram severos limites à organização coletiva dos trabalhadores, alterando as formas clássicas de resistência política da classe operária. Considere as seguintes afirmações sobre a dispersão espacial e a ação coletiva na era do capitalismo de plataforma.",
+                subtext: `I - A fragmentação espacial do trabalho, combinada com a dispersão geográfica das atividades industriais e de serviços e o isolamento dos trabalhadores mediado por dispositivos digitais, dificulta a construção de identidades coletivas e de solidariedades orgânicas de classe.<br><br>
+                II - As redes de comunicação digital e as mídias sociais, embora sirvam à gestão do capital, são apropriadas de forma contra-hegemônica pelos trabalhadores de plataformas, servindo de base para a construção de micro-solidariedades horizontais e para a articulação de movimentos grevistas espontâneos.<br><br>
+                III - O chamado "Breque dos Apps" exemplifica as novas dinâmicas de insubmissão e resistência coletiva do infoproletariado urbano, no qual a própria infraestrutura técnica do capital (os aplicativos e smartphones) é utilizada para paralisar fluxos logísticos e reivindicar direitos mínimos.`,
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                resolution: `
+                    <div class="space-y-4 text-sm text-stone-700">
+                        <div class="bg-indigo-50 border-l-4 border-indigo-500 p-4 text-indigo-950 rounded-r-xl">
+                            <strong class="block font-semibold mb-1">Ações Coletivas Digitais:</strong>
+                            A questão aborda de forma analítica e espacial os dilemas contemporâneos de mobilização coletiva e resistência sob as dinâmicas do capitalismo de plataforma.
+                        </div>
+
+                        <!-- Comparison Table -->
+                        <div class="overflow-x-auto border border-stone-200 rounded-xl my-4">
+                            <table class="w-full text-xs text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-stone-100 border-b border-stone-200 text-stone-700 font-bold uppercase">
+                                        <th class="p-3">Dimensão de Análise</th>
+                                        <th class="p-3">Sindicalismo Clássico (Séc. XX)</th>
+                                        <th class="p-3">Resistência Digital (Séc. XXI)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-100 text-stone-600 bg-white">
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Bases Geográficas</td>
+                                        <td class="p-3">Chão de fábrica centralizado, forte contiguidade física e territorialidade estável.</td>
+                                        <td class="p-3">Dispersão espacial, ruas e praças públicas convertidas em pontos de encontro efêmeros, redes virtuais desterritorializadas.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Estrutura</td>
+                                        <td class="p-3">Sindicatos formais burocratizados, representação legal unificada, hierarquia verticalizada.</td>
+                                        <td class="p-3">Redes horizontais espontâneas, coletivos informais independentes, grupos de troca de mensagens.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Métodos de Luta</td>
+                                        <td class="p-3">Greves gerais planejadas, piquetes nas portas de fábricas, acordos formais estáveis.</td>
+                                        <td class="p-3">Paralisação de fluxos de redes/aplicativos (ex: Breque dos Apps), boicote e suspensão tática de dados.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-semibold text-stone-900">Identidade</td>
+                                        <td class="p-3">Identidade homogênea unificada (ex: metalúrgicos) vinculada à estabilidade produtiva.</td>
+                                        <td class="p-3">Identidade fragmentada de prestadores de serviços individuais mobilizados de modo interseccional.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <ul class="space-y-2">
+                            <li><strong>Item I: Correto.</strong> A atomização espacial constitui uma característica marcante da nova organização do trabalho. Sem o espaço de convivência física partilhado da fábrica fordista e isolados individualmente sob o controle de uma interface de celular, os trabalhadores perdem as referências geográficas diárias que facilitavam a partilha de queixas comuns e o surgimento de organizações sindicais unificadas.</li>
+                            <li><strong>Item II: Correto.</strong> Embora as plataformas de comunicação móvel e os aplicativos de troca de mensagens funcionem primariamente como canais de escoamento e controle corporativo, os trabalhadores se apropriam de forma tática dessas ferramentas. A criação de dezenas de grupos informais de entregadores de uma mesma cidade funciona como uma rede de apoio mútuo, servindo de estopim para a mobilização de lutas locais contra os cortes de tarifas.</li>
+                            <li><strong>Item III: Correto.</strong> O movimento de paralisação batizado como "Breque dos Apps" expressa uma nova gramática de contestação do infoproletariado. Em vez de ocuparem portas de fábricas, os entregadores paralisaram a circulação e desligaram coletivamente os seus aplicativos nos dias marcados, tensionando os fluxos logísticos das cidades. O movimento evidenciou que a própria infraestrutura virtual do capital que impõe a dispersão pode ser convertida temporariamente em instrumento de unificação política.</li>
+                        </ul>
+                    </div>
+                `
+            }
+        ];
+
+        window.onload = function() {
+            // Start Stopwatch timer immediately on load
+            startTimer();
+            // Render Questions List
+            renderQuestions();
+            // Render Navigation Map Sidebar
+            renderNavigationMap();
+            // Initialize progress tracker
+            updateProgressBar();
+        }
+
+        function startTimer() {
+            elapsedSeconds = 0;
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                elapsedSeconds++;
+                const hrs = String(Math.floor(elapsedSeconds / 3600)).padStart(2, '0');
+                const mins = String(Math.floor((elapsedSeconds % 3600) / 60)).padStart(2, '0');
+                const secs = String(elapsedSeconds % 60).padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${hrs}:${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, index) => {
+                const card = document.createElement('div');
+                card.id = `question-card-${q.id}`;
+                card.className = "bg-white p-6 sm:p-8 rounded-2xl border border-stone-200 shadow-xs space-y-6 transition-all duration-300";
+                
+                let subtextHtml = q.subtext ? `<div class="text-stone-700 space-y-2 text-sm leading-relaxed border-l-2 border-stone-200 pl-4 py-1">${q.subtext}</div>` : '';
+                
+                let optionsHtml = '';
+                q.options.forEach(opt => {
+                    optionsHtml += `
+                        <label class="flex items-start p-4 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50/50 cursor-pointer transition-all relative group" id="label-q${q.id}-${opt.key}">
+                            <input type="radio" name="question-${q.id}" value="${opt.key}" 
+                                   onclick="selectOption(${q.id}, '${opt.key}')" 
+                                   class="mt-1 mr-4 accent-stone-800 h-4 w-4 shrink-0" 
+                                   ${answersState[q.id] === opt.key ? 'checked' : ''} 
+                                   ${hasSubmitted ? 'disabled' : ''}>
+                            <span class="text-sm font-semibold text-stone-400 group-hover:text-stone-700 transition mr-2">${opt.key}.</span>
+                            <span class="text-sm text-stone-800 leading-normal" id="text-q${q.id}-${opt.key}">${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+                        <span class="font-serif text-lg font-bold text-stone-900">${q.title}</span>
+                        <span id="badge-q${q.id}" class="text-xs bg-stone-100 text-stone-500 px-2.5 py-1 rounded-md font-semibold uppercase tracking-wider">Pendente</span>
+                    </div>
+                    
+                    <p class="text-stone-900 leading-relaxed text-sm sm:text-base font-medium">${q.text}</p>
+                    
+                    ${subtextHtml}
+                    
+                    <div class="space-y-3 pt-2">
+                        ${optionsHtml}
+                    </div>
+
+                    <!-- Detailed Pedagogical Resolution Container (Hidden initially, shown after submit) -->
+                    <div id="resolution-q${q.id}" class="hidden mt-6 pt-6 border-t border-stone-100 space-y-4">
+                        <div class="flex items-center space-x-2 text-indigo-900 bg-indigo-50/70 border border-indigo-200 px-4 py-2.5 rounded-xl">
+                            <span class="text-sm font-bold">Gabarito Oficial:</span>
+                            <span class="text-sm font-extrabold bg-indigo-600 text-white px-2.5 py-0.5 rounded-md">${q.correctAnswer}</span>
+                        </div>
+                        <div class="p-5 bg-stone-50/80 rounded-2xl border border-stone-200/60 leading-relaxed text-stone-800">
+                            <h4 class="font-serif text-base font-bold text-stone-900 mb-3">Resolução Detalhada e Análise Socioterritorial</h4>
+                            ${q.resolution}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderNavigationMap() {
+            const grid = document.getElementById('question-navigation-grid');
+            grid.innerHTML = '';
+            
+            questionsData.forEach((q, index) => {
+                const bubble = document.createElement('button');
+                bubble.id = `nav-bubble-${q.id}`;
+                bubble.type = "button";
+                bubble.onclick = () => scrollToQuestion(q.id);
+                
+                // Styling based on state
+                let stateClass = "bg-stone-50 border border-stone-200 text-stone-500 hover:bg-stone-100";
+                if (answersState[q.id]) {
+                    stateClass = "bg-stone-800 border-stone-900 text-stone-50";
+                }
+                
+                bubble.className = `w-10 h-10 rounded-xl font-bold text-xs flex items-center justify-center transition-all ${stateClass}`;
+                bubble.innerText = String(q.id).padStart(2, '0');
+                grid.appendChild(bubble);
+            });
+        }
+
+        function selectOption(questionId, optionKey) {
+            if (hasSubmitted) return; // Locked once evaluated
+            
+            answersState[questionId] = optionKey;
+            
+            // Update individual question card badge
+            const badge = document.getElementById(`badge-q${questionId}`);
+            badge.innerText = "Respondida";
+            badge.className = "text-xs bg-amber-50 text-amber-700 px-2.5 py-1 rounded-md font-semibold uppercase tracking-wider border border-amber-200";
+
+            // Highlight label styling
+            const qData = questionsData.find(q => q.id === questionId);
+            qData.options.forEach(opt => {
+                const label = document.getElementById(`label-q${questionId}-${opt.key}`);
+                if (opt.key === optionKey) {
+                    label.className = "flex items-start p-4 rounded-xl border-2 border-stone-900 bg-stone-50/80 cursor-pointer transition-all relative group";
+                } else {
+                    label.className = "flex items-start p-4 rounded-xl border border-stone-200 hover:border-stone-400 hover:bg-stone-50/50 cursor-pointer transition-all relative group";
+                }
+            });
+
+            // Update UI widgets
+            updateProgressBar();
+            renderNavigationMap();
+        }
+
+        function scrollToQuestion(id) {
+            const el = document.getElementById(`question-card-${id}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function updateProgressBar() {
+            const total = questionsData.length;
+            const answered = Object.keys(answersState).length;
+            
+            document.getElementById('progress-text').innerText = `${answered}/${total}`;
+            const pct = (answered / total) * 100;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        function resetQuiz() {
+            answersState = {};
+            hasSubmitted = false;
+            
+            // UI elements rollback
+            document.getElementById('result-card').classList.add('hidden');
+            document.getElementById('score-sidebar-panel').classList.add('hidden');
+            document.getElementById('btn-submit').disabled = false;
+            document.getElementById('btn-submit').innerHTML = `
+                <span>Finalizar e Ver Resolução</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            `;
+            document.getElementById('submit-warning').innerText = "Responda a todas as questões antes de finalizar para um melhor resultado.";
+            document.getElementById('submit-warning').className = "text-xs text-stone-500 font-medium";
+
+            startTimer();
+            renderQuestions();
+            renderNavigationMap();
+            updateProgressBar();
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function submitQuiz(event) {
+            event.preventDefault();
+            if (hasSubmitted) return;
+
+            stopTimer();
+            hasSubmitted = true;
+
+            // Calculate metrics
+            let correctCount = 0;
+            const totalCount = questionsData.length;
+
+            questionsData.forEach(q => {
+                const userAns = answersState[q.id];
+                const card = document.getElementById(`question-card-${q.id}`);
+                const badge = document.getElementById(`badge-q${q.id}`);
+                const resolutionContainer = document.getElementById(`resolution-q${q.id}`);
+
+                // Unhide the detailed feedback directly below the question
+                resolutionContainer.classList.remove('hidden');
+
+                // Evaluate answer correctness
+                if (userAns === q.correctAnswer) {
+                    correctCount++;
+                    badge.innerText = "Correta";
+                    badge.className = "text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-md font-semibold uppercase tracking-wider border border-emerald-200";
+                    card.className = "bg-white p-6 sm:p-8 rounded-2xl border-2 border-emerald-500 shadow-xs space-y-6 transition-all duration-300";
+                } else {
+                    badge.innerText = "Incorreta";
+                    badge.className = "text-xs bg-rose-50 text-rose-700 px-2.5 py-1 rounded-md font-semibold uppercase tracking-wider border border-rose-200";
+                    card.className = "bg-white p-6 sm:p-8 rounded-2xl border-2 border-rose-500 shadow-xs space-y-6 transition-all duration-300";
+                }
+
+                // Color-code each option specifically
+                q.options.forEach(opt => {
+                    const label = document.getElementById(`label-q${q.id}-${opt.key}`);
+                    const radio = label.querySelector('input[type="radio"]');
+                    radio.disabled = true; // Lock controls
+
+                    if (opt.key === q.correctAnswer) {
+                        // Correct option styling
+                        label.className = "flex items-start p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 cursor-not-allowed transition-all relative group";
+                        label.innerHTML += `
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-600 font-bold flex items-center space-x-1 text-xs">
+                                <span>Gabarito</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                            </span>
+                        `;
+                    } else if (userAns === opt.key) {
+                        // Incorrect option chosen by user
+                        label.className = "flex items-start p-4 rounded-xl border-2 border-rose-500 bg-rose-50/50 cursor-not-allowed transition-all relative group";
+                        label.innerHTML += `
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-rose-600 font-bold flex items-center space-x-1 text-xs">
+                                <span>Incorreta</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </span>
+                        `;
+                    } else {
+                        // Non-selected standard choices
+                        label.className = "flex items-start p-4 rounded-xl border border-stone-200 bg-stone-50/30 cursor-not-allowed opacity-60 transition-all relative group";
+                    }
+                });
+            });
+
+            // Populate Results Dashboard
+            const percentage = (correctCount / totalCount) * 100;
+            document.getElementById('result-score').innerText = `${correctCount}/${totalCount}`;
+            document.getElementById('result-percentage').innerText = `${percentage}%`;
+            
+            // Format elapsed seconds to stopwatch view
+            const totalMins = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
+            const totalSecs = String(elapsedSeconds % 60).padStart(2, '0');
+            document.getElementById('result-time').innerText = `${totalMins}:${totalSecs}`;
+
+            // Handle badge colors and Status final
+            const statusCard = document.getElementById('result-status');
+            const pctCard = document.getElementById('result-pct-card');
+            if (percentage >= 70) {
+                statusCard.innerText = "Aprovado";
+                statusCard.className = "text-base sm:text-lg font-bold text-emerald-700 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-center h-10 w-full";
+                pctCard.className = "bg-emerald-50/30 p-4 rounded-xl border border-emerald-100 text-center";
+            } else {
+                statusCard.innerText = "Reprovado";
+                statusCard.className = "text-base sm:text-lg font-bold text-rose-700 bg-rose-50 rounded-xl border border-rose-200 flex items-center justify-center h-10 w-full";
+                pctCard.className = "bg-rose-50/30 p-4 rounded-xl border border-rose-100 text-center";
+            }
+
+            // Generate pedagogical dynamic encouragement text
+            let feedbackText = '';
+            if (percentage === 100) {
+                feedbackText = `<strong>Gabarito Absoluto! 🏆</strong> Você demonstrou domínio conceitual exemplar do meio técnico-científico-informacional de Milton Santos, das dinâmicas de acumulação flexível de David Harvey e das teses de plataformização do trabalho de Ricardo Antunes. Excelente leitura das entrelinhas e enunciados longos característicos da FAURGS!`;
+            } else if (percentage >= 80) {
+                feedbackText = `<strong>Desempenho Excelente! 🌟</strong> Você tem uma ótima interpretação de Geografia Urbana e Sociologia do Trabalho no modelo FAURGS. Pequenos detalhes conceituais impediram a nota máxima. Revise os itens incorretos nas resoluções abaixo para blindar seu conhecimento.`;
+            } else if (percentage >= 50) {
+                feedbackText = `<strong>Bom Aproveitamento! 📚</strong> Sua base de conhecimento cobre os principais eixos do simulado (terceirização, precarização e uberização), mas é preciso atenção na distinção entre os itens corretos e incorretos em proposições de soma ou verdadeiro/falso. Use a análise detalhada em cada card para sanar essas dúvidas.`;
+            } else {
+                feedbackText = `<strong>Necessita de Revisão Acadêmica ✍️</strong> O modelo estruturado de assertivas múltiplas da FAURGS costuma induzir ao erro quando há conceitos similares adjacentes. Recomendamos ler atentamente as tabelas comparativas e a análise das contrarreformas ao fim de cada questão para aprimorar os seus fundamentos teóricos.`;
+            }
+            document.getElementById('general-feedback').innerHTML = feedbackText;
+
+            // Display Results card
+            const resultCard = document.getElementById('result-card');
+            resultCard.classList.remove('hidden');
+
+            // Show and update sidebar summary card
+            const sidebarPanel = document.getElementById('score-sidebar-panel');
+            sidebarPanel.classList.remove('hidden');
+            document.getElementById('sidebar-correct-score').innerText = correctCount;
+            document.getElementById('sidebar-performance-text').innerText = percentage >= 70 ? "Desempenho Aprovado" : "Abaixo da Média Recomendada";
+
+            // Scroll down smoothly to results board
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Lock submission button
+            const submitWarning = document.getElementById('submit-warning');
+            submitWarning.innerText = "Simulado avaliado com sucesso. Confira as resoluções abaixo.";
+            submitWarning.className = "text-xs text-emerald-600 font-bold flex items-center gap-1";
+            document.getElementById('btn-submit').disabled = true;
+            document.getElementById('btn-submit').className = "w-full sm:w-auto px-8 py-3 bg-stone-400 text-stone-200 rounded-xl font-semibold cursor-not-allowed flex items-center justify-center space-x-2";
+
+            // Update Navigation sidebar indicators
+            updateNavigationMapAfterSubmit();
+        }
+
+        function updateNavigationMapAfterSubmit() {
+            questionsData.forEach(q => {
+                const bubble = document.getElementById(`nav-bubble-${q.id}`);
+                const userAns = answersState[q.id];
+                
+                if (userAns === q.correctAnswer) {
+                    bubble.className = "w-10 h-10 rounded-xl font-bold text-xs flex items-center justify-center transition-all bg-emerald-500 border border-emerald-600 text-white shadow-xs";
+                } else {
+                    bubble.className = "w-10 h-10 rounded-xl font-bold text-xs flex items-center justify-center transition-all bg-rose-500 border border-rose-600 text-white shadow-xs";
+                }
+            });
+        }
+    </script>
+</body>
+</html>

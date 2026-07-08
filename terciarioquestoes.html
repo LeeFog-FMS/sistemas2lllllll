@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo: Setor Terciário e Redes de Fluxos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            warmbg: '#FAF8F5',     // Off-white aconchegante para leitura
+                            darktext: '#2D2A26',   // Carvão profundo para excelente contraste e suavidade ocular
+                            muted: '#5F5A54',      // Tom médio neutro
+                            accent: '#4F46E5',     // Indigo elegante para destaques principais
+                            accentHover: '#4338CA',
+                            border: '#E8E5DF',     // Borda suave bege-acinzentada
+                            card: '#FFFFFF',
+                            correct: '#10B981',    // Verde esmeralda suave
+                            correctbg: '#ECFDF5',
+                            incorrect: '#EF4444',  // Vermelho rosado suave
+                            incorrectbg: '#FEF2F2'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF8F5;
+            color: #2D2A26;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .prose-custom p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+        }
+        /* Custom scrollbar to keep layout premium */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E8E5DF;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D5CEC5;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-950">
+
+    <!-- Top Header / Banner -->
+    <header class="border-b border-brand-border bg-white sticky top-0 z-40 shadow-sm backdrop-blur-md bg-white/90">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="bg-indigo-600 text-white font-extrabold text-sm px-3 py-1.5 rounded-lg tracking-wider">FAURGS</span>
+                <h1 class="font-bold text-lg text-brand-darktext hidden md:block">Geografia: Setor Terciário e Redes de Fluxos</h1>
+                <h1 class="font-bold text-base text-brand-darktext block md:hidden">Simulado Geografia</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Live Progress tracker -->
+                <div id="top-tracker" class="text-sm font-medium text-brand-muted">
+                    Respondidas: <span id="answered-count" class="text-indigo-600 font-bold">0</span>/10
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Layout -->
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+        
+        <!-- Welcome & Instructions Card -->
+        <section id="welcome-card" class="bg-white border border-brand-border rounded-2xl p-6 md:p-8 mb-8 shadow-sm">
+            <div class="flex flex-col md:flex-row gap-6 items-start">
+                <div class="bg-indigo-50 text-indigo-700 p-4 rounded-xl self-start">
+                    <i class="fa-solid fa-graduation-cap text-3xl"></i>
+                </div>
+                <div class="flex-1">
+                    <span class="text-xs font-bold text-indigo-600 tracking-wider uppercase">Simulado Preparatório Interativo</span>
+                    <h2 class="font-serif font-bold text-2xl md:text-3xl text-brand-darktext mt-1 mb-3">Questões de Geografia FAURGS</h2>
+                    <p class="text-brand-muted leading-relaxed text-sm md:text-base">
+                        Teste seus conhecimentos sobre o <strong>Setor Terciário e Redes de Fluxos</strong>. Este simulado aborda a dinâmica contemporânea do comércio e serviços, bem como a importância estratégica de redes de transporte e comunicação na integração do espaço geográfico.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-y-2 gap-x-4 text-xs font-medium text-brand-muted">
+                        <span class="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-md"><i class="fa-regular fa-file-lines text-indigo-500"></i> 10 Questões</span>
+                        <span class="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-md"><i class="fa-regular fa-clock text-indigo-500"></i> Sem limite de tempo</span>
+                        <span class="flex items-center gap-1.5 bg-stone-100 px-2.5 py-1 rounded-md"><i class="fa-regular fa-circle-check text-indigo-500"></i> Resoluções detalhadas</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz Container -->
+        <form id="quiz-form" onsubmit="event.preventDefault();" class="space-y-8">
+            <div id="questions-container" class="space-y-8">
+                <!-- Questions will be injected dynamically by JavaScript to prevent massive manual HTML clutter and enable stateful tracking -->
+            </div>
+
+            <!-- Controls Block -->
+            <div class="bg-white border border-brand-border rounded-2xl p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-center md:text-left">
+                    <h4 class="font-bold text-brand-darktext">Pronto para finalizar o simulado?</h4>
+                    <p class="text-sm text-brand-muted mt-0.5">Certifique-se de que respondeu a todas as 10 questões antes de enviar.</p>
+                </div>
+                <button type="button" onclick="submitQuiz()" class="w-full md:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3.5 rounded-xl transition-all shadow-md shadow-indigo-100 hover:shadow-indigo-200 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Finalizar e Ver Resultados
+                </button>
+            </div>
+        </form>
+
+        <!-- Results & Review Section (Hidden by Default) -->
+        <section id="results-panel" class="hidden mt-8 space-y-8">
+            <div class="bg-white border-2 border-indigo-600 rounded-2xl p-6 md:p-8 shadow-lg text-center relative overflow-hidden">
+                <!-- Background decorative elements -->
+                <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-50 rounded-full -z-10"></div>
+                <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-emerald-50 rounded-full -z-10"></div>
+
+                <div class="max-w-md mx-auto">
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-widest">Resultado do Simulado</span>
+                    <h3 class="text-3xl font-serif font-bold text-brand-darktext mt-3 mb-6">Desempenho Geral</h3>
+                    
+                    <!-- Progress circle/badge -->
+                    <div class="inline-flex flex-col items-center justify-center bg-indigo-50 border border-indigo-100 rounded-full w-36 h-36 mb-6">
+                        <span id="score-text" class="text-4xl font-extrabold text-indigo-600">0 / 10</span>
+                        <span id="percent-text" class="text-sm font-semibold text-brand-muted mt-1">0% de acertos</span>
+                    </div>
+
+                    <p id="feedback-message" class="text-brand-muted text-base mb-6 leading-relaxed">
+                        Seu resultado será calculado em breve!
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <a href="#questions-container" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-xl transition-all shadow-sm text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Revisar Questões Abaixo
+                        </a>
+                        <button type="button" onclick="restartQuiz()" class="bg-stone-100 hover:bg-stone-200 text-brand-darktext font-medium px-6 py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 border border-brand-border">
+                            <i class="fa-solid fa-rotate-left"></i> Refazer Simulado
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-brand-border bg-stone-50 mt-16 py-8">
+        <div class="max-w-4xl mx-auto px-4 text-center space-y-3">
+            <p class="text-sm text-brand-muted font-medium">Plataforma Interativa de Estudos • Estilo FAURGS</p>
+            <p class="text-xs text-stone-400">Desenvolvido com foco em ergonomia de leitura prolongada (fundo levemente amarelado e contraste otimizado).</p>
+        </div>
+    </footer>
+
+    <!-- Custom alert wrapper (No Native Alerts) -->
+    <div id="custom-warning-modal" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white border border-brand-border rounded-2xl max-w-md w-full p-6 shadow-xl animate-scale-up">
+            <div class="text-amber-500 bg-amber-50 w-12 h-12 rounded-full flex items-center justify-center text-xl mb-4">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h4 class="font-bold text-lg text-brand-darktext">Ainda restam questões sem resposta!</h4>
+            <p class="text-brand-muted text-sm mt-2 leading-relaxed">
+                Você respondeu apenas <span id="modal-answered-count" class="font-bold text-indigo-600">0</span> de 10 questões. Gostaria de responder todas antes de obter o resultado e o gabarito comentado?
+            </p>
+            <div class="mt-6 flex gap-3 justify-end">
+                <button type="button" onclick="closeWarningModal()" class="px-4 py-2.5 bg-stone-100 hover:bg-stone-200 text-brand-darktext rounded-xl font-medium text-xs transition-all border border-brand-border">
+                    Voltar e Responder
+                </button>
+                <button type="button" onclick="confirmSubmitAnyway()" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium text-xs transition-all shadow-sm">
+                    Finalizar Mesmo Assim
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Full JSON structure matching exactly the requested Geography Database
+        const questionsData = [
+            {
+                id: 1,
+                correctAnswer: "C",
+                header: "Questão 01",
+                text: `<p class="mb-4 font-semibold">Considere as seguintes afirmações sobre a reconfiguração logística das redes de fluxos de transporte nos Campos Sulinos e a dinâmica contemporânea do setor terciário nas áreas urbanas.</p>
+                <div class="space-y-3 pl-4 border-l-2 border-indigo-200 my-4 text-stone-700">
+                    <p><strong>I -</strong> A substituição da vegetação original e a modificação da paisagem nos Campos Sulinos, decorrentes da expansão da agricultura de grãos e do plantio de pinus e eucaliptos para a produção de celulose, reconfiguraram as redes de fluxos de transporte no Rio Grande do Sul, demandando eixos logísticos rodoferroviários integrados para o escoamento dessas matérias-primas até os portos de exportação.</p>
+                    <p><strong>II -</strong> Nas áreas metropolitanas dos países periféricos ou de industrialização tardia, o crescimento do setor terciário frequentemente ocorre sob a forma de hipertrofia do terciário, caracterizada pela proliferação de atividades informais de comércio e serviços de baixa produtividade, que funcionam como uma estratégia de sobrevivência urbana face ao desemprego estrutural.</p>
+                    <p><strong>III -</strong> A fragmentação global dos processos produtivos industriais e a terceirização de etapas de apoio logístico provocam o declínio absoluto do setor terciário nas economias desenvolvidas, dado que as atividades de serviços modernos dependem da proximidade física das plantas fabris tradicionais.</p>
+                </div>
+                <p class="mt-4">Quais estão corretas?</p>`,
+                options: {
+                    A: "Apenas I.",
+                    B: "Apenas II.",
+                    C: "Apenas I e II.",
+                    D: "Apenas II e III.",
+                    E: "I, II e III."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (C)</p>
+                    <p>A compreensão espacial das dinâmicas do setor terciário exige a análise dos processos de transformação do meio natural e a estruturação das atividades de serviços tanto em escala regional como urbana.</p>
+                    <p><strong>A primeira proposição demonstra</strong> como as profundas alterações ecológicas e agrícolas ocorridas no bioma Pampa e nos ecossistemas associados dos Campos Sulinos geraram reflexos diretos na estruturação das redes de circulação regionais. Com a substituição da vegetação campestre nativa por extensas plantações exóticas de pinus e eucaliptos (silvicultura de exportação) e monoculturas de soja, formaram-se complexas redes de fluxos materiais que interligam as áreas produtoras do interior gaúcho aos polos industriais de celulose e aos terminais marítimos de exportação do Sul do Estado, o que demanda o desenvolvimento de infraestruturas pesadas de circulação ferroviária e rodoviária.</p>
+                    <p><strong>A segunda proposição explica</strong> o fenômeno urbano-econômico da hipertrofia do terciário, típico de metrópoles periféricas e de urbanização acelerada de países em desenvolvimento. Diante de uma industrialização tardia que não absorve toda a mão de obra urbana e da mecanização agrícola que expulsa trabalhadores do campo, o setor de comércio e serviços funciona como um refúgio informal de sobrevivência, gerando uma proliferação de atividades de baixa produtividade e remuneração.</p>
+                    <p><strong>A terceira proposição está incorreta</strong> porque o espraiamento internacional das fábricas gerou, na verdade, uma dependência ainda maior em relação aos serviços de ponta (quaternários), que comandam as Cadeias Globais de Valor a partir de escritórios globais.</p>
+                    
+                    <div class="overflow-x-auto mt-4 rounded-xl border border-brand-border">
+                        <table class="min-w-full text-xs divide-y divide-stone-200">
+                            <thead class="bg-stone-50 text-stone-700 font-bold">
+                                <tr>
+                                    <th class="px-4 py-3 text-left">Eixo de Análise</th>
+                                    <th class="px-4 py-3 text-left">Reconfiguração nos Campos Sulinos</th>
+                                    <th class="px-4 py-3 text-left">Hipertrofia do Terciário</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 bg-white">
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Vetor Espacial</td>
+                                    <td class="px-4 py-2.5">Expansão da silvicultura de pinus/eucaliptos e grãos no Pampa.</td>
+                                    <td class="px-4 py-2.5">Crescimento urbano acelerado e desemprego estrutural metropolitano.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Materialização</td>
+                                    <td class="px-4 py-2.5">Transporte pesado de commodities e matérias-primas agroflorestais.</td>
+                                    <td class="px-4 py-2.5">Fluxos diários de trabalhadores informais e comércio varejista precário.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Infraestrutura</td>
+                                    <td class="px-4 py-2.5">Redes rodoferroviárias e ramais de acesso portuário para exportação.</td>
+                                    <td class="px-4 py-2.5">Espaço público urbano, calçadas, transporte coletivo e conexões informais.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Agentes</td>
+                                    <td class="px-4 py-2.5">Grandes proprietários de terras, multinacionais de papel/celulose e trading companies.</td>
+                                    <td class="px-4 py-2.5">Trabalhadores autônomos, camelôs, pequenos comerciantes locais e desempregados.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`
+            },
+            {
+                id: 2,
+                correctAnswer: "A",
+                header: "Questão 02",
+                text: `<p class="mb-4 font-semibold">Numere a segunda coluna de acordo com a primeira, associando adequadamente os diferentes modais de transporte terrestre, aquático e dutoviário às suas respectivas características operacionais e importância estratégica na integração de redes logísticas e de fluxos territoriais contemporâneos.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-brand-border my-4 text-sm">
+                    <div>
+                        <p class="font-bold mb-2 text-indigo-700">Primeira Coluna</p>
+                        <p class="mb-1"><strong>(1)</strong> Modal Rodoviário</p>
+                        <p class="mb-1"><strong>(2)</strong> Modal Ferroviário</p>
+                        <p class="mb-1"><strong>(3)</strong> Modal Dutoviário</p>
+                        <p class="mb-1"><strong>(4)</strong> Modal Aquaviário</p>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-2 text-indigo-700">Segunda Coluna</p>
+                        <p class="mb-2"><strong>( )</strong> Apresenta elevada capacidade de carga para granéis sólidos em longas distâncias terrestres, com boa eficiência energética por tonelada-quilômetro, mas exibe rigidez espacial de rotas e elevados investimentos de capital fixo para a implantação de sua infraestrutura física de vias.</p>
+                        <p class="mb-2"><strong>( )</strong> Caracteriza-se por uma elevada flexibilidade espacial com capacidade de atendimento "porta-a-porta", agilidade no transporte de cargas fracionadas em curtas e médias distâncias, mas apresenta custos operacionais unitários expressivos e menor eficiência energética por tonelada transportada.</p>
+                        <p class="mb-2"><strong>( )</strong> Oferece máxima especialização operacional com fluxos físicos unidirecionais contínuos de fluidos e gases, baixos custos operacionais diretos pós-instalação e reduzida interferência climática, a despeito de exigir vultosos investimentos de capital inicial e de possuir inflexibilidade de traçado geográfico.</p>
+                        <p class="mb-2"><strong>( )</strong> Destaca-se como elemento estruturante do comércio internacional de grandes volumes (granéis e contêineres), apresentando o menor custo unitário de transporte para longas distâncias intercontinentais, embora dependa substancialmente de conexões e terminais portuários eficientes de integração multimodal.</p>
+                    </div>
+                </div>
+                <p class="mt-4">A sequência correta de preenchimento dos parênteses da segunda coluna, de cima para baixo, é</p>`,
+                options: {
+                    A: "2 – 1 – 3 – 4.",
+                    B: "1 – 2 – 4 – 3.",
+                    C: "2 – 3 – 1 – 4.",
+                    D: "4 – 1 – 3 – 2.",
+                    E: "2 – 1 – 4 – 3."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (A)</p>
+                    <p>A associação correta entre as características de cada modal de transporte e a sua função na rede de circulação de fluxos evidencia os papéis desempenhados por essas infraestruturas físicas na integração territorial.</p>
+                    <p>O <strong>modal ferroviário (2)</strong> destaca-se pela sua elevada capacidade de carga e eficiência energética para grandes volumes terrestres de granéis (agrícolas e minerais) em trajetos de longa distância, sofrendo, porém, com a rigidez de suas linhas férreas. O <strong>modal rodoviário (1)</strong> representa a capilaridade da rede logística por excelência, oferecendo alta flexibilidade espacial porta-a-porta e rapidez para cargas fracionadas de menor volume em curtas e médias distâncias, embora incorra em custos de manutenção elevados e menor eficiência energética por tonelada deslocada.</p>
+                    <p>O <strong>modal dutoviário (3)</strong> expressa o nível máximo de especialização técnica de fluxos lineares, sendo altamente seguro, contínuo e imune a intempéries climáticas, ideal para petróleo, derivados e gás natural, sofrendo de inflexibilidade espacial e alto custo fixo de implantação. Por fim, o <strong>modal aquaviário (4)</strong> consolida-se como o motor da globalização comercial contemporânea, oferecendo custos unitários imbatíveis para o trânsito transoceânico de mercadorias conteinerizadas, dependendo substancialmente da produtividade dos sistemas portuários.</p>
+                    
+                    <div class="overflow-x-auto mt-4 rounded-xl border border-brand-border">
+                        <table class="min-w-full text-xs divide-y divide-stone-200">
+                            <thead class="bg-stone-50 text-stone-700 font-bold">
+                                <tr>
+                                    <th class="px-4 py-3 text-left">Modal de Transporte</th>
+                                    <th class="px-4 py-3 text-left">Custo Fixo (Instalação)</th>
+                                    <th class="px-4 py-3 text-left">Custo Variável (Operação)</th>
+                                    <th class="px-4 py-3 text-left">Eficiência Energética</th>
+                                    <th class="px-4 py-3 text-left">Flexibilidade</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 bg-white">
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Ferroviário</td>
+                                    <td class="px-4 py-2.5">Alto</td>
+                                    <td class="px-4 py-2.5">Baixo</td>
+                                    <td class="px-4 py-2.5">Alta</td>
+                                    <td class="px-4 py-2.5">Baixa</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Rodoviário</td>
+                                    <td class="px-4 py-2.5">Baixo</td>
+                                    <td class="px-4 py-2.5">Alto</td>
+                                    <td class="px-4 py-2.5">Baixa</td>
+                                    <td class="px-4 py-2.5">Altíssima</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Dutoviário</td>
+                                    <td class="px-4 py-2.5">Muito Alto</td>
+                                    <td class="px-4 py-2.5">Muito Baixo</td>
+                                    <td class="px-4 py-2.5">Altíssima (Fluido/Gás)</td>
+                                    <td class="px-4 py-2.5">Nula</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2.5 font-semibold">Aquaviário</td>
+                                    <td class="px-4 py-2.5">Médio a Alto</td>
+                                    <td class="px-4 py-2.5">Baixo</td>
+                                    <td class="px-4 py-2.5">Altíssima</td>
+                                    <td class="px-4 py-2.5">Baixa</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`
+            },
+            {
+                id: 3,
+                correctAnswer: "D",
+                header: "Questão 03",
+                text: `<p class="mb-4 font-semibold">As comunicações e a transmissão de informações digitais revolucionaram a organização espacial e produtiva na transição para o século XXI, consolidando o que a teoria geográfica denomina Meio Técnico-Científico-Informacional.</p>
+                <div class="space-y-3 pl-4 border-l-2 border-indigo-200 my-4 text-stone-700">
+                    <p><strong>I -</strong> As redes materiais de fibra óptica submarina e as conexões de satélites constituem a base física que viabiliza a instantaneidade dos fluxos financeiros e o funcionamento de mercados de capitais em tempo real, independentemente da distância geográfica entre as praças de negociação.</p>
+                    <p><strong>II -</strong> A expansão das tecnologias de informação e comunicação (TICs) promoveu uma homogeneização socioespacial plena no planeta, extinguindo a divisão territorial do trabalho entre regiões centrais e periféricas graças ao acesso universal às redes digitais de alta velocidade.</p>
+                    <p><strong>III -</strong> O controle oligopolista dos fluxos imateriais de dados e das grandes plataformas de comunicação digital por corporações transnacionais restabelece novas hierarquias espaciais e novas formas de dependência econômica na atual Divisão Internacional do Trabalho.</p>
+                </div>
+                <p class="mt-4">Quais estão corretas?</p>`,
+                options: {
+                    A: "Apenas I.",
+                    B: "Apenas III.",
+                    C: "Apenas I e II.",
+                    D: "Apenas I e III.",
+                    E: "I, II e III."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (D)</p>
+                    <p>A análise do Meio Técnico-Científico-Informacional na era da globalização exige a compreensão da dialética entre a fixidez e a fluidez do espaço geográfico, bem como das assimetrias geradas pelas redes corporativas.</p>
+                    <p><strong>Afirmativa I (Correta):</strong> Os fluxos financeiros globais imateriais dependem de uma infraestrutura física terrestre altamente densa e materializada. Os cabos submarinos de fibra óptica de transmissão de dados e as redes de satélites geoestacionários de telecomunicação de banda larga são os suportes espaciais que asseguram a circulação instantânea e as transações cambiais e imobiliárias globais de capital financeiro.</p>
+                    <p><strong>Afirmativa II (Incorreta):</strong> O desenvolvimento técnico-científico-informacional não promoveu a homogeneização socioespacial ou o fim da divisão territorial do trabalho. Pelo contrário, as novas tecnologias de rede acentuaram a seletividade espacial (esquizofrenia do espaço), concentrando infraestruturas modernas de alta velocidade nos pontos de interesse do capital corporativo e marginalizando amplas regiões periféricas nacionais e globais.</p>
+                    <p><strong>Afirmativa III (Correta):</strong> As grandes corporações transnacionais de tecnologia da informação concentram o controle dos algoritmos de busca, do processamento de dados e da segurança informacional, monopolizando ou oligopolizando os fluxos de dados e estabelecendo novos laços de subordinação econômica na Divisão Internacional do Trabalho.</p>
+                </div>`
+            },
+            {
+                id: 4,
+                correctAnswer: "C",
+                header: "Questão 04",
+                text: `<p class="mb-4 font-semibold">O comércio contemporâneo internacional é estruturado por redes globais de valor e pela fragmentação geográfica dos processos produtivos industriais e de serviços. Sobre as transformações geográficas que caracterizam as redes de fluxos comerciais do capitalismo atual, assinale a alternativa correta.</p>`,
+                options: {
+                    A: "O comércio internacional de bens de alta tecnologia dispensa a infraestrutura física de portos e aeroportos, sendo processado inteiramente por meio da desmaterialização e virtualização dos canais de distribuição digitais mundiais.",
+                    B: "As Cadeias Globais de Valor (CGVs) caracterizam-se pelo retorno à centralização de todas as etapas de montagem e desenvolvimento em um único polo fabril nacional, visando à eliminação de custos logísticos de transportes marítimos transfronteiriços.",
+                    C: "O domínio das correntes comerciais globais está fortemente atrelado ao controle de ativos intangíveis, tais como softwares, logística de distribuição, design, marcas e patentes de serviços, que agregam o maior valor final aos produtos físicos.",
+                    D: "O comércio de serviços na atualidade permanece restrito aos mercados locais metropolitanos nacionais, sem registrar participação relevante nas trocas externas entre países desenvolvidos e nações emergentes.",
+                    E: "A integração comercial globalizada contemporânea baseia-se no enfraquecimento das corporações transnacionais e no renascimento de mercados regionais autônomos e isolados de fluxo fechado."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (C)</p>
+                    <p>Esta questão aborda as transformações do comércio internacional na atualidade, caracterizado pelo desenvolvimento das Cadeias Globais de Valor (CGVs) e pelo crescente papel estratégico dos serviços modernos e dos ativos intangíveis.</p>
+                    <p><strong>Alternativa (A) Incorreta:</strong> O comércio de bens físicos de alta tecnologia (tais como microprocessadores, semicondutores e hardware avançado) depende de complexas e rápidas infraestruturas físicas de transporte multimodal, principalmente aeroviárias e portuárias, para ligar as distantes unidades de montagem aos centros mundiais de consumo.</p>
+                    <p><strong>Alternativa (B) Incorreta:</strong> As Cadeias Globais de Valor baseiam-se na lógica da fragmentação geográfica, e não da centralização espacial. A montagem de um único produto é fatiada em dezenas de etapas espalhadas por vários continentes, em busca de vantagens locacionais como mão de obra barata, isenções fiscais ou acesso facilitado a recursos naturais.</p>
+                    <p><strong>Alternativa (C) Correta:</strong> Na atual Divisão Internacional do Trabalho, a maior fatia do valor agregado de uma mercadoria não reside mais na fase física da sua montagem industrial fabril, mas sim no controle dos ativos imateriais e intelectuais associados a ela (tais como design, patentes de desenvolvimento, softwares proprietários, estratégias globais de marketing corporativo e controle dos canais logísticos de distribuição). Esses ativos intangíveis altamente lucrativos são controlados por corporações transnacionais situadas em cidades globais de comando de economias centrais.</p>
+                    <p><strong>Alternativa (D) Incorreta:</strong> O comércio internacional de serviços modernos (TI, engenharia consultiva, assessoria financeira de investimentos, propriedade intelectual) é uma das áreas de crescimento mais expressivo do comércio global, superando barreiras nacionais e articulando redes de transações entre países centrais e emergentes.</p>
+                    <p><strong>Alternativa (E) Incorreta:</strong> A integração comercial contemporânea consolida o poder hegemônico das corporações transnacionais, que coordenam as redes globais de fornecimento e direcionam os fluxos comerciais do capitalismo financeiro informacional.</p>
+                </div>`
+            },
+            {
+                id: 5,
+                correctAnswer: "A",
+                header: "Questão 05",
+                text: `<p class="mb-4 font-semibold">Numere a segunda coluna de acordo com a primeira, associando adequadamente as principais formações espaciais urbanas do Rio Grande do Sul às características das suas redes de circulação, comércio e infraestruturas de transportes.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-brand-border my-4 text-sm">
+                    <div>
+                        <p class="font-bold mb-2 text-indigo-700">Primeira Coluna</p>
+                        <p class="mb-1"><strong>(1)</strong> Região Metropolitana de Porto Alegre</p>
+                        <p class="mb-1"><strong>(2)</strong> Aglomeração Urbana do Nordeste</p>
+                        <p class="mb-1"><strong>(3)</strong> Aglomeração Urbana do Sul</p>
+                        <p class="mb-1"><strong>(4)</strong> Aglomeração Urbana do Litoral Norte</p>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-2 text-indigo-700">Segunda Coluna</p>
+                        <p class="mb-2"><strong>( )</strong> Abriga o principal porto marítimo do estado, atuando como um nó estratégico de escoamento agroexportador de granéis agrícolas e industriais, integrado por ramais ferroviários e rodoviários.</p>
+                        <p class="mb-2"><strong>( )</strong> Caracteriza-se por uma forte dinâmica sazonal de serviços e comércio ligada ao turismo de veraneio, contendo diversas unidades de conservação e exibindo alta vulnerabilidade ambiental ao longo de seus eixos de circulação costeira.</p>
+                        <p class="mb-2"><strong>( )</strong> Concentra cerca de um terço da população gaúcha, apresentando elevada densidade demográfica e centralizando os serviços quaternários de comando, centros universitários e conexões logísticas aeroviárias e rodoviárias complexas.</p>
+                        <p class="mb-2"><strong>( )</strong> Apresenta dinamismo industrial vinculado a bens de capital e de consumo, com forte dependência de redes de transporte rodoviário para escoar sua produção metalmecânica e integrar seus serviços regionais.</p>
+                    </div>
+                </div>
+                <p class="mt-4">A sequência correta de preenchimento dos parênteses da segunda coluna, de cima para baixo, é</p>`,
+                options: {
+                    A: "3 – 4 – 1 – 2.",
+                    B: "1 – 3 – 4 – 2.",
+                    C: "4 – 2 – 3 – 1.",
+                    D: "2 – 3 – 1 – 4.",
+                    E: "3 – 2 – 1 – 4."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (A)</p>
+                    <p>A questão exige que o candidato correlacione a espacialização urbana regional do Rio Grande do Sul aos seus eixos de transporte, comércio, circulação de mercadorias e infraestruturas logísticas.</p>
+                    <p><strong>Associação (3) Aglomeração Urbana do Sul:</strong> Corresponde ao primeiro parêntese. A Aglomeração Urbana do Sul (Pelotas/Rio Grande) destaca-se por abrigar o Superporto de Rio Grande, terminal marítimo de grande profundidade natural que centraliza as maiores exportações gaúchas de granéis e manufaturados agroindustriais, interligado a ramais rodoferroviários e dutoviários estratégicos.</p>
+                    <p><strong>Associação (4) Aglomeração Urbana do Litoral Norte:</strong> Corresponde ao segundo parêntese. O Litoral Norte gaúcho apresenta alta sazonalidade demográfica e econômica vinculada ao turismo litorâneo, gerando picos temporais de demanda de comércio e serviços e fragilidades ambientais severas em suas dunas, lagoas e eixos rodoviários (como a BR-101 e a Estrada do Mar).</p>
+                    <p><strong>Associação (1) Região Metropolitana de Porto Alegre:</strong> Corresponde ao terceiro parêntese. Como maior polo populacional e de serviços avançados do estado, a RMPA concentra cerca de um terço do contingente gaúcho e abriga as principais conexões de transporte aéreo (Aeroporto Salgado Filho), serviços corporativos e de gestão e densas redes de fluxos industriais e financeiros.</p>
+                    <p><strong>Associação (2) Aglomeração Urbana do Nordeste:</strong> Corresponde ao quarto parêntese. A região da Serra Gaúcha (Caxias do Sul/Bento Gonçalves) caracteriza-se por um pujante dinamismo industrial no ramo metalmecânico, de transporte e móveis, dependendo diretamente de eixos logísticos rodoviários estruturados (RS-122, BR-116) para escoar sua produção e integrar os seus serviços especializados de apoio.</p>
+                    <p class="font-semibold text-stone-900 mt-2">A ordenação correta das associações produz a sequência 3 – 4 – 1 – 2, correspondendo à Alternativa (A).</p>
+                </div>`
+            },
+            {
+                id: 6,
+                correctAnswer: "C",
+                header: "Questão 06",
+                text: `<p class="mb-4 font-semibold">A plataformização do setor terciário e a expansão do capitalismo de plataforma geraram impactos profundos na organização espacial do trabalho, do comércio e dos serviços urbanos contemporâneos. Considere as seguintes afirmações sobre esse fenômeno:</p>
+                <div class="space-y-3 pl-4 border-l-2 border-indigo-200 my-4 text-stone-700">
+                    <p><strong>I -</strong> A plataformização de serviços de mobilidade e entrega urbana organiza-se espacialmente a partir da centralização e controle algorítmico dos fluxos por corporações tecnológicas internacionais, paralelamente à extrema descentralização e pulverização territorial de trabalhadores informais e precarizados.</p>
+                    <p><strong>II -</strong> O funcionamento das plataformas de serviços digitais de transporte elimina a necessidade de infraestruturas materiais e investimentos estatais em redes físicas de circulação urbana, assentando-se apenas em fluxos virtuais puros de dados móveis de satélite.</p>
+                    <p><strong>III -</strong> A dinâmica espacial do capitalismo de plataforma promove novas relações de trabalho caracterizadas pela flexibilização extrema e pela transferência dos custos operacionais físicos (veículos, manutenção, combustível, conectividade) do capital corporativo para o próprio trabalhador individual.</p>
+                </div>
+                <p class="mt-4">Quais estão corretas?</p>`,
+                options: {
+                    A: "Apenas I.",
+                    B: "Apenas II.",
+                    C: "Apenas I e III.",
+                    D: "Apenas II e III.",
+                    E: "I, II e III."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (C)</p>
+                    <p>O fenômeno contemporâneo da plataformização do setor terciário expressa espacialmente a reestruturação produtiva do capitalismo informacional, redefinindo o trânsito urbano de pessoas e mercadorias.</p>
+                    <p><strong>Afirmativa I (Correta):</strong> A plataformização de serviços (como os aplicativos de transporte e entregas rápidas) opera sobre uma marcante contradição geográfica. De um lado, há uma fortíssima centralização do capital e do processamento informacional algorítmico em polos globais de tecnologia proprietária; de outro lado, ocorre a descentralização física e pulverização territorial dos trabalhadores individuais precarizados, que realizam as entregas nas malhas urbanas locais.</p>
+                    <p><strong>Afirmativa II (Incorreta):</strong> O capitalismo de plataforma não elimina as infraestruturas materiais das cidades. Para funcionar, as plataformas dependem crucialmente de uma densa base material física construída e mantida com investimentos públicos estatais, o que inclui as malhas asfálticas viárias urbanas, sistemas de iluminação e energia elétrica, antenas físicas de telefonia celular e repetidoras de ondas de rádio e cabos de transmissão de dados.</p>
+                    <p><strong>Afirmativa III (Correta):</strong> O modelo operacional da plataformização exime as corporações de TI da posse e manutenção das ferramentas físicas de trabalho tradicionais. Os custos logísticos operacionais tangíveis e de depreciação do capital fixo (como aquisição do carro/moto, manutenção mecânica, seguros de acidentes, combustíveis e conectividade de dados móveis) são inteiramente transferidos para a esfera de responsabilidade do próprio trabalhador individual.</p>
+                </div>`
+            },
+            {
+                id: 7,
+                correctAnswer: "C",
+                header: "Questão 07",
+                text: `<p class="mb-4 font-semibold">As cidades globais desempenham funções cruciais na articulação espacial das redes de fluxos de capital, informações, serviços modernos e poder decisório na atualidade. Considerando o contexto conceitual que envolve as redes urbanas mundiais e o papel das cidades globais, assinale a alternativa <span class="underline font-bold text-red-600">INCORRETA</span>.</p>`,
+                options: {
+                    A: "As cidades globais são os principais nós de comando da economia internacional, onde se concentram sedes de grandes corporações transnacionais e serviços especializados avançados como engenharia financeira, marketing corporativo e advocacia internacional.",
+                    B: "A rede de cidades globais configura um arquipélago urbano cujos nós encontram-se interconectados por fluxos contínuos de alta densidade tecnológica, mantendo, muitas vezes, vínculos de integração financeira mais intensos entre si do que com seus territórios nacionais vizinhos mais próximos.",
+                    C: "A centralidade geográfica e o prestígio de uma metrópole na hierarquia de cidades globais moderna decorrem essencialmente do tamanho absoluto de sua população residente, o que coloca as megacidades mais populosas de países periféricos no topo do comando mundial dos fluxos financeiros.",
+                    D: "A dispersão territorial das fábricas em escala global reforçou e expandiu as necessidades de centralização de serviços de gestão estratégica e controle financeiro de alta complexidade em metrópoles como Nova York, Londres, Tóquio e Paris.",
+                    E: "O desenvolvimento de infraestruturas avançadas de telecomunicações viabilizou a integração instantânea de bolsas de valores de diversas cidades globais ao redor do planeta, redefinindo as fronteiras temporais e espaciais dos fluxos monetários mundiais."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-red-700">Gabarito: Alternativa (C) [Declaração INCORRETA procurada]</p>
+                    <p>Esta questão avalia os conceitos geográficos associados às redes urbanas e à hierarquia de cidades globais no cenário da globalização econômica.</p>
+                    <p><strong>Alternativa (C) Incorreta (Gabarito da Questão):</strong> O prestígio e a classificação de uma cidade como cidade global não residem no tamanho populacional absoluto de seus habitantes. O tamanho populacional de 10 milhões ou mais define a categoria estritamente demográfica de <em>megacidade</em>, de ocorrência comum em países emergentes e periféricos que carecem de poder decisório internacional (como Lagos, Dhaka ou Karachi). A centralidade de uma cidade global decorre da sua densidade de serviços avançados, presença de bolsas de valores de influência mundial e capacidade de comandar as redes financeiras e fluxos internacionais de capital.</p>
+                    <p>As demais alternativas são declarações geograficamente corretas sobre a centralização estratégica, redes do tipo arquipélago conectadas em tempo real e a interconexão global das bolsas através de redes de informação.</p>
+                </div>`
+            },
+            {
+                id: 8,
+                correctAnswer: "A",
+                header: "Questão 08",
+                text: `<p class="mb-4 font-semibold">Numere a segunda coluna de acordo com a primeira, relacionando as redes de fluxos energéticos estratégicos e infraestruturas do espaço geográfico da América do Sul às suas respectivas funções geográficas e importância geopolítica regional.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-stone-50 p-4 rounded-xl border border-brand-border my-4 text-sm">
+                    <div>
+                        <p class="font-bold mb-2 text-indigo-700">Primeira Coluna</p>
+                        <p class="mb-1"><strong>(1)</strong> Gasoduto Bolívia-Brasil (GASBOL)</p>
+                        <p class="mb-1"><strong>(2)</strong> Linhas de Transmissão de Itaipu Binacional</p>
+                        <p class="mb-1"><strong>(3)</strong> Gasoduto de Integração Uruguaiana-Porto Alegre</p>
+                    </div>
+                    <div>
+                        <p class="font-bold mb-2 text-indigo-700">Segunda Coluna</p>
+                        <p class="mb-2"><strong>( )</strong> Consiste em uma infraestrutura linear de grande extensão que conecta a bacia de produção hidroelétrica de aproveitamento binacional diretamente aos maiores centros de consumo urbano-industrial do Sudeste e Sul do Brasil, estruturando a estabilidade do Sistema Interligado Nacional (SIN).</p>
+                        <p class="mb-2"><strong>( )</strong> Trata-se de uma rede transfronteiriça de escoamento dutoviário de alta capacidade, projetada para suprir a demanda industrial por fontes menos poluentes nos estados de São Paulo, Santa Catarina e Rio Grande do Sul, configurando um marco de integração energética sul-americana.</p>
+                        <p class="mb-2"><strong>( )</strong> Representa um eixo de fluxo energético regional que interliga a rede de distribuição de gás natural liquefeito na fronteira ocidental do Rio Grande do Sul em direção à capital gaúcha, promovendo a integração e diversificação da matriz energética industrial local.</p>
+                    </div>
+                </div>
+                <p class="mt-4">A sequência correta de preenchimento dos parênteses da segunda coluna, de cima para baixo, é</p>`,
+                options: {
+                    A: "2 – 1 – 3.",
+                    B: "1 – 2 – 3.",
+                    C: "3 – 1 – 2.",
+                    D: "2 – 3 – 1.",
+                    E: "1 – 3 – 2."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (A)</p>
+                    <p>A integração regional do espaço geográfico sul-americano é materializada por redes técnicas de fluxos de energia (eletricidade, petróleo, gás natural) que ligam as jazidas produtivas de fronteiras aos grandes mercados consumidores urbanos e industriais.</p>
+                    <p><strong>Associação (2) Linhas de Transmissão de Itaipu:</strong> Corresponde ao primeiro parêntese. As linhas de transmissão em corrente contínua e alternada de ultra-alta tensão estendem-se a partir da usina hidroelétrica binacional de Itaipu (rio Paraná, divisa Brasil-Paraguai) para bombear enormes fluxos energéticos em direção ao subsistema do Sudeste e Sul brasileiro, atuando como um eixo regulador da carga energética nacional.</p>
+                    <p><strong>Associação (1) Gasoduto Bolívia-Brasil (GASBOL):</strong> Corresponde ao segundo parêntese. O GASBOL representa a rede técnica de transporte de gás de maior expressão transfronteiriça na América do Sul. Conecta as jazidas bolivianas ao complexo industrial do Sudeste e Sul brasileiro, promovendo o desenvolvimento fabril regional com uma fonte de queima menos emissora.</p>
+                    <p><strong>Associação (3) Gasoduto Uruguaiana-Porto Alegre:</strong> Corresponde ao terceiro parêntese. Esse gasoduto regional constitui um duto de integração no estado do Rio Grande do Sul que liga a fronteira ocidental ao centro metropolitano de Porto Alegre, de modo a interiorizar o acesso ao insumo energético e dinamizar os parques industriais locais.</p>
+                    <p class="font-semibold text-stone-900 mt-2">A ordenação correta das associações gera a sequência 2 – 1 – 3, correspondendo à Alternativa (A).</p>
+                </div>`
+            },
+            {
+                id: 9,
+                correctAnswer: "D",
+                header: "Questão 09",
+                text: `<p class="mb-4 font-semibold">O crescimento do comércio eletrônico (e-commerce) reconfigurou de forma profunda as redes de circulação, a distribuição de mercadorias físicas e o ordenamento urbano-regional contemporâneo. Considere as seguintes afirmações a respeito desse impacto geográfico:</p>
+                <div class="space-y-3 pl-4 border-l-2 border-indigo-200 my-4 text-stone-700">
+                    <p><strong>I -</strong> A expansão do e-commerce promoveu uma total desmaterialização do comércio varejista, eliminando por completo a necessidade geográfica de armazéns físicos, galpões de estocagem e frotas de distribuição terrestres na economia urbana moderna.</p>
+                    <p><strong>II -</strong> O dinamismo das entregas rápidas induziu a multiplicação de Centros de Distribuição (Fulfillment Centers) estrategicamente alocados na periferia imediata das grandes regiões metropolitanas e ao longo de eixos rodoviários expressos para minimizar o tempo de deslocamento das mercadorias.</p>
+                    <p><strong>III -</strong> A reestruturação logística urbana acarretou um aumento substantivo na circulação cotidiana de veículos utilitários leves, caminhões de pequeno porte e motofretistas em vias metropolitanas, impactando o tráfego e as dinâmicas tradicionais de mobilidade associadas ao consumo físico tradicional.</p>
+                </div>
+                <p class="mt-4">Quais estão corretas?</p>`,
+                options: {
+                    A: "Apenas I.",
+                    B: "Apenas II.",
+                    C: "Apenas I e III.",
+                    D: "Apenas II e III.",
+                    E: "I, II e III."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (D)</p>
+                    <p>A expansão meteórica do comércio eletrônico (e-commerce) reordenou os fluxos materiais, os sistemas logísticos e o trânsito de veículos no espaço urbano e regional contemporâneo.</p>
+                    <p><strong>Afirmativa I (Incorreta):</strong> O e-commerce não representa uma desmaterialização completa da cadeia de abastecimento comercial. Embora a etapa de seleção e pagamento seja processada de forma virtual eletrônica, o produto comercializado é material e tangível, demandando uma vasta infraestrutura física logística de armazéns, transportes terrestres e pátios de triagem mecânica de cargas.</p>
+                    <p><strong>Afirmativa II (Correta):</strong> A acirrada concorrência pelo menor tempo de entrega das compras domésticas induziu as empresas líderes a instalar grandes complexos de armazenagem e embalagem (<em>Fulfillment Centers</em>) em posições metropolitanas estratégicas. Esses galpões logísticos instalam-se em áreas periféricas ou periurbanas com preços de terra acessíveis e junto a grandes vias para acelerar as rotas de circulação.</p>
+                    <p><strong>Afirmativa III (Correta):</strong> O modelo logístico de entrega ponto-a-ponto descentralizada (<em>last mile</em>) estimulou o tráfego diário de milhares de veículos utilitários leves, vans, caminhões pequenos e motoboys de entrega rápida pelas artérias viárias das metrópoles, impondo fortes alterações no padrão tradicional de circulação urbana.</p>
+                </div>`
+            },
+            {
+                id: 10,
+                correctAnswer: "B",
+                header: "Questão 10",
+                text: `<p class="mb-4 font-semibold">O turismo consolidou-se como um dos segmentos mais dinâmicos do setor terciário na atualidade, gerando intensos fluxos espaciais de pessoas, informações e capitais. Sobre a geografia do turismo e seu papel na integração do espaço geográfico globalizado, assinale a alternativa correta.</p>`,
+                options: {
+                    A: "O turismo internacional contemporâneo distribui-se de forma espacialmente homogênea entre os continentes, eliminando disparidades econômicas entre países centrais e regiões periféricas ao atuar de modo equitativo no território.",
+                    B: "O turismo contemporâneo atua como indutor de especialização funcional de territórios de interesse paisagístico, de biodiversidade regional ou histórico, promovendo a transformação de recursos naturais, bens culturais e identidades tradicionais em valores de troca e mercadorias turísticas integradas ao mercado global.",
+                    C: "A estruturação dos fluxos turísticos modernos independe do desenvolvimento de redes digitais de informação ou de serviços avançados de agenciamento e transações financeiras transnacionais corporativas.",
+                    D: "A expansão de enclaves de turismo de luxo em países periféricos atua como mecanismo neutro em relação às populações locais, blindando o solo urbano circundante contra dinâmicas de gentrificação, exclusão habitacional e especulação imobiliária.",
+                    E: "O avanço do nomadismo digital e o turismo contemporâneo provocaram uma drástica redução estrutural na demanda por redes de transportes aéreos internacionais, dada a substituição do trânsito de pessoas pela experiência sensorial virtual simulada."
+                },
+                explanation: `
+                <div class="prose-custom text-sm leading-relaxed text-stone-700 space-y-4">
+                    <p class="font-bold text-indigo-700">Gabarito: Alternativa (B)</p>
+                    <p>A geografia do turismo contemporâneo reflete como essa atividade do setor terciário moderno atua na reorganização e mercantilização dos territórios em escala global.</p>
+                    <p><strong>Alternativa (A) Incorreta:</strong> O turismo internacional de massas e de negócios é altamente concentrado e seletivo no espaço, privilegiando destinos europeus, asiáticos e norte-americanos estruturados com vultosos capitais fixos.</p>
+                    <p><strong>Alternativa (B) Correta:</strong> O turismo contemporâneo reconfigura o espaço geográfico ao submeter novos territórios à lógica mercantil do consumo paisagístico, ecológico ou de lazer histórico. Por meio da <em>especialização funcional de territórios</em>, o setor turístico transforma elementos naturais do espaço físico, acervos históricos e manifestações da identidade cultural e dos saberes tradicionais locais de comunidades em mercadorias e valores de troca turísticos plenamente integrados às redes de fluxos de capitais globais.</p>
+                    <p><strong>Alternativa (C) Incorreta:</strong> A estruturação e a realização dos fluxos dependem intrinsecamente do avanço das redes de telecomunicações e serviços financeiros, que viabilizam agenciamentos digitais instantâneos e pagamentos de divisas transnacionais.</p>
+                    <p><strong>Alternativa (D) Incorreta:</strong> A implantação de resorts ou enclaves turísticos de alta renda gera pressões severas sobre o solo e a terra urbana. Esse processo promove a especulação imobiliária acelerada, o encarecimento geral do custo de vida e processos de gentrificação e exclusão territorial excludente.</p>
+                    <p><strong>Alternativa (E) Incorreta:</strong> O surgimento do nomadismo digital e o fortalecimento do turismo na era informacional elevaram drasticamente as taxas e fluxos de transporte aéreo internacional de passageiros.</p>
+                </div>`
+            }
+        ];
+
+        // Core App State
+        let userAnswers = {};
+        let quizSubmitted = false;
+
+        // Render all questions dynamically to guarantee standard clean styling
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q) => {
+                const questionCard = document.createElement('div');
+                questionCard.id = `card-q${q.id}`;
+                questionCard.className = "bg-white border border-brand-border rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-300";
+                
+                // Constructing options markup
+                let optionsMarkup = '';
+                Object.entries(q.options).forEach(([key, val]) => {
+                    optionsMarkup += `
+                        <label onclick="selectOption(${q.id}, '${key}')" class="flex items-start gap-4 p-4 rounded-xl border border-brand-border hover:border-indigo-300 hover:bg-stone-50/50 cursor-pointer transition-all relative select-none md:text-base text-sm group">
+                            <input type="radio" name="question-${q.id}" id="q${q.id}-${key}" value="${key}" class="mt-1 h-4.5 w-4.5 text-indigo-600 border-stone-300 focus:ring-indigo-500 accent-indigo-600 flex-shrink-0" ${userAnswers[q.id] === key ? 'checked' : ''}>
+                            <span class="font-bold text-brand-darktext group-hover:text-indigo-900 transition-colors">${key})</span>
+                            <span class="text-brand-darktext leading-relaxed font-normal">${val}</span>
+                            
+                            <!-- Status Icons (Hidden until submit) -->
+                            <span id="icon-container-q${q.id}-${key}" class="ml-auto flex-shrink-0 hidden text-lg"></span>
+                        </label>
+                    `;
+                });
+
+                questionCard.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-stone-100 pb-4 mb-6">
+                        <span class="font-bold text-sm text-indigo-600 tracking-wider uppercase">${q.header}</span>
+                        <div id="status-badge-q${q.id}" class="hidden text-xs font-semibold px-3 py-1 rounded-full"></div>
+                    </div>
+                    
+                    <!-- Question Context/Statement -->
+                    <div class="prose max-w-none text-brand-darktext leading-relaxed font-normal mb-8 md:text-base text-sm">
+                        ${q.text}
+                    </div>
+
+                    <!-- Options list -->
+                    <div class="space-y-3" id="options-list-q${q.id}">
+                        ${optionsMarkup}
+                    </div>
+
+                    <!-- Resolution (Hidden until submit) -->
+                    <div id="resolution-q${q.id}" class="hidden mt-8 pt-6 border-t border-dashed border-stone-200">
+                        <div class="bg-indigo-50/40 rounded-xl p-5 border border-indigo-100">
+                            <div class="flex items-center gap-2 text-indigo-800 font-bold mb-3 text-sm">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span>Gabarito Comentado e Resolução Detalhada</span>
+                            </div>
+                            ${q.explanation}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(questionCard);
+            });
+            updateTracker();
+        }
+
+        // Handle option click
+        function selectOption(qId, key) {
+            if (quizSubmitted) return; // Freeze interactions after submit
+
+            userAnswers[qId] = key;
+            updateTracker();
+
+            // Highlight selected card visually
+            const optionInputs = document.getElementsByName(`question-${qId}`);
+            optionInputs.forEach((input) => {
+                const label = input.closest('label');
+                if (input.value === key) {
+                    label.classList.add('border-indigo-500', 'bg-indigo-50/30', 'ring-1', 'ring-indigo-100');
+                    label.classList.remove('border-brand-border', 'bg-stone-50/50');
+                } else {
+                    label.classList.remove('border-indigo-500', 'bg-indigo-50/30', 'ring-1', 'ring-indigo-100');
+                    label.classList.add('border-brand-border');
+                }
+            });
+        }
+
+        // Update answered questions counter
+        function updateTracker() {
+            const answeredCount = Object.keys(userAnswers).length;
+            document.getElementById('answered-count').innerText = answeredCount;
+        }
+
+        // Submit Quiz execution
+        function submitQuiz() {
+            if (quizSubmitted) return;
+
+            const answeredCount = Object.keys(userAnswers).length;
+            if (answeredCount < 10) {
+                // Trigger customized warnings modal (Anti-alert mechanism)
+                document.getElementById('modal-answered-count').innerText = answeredCount;
+                const modal = document.getElementById('custom-warning-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                return;
+            }
+
+            confirmSubmit();
+        }
+
+        function closeWarningModal() {
+            const modal = document.getElementById('custom-warning-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmSubmitAnyway() {
+            closeWarningModal();
+            confirmSubmit();
+        }
+
+        // Process final answers and reveal comments/explanations inline
+        function confirmSubmit() {
+            quizSubmitted = true;
+            let score = 0;
+
+            questionsData.forEach((q) => {
+                const userChoice = userAnswers[q.id];
+                const correctChoice = q.correctAnswer;
+                const isCorrect = userChoice === correctChoice;
+
+                if (isCorrect) score++;
+
+                const card = document.getElementById(`card-q${q.id}`);
+                const statusBadge = document.getElementById(`status-badge-q${q.id}`);
+                const resolutionBox = document.getElementById(`resolution-q${q.id}`);
+
+                // 1. Color Card Background & Show Success Indicators
+                if (isCorrect) {
+                    card.classList.add('border-emerald-200', 'bg-emerald-50/10');
+                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-check"></i> Você Acertou`;
+                    statusBadge.className = "text-xs font-semibold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1.5";
+                } else {
+                    card.classList.add('border-rose-200', 'bg-rose-50/10');
+                    statusBadge.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Você Errou`;
+                    statusBadge.className = "text-xs font-semibold px-3 py-1 rounded-full bg-rose-100 text-rose-800 flex items-center gap-1.5";
+                }
+                statusBadge.classList.remove('hidden');
+
+                // 2. Format options inside the DOM
+                const optionLabels = document.querySelectorAll(`[name="question-${q.id}"]`);
+                optionLabels.forEach((radio) => {
+                    const label = radio.closest('label');
+                    const labelKey = radio.value;
+                    const iconContainer = document.getElementById(`icon-container-q${q.id}-${labelKey}`);
+                    
+                    radio.disabled = true; // Disable radios post-submission
+                    label.classList.add('cursor-default');
+                    label.classList.remove('hover:border-indigo-300', 'hover:bg-stone-50/50');
+
+                    // Highlight the correct answer with Green
+                    if (labelKey === correctChoice) {
+                        label.className = "flex items-start gap-4 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/40 cursor-default select-none text-brand-darktext leading-relaxed font-normal relative md:text-base text-sm";
+                        iconContainer.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i>`;
+                        iconContainer.classList.remove('hidden');
+                    }
+                    // Highlight the user's incorrect answer with Red
+                    else if (labelKey === userChoice && userChoice !== correctChoice) {
+                        label.className = "flex items-start gap-4 p-4 rounded-xl border-2 border-rose-500 bg-rose-50/40 cursor-default select-none text-brand-darktext leading-relaxed font-normal relative md:text-base text-sm";
+                        iconContainer.innerHTML = `<i class="fa-solid fa-xmark text-rose-600"></i>`;
+                        iconContainer.classList.remove('hidden');
+                    } else {
+                        // Reset styling of other options
+                        label.className = "flex items-start gap-4 p-4 rounded-xl border border-brand-border opacity-60 cursor-default select-none text-brand-darktext leading-relaxed font-normal relative md:text-base text-sm";
+                    }
+                });
+
+                // 3. Reveal detailed resolution block
+                resolutionBox.classList.remove('hidden');
+            });
+
+            // Calculate score details & show global feedback box
+            const pct = Math.round((score / 10) * 100);
+            document.getElementById('score-text').innerText = `${score} / 10`;
+            document.getElementById('percent-text').innerText = `${pct}% de acertos`;
+
+            let feedback = '';
+            if (score === 10) {
+                feedback = 'Espetacular! Desempenho perfeito! Você domina com maestria todas as nuances e fluxos da geografia econômica, dos modais e do setor terciário.';
+            } else if (score >= 8) {
+                feedback = 'Excelente! Seu aproveitamento é brilhante e demonstra excelente preparação teórica sobre redes de circulação, modais de transporte e comunicações.';
+            } else if (score >= 5) {
+                feedback = 'Bom trabalho! Você possui uma sólida compreensão básica sobre o setor terciário, mas vale a pena revisar as resoluções detalhadas e as tabelas operacionais abaixo para fixar os tópicos mais complexos.';
+            } else {
+                feedback = 'Foco nos estudos! A geografia do setor terciário, modais sul-americanos e plataformas digitais é repleta de detalhes teóricos. Revise atentamente o gabarito comentado de cada questão abaixo.';
+            }
+
+            document.getElementById('feedback-message').innerText = feedback;
+
+            // Render Results Banner and focus user's attention
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.remove('hidden');
+            
+            // Smoothly scroll down to the performance card
+            resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Restart the simulation back to initial state
+        function restartQuiz() {
+            userAnswers = {};
+            quizSubmitted = false;
+            
+            // Re-render empty dynamic form markup
+            renderQuestions();
+
+            // Hide Results Banner
+            document.getElementById('results-panel').classList.add('hidden');
+            
+            // Scroll smoothly back to top welcoming card
+            document.getElementById('welcome-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize App on load
+        window.onload = function() {
+            renderQuestions();
+        };
+    </script>
+</body>
+</html>
