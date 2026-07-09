@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo - Demografia Mundial e Desigualdades Sócio-espaciais</title>
+    <!-- Importação do Tailwind CSS para estilização moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Importação de fontes ergonômicas para leitura (Inter para UI e Lora para Textos Longos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos adicionais para uma experiência de leitura confortável livre de fadiga */
+        body {
+            background-color: #FAF8F5; /* Tom suave creme/marfim (reduz fadiga ocular) */
+            color: #2D312E; /* Cinza grafite escuro (contraste suave e nítido) */
+        }
+        .readable-max-width {
+            max-width: 72ch; /* Limite recomendado de caracteres por linha para leitura ideal */
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen selection:bg-stone-200">
+
+    <!-- Topo da página / Cabeçalho -->
+    <header class="border-b border-stone-200 bg-white/80 backdrop-blur sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-emerald-800 text-white rounded-lg font-bold shadow-sm">
+                    FAURGS
+                </div>
+                <div>
+                    <h1 class="text-stone-900 font-semibold text-lg leading-tight">Simulado de Demografia</h1>
+                    <p class="text-stone-500 text-xs">Estilo FAURGS • Geografia Contemporânea</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="quick-progress" class="hidden sm:flex items-center gap-2 text-sm text-stone-600 font-medium">
+                    Progresso: <span id="progress-count">0</span> de 10 respondidas
+                </div>
+                <a href="#results-section" id="jump-to-results" class="hidden text-xs bg-emerald-800 text-white font-semibold py-1.5 px-3 rounded-full hover:bg-emerald-900 transition-colors">
+                    Ver Gabarito
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8 md:py-16">
+        <!-- Card de Introdução -->
+        <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-10 mb-10 shadow-sm">
+            <div class="inline-block px-3 py-1 bg-emerald-50 text-emerald-800 text-xs font-semibold rounded-full mb-4 tracking-wider uppercase">
+                Simulado Preparatório
+            </div>
+            <h2 class="text-3xl md:text-4xl font-serif font-semibold text-stone-900 tracking-tight leading-tight mb-4">
+                Demografia Mundial e Desigualdades Sócio-espaciais
+            </h2>
+            <p class="text-stone-600 leading-relaxed font-serif text-lg readable-max-width">
+                Este simulado contém exatamente 10 questões de nível avançado baseadas nos modelos de cobrança da banca <strong>FAURGS</strong>. Ao final da resolução das questões na íntegra, envie suas respostas para conferir sua nota e estudar pelas explicações teóricas e tabelas de síntese de cada item.
+            </p>
+        </div>
+
+        <!-- Banner de Avisos / Erros do Formulário (Evita o uso de alert) -->
+        <div id="validation-warning" class="hidden bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-xl shadow-sm transition-all duration-300">
+            <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <div>
+                    <h4 class="font-semibold text-amber-900 text-sm">Respostas pendentes!</h4>
+                    <p class="text-amber-700 text-xs mt-1" id="warning-message">Por favor, responda a todas as questões antes de enviar.</p>
+                </div>
+            </div>
+        </div>
+
+        <form id="quiz-form" class="space-y-8 md:space-y-12">
+            
+            <!-- QUESTÃO 1 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-1">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 01</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Demografia</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    Considere as seguintes afirmações sobre o modelo de Transição Demográfica global e as suas implicações na dinâmica populacional contemporânea.
+                </div>
+
+                <div class="bg-stone-50 border-l-2 border-stone-300 p-4 mb-6 rounded-r-lg font-serif text-[1.05rem] leading-relaxed text-stone-700 space-y-3">
+                    <p><strong>I -</strong> A primeira fase da transição demográfica, caracterizada por altas taxas de natalidade e de mortalidade, resulta em um crescimento vegetativo muito baixo ou estagnado, cenário que atualmente se restringe a pouquíssimas populações tradicionais isoladas.</p>
+                    <p><strong>II -</strong> A desaceleração demográfica observada nos países em desenvolvimento ocorreu de forma idêntica e simultânea à dos países desenvolvidos, sendo regulada principalmente pelo equilíbrio espontâneo entre a taxa de urbanização e o acesso a serviços básicos de saúde.</p>
+                    <p><strong>III -</strong> A fase pós-transicional caracteriza-se pela estabilização ou declínio do ritmo de crescimento populacional, onde as taxas de natalidade e de mortalidade se equilibram em patamares baixos, podendo resultar em crescimento vegetativo negativo, como verificado em diversas nações da Europa.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">Quais estão corretas?</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q1" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q1" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) Apenas III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q1" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q1" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) Apenas I e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q1" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) I, II e III.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 2 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-2">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 02</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Estrutura Etária</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    Numere a segunda coluna de acordo com a primeira, associando os conceitos e dinâmicas da estrutura etária global às suas respectivas características e impactos socioeconómicos.
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-stone-50 p-5 mb-6 rounded-xl font-serif text-[1.02rem] leading-relaxed text-stone-700">
+                    <div>
+                        <strong class="text-stone-900 block mb-2">Primeira Coluna:</strong>
+                        <ul class="space-y-1.5">
+                            <li>(1) Bónus Demográfico (Janela de Oportunidade)</li>
+                            <li>(2) Envelhecimento Populacional</li>
+                            <li>(3) Transição Demográfica Acelerada</li>
+                            <li>(4) Razão de Dependência Elevada por Jovens</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong class="text-stone-900 block mb-2">Segunda Coluna:</strong>
+                        <ul class="space-y-3 text-sm">
+                            <li>( &nbsp; ) Fenómeno típico de nações de industrialização e urbanização tardias, em que o rápido declínio da taxa de fecundidade promove o estreitamento da base da pirâmide etária num curto intervalo de tempo.</li>
+                            <li>( &nbsp; ) Período em que a proporção de indivíduos em idade ativa supera a soma de crianças e idosos, reduzindo a taxa de dependência e oferecendo um cenário favorável ao crescimento económico e ao investimento produtivo.</li>
+                            <li>( &nbsp; ) Característica demográfica de nações com baixos índices de desenvolvimento humano, onde taxas persistentes de fecundidade geram pirâmides de base larga e topo estreito, pressionando os sistemas de saúde primária e de educação básica.</li>
+                            <li>( &nbsp; ) Processo de alteração estrutural no topo da pirâmide etária que impõe desafios urgentes aos sistemas previdenciários públicos e exige a reformulação de políticas de saúde voltadas para doenças crónicas não transmissíveis.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">A sequência correta de preenchimento dos parênteses, de cima para baixo, é</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q2" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) 3 – 1 – 4 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q2" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) 1 – 3 – 4 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q2" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) 4 – 2 – 3 – 1.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q2" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) 3 – 4 – 1 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q2" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) 2 – 3 – 1 – 4.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 3 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-3">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 03</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Teorias Demográficas</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    As teorias demográficas buscam explicar a relação entre o crescimento populacional e a disponibilidade de recursos. Sobre essas formulações teóricas e suas implicações nas políticas globais, considere as seguintes afirmações.
+                </div>
+
+                <div class="bg-stone-50 border-l-2 border-stone-300 p-4 mb-6 rounded-r-lg font-serif text-[1.05rem] leading-relaxed text-stone-700 space-y-3">
+                    <p><strong>I -</strong> A teoria malthusiana clássica defendia que a população crescia em progressão geométrica, enquanto a produção de alimentos crescia em progressão aritmética, propondo a sujeição moral como único mecanismo legítimo para conter a expansão demográfica.</p>
+                    <p><strong>II -</strong> Os neomalthusianos argumentam que o subdesenvolvimento das nações do Sul global é uma consequência direta do elevado crescimento populacional, justificando políticas estatais de planejamento familiar e controle de natalidade como pré-requisitos para o desenvolvimento econômico.</p>
+                    <p><strong>III -</strong> A teoria reformista (ou marxista) inverte a causalidade neomalthusiana ao afirmar que a pobreza e o subdesenvolvimento são os verdadeiros geradores do crescimento populacional desordenado, defendendo que a superação das desigualdades socioeconômicas naturalmente reduzirá as taxas de natalidade.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">Quais estão corretas?</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q3" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q3" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) Apenas III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q3" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q3" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q3" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) I, II e III.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 4 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-4">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 04</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Distribuição da População</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    Assinale com V (verdadeiro) ou F (falso) as afirmações a seguir, referentes aos fatores que influenciam a distribuição espacial da população mundial e a configuração das desigualdades globais.
+                </div>
+
+                <div class="bg-stone-50 p-5 mb-6 rounded-xl font-serif text-[1.02rem] leading-relaxed text-stone-700 space-y-4">
+                    <p>( &nbsp; ) As áreas ecúmenas correspondem a regiões com condições físicas favoráveis à fixação humana permanente, concentrando as maiores densidades demográficas do planeta.</p>
+                    <p>( &nbsp; ) O crescimento demográfico urbano contemporâneo é marcado pela metropolização nas nações em desenvolvimento, onde a migração rural-urbana e o crescimento vegetativo local geram processos de macrocefalia urbana e segregação socioespacial intensa.</p>
+                    <p>( &nbsp; ) A distribuição da população global é homogênea, distribuindo-se igualmente entre os Hemisférios Norte e Sul devido à facilidade de integração promovida pelos meios técnicos e de transporte modernos.</p>
+                    <p>( &nbsp; ) A inserção de países no sistema econômico globalizado perpetua a divisão internacional do trabalho, concentrando no Sul global as atividades de menor valor agregado e maior desgaste ambiental, o que aprofunda as disparidades de qualidade de vida em relação ao Norte global.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">A sequência correta de preenchimento dos parênteses, de cima para baixo, é</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q4" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) V – V – V – F.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q4" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) V – V – F – V.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q4" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) F – F – V – V.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q4" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) V – F – F – V.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q4" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) F – V – F – V.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 5 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-5">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 05</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Migrações Globais</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    As migrações internacionais constituem um reflexo direto das assimetrias de desenvolvimento econômico-social no mundo contemporâneo. Considere as seguintes afirmações sobre a dinâmica migratória global.
+                </div>
+
+                <div class="bg-stone-50 border-l-2 border-stone-300 p-4 mb-6 rounded-r-lg font-serif text-[1.05rem] leading-relaxed text-stone-700 space-y-3">
+                    <p><strong>I -</strong> A maior parte dos fluxos migratórios internacionais ocorre na direção Sul-Norte, impulsionada por fatores de repulsão (como conflitos armados, crises econômicas e desastres climáticos) e de atração (como busca de melhores salários e estabilidade institucional).</p>
+                    <p><strong>II -</strong> O conceito de "fuga de cérebros" refere-se à migração de profissionais altamente qualificados das nações em desenvolvimento para os países desenvolvidos, o que atenua as desigualdades técnico-científicas entre essas regiões ao redistribuir o conhecimento.</p>
+                    <p><strong>III -</strong> As remessas financeiras enviadas por imigrantes aos seus países de origem constituem importantes fontes de divisas para nações em desenvolvimento, embora não alterem as causas estruturais das desigualdades socioespaciais nesses locais.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">Quais estão corretas?</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q5" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q5" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q5" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) Apenas I e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q5" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q5" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) I, II e III.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 6 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-6">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 06</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Demografia e Saúde</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    A dinâmica demográfica está intimamente ligada ao perfil de saúde das populações. Numere a segunda coluna de acordo com a primeira, correlacionando os termos da transição epidemiológica e nutricional com as suas descrições no espaço mundial contemporâneo.
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-stone-50 p-5 mb-6 rounded-xl font-serif text-[1.02rem] leading-relaxed text-stone-700">
+                    <div>
+                        <strong class="text-stone-900 block mb-2">Primeira Coluna:</strong>
+                        <ul class="space-y-1.5">
+                            <li>(1) Transição Epidemiológica</li>
+                            <li>(2) Ambiente Obesogênico</li>
+                            <li>(3) Dupla Carga de Má-nutrição</li>
+                            <li>(4) Desigualdade Sanitária</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong class="text-stone-900 block mb-2">Segunda Coluna:</strong>
+                        <ul class="space-y-3 text-sm">
+                            <li>( &nbsp; ) Coexistência de subnutrição (fome crônica) e sobrepeso/obesidade em uma mesma população, domicílio ou indivíduo, muito comum em países de renda média em rápida urbanização.</li>
+                            <li>( &nbsp; ) Processo de mudança de longo prazo nos padrões de morbidade e mortalidade, caracterizado pela transição da predominância de doenças infecciosas para doenças crônicas não transmissíveis.</li>
+                            <li>( &nbsp; ) Espaço urbano que promove o sedentarismo e desencoraja hábitos alimentares saudáveis, propiciando a venda de alimentos ultraprocessados hipercalóricos e limitando o acesso a espaços de prática esportiva.</li>
+                            <li>( &nbsp; ) Disparidades estruturais no acesso à água potável, esgotamento sanitário e serviços de saúde de qualidade, que resultam em taxas de mortalidade infantil drasticamente maiores nos países periféricos.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">A sequência correta de preenchimento dos parênteses, de cima para baixo, é</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q6" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) 3 – 1 – 2 – 4.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q6" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) 1 – 3 – 4 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q6" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) 3 – 2 – 1 – 4.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q6" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) 4 – 1 – 2 – 3.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q6" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) 2 – 4 – 1 – 3.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 7 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-7">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 07</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - IDH</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    O Índice de Desenvolvimento Humano (IDH) é uma medida sintética utilizada pela Organização das Nações Unidas (ONU) para avaliar a qualidade de vida e o nível de desenvolvimento socioeconômico dos países. Considere as seguintes afirmações sobre os componentes do IDH e suas relações com a demografia.
+                </div>
+
+                <div class="bg-stone-50 border-l-2 border-stone-300 p-4 mb-6 rounded-r-lg font-serif text-[1.05rem] leading-relaxed text-stone-700 space-y-3">
+                    <p><strong>I -</strong> O cálculo do IDH é composto por três dimensões básicas: saúde (medida pela expectativa de vida ao nascer), educação (medida pela média de anos de escolaridade e anos esperados de escolaridade) e padrão de vida (medido pela Renda Nacional Bruta per capita).</p>
+                    <p><strong>II -</strong> Países que possuem pirâmides etárias com base estreita e topo largo tendem, estatisticamente, a registrar IDH classificado como muito alto, pois o envelhecimento populacional reflete a consolidação de indicadores favoráveis de saúde e saneamento.</p>
+                    <p><strong>III -</strong> Embora o IDH seja uma métrica amplamente utilizada, ele pode ocultar profundas desigualdades socioespaciais internas (regionais, raciais ou de gênero), razão pela qual a ONU desenvolveu o IDH Ajustado à Desigualdade (IDHAD).</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">Quais estão corretas?</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q7" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q7" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q7" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) Apenas I e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q7" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q7" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) I, II e III.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 8 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-8">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 08</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Geografia da Fome</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    Josué de Castro, em sua obra clássica "Geografia da Fome", pioneiramente mapeou e teorizou a fome como um produto de fatores socioeconômicos e políticos, e não biológicos ou climáticos. Assinale com V (verdadeira) ou F (falsa) as afirmações a seguir sobre a fome e a segurança alimentar no cenário global contemporâneo.
+                </div>
+
+                <div class="bg-stone-50 p-5 mb-6 rounded-xl font-serif text-[1.02rem] leading-relaxed text-stone-700 space-y-4">
+                    <p>( &nbsp; ) O retorno de países em desenvolvimento ao Mapa da Fome nas últimas décadas está associado de forma direta à descontinuidade de políticas de alimentação e nutrição, à ocorrência de instabilidades políticas e a crises sanitárias globais, como a pandemia de Covid-19.</p>
+                    <p>( &nbsp; ) A fome mundial contemporânea decorre primordialmente da escassez absoluta de alimentos no planeta, gerada pela incapacidade técnica da produção agrícola global em acompanhar o ritmo de crescimento populacional nas nações pobres.</p>
+                    <p>( &nbsp; ) Os chamados "hotspots de insegurança alimentar" são áreas prioritárias monitoradas por organismos internacionais, onde a desnutrição severa é agravada pela convergência de conflitos geopolíticos, crises macroeconômicas e eventos climáticos extremos.</p>
+                    <p>( &nbsp; ) O agronegócio exportador de commodities nas nações em desenvolvimento prioriza as demandas do mercado internacional em detrimento da segurança alimentar doméstica, perpetuando disparidades de acesso a alimentos de qualidade entre as populações rurais e urbanas locais.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">A sequência correta de preenchimento dos parênteses, de cima para baixo, é</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q8" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) V – F – V – V.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q8" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) V – V – F – F.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q8" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) F – F – V – V.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q8" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) V – F – F – V.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q8" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) F – V – V – F.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 9 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-9">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 09</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Demografia Regional</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    O crescimento populacional mundial ocorre de maneira altamente heterogênea no espaço geográfico, refletindo disparidades socioeconômicas profundas. Considere as seguintes afirmações sobre a dinâmica demográfica regional atual.
+                </div>
+
+                <div class="bg-stone-50 border-l-2 border-stone-300 p-4 mb-6 rounded-r-lg font-serif text-[1.05rem] leading-relaxed text-stone-700 space-y-3">
+                    <p><strong>I -</strong> A África Subsaariana apresenta as maiores taxas de crescimento populacional e fecundidade do globo, decorrentes de processos de urbanização tardios e de disparidades no acesso a métodos contraceptivos e à educação feminina.</p>
+                    <p><strong>II -</strong> Países europeus como a Itália e a Alemanha enfrentam o desafio do crescimento vegetativo negativo e do envelhecimento populacional acelerado, o que acarreta a necessidade de políticas de atração de mão de obra imigrante para sustentar a População Economicamente Ativa (PEA).</p>
+                    <p><strong>III -</strong> A China e a Índia, as duas maiores nações populosas do mundo, vivenciam dinâmicas demográficas idênticas de desaceleração abrupta da natalidade devido à manutenção de rígidas políticas estatais de controle de natalidade em ambos os países.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">Quais estão corretas?</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q9" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q9" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q9" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) Apenas I e II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q9" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q9" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) I, II e III.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 10 -->
+            <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm transition-all duration-200 hover:border-stone-300 relative" id="q-container-10">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded">Questão 10</span>
+                    <span class="text-xs text-stone-400 font-mono">FAURGS - Espaço Urbano</span>
+                </div>
+                
+                <div class="font-serif text-lg leading-relaxed text-stone-800 mb-6 readable-max-width">
+                    A espacialização das desigualdades socioeconômicas no meio urbano global revela a exclusão social de forma materializada. Considere as seguintes afirmações sobre a segregação socioespacial urbana.
+                </div>
+
+                <div class="bg-stone-50 border-l-2 border-stone-300 p-4 mb-6 rounded-r-lg font-serif text-[1.05rem] leading-relaxed text-stone-700 space-y-3">
+                    <p><strong>I -</strong> O fenômeno da gentrificação consiste em intervenções urbanas de requalificação de áreas centrais ou históricas degradadas que resultam na valorização imobiliária e na consequente expulsão indireta das populações tradicionais de baixa renda, que são empurradas para periferias desprovidas de infraestrutura.</p>
+                    <p><strong>II -</strong> A divisão socioespacial das cidades nas nações subdesenvolvidas expressa-se na dualidade entre as áreas centrais dotadas de farta infraestrutura de transporte e serviços e as áreas periféricas autoconstruídas, caracterizadas pela vulnerabilidade ambiental e ausência de saneamento básico.</p>
+                    <p><strong>III -</strong> A autossegregação é um processo conduzido por classes sociais de alto poder aquisitivo que optam por residir em condomínios fechados ou enclaves fortificados para se isolarem da violência urbana e da exclusão social circundante, fragmentando ainda mais o tecido público urbano.</p>
+                </div>
+
+                <p class="font-semibold text-stone-950 mb-4 text-sm uppercase tracking-wide">Quais estão corretas?</p>
+
+                <div class="space-y-3">
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q10" value="A" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(A) Apenas I.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q10" value="B" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(B) Apenas II.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q10" value="C" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(C) Apenas I e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q10" value="D" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(D) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start gap-3 p-4 border border-stone-200 rounded-xl cursor-pointer hover:bg-stone-50 transition-colors duration-150">
+                        <input type="radio" name="q10" value="E" class="mt-1 h-4 w-4 text-emerald-800 focus:ring-emerald-500 border-stone-300">
+                        <span class="text-stone-700 font-medium text-[0.95rem]">(E) I, II e III.</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Botão de Finalizar -->
+            <div class="pt-6 text-center">
+                <button type="submit" class="w-full sm:w-auto bg-emerald-800 hover:bg-emerald-900 active:transform active:scale-95 text-white font-semibold text-lg py-5 px-12 rounded-xl shadow-lg transition-all duration-150 inline-flex items-center justify-center gap-3">
+                    <span>Finalizar Simulado e Ver Resoluções</span>
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+        <!-- SEÇÃO DE RESULTADOS E RESOLUÇÕES (OCULTA INICIALMENTE) -->
+        <section id="results-section" class="hidden mt-16 pt-12 border-t-2 border-stone-200 space-y-12">
+            
+            <!-- Painel de Pontuação Global -->
+            <div class="bg-emerald-950 text-white rounded-3xl p-8 md:p-12 text-center shadow-xl relative overflow-hidden">
+                <div class="absolute -right-24 -bottom-24 w-64 h-64 bg-emerald-900 rounded-full opacity-30 pointer-events-none"></div>
+                <div class="absolute -left-24 -top-24 w-64 h-64 bg-emerald-800 rounded-full opacity-25 pointer-events-none"></div>
+                
+                <h3 class="text-sm font-semibold tracking-widest uppercase text-emerald-300 mb-2">Desempenho Geral</h3>
+                <div class="text-6xl md:text-8xl font-serif font-extrabold text-white tracking-tight mb-4">
+                    <span id="correct-score">0</span><span class="text-emerald-400 font-sans font-light">/10</span>
+                </div>
+                <p class="text-xl font-serif text-emerald-100 max-w-xl mx-auto mb-6" id="score-feedback-text">
+                    Carregando feedback...
+                </p>
+                <div class="inline-flex gap-4 text-sm font-medium text-emerald-200 bg-emerald-900/50 px-6 py-2.5 rounded-full border border-emerald-800">
+                    <div>Erros: <span id="incorrect-score" class="text-rose-300 font-bold">0</span></div>
+                    <div class="w-px bg-emerald-800"></div>
+                    <div>Aproveitamento: <span id="percentage-score" class="text-yellow-200 font-bold">0%</span></div>
+                </div>
+            </div>
+
+            <!-- Título das Resoluções -->
+            <div class="border-b border-stone-200 pb-4">
+                <h3 class="text-2xl font-serif font-bold text-stone-900">Gabarito Comentado & Resoluções</h3>
+                <p class="text-stone-500 text-sm mt-1">Análise minuciosa de cada questão, fundamentação teórica e dados estatísticos complementares.</p>
+            </div>
+
+            <div class="space-y-12 font-serif text-stone-800 text-lg leading-relaxed">
+                
+                <!-- Resolução 1 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 01</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: D</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 01</h4>
+                    <p class="mb-4">O modelo da Transição Demográfica descreve a evolução histórica da dinâmica populacional ao correlacionar as variações de natalidade e mortalidade ao desenvolvimento socioeconômico, à urbanização e ao acesso à infraestrutura médica.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li><strong>• Afirmação I (Correta):</strong> A Fase 1 (Pré-transicional) é definida por taxas elevadas e flutuantes de natalidade e de mortalidade, produzindo um crescimento vegetativo virtualmente nulo ou instável. Historicamente superada com a Revolução Industrial, essa fase hoje só se aplica a pequenos contingentes populacionais em isolamento absoluto ou sob colapso civilizacional total.</li>
+                        <li><strong>• Afirmação II (Incorreta):</strong> A transição demográfica nos países em desenvolvimento ocorreu de forma tardia em relação aos países desenvolvidos, mas de maneira incomparavelmente mais rápida e descompassada. Enquanto a transição do Norte global estendeu-se por quase dois séculos associada à elevação orgânica dos padrões de vida, no Sul global ela foi impulsionada pela importação abrupta e exógena de técnicas médico-sanitárias e de saneamento básico após a Segunda Guerra Mundial. Isso provocou uma queda imediata na mortalidade, enquanto a natalidade permaneceu em níveis pré-industriais por décadas, gerando uma explosão demográfica antes que a fecundidade recuasse sob o efeito da urbanização tardia e da inserção feminina no mercado de trabalho formal.</li>
+                        <li><strong>• Afirmação III (Correta):</strong> A fase pós-transicional (Fases 4 e 5) caracteriza-se por um novo equilíbrio demográfico em patamares baixos. Países desenvolvidos encontram-se no estágio onde a taxa de fecundidade cai abaixo do limite de reposição populacional de 2,1 filhos por mulher, gerando um envelhecimento populacional acentuado e, em alguns casos, crescimento populacional negativo ou estagnação demográfica persistente.</li>
+                    </ul>
+
+                    <div class="overflow-x-auto rounded-xl border border-stone-200">
+                        <table class="min-w-full text-left text-sm font-sans border-collapse">
+                            <thead class="bg-stone-100 text-stone-700 border-b border-stone-200">
+                                <tr>
+                                    <th class="p-3 font-semibold">Fase da Transição</th>
+                                    <th class="p-3 font-semibold">Taxa de Natalidade</th>
+                                    <th class="p-3 font-semibold">Taxa de Mortalidade</th>
+                                    <th class="p-3 font-semibold">Crescimento Vegetativo</th>
+                                    <th class="p-3 font-semibold">Contexto Socioeconômico Predominante</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 text-stone-600">
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Fase 1: Pré-industrial</td>
+                                    <td class="p-3">Muito Elevada</td>
+                                    <td class="p-3">Muito Elevada</td>
+                                    <td class="p-3">Baixo ou Nulo (Flutuante)</td>
+                                    <td class="p-3">Sociedades agrárias tradicionais, alta incidência de epidemias e fome.</td>
+                                </tr>
+                                <tr class="bg-stone-50/50">
+                                    <td class="p-3 font-semibold text-stone-900">Fase 2: Expansão Rápida</td>
+                                    <td class="p-3">Muito Elevada</td>
+                                    <td class="p-3">Em Rápido Declínio</td>
+                                    <td class="p-3">Muito Elevado (Explosão)</td>
+                                    <td class="p-3">Urbanização inicial, introdução de saneamento e vacinas básicas.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Fase 3: Desaceleração</td>
+                                    <td class="p-3">Em Declínio Rápido</td>
+                                    <td class="p-3">Baixa e Estabilizada</td>
+                                    <td class="p-3">Moderado a Baixo</td>
+                                    <td class="p-3">Inserção da mulher no mercado, difusão de métodos contraceptivos.</td>
+                                </tr>
+                                <tr class="bg-stone-50/50">
+                                    <td class="p-3 font-semibold text-stone-900">Fase 4: Estabilização</td>
+                                    <td class="p-3">Baixa</td>
+                                    <td class="p-3">Baixa</td>
+                                    <td class="p-3">Muito Baixo ou Nulo</td>
+                                    <td class="p-3">Sociedades plenamente urbanizadas, elevado desenvolvimento humano.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Fase 5: Implosão</td>
+                                    <td class="p-3">Extremamente Baixa</td>
+                                    <td class="p-3">Baixa (Leve Elevação)</td>
+                                    <td class="p-3">Negativo (Declínio)</td>
+                                    <td class="p-3">Envelhecimento severo, alta dependência de idosos.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resolução 2 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 02</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: A</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 02</h4>
+                    <p class="mb-4">A estrutura etária de uma população reflete as mudanças nas taxas de natalidade e mortalidade ao longo do tempo, influenciando diretamente a capacidade de acumulação econômica de uma nação.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li><strong>• (3) Transição Demográfica Acelerada:</strong> Relaciona-se com a primeira afirmação. Reflete a experiência de nações de industrialização recente ou tardia (como os países emergentes da América Latina e da Ásia), onde a transição demográfica ocorreu de forma compactada no tempo. O estreitamento rápido da base da pirâmide (redução drástica de crianças de 0 a 14 anos) ocorreu em poucas décadas, diferentemente da lenta transição geracional do continente europeu.</li>
+                        <li><strong>• (1) Bônus Demográfico (Janela de Oportunidade):</strong> Relaciona-se com a segunda afirmação. Ocorre quando a redução rápida da taxa de fecundidade diminui a parcela infantil da população, enquanto a proporção de idosos ainda não cresceu significativamente. Isso resulta temporariamente em uma proporção máxima de população em idade ativa (15 a 64 anos) em relação à população dependente, o que reduz os encargos sociais do Estado e maximiza a capacidade produtiva interna se houver emprego formal suficiente.</li>
+                        <li><strong>• (4) Razão de Dependência Elevada por Jovens:</strong> Relaciona-se com a terceira afirmação. É característica de países de periferia econômica que ainda não avançaram significativamente na transição demográfica. A persistência de elevadas taxas de fecundidade gera uma pirâmide etária de perfil extremamente jovem, com uma base muito larga que sobrecarrega a PEA ativa para sustentar o provimento de serviços sociais básicos à infância.</li>
+                        <li><strong>• (2) Envelhecimento Populacional:</strong> Relaciona-se com a quarta afirmação. Descreve a transição para pirâmides etárias de topo largo e base estreita, característica de países desenvolvidos ou emergentes em fase avançada de transição. Esse processo gera um declínio na oferta de mão de obra jovem e exerce enorme pressão sobre as despesas fiscais com aposentadorias, além de demandar a reestruturação da infraestrutura de saúde para atender a doenças de longa duração.</li>
+                    </ul>
+
+                    <div class="overflow-x-auto rounded-xl border border-stone-200">
+                        <table class="min-w-full text-left text-sm font-sans border-collapse">
+                            <thead class="bg-stone-100 text-stone-700 border-b border-stone-200">
+                                <tr>
+                                    <th class="p-3 font-semibold">Perfil de Pirâmide Etária</th>
+                                    <th class="p-3 font-semibold">Características Geométricas</th>
+                                    <th class="p-3 font-semibold">Razão de Dependência Predominante</th>
+                                    <th class="p-3 font-semibold">Desafios de Políticas Públicas</th>
+                                    <th class="p-3 font-semibold">Exemplos Geográficos</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 text-stone-600">
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Jovem (Base Larga)</td>
+                                    <td class="p-3">Base muito expandida, topo filiforme (formato triangular clássico)</td>
+                                    <td class="p-3">Dependência infantil muito elevada</td>
+                                    <td class="p-3">Universalização da educação básica, redução da mortalidade infantil.</td>
+                                    <td class="p-3">Países da África Subsaariana e partes do Sul da Ásia.</td>
+                                </tr>
+                                <tr class="bg-stone-50/50">
+                                    <td class="p-3 font-semibold text-stone-900">Adulta (Estreitamento da Base)</td>
+                                    <td class="p-3">Redução da base, alargamento do centro da pirâmide (bônus demográfico)</td>
+                                    <td class="p-3">Baixa dependência total (janela de oportunidade)</td>
+                                    <td class="p-3">Geração de empregos de qualidade, inserção técnica de jovens.</td>
+                                    <td class="p-3">Brasil, México, Índia e grande parte da América Latina.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Envelhecida (Topo Alargado)</td>
+                                    <td class="p-3">Base muito estreita, topo largo e retangular (pirâmide invertida)</td>
+                                    <td class="p-3">Dependência geriátrica em rápida expansão</td>
+                                    <td class="p-3">Reforma previdenciária, reestruturação da saúde pública preventiva.</td>
+                                    <td class="p-3">Japão, Alemanha, Itália e partes do Leste Europeu.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resolução 3 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 03</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: E</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 03</h4>
+                    <p class="mb-4">As formulações teóricas acerca da demografia refletem disputas ideológicas e visões políticas distintas sobre a escassez de recursos e o desenvolvimento das nações.</p>
+                    <ul class="space-y-3">
+                        <li><strong>• Afirmação I (Correta):</strong> Thomas Robert Malthus, em fins do século XVIII, elaborou a primeira grande teoria demográfica de caráter sistemático. Ele asseverava a existência de um descompasso estrutural entre o ritmo reprodutivo da espécie humana (crescimento em progressão geométrica) e a capacidade produtiva da terra (crescimento em progressão aritmética). Sem prever a mecanização agrícola, Malthus propôs a "sujeição moral" (abstinência sexual, casamentos tardios e negação de auxílio social aos pobres) como única via racional para evitar catástrofes de mortalidade.</li>
+                        <li><strong>• Afirmação II (Correta):</strong> Os neomalthusianos emergiram em meados do século XX, ressignificando o pensamento malthusiano após a grande explosão demográfica dos países do Sul global. Essa corrente inverteu a causalidade do subdesenvolvimento, argumentando que a miséria crônica das nações subdesenvolvidas decorre do seu excessivo crescimento populacional, o que esgotaria a capacidade de investimento estatal. Dessa forma, defendem que o planejamento familiar impositivo e o controle rígido de natalidade são pré-requisitos absolutos para o desenvolvimento econômico.</li>
+                        <li><strong>• Afirmação III (Correta):</strong> A vertente reformista ou marxista formulou a crítica direta às teses malthusianas. Essa perspectiva demonstra que o crescimento populacional acelerado não é a causa do subdesenvolvimento, mas sim o seu efeito. A ausência de garantias sociais, a falta de acesso à educação e a miséria estrutural induzem taxas de natalidade elevadas como mecanismo de sobrevivência familiar. Por conseguinte, os reformistas defendem que as reformas socioeconômicas e a redistribuição da riqueza são os verdadeiros indutores do controle voluntário da natalidade.</li>
+                    </ul>
+                </div>
+
+                <!-- Resolução 4 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 04</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: B</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 04</h4>
+                    <p class="mb-4">A distribuição espacial da população global é fruto da interação dinâmica entre as potencialidades oferecidas pelas condições físicas da natureza (clima, relevo, hidrografia) e as formas históricas de produção e ocupação do espaço geográfico pelas sociedades humanas.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li><strong>• Item 1 (Verdadeiro):</strong> As áreas ecúmenas correspondem a porções do espaço geográfico que apresentam condições físicas e ecológicas favoráveis à habitação estável, tais como planícies fluviais, regiões de clima temperado e faixas litorâneas dotadas de canais de circulação. Opõem-se às áreas anecúmenas (desertos, regiões polares, cumes montanhosos), que impõem severos limites ambientais ao assentamento demográfico permanente.</li>
+                        <li><strong>• Item 2 (Verdadeiro):</strong> A dinâmica urbana nas nações do Sul global é caracterizada pelo crescimento desordenado. A modernização excludente do campo forçou a migração em massa de populações rurais para as áreas urbanas em busca de subsistência, criando megacidades desprovidas de infraestrutura correspondente. Esse processo de metropolização gera uma nítida segregação socioespacial, expressando-se na proliferação de favelas, ocupações informais e áreas de severo risco ambiental habitadas exclusivamente por populações marginalizadas.</li>
+                        <li><strong>• Item 3 (Falso):</strong> A distribuição demográfica mundial é extremamente irregular. Cerca de 90% da população mundial reside no Hemisfério Norte, concentrada principalmente nas regiões da Ásia Meridional, Ásia Oriental, Europa Ocidental e Nordeste dos Estados Unidos. O Hemisfério Sul apresenta grandes áreas anecúmenas ou de baixa densidade, inviabilizando qualquer conceito de homogeneidade espacial demográfica.</li>
+                        <li><strong>• Item 4 (Verdadeiro):</strong> A inserção de países no sistema econômico globalizado perpetua a divisão internacional do trabalho, concentrando no Sul global as atividades de menor valor agregado e maior desgaste ambiental, o que aprofunda as disparidades de qualidade de vida em relação ao Norte global. As nações subdesenvolvidas atuam como provedoras de matérias-primas e suportam os maiores passivos ambientais decorrentes do extrativismo predatório, acentuando as disparidades de bem-estar social.</li>
+                    </ul>
+
+                    <div class="overflow-x-auto rounded-xl border border-stone-200">
+                        <table class="min-w-full text-left text-sm font-sans border-collapse">
+                            <thead class="bg-stone-100 text-stone-700 border-b border-stone-200">
+                                <tr>
+                                    <th class="p-3 font-semibold">Fatores de Concentração (Áreas Ecúmenas)</th>
+                                    <th class="p-3 font-semibold">Fatores de Dispersão (Áreas Anecúmenas)</th>
+                                    <th class="p-3 font-semibold">Dinâmica Econômica Associada</th>
+                                    <th class="p-3 font-semibold">Impacto nas Desigualdades</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 text-stone-600">
+                                <tr>
+                                    <td class="p-3">Planícies aluviais e solos férteis, climas temperados ou tropicais úmidos, proximidade ao litoral.</td>
+                                    <td class="p-3">Desertos áridos, regiões polares, cadeias montanhosas de elevada declividade, florestas equatoriais densas.</td>
+                                    <td class="p-3">Polos de industrialização, eixos de transporte global, concentração de capital financeiro e de serviços.</td>
+                                    <td class="p-3">Valorização seletiva da terra urbana e exclusão de populações pobres para áreas de risco e encostas.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resolução 5 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 05</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: C</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 05</h4>
+                    <p class="mb-4">As migrações são fenômenos geográficos indissociáveis das desigualdades no desenvolvimento socioeconômico do espaço globalizado.</p>
+                    <ul class="space-y-3">
+                        <li><strong>• Afirmação I (Correta):</strong> Embora existam fluxos intrarregionais expressivos no Sul global, os fluxos internacionais intercontinentais de maior vulto dirigem-se de nações em desenvolvimento (América Latina, África e Sul da Ásia) para países centrais (Estados Unidos e Europa Ocidental). Esse movimento é alimentado pelas profundas assimetrias de rendimento, falta de estabilidade institucional nas regiões de origem e a busca de refúgio devido a desastres de ordem militar ou ambiental.</li>
+                        <li><strong>• Afirmação II (Incorreta):</strong> O fenômeno da "fuga de cérebros" refere-se à migração seletiva de cientistas, médicos, engenheiros e pesquisadores qualificados formados em países do Sul global para os centros hegemônicos de inovação e pesquisa do Norte global. Esse fluxo amplifica e perpetua a dependência científica, acadêmica e tecnológica das nações periféricas, que arcam com os custos de formação profissional mas perdem o retorno produtivo do conhecimento especializado gerado internamente.</li>
+                        <li><strong>• Afirmação III (Correta):</strong> O envio de dinheiro por migrantes aos seus países de origem constitui uma fonte vital de divisas externas para a economia interna de dezenas de nações periféricas. Essas transferências desempenham um importante papel de proteção social e combate imediato à pobreza extrema no âmbito familiar, porém não alteram as condições estruturais, de subdesenvolvimento tecnológico ou de frágil industrialização das economias domésticas.</li>
+                    </ul>
+                </div>
+
+                <!-- Resolução 6 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 06</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: A</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 06</h4>
+                    <p class="mb-4">A demografia e a geografia médica revelam como os perfis de doença e o padrão de alimentação se alteram conforme as sociedades mudam de bases agrícolas rurais para urbanas e de consumo em massa.</p>
+                    <ul class="space-y-3">
+                        <li><strong>• (3) Dupla Carga de Má-nutrição:</strong> Relaciona-se com a primeira descrição. É um paradoxo nutricional contemporâneo verificado principalmente em nações de desenvolvimento médio e rápido processo de urbanização. Caracteriza-se pela manifestação simultânea de problemas de subnutrição clássica (desnutrição infantil e carências de micronutrientes) e desordens associadas ao sobrepeso e à obesidade. Esse fenômeno resulta da proliferação de alimentos ultraprocessados, de custo reduzido e de baixa qualidade nutricional, consumidos massivamente por populações de baixa renda desprovidas de soberania alimentar.</li>
+                        <li><strong>• (1) Transição Epidemiológica:</strong> Relaciona-se com a segunda descrição. Descreve a mudança histórica no perfil de mortalidade e adoecimento de uma sociedade. Com o avanço das infraestruturas básicas de água potável, a vacinação em massa e a ampliação do acesso à atenção básica, há uma queda acentuada no peso relativo de óbitos gerados por patologias infectocontagiosas (cólera, febre tifoide, tuberculose), ocorrendo um avanço das mortes causadas por condições de longa duração e de caráter crônico (cardiopatias, neoplasias malignas e diabetes).</li>
+                        <li><strong>• (2) Ambiente Obesogênico:</strong> Relaciona-se com a terceira descrição. Trata-se de um conceito geográfico que descreve a configuração espacial que promove o ganho excessivo de peso. Cidades com carência crônica de espaços verdes para lazer, de calçadas seguras e de parques para atividades físicas ativas induzem ao sedentarismo involuntário. Esse efeito é acentuado em bairros segregados com farta distribuição de fast-food e desprovidos de feiras ou mercados de produtos hortifrutigranjeiros frescos.</li>
+                        <li><strong>• (4) Desigualdade Sanitária:</strong> Relaciona-se com a quarta descrição. Expressa de forma contundente a divisão socioespacial. Enquanto as populações ricas dispõem de esgotamento sanitário completo e abastecimento de água purificada regular, as populações rurais dispersas ou das favelas urbanas sofrem com a falta contínua desses serviços de infraestrutura básica, o que as torna vulneráveis a endemias recorrentes.</li>
+                    </ul>
+                </div>
+
+                <!-- Resolução 7 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 07</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: E</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 07</h4>
+                    <p class="mb-4">Os indicadores de desenvolvimento social devem ser lidos sob uma ótica espacial e demográfica crítica para revelar as disparidades existentes por trás das médias gerais.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li><strong>• Afirmação I (Correta):</strong> O IDH é calculado de forma padronizada pelo PNUD a partir de três eixos fundamentais: a longevidade (saúde), avaliada pela expectativa de vida ao nascer; o nível educacional (conhecimento), medido pela média de anos de estudo e anos esperados de escolaridade; e o padrão de vida (renda), mensurado pela Renda Nacional Bruta per capita convertida pela paridade de poder de compra.</li>
+                        <li><strong>• Afirmação II (Correta):</strong> Países que completaram sua transição demográfica e exibem estruturas etárias envelhecidas tendem a apresentar ótimos indicadores de longevidade, elevados níveis de saneamento e alta escolaridade feminina, o que historicamente reduziu a natalidade. Dessa forma, existe uma correlação direta entre o envelhecimento populacional (pirâmides de topo alargado) e as faixas de IDH muito alto.</li>
+                        <li><strong>• Afirmação III (Correta):</strong> Como uma média aritmética simples de agregados nacionais, o IDH padrão não capta a divisão interna. Para corrigir essa limitação conceitual, o PNUD utiliza o IDH Ajustado à Desigualdade (IDHAD), que recalcula o índice penalizando a nota média nacional proporcionalmente à disparidade na distribuição dos indicadores de renda, educação e saúde entre a população local, revelando que mesmo países de IDH muito alto podem apresentar perdas agudas de bem-estar social quando analisados em detalhes.</li>
+                    </ul>
+
+                    <div class="overflow-x-auto rounded-xl border border-stone-200">
+                        <table class="min-w-full text-left text-sm font-sans border-collapse">
+                            <thead class="bg-stone-100 text-stone-700 border-b border-stone-200">
+                                <tr>
+                                    <th class="p-3 font-semibold">Métrica de Desenvolvimento</th>
+                                    <th class="p-3 font-semibold">Dimensões Mensuradas</th>
+                                    <th class="p-3 font-semibold">Capacidade de Revelar Disparidades Internas</th>
+                                    <th class="p-3 font-semibold">Limitações Teóricas / Aplicação Demográfica</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 text-stone-600">
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Índice de Desenvolvimento Humano (IDH)</td>
+                                    <td class="p-3">Saúde (expectativa de vida), Educação (anos de estudo) e Padrão de Vida (RNB per capita).</td>
+                                    <td class="p-3 text-rose-600 font-medium">Nula. O índice funciona como um valor médio nacional homogêneo.</td>
+                                    <td class="p-3">Pode mascarar abismos sociais profundos de raça, gênero ou distribuição regional de renda.</td>
+                                </tr>
+                                <tr class="bg-stone-50/50">
+                                    <td class="p-3 font-semibold text-stone-900">IDH Ajustado à Desigualdade (IDHAD)</td>
+                                    <td class="p-3">As mesmas dimensões do IDH, porém ponderadas pela desigualdade na sua distribuição.</td>
+                                    <td class="p-3 text-emerald-700 font-medium">Elevada. Demonstra a perda percentual de desenvolvimento humano devido à desigualdade interna.</td>
+                                    <td class="p-3">Expõe a perda de progresso social e a exclusão crônica de minorias em países emergentes ou desiguais.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resolução 8 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 08</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: A</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 08</h4>
+                    <p class="mb-4">O debate sobre a segurança alimentar e a incidência da fome nas sociedades capitalistas contemporâneas revela como as disparidades socioeconômicas e geopolíticas sobrepõem-se à capacidade técnico-produtiva das nações.</p>
+                    <ul class="space-y-3 mb-6">
+                        <li><strong>• Item 1 (Verdadeiro):</strong> O retorno de populações vulneráveis a patamares agudos de insegurança alimentar decorre de fatores institucionais e políticos, como o corte de investimentos em redes de assistência social, a desarticulação de programas voltados à agricultura de subsistência, a inflação alimentar global e as consequências econômicas da pandemia de Covid-19.</li>
+                        <li><strong>• Item 2 (Falso):</strong> Conforme amplamente demonstrado pela moderna Geografia da Fome, o problema da fome mundial contemporânea não se deve à escassez material absoluta de alimentos, dado que as inovações biotecnológicas garantem safras anuais suficientes para alimentar toda a população da Terra. Trata-se de uma crise de acesso (poder de compra) e de distribuição, onde a produção agrícola é concentrada em mercados especulativos de commodities.</li>
+                        <li><strong>• Item 3 (Verdadeiro):</strong> Hotspots de insegurança alimentar são áreas de grave perigo humanitário monitoradas de perto por organizações multilaterais (como a FAO). Nesses territórios periféricos, a insegurança alimentar severa é agravada pela convergência de choques climáticos (secas prolongadas, enchentes) e instabilidades de ordem militar ou macroeconômica.</li>
+                        <li><strong>• Item 4 (Verdadeiro):</strong> Nas economias subdesenvolvidas orientadas para o mercado externo, o agronegócio de commodities exportáveis compete pelo uso do solo, de recursos hídricos e de incentivos estatais em detrimento da agricultura familiar e de subsistência. Isso afeta a segurança alimentar das populações camponesas e rurais de baixa renda, que se veem destituídas das suas bases produtivas e expostas à vulnerabilidade econômica.</li>
+                    </ul>
+
+                    <div class="overflow-x-auto rounded-xl border border-stone-200">
+                        <table class="min-w-full text-left text-sm font-sans border-collapse">
+                            <thead class="bg-stone-100 text-stone-700 border-b border-stone-200">
+                                <tr>
+                                    <th class="p-3 font-semibold">Nível de Insegurança Alimentar</th>
+                                    <th class="p-3 font-semibold">Características Principais</th>
+                                    <th class="p-3 font-semibold">Fatores Geográficos e Estruturais Associados</th>
+                                    <th class="p-3 font-semibold">Consequências Sociais Diretas</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-100 text-stone-600">
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Segurança Alimentar (SAN)</td>
+                                    <td class="p-3">Acesso regular e permanente a alimentos de qualidade e em quantidade suficiente.</td>
+                                    <td class="p-3">Políticas públicas integradas, alta renda per capita e cadeias curtas de abastecimento.</td>
+                                    <td class="p-3">Elevada expectativa de vida e baixos índices de subnutrição infantil.</td>
+                                </tr>
+                                <tr class="bg-stone-50/50">
+                                    <td class="p-3 font-semibold text-stone-900">Insegurança Alimentar Leve</td>
+                                    <td class="p-3">Incerteza quanto à capacidade futura de obter alimentos e comprometimento da qualidade alimentar.</td>
+                                    <td class="p-3">Inflação de alimentos e instabilidade no mercado de trabalho formal.</td>
+                                    <td class="p-3">Substituição de alimentos in natura por ultraprocessados de baixo custo.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-semibold text-stone-900">Insegurança Alimentar Moderada</td>
+                                    <td class="p-3">Redução quantitativa na porção de alimentos consumidos de forma recorrente por falta de renda.</td>
+                                    <td class="p-3">Concentração severa da posse da terra e descontinuidade de redes de apoio social.</td>
+                                    <td class="p-3">Desnutrição silenciosa e perda crônica de capacidade produtiva individual.</td>
+                                </tr>
+                                <tr class="bg-stone-50/50">
+                                    <td class="p-3 font-semibold text-stone-900">Insegurança Alimentar Grave (Fome)</td>
+                                    <td class="p-3">Privação total de alimentos (fome aguda) onde indivíduos passam dias inteiros sem comer.</td>
+                                    <td class="p-3">Hotspots de conflito civil armado, secas severas associadas às mudanças climáticas.</td>
+                                    <td class="p-3">Fome extrema, êxodo migratório em massa e colapso demográfico local.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resolução 9 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 09</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: C</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 09</h4>
+                    <p class="mb-4">As assimetrias na transição demográfica global refletem a divisão socioeconômica do espaço geográfico mundial e as profundas diferenças culturais e institucionais das nações.</p>
+                    <ul class="space-y-3">
+                        <li><strong>• Afirmação I (Correta):</strong> A África Subsaariana permanece com indicadores demográficos marcados por altas taxas de natalidade e taxas de fecundidade médias superiores a 4,5 filhos por mulher. Esse atraso na transição demográfica explica-se pelo peso expressivo da população agrária tradicional de baixa renda, baixa escolarização geral de meninas, casamentos precoces e carência crônica de planejamento familiar.</li>
+                        <li><strong>• Afirmação II (Correta):</strong> Os países de elevado desenvolvimento humano na Europa enfrentam um severo envelhecimento demográfico combinado a taxas de fecundidade muito abaixo do patamar mínimo de reposição populacional (1,3 a 1,5 filhos por mulher). A baixa oferta de força de trabalho jovem compromete o equilíbrio fiscal e a sustentação econômica dos sistemas previdenciários de repartição simples. Diante desse cenário, a atração seletiva de mão de obra de países periféricos desempenha uma função importante na manutenção da atividade econômica local.</li>
+                        <li><strong>• Afirmação III (Incorreta):</strong> Embora sejam as duas maiores nações populosas do globo, suas trajetórias e ritmos demográficos são distintos. A China implementou a "política do filho único" sob forte controle coercitivo estatal a partir de 1979, o que resultou em uma desaceleração populacional precoce e em um envelhecimento populacional acentuado antes mesmo de atingir níveis elevados de renda per capita. A Índia, por sua vez, nunca aplicou medidas compulsórias de tal rigidez, registrando um declínio de fecundidade muito mais gradual e desigual entre as suas diferentes províncias regionais, o que manteve sua estrutura demográfica sensivelmente mais jovem e explica por que ultrapassou recentemente a população chinesa.</li>
+                    </ul>
+                </div>
+
+                <!-- Resolução 10 -->
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="px-2.5 py-1 bg-stone-100 text-stone-700 text-xs font-semibold rounded font-sans">QUESTÃO 10</span>
+                        <span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-semibold rounded font-sans">GABARITO: E</span>
+                    </div>
+                    <h4 class="text-xl font-bold text-stone-900 mb-4">Análise da Questão 10</h4>
+                    <p class="mb-4">A segregação socioespacial urbana reflete a apropriação seletiva da terra urbana por diferentes classes sociais, no âmbito da lógica de reprodução do capital.</p>
+                    <ul class="space-y-3">
+                        <li><strong>• Afirmação I (Correta):</strong> A gentrificação ocorre pela valorização de áreas urbanas tradicionais através de investimentos estatais e privados em requalificação arquitetônica. Esse processo de "embelezamento" das paisagens urbanas centrais induz a uma valorização imobiliária agressiva, com a alta de aluguéis e do custo de vida geral. Como consequência, as populações residentes históricas de baixa renda são expulsas indiretamente das áreas bem integradas de transporte para áreas periféricas informais.</li>
+                        <li><strong>• Afirmação II (Correta):</strong> O espaço das grandes cidades nas nações subdesenvolvidas caracteriza-se por uma marcante dualidade socioespacial. De um lado, encontram-se as áreas centrais concentradoras das atividades de prestação de serviços de luxo, dotadas de redes de esgoto, pavimentação e oferta abundante de transporte público. De outro lado, expandem-se periferias e favelas marcadas pela autoconstrução em áreas instáveis (como encostas de morros, planícies de inundação ou fundos de vale de rios urbanos), vulnerabilidade ambiental aguda e ausência crônica de saneamento e pavimentação.</li>
+                        <li><strong>• Afirmação III (Correta):</strong> A autossegregação é a fragmentação conduzida pelas frações de classe de alta renda. Em resposta ao medo da criminalidade e à divisão do espaço público comum, essas elites optam por abandonar o convívio nas áreas urbanas integradas para habitar enclaves fortificados ou condomínios residenciais fechados suburbanos de circulação privada controlada. Esse afastamento voluntário priva o restante da cidade do investimento correspondente, acentuando o isolamento socioespacial e esvaziando o papel integrador da rua e do espaço público urbano compartilhado.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="border-t border-stone-200 bg-white py-12 mt-20 text-center text-sm text-stone-500">
+        <div class="max-w-5xl mx-auto px-4">
+            <p class="font-semibold text-stone-700">Simulado Preparatório - Geografia e Demografia</p>
+            <p class="mt-2 text-xs">Desenvolvido com foco em leitura ergonômica e conforto visual para maratonas de estudo.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gabarito Oficial
+        const GABARITO = {
+            q1: 'D',
+            q2: 'A',
+            q3: 'E',
+            q4: 'B',
+            q5: 'C',
+            q6: 'A',
+            q7: 'E',
+            q8: 'A',
+            q9: 'C',
+            q10: 'E'
+        };
+
+        const form = document.getElementById('quiz-form');
+        const validationWarning = document.getElementById('validation-warning');
+        const warningMessage = document.getElementById('warning-message');
+        const progressCount = document.getElementById('progress-count');
+        const quickProgress = document.getElementById('quick-progress');
+        const jumpToResults = document.getElementById('jump-to-results');
+
+        // Atualização de feedback de progresso conforme o usuário responde
+        form.addEventListener('change', () => {
+            let answered = 0;
+            for (let i = 1; i <= 10; i++) {
+                if (form.querySelector(`input[name="q${i}"]:checked`)) {
+                    answered++;
+                }
+            }
+            progressCount.textContent = answered;
+            if (answered > 0) {
+                quickProgress.classList.remove('hidden');
+            }
+        });
+
+        // Eventos visuais nos seletores (estilização ativa das labels selecionadas)
+        document.querySelectorAll('.option-label').forEach(label => {
+            const input = label.querySelector('input[type="radio"]');
+            
+            input.addEventListener('change', () => {
+                const groupName = input.name;
+                // Remove as bordas verdes de seleção de todas as labels daquela mesma questão
+                document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                    radio.closest('.option-label').classList.remove('border-emerald-600', 'bg-emerald-50/40');
+                });
+                // Adiciona na atual selecionada
+                if (input.checked) {
+                    label.classList.add('border-emerald-600', 'bg-emerald-50/40');
+                }
+            });
+        });
+
+        // Submissão do simulado
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Validação sem alert()
+            let unanswered = [];
+            for (let i = 1; i <= 10; i++) {
+                if (!form.querySelector(`input[name="q${i}"]:checked`)) {
+                    unanswered.push(i);
+                }
+            }
+
+            if (unanswered.length > 0) {
+                warningMessage.innerHTML = `Identificamos que você deixou as seguintes questões em branco: <strong>${unanswered.map(n => 'Questão ' + String(n).padStart(2, '0')).join(', ')}</strong>. Responda a todas para avaliar seu desempenho global.`;
+                validationWarning.classList.remove('hidden');
+                
+                // Rola a tela até o topo das mensagens de aviso
+                validationWarning.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            // Oculta aviso de validação caso tenha sido preenchido por completo
+            validationWarning.classList.add('hidden');
+
+            let score = 0;
+
+            // Bloquear novos inputs e colorir as escolhas conforme gabarito
+            for (let i = 1; i <= 10; i++) {
+                const selectedInput = form.querySelector(`input[name="q${i}"]:checked`);
+                const userChoice = selectedInput.value;
+                const correctAnswer = GABARITO[`q${i}`];
+                const container = document.getElementById(`q-container-${i}`);
+                
+                // Desabilita as opções para evitar alteração pós-gabarito
+                form.querySelectorAll(`input[name="q${i}"]`).forEach(input => {
+                    input.disabled = true;
+                });
+
+                // Limpa marcações provisórias de hover e cores de seleção manual
+                container.querySelectorAll('.option-label').forEach(lbl => {
+                    lbl.classList.remove('hover:bg-stone-50', 'border-emerald-600', 'bg-emerald-50/40');
+                });
+
+                // Aplica formatação de correção visual
+                if (userChoice === correctAnswer) {
+                    score++;
+                    // Escolha correta: ganha borda e fundo verde suave
+                    const correctLabel = selectedInput.closest('.option-label');
+                    correctLabel.classList.add('border-emerald-600', 'bg-emerald-100/60', 'text-emerald-900', 'font-medium');
+                    correctLabel.insertAdjacentHTML('beforeend', `
+                        <span class="ml-auto text-emerald-800 text-xs font-semibold flex items-center gap-1 bg-emerald-100 px-2 py-1 rounded">
+                            ✓ Sua Resposta (Correta)
+                        </span>
+                    `);
+                } else {
+                    // Escolha incorreta do usuário: ganha borda e fundo vermelho suave
+                    const wrongLabel = selectedInput.closest('.option-label');
+                    wrongLabel.classList.add('border-rose-300', 'bg-rose-50', 'text-rose-900');
+                    wrongLabel.insertAdjacentHTML('beforeend', `
+                        <span class="ml-auto text-rose-800 text-xs font-semibold flex items-center gap-1 bg-rose-100 px-2 py-1 rounded">
+                            ✗ Sua Resposta
+                        </span>
+                    `);
+
+                    // Destacar a alternativa que era a correta de forma limpa
+                    const correctInput = form.querySelector(`input[name="q${i}"][value="${correctAnswer}"]`);
+                    const correctLabel = correctInput.closest('.option-label');
+                    correctLabel.classList.add('border-emerald-500', 'bg-emerald-50/50', 'text-emerald-900', 'font-medium');
+                    correctLabel.insertAdjacentHTML('beforeend', `
+                        <span class="ml-auto text-emerald-800 text-xs font-semibold flex items-center gap-1 bg-emerald-100 px-2 py-1 rounded">
+                            Gabarito Oficial
+                        </span>
+                    `);
+                }
+            }
+
+            // Alimentar e revelar seção de resultados
+            const resultsSection = document.getElementById('results-section');
+            const correctScoreSpan = document.getElementById('correct-score');
+            const incorrectScoreSpan = document.getElementById('incorrect-score');
+            const percentageScoreSpan = document.getElementById('percentage-score');
+            const scoreFeedbackText = document.getElementById('score-feedback-text');
+
+            correctScoreSpan.textContent = score;
+            incorrectScoreSpan.textContent = 10 - score;
+            const pct = Math.round((score / 10) * 100);
+            percentageScoreSpan.textContent = `${pct}%`;
+
+            // Mensagem de feedback contextualizada
+            if (score >= 9) {
+                scoreFeedbackText.innerHTML = "<strong>Desempenho Excelente!</strong> Você domina completamente o assunto. Sua capacidade interpretativa está totalmente de acordo com as exigências de alto nível da banca FAURGS.";
+            } else if (score >= 7) {
+                scoreFeedbackText.innerHTML = "<strong>Bom Aproveitamento!</strong> Você obteve uma excelente pontuação, demonstrando conhecimento sólido. Revise as resoluções detalhadas abaixo para aparar as arestas teóricas.";
+            } else if (score >= 5) {
+                scoreFeedbackText.innerHTML = "<strong>Desempenho Regular.</strong> Você acertou metade do simulado. Há conceitos importantes que demandam atenção. Utilize as explicações teóricas detalhadas abaixo como guia de revisão rápida.";
+            } else {
+                scoreFeedbackText.innerHTML = "<strong>Atenção!</strong> Seu aproveitamento ficou abaixo do esperado para aprovação direta. Dedique um tempo extra na leitura das resoluções comentadas para solidificar as teorias demográficas.";
+            }
+
+            // Exibir a seção de resultados e o botão de pulo rápido no cabeçalho
+            resultsSection.classList.remove('hidden');
+            jumpToResults.classList.remove('hidden');
+
+            // Scroll suave automático para a área de pontuação final
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    </script>
+</body>
+</html>

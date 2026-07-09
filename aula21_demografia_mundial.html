@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estudo Ativo - Demografia Mundial e Desigualdades</title>
+    <!-- Tailwind CSS para estilização moderna e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter para legibilidade impecável -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones de controle -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX para renderização perfeita de equações matemáticas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+        /* Estilização suave de marca-texto (grifados) */
+        .grifado {
+            background-color: #fef08a; /* Amarelo-marca-texto suave */
+            color: #1e293b;
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .grifado-forte {
+            background-color: #fde047; /* Amarelo mais marcante */
+            color: #0f172a;
+            padding: 0.15rem 0.35rem;
+            border-radius: 0.25rem;
+            font-weight: 700;
+        }
+        /* Garantia de que tabelas nunca gerem rolagem horizontal */
+        .table-responsive-container {
+            width: 100%;
+            overflow-x: hidden;
+        }
+        @media (max-width: 768px) {
+            .table-mobile-card, .table-mobile-card tbody, .table-mobile-card tr, .table-mobile-card td, .table-mobile-card th {
+                display: block;
+                width: 100%;
+            }
+            .table-mobile-card tr {
+                margin-bottom: 1rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+                padding: 0.75rem;
+                background-color: #f8fafc;
+            }
+            .table-mobile-card td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px solid #f1f5f9;
+            }
+            .table-mobile-card td:last-child {
+                border-bottom: none;
+            }
+            .table-mobile-card td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0.75rem;
+                width: 45%;
+                font-weight: 600;
+                text-align: left;
+                color: #475569;
+            }
+            .table-mobile-card thead {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="selection:bg-yellow-200">
+
+    <!-- Header Fixo de Identificação do Concurso -->
+    <header class="border-b border-slate-200 bg-white sticky top-0 z-50 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-600 text-white p-2 rounded-lg font-bold text-sm tracking-wider">
+                    IFSC
+                </div>
+                <div>
+                    <h1 class="text-sm font-bold text-slate-800 tracking-tight uppercase">Concurso Professor de Geografia</h1>
+                    <p class="text-xs text-slate-500 font-medium">Banca Examinadora: FAURGS</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs bg-slate-100 text-slate-600 px-3 py-1.5 rounded-full font-semibold">
+                <i class="fa-solid fa-graduation-cap"></i>
+                Guia de Memorização Ativa
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-8">
+
+        <!-- Reprodutor de Áudio Avançado no Topo -->
+        <section class="mb-10 bg-slate-50 border border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-play text-emerald-600 animate-pulse"></i>
+                    Audioguia de Memorização Dinâmica
+                </h2>
+                <span class="text-xs text-slate-400">Estude ouvindo</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                <!-- Inputs de Configuração do Áudio -->
+                <div class="md:col-span-5 flex flex-col gap-1">
+                    <label for="audio-src-input" class="text-xs font-bold text-slate-600">Arquivo MP3 da Aula:</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-music"></i>
+                        </span>
+                        <input type="text" id="audio-src-input" value="aula-demografia.mp3" 
+                            class="w-full pl-9 pr-3 py-2 text-sm bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all font-mono"
+                            placeholder="Ex: aula-demografia.mp3">
+                    </div>
+                </div>
+
+                <!-- Painel de Controles do Player -->
+                <div class="md:col-span-7 flex flex-wrap items-center justify-between gap-3 bg-white p-3 border border-slate-200 rounded-xl">
+                    <div class="flex items-center gap-2">
+                        <!-- Botão de Reproduzir/Pausar -->
+                        <button id="btn-play" class="w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <i id="play-icon" class="fa-solid fa-play ml-0.5"></i>
+                        </button>
+                        <!-- Informação de Tempo -->
+                        <div class="text-xs text-slate-600 font-mono">
+                            <span id="current-time">00:00</span> / <span id="duration-time">00:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Progresso Customizada -->
+                    <div class="flex-1 min-w-[120px] mx-2 relative group cursor-pointer" id="progress-container">
+                        <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div id="progress-bar" class="bg-emerald-600 h-full w-0 transition-all duration-75"></div>
+                        </div>
+                        <input type="range" id="progress-slider" min="0" max="100" value="0" step="0.1" 
+                            class="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer">
+                    </div>
+
+                    <!-- Controle Dinâmico de Velocidade -->
+                    <div class="flex items-center gap-1">
+                        <button id="btn-speed" class="text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 px-2.5 py-1.5 rounded-lg border border-slate-200 flex items-center gap-1 transition-all">
+                            Speed: <span id="speed-indicator">1.0x</span>
+                        </button>
+                        <!-- Menu de velocidades escondido por padrão -->
+                        <div id="speed-menu" class="hidden absolute mt-12 bg-white border border-slate-200 rounded-lg shadow-lg py-1 z-50 text-xs font-medium">
+                            <button onclick="changeSpeed(0.5)" class="block w-full px-4 py-2 text-left hover:bg-slate-50">0.5x</button>
+                            <button onclick="changeSpeed(1.0)" class="block w-full px-4 py-2 text-left hover:bg-slate-50">1.0x</button>
+                            <button onclick="changeSpeed(1.25)" class="block w-full px-4 py-2 text-left hover:bg-slate-50">1.25x</button>
+                            <button onclick="changeSpeed(1.5)" class="block w-full px-4 py-2 text-left hover:bg-slate-50">1.5x</button>
+                            <button onclick="changeSpeed(1.75)" class="block w-full px-4 py-2 text-left hover:bg-slate-50">1.75x</button>
+                            <button onclick="changeSpeed(2.0)" class="block w-full px-4 py-2 text-left hover:bg-slate-50">2.0x</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tag de Áudio Invisível original -->
+            <audio id="audio-player" class="hidden">
+                <source id="audio-source" src="aula-demografia.mp3" type="audio/mpeg">
+                Seu navegador não suporta a reprodução deste áudio.
+            </audio>
+        </section>
+
+        <!-- Introdução -->
+        <article class="prose prose-slate max-w-none">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Material Técnico de Revisão</span>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3">Demografia Mundial e Desigualdades Sócio-espaciais</h1>
+                <p class="text-slate-500 mt-2 text-base md:text-lg max-w-2xl mx-auto">
+                    Preparação cirúrgica com foco na banca <span class="grifado font-semibold">FAURGS</span> para o IFSC. Fórmulas cruciais, transição demográfica detalhada e as armadilhas recorrentes em provas EBTT.
+                </p>
+            </div>
+
+            <hr class="border-slate-200 my-8">
+
+            <!-- FICHA 1 -->
+            <section class="mb-12" id="ficha-1">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 font-bold text-sm">01</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800">Fórmulas Matemáticas e Indicadores Demográficos Críticos</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    A banca <span class="grifado">FAURGS exige rigor técnico</span> e precisão no uso dos indicadores demográficos. Memorize as fórmulas e as distinções espaciais clássicas abaixo para blindar sua prova contra as insistentes pegadinhas de inversão conceitual.
+                </p>
+
+                <!-- Box de Diferenciação Clássica -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-users text-emerald-600"></i> População Absoluta (Populoso)
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Refere-se ao <span class="grifado">número total de habitantes</span> de um território de forma estanque. Se o valor absoluto é elevado, classifica-se o território ou país como <span class="grifado font-bold">populoso</span>.
+                        </p>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                        <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-users-rectangle text-emerald-600"></i> População Relativa (Povoado)
+                        </h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            É a relação entre a população absoluta e a área total expressa em <span class="grifado font-bold">habitantes por quilômetro quadrado (hab/km²)</span>. Mede a <span class="grifado">densidade demográfica</span>; se o indicador é alto, o país é <span class="grifado font-bold">povoado</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Equações KaTeX -->
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8 text-center">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Equações de Dinâmica Populacional</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white p-4 border border-slate-100 rounded-lg shadow-sm">
+                            <p class="text-xs text-slate-500 font-bold mb-2">Crescimento Vegetativo (CV)</p>
+                            <div class="text-lg font-bold text-slate-800">
+                                $$CV = TN - TM$$
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 border border-slate-100 rounded-lg shadow-sm">
+                            <p class="text-xs text-slate-500 font-bold mb-2">Saldo Migratório (SM)</p>
+                            <div class="text-lg font-bold text-slate-800">
+                                $$SM = I - E$$
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 border border-slate-100 rounded-lg shadow-sm">
+                            <p class="text-xs text-slate-500 font-bold mb-2">Crescimento Total ($T_d$)</p>
+                            <div class="text-lg font-bold text-slate-800">
+                                $$T_d = CV + SM$$
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mt-4 font-medium italic">
+                        *Onde: TN = Taxa de Natalidade (‰); TM = Taxa de Mortalidade (‰); I = Imigrantes; E = Emigrantes.
+                    </p>
+                </div>
+
+                <!-- Tabela de Alertas de Pegadinhas (Sem Scrollbar Horizontal) -->
+                <div class="table-responsive-container border border-slate-200 rounded-xl overflow-hidden mb-6">
+                    <table class="w-full table-mobile-card text-left border-collapse bg-white">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                                <th class="p-4 w-1/4">Indicador</th>
+                                <th class="p-4 w-5/12">Definição Técnica</th>
+                                <th class="p-4 w-1/3">Alerta de Pegadinha (FAURGS)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm divide-y divide-slate-200 text-slate-700">
+                            <tr>
+                                <td class="p-4 font-bold text-slate-800 md:bg-slate-50/50" data-label="Indicador">Taxa de Fecundidade</td>
+                                <td class="p-4 leading-relaxed" data-label="Definição Técnica">Estimativa do <span class="grifado">número médio de filhos por mulher</span> ao longo de seu período fértil, compreendido convencionalmente entre os <span class="grifado">15 e 49 anos</span> de idade.</td>
+                                <td class="p-4 leading-relaxed text-rose-700 font-medium bg-rose-50/30" data-label="Alerta de Pegadinha">A banca tenta sistematicamente igualá-la à Taxa de Natalidade. Natalidade mede nascimentos por mil habitantes na população em geral.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-800 md:bg-slate-50/50" data-label="Indicador">Nível de Reposição</td>
+                                <td class="p-4 leading-relaxed" data-label="Definição Técnica">Taxa calculada em <span class="grifado font-bold">2,1 filhos por mulher</span>, índice demográfico estipulado mundialmente para assegurar a renovação geracional sem decréscimo populacional no longo prazo.</td>
+                                <td class="p-4 leading-relaxed text-rose-700 font-medium bg-rose-50/30" data-label="Alerta de Pegadinha">O Brasil já se encontra consideravelmente abaixo do nível de reposição, o que acelera o envelhecimento populacional do país de forma irreversível.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-800 md:bg-slate-50/50" data-label="Indicador">Razão de Dependência ($RD$)</td>
+                                <td class="p-4 leading-relaxed" data-label="Definição Técnica">Relação matemática entre a <span class="grifado">população considerada dependente</span> (jovens de 0 a 14 anos e idosos de 65 anos ou mais) e a <span class="grifado font-bold">População em Idade Ativa (PIA)</span> de 15 a 64 anos.</td>
+                                <td class="p-4 leading-relaxed text-rose-700 font-medium bg-rose-50/30" data-label="Alerta de Pegadinha">A banca costuma inverter a fração matemática, alocando incorretamente a PIA no numerador. Lembre-se: dependentes sempre no topo.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-bold text-slate-800 md:bg-slate-50/50" data-label="Indicador">Bônus Demográfico</td>
+                                <td class="p-4 leading-relaxed" data-label="Definição Técnica">Janela demográfica temporária em que a <span class="grifado">razão de dependência é inferior a 0,5 ($RD < 0,5$)</span>, indicando que existem mais de dois trabalhadores ativos para cada dependente sustentado.</td>
+                                <td class="p-4 leading-relaxed text-rose-700 font-medium bg-rose-50/30" data-label="Alerta de Pegadinha">A FAURGS tenta induzir que o bônus corresponde meramente ao "crescimento rápido da população". Trata-se, na verdade, de uma janela de oportunidade estrutural para o PIB.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <hr class="border-slate-200 my-8">
+
+            <!-- FICHA 2 -->
+            <section class="mb-12" id="ficha-2">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 font-bold text-sm">02</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800">A Transição Demográfica em 5 Fases</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    A transição demográfica analisa a evolução de um regime demográfico pré-industrial para um modelo demográfico moderno e urbanizado.
+                </p>
+
+                <!-- Esquematização Gráfica Interativa das Fases -->
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 mb-8">
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Fase 1</span>
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mt-2 mb-1">Pré-transição</h4>
+                        </div>
+                        <ul class="text-xs text-slate-500 space-y-1 mt-2">
+                            <li>• Natalidade: <span class="grifado">ALTA</span></li>
+                            <li>• Mortalidade: <span class="grifado">ALTA</span></li>
+                            <li>• Crescimento: <span class="font-bold">Instável</span></li>
+                        </ul>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-emerald-50/30 border-emerald-200 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Fase 2</span>
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mt-2 mb-1">Aceleração</h4>
+                        </div>
+                        <ul class="text-xs text-slate-600 space-y-1 mt-2">
+                            <li>• Natalidade: <span class="grifado-forte">ALTA</span></li>
+                            <li>• Mortalidade: <span class="grifado-forte">QUEDA</span></li>
+                            <li>• Crescimento: <span class="font-bold text-emerald-700">Explosão</span></li>
+                        </ul>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Fase 3</span>
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mt-2 mb-1">Desaceleração</h4>
+                        </div>
+                        <ul class="text-xs text-slate-500 space-y-1 mt-2">
+                            <li>• Natalidade: <span class="grifado">QUEDA</span></li>
+                            <li>• Mortalidade: <span class="grifado">BAIXA</span></li>
+                            <li>• Crescimento: <span class="font-bold">Em queda</span></li>
+                        </ul>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">Fase 4</span>
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mt-2 mb-1">Estabilização</h4>
+                        </div>
+                        <ul class="text-xs text-slate-500 space-y-1 mt-2">
+                            <li>• Natalidade: <span class="grifado">BAIXA</span></li>
+                            <li>• Mortalidade: <span class="grifado">BAIXA</span></li>
+                            <li>• Crescimento: <span class="font-bold">Perto de zero</span></li>
+                        </ul>
+                    </div>
+                    <div class="border border-slate-200 rounded-xl p-4 bg-amber-50/20 border-amber-200 flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">Fase 5</span>
+                            <h4 class="text-xs font-bold text-slate-800 uppercase mt-2 mb-1">Implosão</h4>
+                        </div>
+                        <ul class="text-xs text-slate-500 space-y-1 mt-2">
+                            <li>• Natalidade: <span class="grifado">MÍNIMA</span></li>
+                            <li>• Mortalidade: <span class="font-bold text-amber-800">Leve Alta</span></li>
+                            <li>• Crescimento: <span class="font-bold text-rose-600">Negativo</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Detalhamento Técnico das Fases -->
+                <div class="space-y-4">
+                    <div class="relative pl-6 border-l-2 border-slate-200">
+                        <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-slate-400"></div>
+                        <h4 class="text-sm font-bold text-slate-800">Fase 1: Pré-transição Demográfica</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            Predomina em sociedades agrárias rudimentares. A <span class="grifado">mortalidade infantil é extremamente elevada</span> em virtude de colapsos sanitários, fomes recorrentes e ausência de assepsia médica básica.
+                        </p>
+                    </div>
+                    <div class="relative pl-6 border-l-2 border-emerald-500">
+                        <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-emerald-500"></div>
+                        <h4 class="text-sm font-bold text-slate-800">Fase 2: Explosão Demográfica (Transição Inicial)</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            Disparada pela revolução médico-sanitária (introdução de vacinas, antibióticos e saneamento básico). A <span class="grifado">taxa de mortalidade despenca</span> de forma abrupta, enquanto as taxas de natalidade mantêm-se elevadas.
+                        </p>
+                    </div>
+                    <div class="relative pl-6 border-l-2 border-slate-200">
+                        <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-slate-400"></div>
+                        <h4 class="text-sm font-bold text-slate-800">Fase 3: Desaceleração Demográfica</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            Consolidação do processo de urbanização. A <span class="grifado">taxa de natalidade inicia declínio expressivo</span> estimulada pelo ingresso massivo da mulher no mercado de trabalho, ampliação do acesso a métodos contraceptivos e elevado custo de vida no meio urbano.
+                        </p>
+                    </div>
+                    <div class="relative pl-6 border-l-2 border-slate-200">
+                        <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-slate-400"></div>
+                        <h4 class="text-sm font-bold text-slate-800">Fase 4: Estabilização Demográfica</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            Equilíbrio demográfico consolidado em patamares baixos, resultando em um crescimento vegetativo próximo de zero. Sociedades maduras onde o planejamento familiar está solidamente integrado à rotina social.
+                        </p>
+                    </div>
+                    <div class="relative pl-6 border-l-2 border-amber-500">
+                        <div class="absolute -left-[7px] top-1.5 w-3 h-3 rounded-full bg-amber-500"></div>
+                        <h4 class="text-sm font-bold text-slate-800">Fase 5: Implosão ou Declínio Populacional</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                            Fenômeno atual verificado em nações da Europa Ocidental e do Leste Asiático, no qual a taxa de óbitos suplanta estatisticamente o número de nascimentos. <span class="grifado">No Brasil, o Censo Demográfico de 2022</span> evidenciou uma transição acelerada em direção ao envelhecimento populacional, que exerce pressões diretas sobre o sistema previdenciário e os serviços públicos de saúde.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="border-slate-200 my-8">
+
+            <!-- FICHA 3 -->
+            <section class="mb-12" id="ficha-3">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 font-bold text-sm">03</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800">Teorias Demográficas e Suas Visões de Mundo</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    A banca FAURGS cobra de forma recorrente a distinção de causalidade de cada teoria demográfica. <span class="grifado font-bold">Identifique quem é o "culpado" pela miséria</span> para classificar corretamente as correntes teóricas.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Malthusiana -->
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Thomas Malthus</span>
+                        <h3 class="text-base font-bold text-slate-800 mt-1 mb-3">Teoria Malthusiana</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            <strong class="text-slate-700">A Causa:</strong> A população se expande em <span class="grifado font-bold">Progressão Geométrica (P.G.: 2, 4, 8, 16...)</span>, enquanto os alimentos crescem apenas em <span class="grifado">Progressão Aritmética (P.A.: 1, 2, 3, 4...)</span>, o que resultará em fome generalizada.
+                        </p>
+                        <p class="text-xs text-slate-500">
+                            <strong class="text-slate-700">Solução Malthusiana:</strong> Aplicação de freios morais estritos (como abstinência sexual e matrimônio tardio) e <span class="grifado">rejeição categórica</span> a quaisquer leis de amparo estatal aos pobres.
+                        </p>
+                    </div>
+
+                    <!-- Neomalthusiana -->
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Pós-Segunda Guerra Mundial</span>
+                        <h3 class="text-base font-bold text-slate-800 mt-1 mb-3">Teoria Neomalthusiana</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            <strong class="text-slate-700">A Causa:</strong> O crescimento demográfico descontrolado nas nações em desenvolvimento <span class="grifado">drena investimentos do Estado</span> que deveriam se destinar à infraestrutura básica e industrialização, <span class="grifado font-bold">gerando pobreza crônica</span>.
+                        </p>
+                        <p class="text-xs text-slate-500">
+                            <strong class="text-slate-700">Solução Neomalthusiana:</strong> Controle compulsório ou planejado de natalidade promovido ativamente pelo Estado através de distribuição de anticoncepcionais em larga escala.
+                        </p>
+                    </div>
+
+                    <!-- Reformista / Marxista -->
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Perspectiva Crítica / Marxista</span>
+                        <h3 class="text-base font-bold text-slate-800 mt-1 mb-3">Teoria Reformista</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            <strong class="text-slate-700">A Causa:</strong> A miséria, o desemprego estrutural e a subnutrição <span class="grifado font-bold">são frutos exclusivos das contradições do modelo capitalista</span> e da desigual distribuição de renda, e não do excedente populacional.
+                        </p>
+                        <p class="text-xs text-slate-500">
+                            <strong class="text-slate-700">Solução Reformista:</strong> Reformas estruturais profundas e redistribuição de renda. A queda das taxas de natalidade ocorrerá de forma orgânica à medida que houver pleno desenvolvimento educacional e social.
+                        </p>
+                    </div>
+
+                    <!-- Ecomalthusiana -->
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <span class="text-xs font-bold text-slate-400 uppercase">Perspectiva Ecológica</span>
+                        <h3 class="text-base font-bold text-slate-800 mt-1 mb-3">Teoria Ecomalthusiana</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            <strong class="text-slate-700">A Causa:</strong> O crescimento desmedido da população mundial exerce <span class="grifado">pressão predatória insustentável</span> sobre os recursos energéticos e naturais do globo, exacerbando a crise climática e acelerando o desmatamento.
+                        </p>
+                        <p class="text-xs text-slate-500">
+                            <strong class="text-slate-700">Crítica Geográfica:</strong> Omite intencionalmente que o desequilíbrio e os altos índices de poluição e emissões de carbono derivam do alto consumo industrial das nações ricas, mesmo que possuam crescimento vegetativo nulo.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="border-slate-200 my-8">
+
+            <!-- FICHA 4 -->
+            <section class="mb-12" id="ficha-4">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 font-bold text-sm">04</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800">Desigualdades Sócio-espaciais e Geografias Críticas</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    A análise geográfica contemporânea requer amplo domínio de indicadores complexos e de conceitos espaciais refinados frequentemente exigidos pelo IFSC.
+                </p>
+
+                <!-- Box IDH com Equação -->
+                <div class="border border-slate-200 rounded-xl p-5 bg-slate-50 mb-6">
+                    <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-3">O Índice de Desenvolvimento Humano (IDH)</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed mb-4">
+                        O IDH é computado pela <span class="grifado">média geométrica</span> de três componentes cruciais:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+                        <div class="bg-white border border-slate-100 p-3 rounded-lg">
+                            <p class="text-xs font-bold text-slate-700">1. Saúde / Longevidade</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Expectativa de vida ao nascer.</p>
+                        </div>
+                        <div class="bg-white border border-slate-100 p-3 rounded-lg">
+                            <p class="text-xs font-bold text-slate-700">2. Educação / Escolaridade</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Anos médios e expectativa de anos de estudo.</p>
+                        </div>
+                        <div class="bg-white border border-slate-100 p-3 rounded-lg">
+                            <p class="text-xs font-bold text-slate-700">3. Renda / Padrão de Vida</p>
+                            <p class="text-[11px] text-slate-500 mt-1">Rendimento Nacional Bruto ($RNB$) per capita (PPC).</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 border border-slate-200 rounded-lg text-center font-mono text-xs text-slate-700">
+                        $$\text{Classificação do IDH: } \begin{cases} \text{Muito Alto:} & IDH \ge 0,800 \\ \text{Alto:} & 0,700 \le IDH \le 0,799 \\ \text{Médio:} & 0,550 \le IDH \le 0,699 \\ \text{Baixo:} & IDH < 0,550 \end{cases}$$
+                    </div>
+                    
+                    <p class="text-xs text-slate-500 leading-relaxed mt-4">
+                        <strong class="text-slate-700">IDH Ajustado à Desigualdade (IDH-D):</strong> Aplica uma penalização estatística proporcional ao nível de disparidade interna na distribuição de renda, saúde e educação. O <span class="grifado">Coeficiente de Gini</span> varia de 0 (perfeita igualdade) a 1 (desigualdade extrema).
+                    </p>
+                </div>
+
+                <!-- Geografia Urbana e Rural Crítica -->
+                <div class="space-y-4">
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-tree-city text-emerald-600"></i> Microclimas Urbanos e Segregação
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A desigual divisão de classes no espaço urbano cria áreas nobres e verticalizadas, ricas em cobertura vegetal e infraestrutura, enquanto as periferias sofrem com a precariedade de pavimentação e habitabilidade. Isso gera <span class="grifado">ilhas de calor</span> nos centros impermeabilizados e maior exposição das populações segregadas aos desastres socioambientais (deslizamentos, inundações).
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-cloud-sun-rain text-emerald-600"></i> Semiárido e Paradigma da Convivência
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A escassez hídrica no Nordeste não decorre puramente de condicionantes físicas. O paradigma geográfico crítico foca na <span class="grifado">convivência com o semiárido</span> e na descentralização e democratização do acesso à água (tecnologia social de cisternas de placas), superando o ultrapassado e elitista discurso de "combate à seca" que historicamente enriqueceu as oligarquias rurais (a famosa "indústria da seca").
+                        </p>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-plate-wheat text-emerald-600"></i> A Nova Cartografia da Fome
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            Migrou de modelos simplistas baseados em taxas de desnutrição para análises complexas sobre soberania e segurança alimentar de populações periféricas. Atente-se a três conceitos amplamente cobrados em provas:
+                        </p>
+                        <ul class="text-xs text-slate-600 space-y-2 pl-4 list-disc">
+                            <li><strong class="text-slate-700">Desertos Alimentares:</strong> Áreas desprovidas de estabelecimentos de comercialização de comida fresca e de qualidade, obrigando os residentes a dependerem unicamente de produtos ultraprocessados.</li>
+                            <li><strong class="text-slate-700">Pântanos Alimentares:</strong> Áreas com saturação de redes de fast-food e mercados de conveniência que vendem produtos ultraprocessados a preços excessivamente baixos.</li>
+                            <li><strong class="text-slate-700">Ilhas de Abundância:</strong> Enclaves urbanos elitizados com ampla e diversificada oferta de hortifrútis selecionados, feiras agroecológicas e alimentos de alto valor nutricional.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                        <h4 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2">
+                            <i class="fa-solid fa-people-carry-box text-emerald-600"></i> Desigualdade Étnico-Racial e Colonialidade
+                        </h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            As disparidades socioeconômicas territoriais carregam profundas marcas hereditárias do colonialismo e do regime escravocrata. Nos dados oficiais da PNAD Contínua (IBGE), a população negra exibe os índices de desemprego sistematicamente mais elevados, menor teto de remuneração média, expectativa de vida reduzida e menor acesso a saneamento básico estrutural.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <hr class="border-slate-200 my-8">
+
+            <!-- FICHA 5 -->
+            <section class="mb-12" id="ficha-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800 text-white font-bold text-sm">05</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-slate-800">Raio-X FAURGS — Armadilhas e Estratégias</h2>
+                </div>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    A FAURGS possui padrões rígidos de formulação e estratégias de avaliação. Domine as táticas da banca para garantir agilidade e acertos na prova do IFSC.
+                </p>
+
+                <div class="space-y-4">
+                    <div class="flex gap-4 items-start bg-slate-50 p-4 border border-slate-200 rounded-xl">
+                        <div class="bg-white w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center flex-shrink-0 text-slate-700 font-bold text-sm">1</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Associação de Colunas Complexas</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                                A banca apresenta termos numerados na coluna esquerda, por exemplo <span class="grifado">(1) Neomalthusianismo, (2) Ecomalthusianismo</span>, para serem associados a conceitos ou frases na coluna direita. <strong class="text-slate-700">A Técnica:</strong> Identifique e relacione os dois termos sobre os quais você possui certeza inequívoca e faça imediata eliminação cruzada nas alternativas de múltipla escolha. Não tente adivinhar a ordem sequencial linear de cima para baixo.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start bg-slate-50 p-4 border border-slate-200 rounded-xl">
+                        <div class="bg-white w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center flex-shrink-0 text-slate-700 font-bold text-sm">2</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Armadilha da Alternativa "INCORRETA"</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                                A banca requer a seleção da proposição incorreta em meio a enunciados de Geopolítica ou Demografia. <strong class="text-slate-700">A Tática:</strong> A FAURGS elabora períodos extensos, tecnicamente impecáveis em 95% do parágrafo, para ocultar apenas um termo sutilmente alterado no final (como trocar "mortalidade" por "natalidade" em teorias de transição demográfica). Atente-se estritamente aos conectores lógicos e a adjetivos restritivos.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 items-start bg-slate-50 p-4 border border-slate-200 rounded-xl">
+                        <div class="bg-white w-8 h-8 rounded-full border border-slate-300 flex items-center justify-center flex-shrink-0 text-slate-700 font-bold text-sm">3</div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-800">Análise e Leitura de Dados Gráficos</h4>
+                            <p class="text-xs text-slate-500 leading-relaxed mt-1">
+                                É usual a apresentação de tabelas brutas do IBGE ou gráficos de linha retratando dinâmicas de desemprego ou taxas de dependência demográfica. <strong class="text-slate-700">O Macete:</strong> Prepare-se para efetuar cálculos simples de divisão e taxas de variação percentual aproximada no espaço de rascunho de sua prova.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- Botão para Prática de Questões -->
+        <div class="mt-12 pt-8 border-t border-slate-200 text-center">
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Teoria Dominada? Vá para a Prática</p>
+            <a href="demografiaquestoes.html" class="inline-flex items-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-emerald-500/50">
+                <span>Ir para o Simulado de Questões FAURGS</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+            <p class="text-[11px] text-slate-400 mt-2">Você será redirecionado para a página de testes dinâmicos: <code class="font-mono bg-slate-100 p-1 rounded">questes.html</code></p>
+        </div>
+    </main>
+
+    <!-- Footer Geral -->
+    <footer class="bg-slate-50 border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <p class="text-xs font-semibold text-slate-500">Material de Apoio do Aluno - Exclusivo Concurso Professor IFSC</p>
+            <p class="text-[10px] text-slate-400 mt-1">Foco de Pesquisa: Dinâmicas Populacionais e Desigualdades Econômico-Sociais Globais</p>
+        </div>
+    </footer>
+
+    <!-- Script de Controle do Player de Áudio e Comportamento da Página -->
+    <script>
+        // Elementos do DOM
+        const audioPlayer = document.getElementById('audio-player');
+        const audioSource = document.getElementById('audio-source');
+        const audioSrcInput = document.getElementById('audio-src-input');
+        const btnPlay = document.getElementById('btn-play');
+        const playIcon = document.getElementById('play-icon');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationTimeEl = document.getElementById('duration-time');
+        const progressBar = document.getElementById('progress-bar');
+        const progressSlider = document.getElementById('progress-slider');
+        const btnSpeed = document.getElementById('btn-speed');
+        const speedIndicator = document.getElementById('speed-indicator');
+        const speedMenu = document.getElementById('speed-menu');
+
+        let isPlaying = false;
+
+        // Atualizar o arquivo de áudio dinamicamente se o usuário alterar o input
+        audioSrcInput.addEventListener('change', function() {
+            const newFile = this.value.trim();
+            if (newFile) {
+                audioSource.src = newFile;
+                audioPlayer.load();
+                resetPlayerState();
+            }
+        });
+
+        // Evento de Play/Pause
+        btnPlay.addEventListener('click', togglePlay);
+
+        function togglePlay() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                playIcon.className = "fa-solid fa-play ml-0.5";
+            } else {
+                audioPlayer.play().then(() => {
+                    playIcon.className = "fa-solid fa-pause";
+                }).catch(err => {
+                    console.log("Para testar o player, certifique-se de carregar um arquivo MP3 válido no campo.");
+                    playIcon.className = "fa-solid fa-pause";
+                });
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function resetPlayerState() {
+            isPlaying = false;
+            playIcon.className = "fa-solid fa-play ml-0.5";
+            progressBar.style.width = '0%';
+            progressSlider.value = 0;
+            currentTimeEl.textContent = "00:00";
+        }
+
+        // Atualizar o progresso do áudio
+        audioPlayer.addEventListener('timeupdate', () => {
+            const current = audioPlayer.currentTime;
+            const duration = audioPlayer.duration;
+            if (duration) {
+                const percent = (current / duration) * 100;
+                progressBar.style.width = percent + '%';
+                progressSlider.value = percent;
+                currentTimeEl.textContent = formatTime(current);
+                durationTimeEl.textContent = formatTime(duration);
+            }
+        });
+
+        // Formatar tempo em mm:ss
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        // Buscar posição no áudio através do slider
+        progressSlider.addEventListener('input', () => {
+            const duration = audioPlayer.duration;
+            if (duration) {
+                const targetTime = (progressSlider.value / 100) * duration;
+                audioPlayer.currentTime = targetTime;
+            }
+        });
+
+        // Lógica de Controle de Velocidade
+        btnSpeed.addEventListener('click', (e) => {
+            e.stopPropagation();
+            speedMenu.classList.toggle('hidden');
+        });
+
+        // Fechar menu de velocidade se clicar fora
+        document.addEventListener('click', () => {
+            speedMenu.classList.add('hidden');
+        });
+
+        function changeSpeed(rate) {
+            audioPlayer.playbackRate = rate;
+            speedIndicator.textContent = rate + 'x';
+            speedMenu.classList.add('hidden');
+        }
+
+        // Inicializar com a duração assim que o metadata estiver carregado
+        audioPlayer.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(audioPlayer.duration);
+        });
+    </script>
+</body>
+</html>
