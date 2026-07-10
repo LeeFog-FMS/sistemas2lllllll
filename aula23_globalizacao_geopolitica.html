@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula Interativa - Globalização e Geopolítica Mundial (IFSC - FAURGS)</title>
+    <!-- Tailwind CSS para design ágil e responsivo -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para melhor legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        /* Estilos para grifos e modo de estudo ativo */
+        .highlight {
+            background-color: #fef3c7; /* Amarelo suave */
+            color: #78350f; /* Marrom escuro */
+            font-weight: 600;
+            padding: 0.1rem 0.25rem;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+        /* Modo de estudo ativo: esconde o conteúdo do grifo */
+        .hide-highlights .highlight {
+            background-color: #e5e7eb !important; /* Cinza claro */
+            color: #e5e7eb !important; /* Torna o texto invisível */
+            border-bottom: 2px dashed #9ca3af;
+            user-select: none;
+            cursor: pointer;
+        }
+        .hide-highlights .highlight:hover {
+            background-color: #fef3c7 !important;
+            color: #78350f !important;
+            user-select: auto;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen pb-24">
+
+    <!-- Topo / Header Acadêmico -->
+    <header class="border-b border-gray-200 bg-white sticky top-0 z-40 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Preparatório Professor EBTT - IFSC</span>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mt-1">Geografia: Globalização & Ordem Geopolítica</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button id="toggle-highlights" onclick="toggleActiveRecall()" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition shadow-sm flex items-center gap-2">
+                    <span id="btn-highlight-status">🙈 Esconder Grifos</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 mt-8">
+
+        <!-- Bloco 0: Reprodutor de Áudio Integrado -->
+        <section class="bg-gray-50 rounded-xl border border-gray-200 p-6 mb-8 shadow-sm">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-gray-500 mb-4 flex items-center gap-2">
+                🎧 Reprodutor de Áudio - Guia de Memorização
+            </h2>
+            
+            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4">
+                <!-- Controle do nome do arquivo -->
+                <div class="flex-1">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Nome do arquivo MP3:</label>
+                    <input type="text" id="audio-filename" value="globalizacao_audio.mp3" onchange="updateAudioSource()" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-mono" placeholder="ex: audio.mp3">
+                </div>
+                
+                <!-- Player HTML5 estilizado / nativo -->
+                <div class="flex-1 flex flex-col justify-end">
+                    <label class="block text-xs font-semibold text-gray-600 mb-1">Player:</label>
+                    <audio id="main-audio" controls class="w-full h-10 rounded-lg bg-white border border-gray-200">
+                        <source id="audio-source" src="globalizacao_audio.mp3" type="audio/mpeg">
+                        Seu navegador não suporta áudio HTML5.
+                    </audio>
+                </div>
+
+                <!-- Velocidade do Áudio -->
+                <div class="flex flex-col justify-end">
+                    <span class="block text-xs font-semibold text-gray-600 mb-1">Velocidade:</span>
+                    <button id="speed-btn" onclick="cycleSpeed()" class="h-10 px-4 bg-white border border-gray-300 rounded-lg text-sm font-bold text-gray-700 hover:bg-gray-50 transition flex items-center justify-center min-w-[70px]">
+                        1.0x
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Aviso de status do áudio -->
+            <p id="audio-status" class="text-xs text-gray-500 mt-3 flex items-center gap-1">
+                ℹ️ O reprodutor tentará carregar o arquivo local <strong class="font-mono">globalizacao_audio.mp3</strong> que deve estar no mesmo diretório desta página.
+            </p>
+        </section>
+
+        <!-- Barra de Progresso de Revisão -->
+        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🎯</span>
+                <div>
+                    <h3 class="font-bold text-gray-900 text-sm">Seu Progresso nesta Aula</h3>
+                    <p class="text-xs text-gray-500">Marque as fichas conforme as domina para fixação.</p>
+                </div>
+            </div>
+            <div class="w-full sm:w-48 bg-gray-100 rounded-full h-2.5">
+                <div id="progress-bar" class="bg-emerald-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- INTRODUÇÃO METODOLÓGICA -->
+        <article class="prose max-w-none mb-12">
+            <h2 class="text-2xl font-bold text-gray-950 border-b pb-2">Apresentação da Aula</h2>
+            <p class="text-gray-600 leading-relaxed mt-4">
+                Esta ferramenta didática foi projetada especificamente para o concurso de <strong>Professor do IFSC</strong>, onde as provas da banca <strong>FAURGS</strong> são conhecidas pela cobrança conceitual cirúrgica, exigência de vocabulário geográfico clássico e leitura crítica do espaço. Abaixo, você encontrará o resumo teórico de altíssima densidade dividido em fichas de memorização ativa, análises de armadilhas comuns ("peguinhas") e um simulado padrão de prova.
+            </p>
+        </article>
+
+        <!-- FICHAS DE ESTUDO E MEMORIZAÇÃO -->
+        <div class="space-y-8">
+            
+            <!-- FICHA 1 -->
+            <section class="bg-white border border-gray-200 rounded-xl shadow-sm hover:border-gray-300 transition duration-200 overflow-hidden">
+                <div class="border-b border-gray-100 bg-gray-50 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="check-f1" onchange="updateProgress()" class="w-5 h-5 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                        <label for="check-f1" class="text-xs font-bold uppercase tracking-wider text-emerald-800 cursor-pointer">Ficha 1</label>
+                    </div>
+                    <span class="text-xs bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Bipolaridade</span>
+                </div>
+                
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">A Ordem da Bipolaridade (Pós-Segunda Guerra Mundial)</h3>
+                    
+                    <div class="space-y-4 text-gray-700 leading-relaxed text-sm">
+                        <p>
+                            A ordem geopolítica do pós-Segunda Guerra Mundial (1945-1991) foi estruturada pela rivalidade multidimensional entre duas superpotências com sistemas socioeconômicos antagônicos: os <span class="highlight">Estados Unidos (capitalismo)</span> e a <span class="highlight">União Soviética (socialismo)</span>.
+                        </p>
+                        <p>
+                            A materialização territorial e militar dessa disputa deu-se através da criação de alianças militares opostas: a <span class="highlight">OTAN (Organização do Tratado do Atlântico Norte)</span> em 1949 e o <span class="highlight">Pacto de Varsóvia</span> em 1955. O espaço geográfico europeu tornou-se o principal palco dessa divisão, simbolizado pelo "Telão de Ferro" e o Muro de Berlim.
+                        </p>
+                        <p>
+                            <strong>Foco FAURGS:</strong> A banca costuma cobrar a distinção entre a disputa ideológica indireta e os conflitos armados localizados na periferia do sistema (Guerra da Coreia, Guerra do Vietnã). O conceito chave de <span class="highlight">Coexistência Pacífica</span> refere-se à tentativa de reduzir tensões mantendo a soberania de cada bloco sob a premissa de destruição mútua assegurada (MAD).
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FICHA 2 -->
+            <section class="bg-white border border-gray-200 rounded-xl shadow-sm hover:border-gray-300 transition duration-200 overflow-hidden">
+                <div class="border-b border-gray-100 bg-gray-50 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="check-f2" onchange="updateProgress()" class="w-5 h-5 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                        <label for="check-f2" class="text-xs font-bold uppercase tracking-wider text-emerald-800 cursor-pointer">Ficha 2</label>
+                    </div>
+                    <span class="text-xs bg-cyan-100 text-cyan-800 font-semibold px-2 py-0.5 rounded-full">Multipolaridade</span>
+                </div>
+                
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">A Transição para a Multipolaridade e Fragmentação</h3>
+                    
+                    <div class="space-y-4 text-gray-700 leading-relaxed text-sm">
+                        <p>
+                            Com o colapso da URSS em 1991, inaugurou-se a "Nova Ordem Mundial". Embora tenha havido uma <span class="highlight">unipolaridade militar</span> por parte dos Estados Unidos, o cenário econômico global rapidamente se fragmentou em múltiplos polos de poder econômico, consolidando a <span class="highlight">multipolaridade</span> (liderada por EUA, União Europeia, Japão e, progressivamente, a China).
+                        </p>
+                        <p>
+                            Nos dias atuais, assistimos a uma fase de <span class="highlight">fragmentação geopolítica</span> e regionalismo. O ressurgimento de disputas territoriais tradicionais e a ascensão do <span class="highlight">Sul Global (especialmente os BRICS)</span> desafiam as instituições multilaterais hegemônicas dominadas pelo Ocidente (FMI, Banco Mundial).
+                        </p>
+                        <p>
+                            <strong>Foco FAURGS:</strong> Fique atento à terminologia! A banca costuma usar termos como "Mundialização" ou "Derrubada de fronteiras" para tentar induzir o candidato ao erro. A multipolaridade não significa o fim das fronteiras nacionais, mas sim uma <span class="highlight">reorganização assimétrica do poder estatal</span>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FICHA 3 -->
+            <section class="bg-white border border-gray-200 rounded-xl shadow-sm hover:border-gray-300 transition duration-200 overflow-hidden">
+                <div class="border-b border-gray-100 bg-gray-50 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="check-f3" onchange="updateProgress()" class="w-5 h-5 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                        <label for="check-f3" class="text-xs font-bold uppercase tracking-wider text-emerald-800 cursor-pointer">Ficha 3</label>
+                    </div>
+                    <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2 py-0.5 rounded-full">Efeitos Espaciais</span>
+                </div>
+                
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Globalização e a Reconfiguração do Espaço Geográfico</h3>
+                    
+                    <div class="space-y-4 text-gray-700 leading-relaxed text-sm">
+                        <p>
+                            A globalização promove uma profunda redefinição das escalas geográficas. Segundo o geógrafo brasileiro <span class="highlight">Milton Santos</span>, vivemos no período do <span class="highlight">Meio Técnico-Científico-Informacional (MTCI)</span>, caracterizado pela união intrínseca entre técnica, ciência e informação no controle do espaço produtivo global.
+                        </p>
+                        <p>
+                            David Harvey, por sua vez, desenvolve a teoria da <span class="highlight">compressão espaço-tempo</span>, onde o avanço nos transportes e nas comunicações "aniquila" as distâncias físicas, acelerando a circulação de capital, mercadorias e informações. Contudo, essa integração é <span class="highlight">profundamente seletiva</span> e desigual: enquanto áreas integradas ("pontos luminosos") prosperam, imensas periferias continuam apartadas dos fluxos ("espaços opacos").
+                        </p>
+                        <p>
+                            <strong>Foco FAURGS:</strong> Questões de concurso EBTT adoram relacionar o conceito de redes à produção do espaço de forma desigual. Lembre-se de que a globalização homogeneiza padrões de consumo, mas simultaneamente <span class="highlight">fragmenta o território</span> de forma socioespacial.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FICHA 4 -->
+            <section class="bg-white border border-gray-200 rounded-xl shadow-sm hover:border-gray-300 transition duration-200 overflow-hidden">
+                <div class="border-b border-gray-100 bg-gray-50 px-6 py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" id="check-f4" onchange="updateProgress()" class="w-5 h-5 rounded text-emerald-600 border-gray-300 focus:ring-emerald-500">
+                        <label for="check-f4" class="text-xs font-bold uppercase tracking-wider text-emerald-800 cursor-pointer">Ficha 4</label>
+                    </div>
+                    <span class="text-xs bg-red-100 text-red-800 font-semibold px-2 py-0.5 rounded-full">Recursos Naturais</span>
+                </div>
+                
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Geopolítica dos Recursos Naturais</h3>
+                    
+                    <div class="space-y-4 text-gray-700 leading-relaxed text-sm">
+                        <p>
+                            A geopolítica dos recursos naturais estuda a disputa internacional pelo controle, acesso e rotas de transporte de recursos estratégicos essenciais para o metabolismo industrial e militar das grandes nações.
+                        </p>
+                        <p>
+                            A soberania sobre o petróleo tradicionalmente concentrada no Oriente Médio através da <span class="highlight">OPEP</span> continua crucial, mas a transição energética global redefine o tabuleiro. A disputa contemporânea foca nos <span class="highlight">minerais críticos (lítio, cobalto, terras raras)</span>, essenciais para as indústrias de alta tecnologia e baterias. A hegemonia da <span class="highlight">China no processamento de terras raras</span> confere-lhe imensa vantagem geopolítica estratégica frente aos EUA e União Europeia.
+                        </p>
+                        <p>
+                            Além disso, o acesso à <span class="highlight">água potável e a segurança hídrica/alimentar</span> passam a ser debatidos sob a ótica da geopolítica de segurança nacional, gerando tensões em bacias hidrográficas compartilhadas (Nilo, Tigre-Eufrates, Jordão).
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TABELA COMPARATIVA TOTALMENTE RESPONSIVA -->
+        <section class="mt-12 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold text-gray-950 mb-6 flex items-center gap-2">
+                📋 Comparativo das Eras Geopolíticas (Tabela de Estudo Dinâmico)
+            </h2>
+            <p class="text-xs text-gray-500 mb-4">As informações abaixo estão estruturadas de forma flexível para visualização perfeita em qualquer dispositivo, sem barras de rolagem horizontal incômodas.</p>
+
+            <!-- Tabela Otimizada para Celular (Grid Flexível) -->
+            <div class="hidden md:block overflow-hidden border border-gray-200 rounded-lg">
+                <table class="w-full text-left text-sm text-gray-700">
+                    <thead class="bg-gray-50 text-xs font-bold text-gray-600 uppercase">
+                        <tr>
+                            <th class="px-4 py-3">Dimensão</th>
+                            <th class="px-4 py-3">Era da Bipolaridade (1945-1991)</th>
+                            <th class="px-4 py-3">Era da Multipolaridade / Dias Atuais</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-3 font-semibold bg-gray-50/50">Atores Principais</td>
+                            <td class="px-4 py-3">EUA e URSS (Sistemas de Bloco Rígido)</td>
+                            <td class="px-4 py-3">EUA, China, União Europeia, Rússia, BRICS (Redes Fluidas)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 font-semibold bg-gray-50/50">Lógica de Segurança</td>
+                            <td class="px-4 py-3">Contenção mútua, dissuasão nuclear (MAD), fronteiras fixas</td>
+                            <td class="px-4 py-3">Ameaças assimétricas (guerra híbrida, ataques cibernéticos)</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 font-semibold bg-gray-50/50">Fluxos Econômicos</td>
+                            <td class="px-4 py-3">Mercados segmentados e comércio internacional planejado</td>
+                            <td class="px-4 py-3">Cadeias globais de valor, finanças desreguladas em tempo real</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 font-semibold bg-gray-50/50">Espaço e Geografia</td>
+                            <td class="px-4 py-3">Fronteira física impermeável (Cortina de Ferro)</td>
+                            <td class="px-4 py-3">Territorialidades em rede e nós geográficos dinâmicos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Layout Responsivo Mobile (Substitutos de tabela em formato cartão) -->
+            <div class="md:hidden space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                    <span class="text-xs font-bold text-emerald-700 uppercase">Dimensão: Atores Principais</span>
+                    <div class="mt-2 text-sm text-gray-700">
+                        <p class="mb-1"><strong>Bipolaridade:</strong> EUA e URSS (Sistemas de Bloco Rígido)</p>
+                        <p><strong>Multipolaridade:</strong> EUA, China, União Europeia, Rússia, BRICS (Redes Fluidas)</p>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                    <span class="text-xs font-bold text-emerald-700 uppercase">Dimensão: Lógica de Segurança</span>
+                    <div class="mt-2 text-sm text-gray-700">
+                        <p class="mb-1"><strong>Bipolaridade:</strong> Contenção mútua, dissuasão nuclear (MAD)</p>
+                        <p><strong>Multipolaridade:</strong> Ameaças assimétricas (guerra híbrida, ataques cibernéticos)</p>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                    <span class="text-xs font-bold text-emerald-700 uppercase">Dimensão: Fluxos Econômicos</span>
+                    <div class="mt-2 text-sm text-gray-700">
+                        <p class="mb-1"><strong>Bipolaridade:</strong> Mercados segmentados e blocos econômicos rígidos</p>
+                        <p><strong>Multipolaridade:</strong> Cadeias globais de valor, finanças desreguladas em tempo real</p>
+                    </div>
+                </div>
+                <div class="border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+                    <span class="text-xs font-bold text-emerald-700 uppercase">Dimensão: Espaço e Geografia</span>
+                    <div class="mt-2 text-sm text-gray-700">
+                        <p class="mb-1"><strong>Bipolaridade:</strong> Fronteira física impermeável (Cortina de Ferro)</p>
+                        <p><strong>Multipolaridade:</strong> Territorialidades em rede e nós geográficos dinâmicos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PEGUINHAS RECORRENTES DA BANCA FAURGS -->
+        <section class="mt-12 bg-amber-50/60 border border-amber-200 rounded-xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold text-amber-950 mb-4 flex items-center gap-2">
+                ⚠️ Tendências de Cobrança e "Peguinhas" da FAURGS (Cargos EBTT)
+            </h2>
+            
+            <ul class="space-y-4 text-sm text-gray-700 list-none pl-0">
+                <li class="flex items-start gap-2">
+                    <span class="text-red-600 font-bold">1.</span>
+                    <div>
+                        <strong>Confusão entre Escalas:</strong> A banca muitas vezes cria sentenças que afirmam que o fim do estado-nação foi decretado com a globalização. 
+                        <em class="text-amber-900 block mt-1">Gabarito Fiel: O Estado-Nação não desaparece; ele é redefinido. Ele atua como agente facilitador dos fluxos do capital e assume funções normativas no território.</em>
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-red-600 font-bold">2.</span>
+                    <div>
+                        <strong>Desonestidade Conceitual de Milton Santos:</strong> A FAURGS adora trocar os termos "Espaços Luminosos" e "Espaços Opacos". Eles descrevem os espaços opacos (regiões pobres ou desconectadas) usando características dos luminosos (regiões de fluidez e tecnologia).
+                        <em class="text-amber-900 block mt-1">Memorize: Os espaços luminosos atraem o capital hegemônico de forma altamente seletiva, enquanto os opacos concentram os excluídos sociais.</em>
+                    </div>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-red-600 font-bold">3.</span>
+                    <div>
+                        <strong>Reducionismo dos Recursos Naturais:</strong> Perguntas sobre geopolítica energética moderna tendem a induzir o candidato a achar que o petróleo perdeu completamente o protagonismo por conta de agendas sustentáveis.
+                        <em class="text-amber-900 block mt-1">Atenção: O petróleo continua sendo a espinha dorsal militar e energética global. O que ocorre é um prolongado período de coexistência de matrizes e transição assimétrica, onde minerais de terras raras adicionam uma nova camada de fricção geopolítica.</em>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <!-- SIMULADO INTERATIVO MODELO FAURGS -->
+        <section class="mt-12 bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <h2 class="text-xl font-bold text-gray-950 mb-4 flex items-center gap-2">
+                📝 Simulado Exclusivo (Modelo IFSC - FAURGS)
+            </h2>
+            <p class="text-xs text-gray-500 mb-6">Teste seus conhecimentos imediatos. Clique em uma alternativa para revelar o gabarito comentado.</p>
+
+            <div class="space-y-4">
+                <p class="text-sm font-semibold text-gray-800 leading-relaxed">
+                    (Inédita/FAURGS - Adaptada para IFSC) Sobre o processo de transição da ordem geopolítica mundial da Bipolaridade para a Multipolaridade, analise as afirmativas a seguir:
+                </p>
+                
+                <div class="text-xs text-gray-600 space-y-2 bg-gray-50 p-4 rounded-lg border border-gray-100">
+                    <p>I. A bipolaridade caracterizou-se pela divisão geopolítica sob os preceitos de ideologias econômicas incompatíveis, cujas zonas de influência eram rígidas e demarcadas por pactos de segurança e cooperação militar.</p>
+                    <p>II. A multipolaridade contemporânea é marcada por uma soberania fragmentada e pela presença de nós geográficos que sobrepõem o poder político dos Estados-nação tradicionais nas cadeias globais de valor.</p>
+                    <p>III. No plano geoeconômico contemporâneo, a escassez física de recursos não convencionais, como as terras raras, atua como fator desestabilizador e força a rearranjos nas cadeias logísticas dos países desenvolvidos.</p>
+                </div>
+
+                <p class="text-xs text-gray-700 font-bold">Quais afirmativas estão corretas?</p>
+
+                <!-- Alternativas interativas -->
+                <div class="space-y-2">
+                    <button onclick="revealGabarito('error', 'Incorreto. A afirmativa I e a afirmativa II também estão perfeitamente conceituadas.')" class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 transition flex items-center justify-between">
+                        <span>A) Apenas III está correta.</span>
+                        <span class="text-xs text-gray-400">Selecionar</span>
+                    </button>
+                    <button onclick="revealGabarito('error', 'Incorreto. A afirmativa II aborda o papel das cadeias de valor e das redes de forma conceitualmente correta na geografia atual.')" class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 transition flex items-center justify-between">
+                        <span>B) Apenas I e III estão corretas.</span>
+                        <span class="text-xs text-gray-400">Selecionar</span>
+                    </button>
+                    <button onclick="revealGabarito('correct', 'Correto! Todas as afirmativas trazem noções centrais de geopolítica e globalização de acordo com as teorias contemporâneas e a visão crítica de autores de base.')" class="w-full text-left px-4 py-3 border border-emerald-500 bg-emerald-50/20 rounded-lg text-sm flex items-center justify-between">
+                        <span class="text-emerald-900 font-semibold">C) I, II e III estão corretas.</span>
+                        <span class="text-xs text-emerald-600 font-bold">Gabarito Oficial ✅</span>
+                    </button>
+                    <button onclick="revealGabarito('error', 'Incorreto. A afirmativa I reflete com exatidão a dinâmica espacial da Guerra Fria.')" class="w-full text-left px-4 py-3 border border-gray-200 rounded-lg text-sm hover:bg-gray-50 transition flex items-center justify-between">
+                        <span>D) Apenas II e III estão corretas.</span>
+                        <span class="text-xs text-gray-400">Selecionar</span>
+                    </button>
+                </div>
+
+                <!-- Painel de Gabarito Comentado (Oculto até interação) -->
+                <div id="gabarito-box" class="hidden mt-4 p-4 rounded-lg text-sm">
+                    <!-- Conteúdo dinâmico via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- BOTÃO FINAL DE ACESSO ÀS QUESTÕES -->
+        <section class="mt-16 text-center">
+            <p class="text-sm text-gray-500 mb-4">Finalizou a revisão teórica e o estudo ativo? Vá para a próxima etapa.</p>
+            <a href="globalizacaoquestoes.html" class="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg hover:shadow-emerald-200 transition duration-300 transform hover:-translate-y-0.5 text-base">
+                🎯 Ir para Banco de Questões (questoes.html)
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- JS de Interatividade e Controle de Estado -->
+    <script>
+        // Carrega as configurações iniciais
+        window.onload = function() {
+            updateAudioSource();
+            updateProgress();
+        };
+
+        // 1. Controle do Reprodutor de Áudio
+        const audio = document.getElementById('main-audio');
+        const filenameInput = document.getElementById('audio-filename');
+        const speedBtn = document.getElementById('speed-btn');
+        let currentSpeedIndex = 0;
+        const speeds = [1.0, 1.25, 1.5, 1.75, 2.0];
+
+        function updateAudioSource() {
+            const file = filenameInput.value.trim() || 'globalizacao_audio.mp3';
+            const audioSource = document.getElementById('audio-source');
+            audioSource.src = file;
+            audio.load();
+            document.getElementById('audio-status').innerHTML = `ℹ️ O reprodutor carregou o arquivo local: <strong class="font-mono">${file}</strong>. Certifique-se de que ele esteja na mesma pasta do arquivo HTML.`;
+        }
+
+        function cycleSpeed() {
+            currentSpeedIndex = (currentSpeedIndex + 1) % speeds.length;
+            const newSpeed = speeds[currentSpeedIndex];
+            audio.playbackRate = newSpeed;
+            speedBtn.innerText = `${newSpeed.toFixed(2)}x`;
+        }
+
+        // 2. Modo Estudo Ativo (Esconder Grifos)
+        let isRecalledMode = false;
+        function toggleActiveRecall() {
+            const body = document.body;
+            const btn = document.getElementById('toggle-highlights');
+            const btnText = document.getElementById('btn-highlight-status');
+            
+            isRecalledMode = !isRecalledMode;
+            
+            if (isRecalledMode) {
+                body.classList.add('hide-highlights');
+                btnText.innerText = '👀 Mostrar Grifos';
+                btn.classList.remove('text-gray-700', 'bg-white');
+                btn.classList.add('text-emerald-900', 'bg-emerald-50', 'border-emerald-300');
+            } else {
+                body.classList.remove('hide-highlights');
+                btnText.innerText = '🙈 Esconder Grifos';
+                btn.classList.add('text-gray-700', 'bg-white');
+                btn.classList.remove('text-emerald-900', 'bg-emerald-50', 'border-emerald-300');
+            }
+        }
+
+        // 3. Progresso do Estudo
+        function updateProgress() {
+            const checkboxes = [
+                document.getElementById('check-f1'),
+                document.getElementById('check-f2'),
+                document.getElementById('check-f3'),
+                document.getElementById('check-f4')
+            ];
+            
+            const total = checkboxes.length;
+            const checked = checkboxes.filter(cb => cb.checked).length;
+            const percent = Math.round((checked / total) * 100);
+            
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        // 4. Validação do Simulado Interativo
+        function revealGabarito(type, message) {
+            const box = document.getElementById('gabarito-box');
+            box.classList.remove('hidden', 'bg-red-50', 'text-red-900', 'border-red-200', 'bg-emerald-50', 'text-emerald-900', 'border-emerald-200');
+            
+            if (type === 'correct') {
+                box.classList.add('bg-emerald-50', 'text-emerald-900', 'border', 'border-emerald-200');
+                box.innerHTML = `<strong>Resposta Correta!</strong><br>${message}<br><br><em>Comentário Didático do Professor:</em> Na prova da FAURGS, a globalização deve ser abordada na perspectiva de sua seletividade e assimetria, onde a fragmentação territorial se sobrepõe à interdependência econômica das nações. A escassez de recursos estratégicos contemporâneos (terras raras) gera gargalos lógicos que alteram as relações de poder internacional.`;
+            } else {
+                box.classList.add('bg-red-50', 'text-red-900', 'border', 'border-red-200');
+                box.innerHTML = `<strong>Tente Novamente!</strong><br>${message}`;
+            }
+        }
+    </script>
+</body>
+</html>

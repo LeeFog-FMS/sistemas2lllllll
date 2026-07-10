@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo: Migrações e Espaço Urbano Global (FAURGS)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS custom variables for reading theme support */
+        :root {
+            --bg-page: #fbfbf9;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-primary: #4f46e5;
+            --accent-hover: #4338ca;
+            --accent-light: #e0e7ff;
+            --selection-bg: #e2e8f0;
+        }
+
+        .theme-warm {
+            --bg-page: #FAF9F5;
+            --bg-card: #FFFFFF;
+            --text-main: #2C2A29;
+            --text-muted: #706E6B;
+            --border-color: #E6E4DF;
+            --accent-primary: #8C6239;
+            --accent-hover: #704E2D;
+            --accent-light: #F5EFEB;
+            --selection-bg: #EAE6DF;
+        }
+
+        .theme-sepia {
+            --bg-page: #F4ECD8;
+            --bg-card: #FCF8F0;
+            --text-main: #433422;
+            --text-muted: #7C6E5C;
+            --border-color: #E4D5B7;
+            --accent-primary: #A0522D;
+            --accent-hover: #8B4513;
+            --accent-light: #F7E7C4;
+            --selection-bg: #EBD9B4;
+        }
+
+        .theme-dark {
+            --bg-page: #0F172A;
+            --bg-card: #1E293B;
+            --text-main: #F1F5F9;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --accent-primary: #6366F1;
+            --accent-hover: #818CF8;
+            --accent-light: #312E81;
+            --selection-bg: #334155;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card-reading {
+            background-color: var(--bg-card);
+            border-color: var(--border-color);
+        }
+
+        .border-theme {
+            border-color: var(--border-color);
+        }
+
+        .text-muted-theme {
+            color: var(--text-muted);
+        }
+
+        /* Reading line-length optimizer */
+        .readable-prose {
+            max-width: 75ch;
+            line-height: 1.75;
+        }
+
+        /* Smooth custom active transitions */
+        .option-button {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="theme-warm font-sans antialiased min-h-screen pb-24">
+
+    <!-- Top Progress & Controls bar -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-opacity-90 border-b border-theme transition-colors duration-300 card-reading py-4 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 flex flex-wrap gap-4 items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="inline-block p-1.5 bg-indigo-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider">FAURGS</span>
+                <h1 class="text-sm font-semibold tracking-tight">Geografia Urbana e Migrações</h1>
+            </div>
+            
+            <!-- Theme controller -->
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-medium text-muted-theme mr-1">Modo de Leitura:</span>
+                <div class="inline-flex bg-slate-100 p-1 rounded-lg border-theme dark:bg-slate-800">
+                    <button onclick="setTheme('warm')" class="px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer bg-white text-slate-800 shadow-sm" id="btn-theme-warm">Quente</button>
+                    <button onclick="setTheme('sepia')" class="px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer text-slate-600" id="btn-theme-sepia">Sepia</button>
+                    <button onclick="setTheme('dark')" class="px-2.5 py-1 text-xs font-medium rounded-md transition-all cursor-pointer text-slate-600" id="btn-theme-dark">Escuro</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pt-10">
+        
+        <!-- Welcome header panel -->
+        <div class="mb-12 border-b border-theme pb-8 text-center md:text-left">
+            <h2 class="text-3xl md:text-4xl font-bold font-serif mb-4 tracking-tight leading-tight">Simulado Temático Completo</h2>
+            <p class="text-lg text-muted-theme max-w-2xl leading-relaxed">
+                Explore 10 questões inéditas e minuciosamente elaboradas seguindo o padrão metodológico e de cobrança conceitual da banca <strong>FAURGS</strong>. Foco em fluxos migratórios contemporâneos, urbanização mundial, megacidades e movimentos sociais globais.
+            </p>
+            <div class="mt-6 flex flex-wrap justify-center md:justify-start gap-4 text-xs font-semibold uppercase tracking-wider text-muted-theme">
+                <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    10 Questões Integras
+                </span>
+                <span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    Gabarito e Resoluções Críticas
+                </span>
+            </div>
+        </div>
+
+        <!-- Quiz Main Section -->
+        <div id="quiz-container" class="space-y-10">
+            <!-- Questions will be dynamically loaded here by the JavaScript engine -->
+            <div class="flex justify-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            </div>
+        </div>
+
+        <!-- Floating Progress and Check/Submit Card -->
+        <div id="quiz-control-card" class="mt-12 p-6 rounded-2xl border border-theme card-reading shadow-md text-center">
+            <h3 class="text-lg font-bold mb-2">Pronto para concluir seu simulado?</h3>
+            <p class="text-sm text-muted-theme mb-6 readable-prose mx-auto">
+                Verifique se respondeu a todas as questões. Ao finalizar, calcularemos instantaneamente seu rendimento e liberaremos as resoluções detalhadas e gabarito comentado passo a passo para cada item do simulado.
+            </p>
+            <div id="quiz-progress-text" class="text-sm font-semibold text-muted-theme mb-4">
+                0 de 10 respondidas
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6 overflow-hidden max-w-md mx-auto">
+                <div id="quiz-progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <button onclick="calculateAndFinishQuiz()" class="inline-flex items-center justify-center cursor-pointer px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition shadow-lg shadow-indigo-100 dark:shadow-none hover:-translate-y-0.5 transform">
+                Finalizar Simulado e Ver Resoluções
+            </button>
+        </div>
+
+        <!-- Results Dashboard Panel (Hidden by default, shown after completion) -->
+        <div id="results-panel" class="hidden mt-12 p-8 rounded-2xl border-2 border-green-200 bg-emerald-50 dark:bg-emerald-950 dark:border-emerald-900 transition-all duration-500">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-20 h-20 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-emerald-900 dark:text-emerald-200">Simulado Concluído!</h3>
+                <p class="text-emerald-700 dark:text-emerald-400 mt-2 text-sm max-w-md">
+                    Seu desempenho foi registrado com sucesso. Veja abaixo as métricas de acerto e confira o comentário de cada questão.
+                </p>
+                
+                <!-- Performance Statistics -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8 w-full max-w-2xl bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-theme">
+                    <div class="text-center">
+                        <span class="block text-3xl font-extrabold text-indigo-600" id="stat-score">0/10</span>
+                        <span class="text-xs font-semibold uppercase text-muted-theme tracking-wider">Acertos</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="block text-3xl font-extrabold text-emerald-600" id="stat-percentage">0%</span>
+                        <span class="text-xs font-semibold uppercase text-muted-theme tracking-wider">Aproveitamento</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="block text-3xl font-extrabold text-amber-600" id="stat-time">--</span>
+                        <span class="text-xs font-semibold uppercase text-muted-theme tracking-wider">Tempo</span>
+                    </div>
+                    <div class="text-center">
+                        <span class="block text-3xl font-extrabold text-slate-600" id="stat-evaluation">Aprovado</span>
+                        <span class="text-xs font-semibold uppercase text-muted-theme tracking-wider">Desempenho</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex gap-4">
+                    <button onclick="scrollToQuestion(1)" class="px-5 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold cursor-pointer shadow hover:bg-indigo-700 transition">
+                        Revisar Questões
+                    </button>
+                    <button onclick="restartQuiz()" class="px-5 py-2.5 border border-slate-300 dark:border-slate-600 text-muted-theme rounded-lg text-sm font-semibold cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                        Refazer Simulado
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Full Question database matching exactly the original text and structure
+        const quizData = [
+            {
+                id: 1,
+                title: "Questão 1",
+                text: "A dinâmica dos fluxos migratórios contemporâneos e os deslocamentos forçados à escala global revelam profundas transformações nas redes de mobilidade humana e na geopolítica internacional. Com base nos relatórios recentes da Organização Internacional para as Migrações (OIM) e do Alto-Comissariado das Nações Unidas para os Refugiados (ACNUR), considere as afirmações abaixo.",
+                statements: [
+                    "I - O volume global de pessoas em situação de deslocamento forçado registou um crescimento contínuo ao longo da última década, atingindo a estimativa de 122,1 milhões de pessoas até abril de 2025. No entanto, no final de 2025, verificou-se um declínio inédito para 117,8 milhões de pessoas, impulsionado por processos significativos de retorno de refugiados e deslocados internos.",
+                    "II - O perfil demográfico e socioeconómico do refúgio global demonstra que a esmagadora maioria dos refugiados (cerca de 73%) é acolhida em países de rendimento baixo ou médio, sendo que aproximadamente 67% destas populações residem em países vizinhos ao seu território de origem, contrariando a tese de que o Norte Global é o destino principal destes fluxos.",
+                    "III - Os retornos de refugiados registados em 2025 atingiram níveis históricos, destacando-se o repatriamento de contingentes expressivos na República Democrática do Congo e no Sudão, embora este último se mantenha como o país com o maior número absoluto de deslocados internos do mundo.",
+                    "IV - No que concerne à infância e juventude, estima-se que menos de 10% da população deslocada globalmente seja constituída por crianças e adolescentes, face ao aumento do controlo de natalidade e à rigidez das políticas de reagrupamento familiar impostas pelas organizações humanitárias internacionais."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I e II." },
+                    { value: "B", text: "(B) Apenas II e III." },
+                    { value: "C", text: "(C) Apenas I, II e III." },
+                    { value: "D", text: "(D) Apenas I, III e IV." },
+                    { value: "E", text: "(E) I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Apenas I, II e III estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Correta.</strong> A evolução do deslocamento forçado mundial atingiu de facto a estimativa histórica de 122,1 milhões de pessoas sob situação de mobilidade involuntária até abril de 2025, impulsionada por fatores políticos, climáticos e conflitos armados. Os dados consolidados do ACNUR registam que no final de 2025 ocorreu um declínio inédito numa década, caindo o contingente global para 117,8 milhões devido ao aumento expressivo nos processos de retorno de populações refugiadas e deslocados internos (cerca de 14,7 milhões de retornos no total).</li>
+                            <li><strong>Afirmação II: Correta.</strong> A distribuição demográfica do refúgio global desmitifica a ideia de que o Norte Global absorve a maior parte destas migrações. Cerca de 73% das pessoas refugiadas encontram-se em países de baixo ou médio rendimento, e 67% residem em nações limítrofes ao seu território de origem.</li>
+                            <li><strong>Afirmação III: Correta.</strong> O ano de 2025 registou movimentos robustos de retorno de refugiados e deslocados internos em países fustigados por crises prolongadas, tais como o Afeganistão, a Síria, a República Democrática do Congo e o Sudão. Não obstante os regressos localizados, o Sudão continua a ser, sob o ponto de vista estrutural, a nação com o maior contingente absoluto de pessoas deslocadas internamente do planeta.</li>
+                            <li><strong>Afirmação IV: Incorreta.</strong> As crianças e os adolescentes representam uma parcela extremamente vulnerável e demograficamente expressiva do deslocamento forçado global, correspondendo a cerca de 41% de todas as pessoas deslocadas no mundo, estimando-se ainda que 2,3 milhões de crianças tenham nascido na condição de refugiadas.</li>
+                        </ul>
+                        
+                        <div class="overflow-x-auto mt-6">
+                            <table class="min-w-full text-xs divide-y divide-gray-200 border border-gray-100 rounded-lg overflow-hidden dark:divide-slate-700 dark:border-slate-700">
+                                <thead class="bg-slate-100 dark:bg-slate-800">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Indicador Demográfico de Deslocamento</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Volume / Percentagem</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Detalhes e Contexto Geográfico</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Volume de Deslocados Forçados (Abril/2025)</td>
+                                        <td class="px-4 py-2">122,1 milhões de pessoas</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Recorde histórico de deslocamento devido a crises cumulativas.</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Volume de Deslocados Forçados (Final/2025)</td>
+                                        <td class="px-4 py-2">117,8 milhões de pessoas</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Primeiro declínio numa década devido ao aumento dos retornos.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Retornos Registados (Durante 2025)</td>
+                                        <td class="px-4 py-2">14,7 milhões de indivíduos</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">4,4 milhões de refugiados e 10,3 milhões de deslocados internos.</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Participação de Crianças e Adolescentes</td>
+                                        <td class="px-4 py-2">41% do contingente total</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">População jovem altamente vulnerável em campos de trânsito.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Acolhimento em Nações de Baixo/Médio Rendimento</td>
+                                        <td class="px-4 py-2">73% das pessoas refugiadas</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Evidencia a forte regionalização e proximidade geográfica.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "Questão 2",
+                text: "A socióloga Saskia Sassen introduziu o conceito de \"cidades globais\" para analisar a reestruturação territorial do capital e a emergência de novos nós de centralidade na economia mundializada. Considere as seguintes afirmações sobre as características destas metrópoles e a sua diferenciação em relação às megacidades.",
+                statements: [
+                    "I - As cidades globais são caracterizadas e hierarquizadas primordialmente pelo seu volume populacional, exigindo-se um patamar demográfico mínimo de 10 milhões de habitantes para que um centro urbano seja classificado como nó económico de influência transnacional.",
+                    "II - Metrópoles como Zurique e Londres constituem exemplos de cidades globais altamente integradas nas redes financeiras internacionais que, contudo, não se enquadram na classificação demográfica de megacidades, demonstrando que a importância funcional não é diretamente proporcional à dimensão populacional.",
+                    "III - Segundo a hierarquia urbana global baseada na conectividade e na oferta de serviços avançados, cidades como São Paulo e Nova Iorque são classificadas como cidades Alfa, enquanto o Rio de Janeiro e Lisboa integram a categoria Beta, e Curitiba assume a posição de cidade Gama.",
+                    "IV - A exposição das comunidades urbanas aos processos de globalização gera um duplo efeito socioespacial: se, por um lado, fomenta um cosmopolitismo assente no intercâmbio financeiro e cultural, por outro, estimula reações de fragmentação social, xenofobia e recrudescimento de nacionalismos."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I e II." },
+                    { value: "B", text: "(B) Apenas III e IV." },
+                    { value: "C", text: "(C) Apenas I, III e IV." },
+                    { value: "D", text: "(D) Apenas II, III e IV." },
+                    { value: "E", text: "(E) I, II, III e IV." }
+                ],
+                correct: "D",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (D) - Apenas II, III e IV estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Incorreta.</strong> O critério definidor das cidades globais de Saskia Sassen assenta no papel funcional, financeiro e corporativo que estes centros urbanos desempenham na rede económica mundial, e não no volume demográfico. O critério de 10 milhões de habitantes aplica-se à definição de "megacidade", um conceito de cariz eminentemente demográfico.</li>
+                            <li><strong>Afirmação II: Correta.</strong> Cidades como Zurique e Londres exercem funções de comando centralizado no mercado financeiro global e na oferta de serviços avançados corporativos, sem que possuam populações superiores a 10 milhões de habitantes, o que as exclui da categoria de megacidades, realçando a primazia da funcionalidade económica global.</li>
+                            <li><strong>Afirmação III: Correta.</strong> A hierarquização estabelecida pelos estudos sobre cidades globais (como o grupo GaWC) subdivide estes centros em categorias de influência decrescente: Alfa (grandes nós globais como São Paulo, Nova Iorque e Londres), Beta (nós regionais importantes como o Rio de Janeiro e Lisboa) e Gama (nós de menor amplitude como Curitiba).</li>
+                            <li><strong>Afirmação IV: Correta.</strong> A globalização produz tensões internas severas na estrutura socioespacial das metrópoles. Ao mesmo tempo que viabiliza a constituição de elites cosmopolitas e fluxos culturais diversificados, gera marginalização e exclusão económica de estratos vulneráveis, criando condições propícias ao florescimento de xenofobia, racismo e sentimentos nacionalistas extremados.</li>
+                        </ul>
+                        
+                        <div class="overflow-x-auto mt-6">
+                            <table class="min-w-full text-xs divide-y divide-gray-200 border border-gray-100 rounded-lg overflow-hidden dark:divide-slate-700 dark:border-slate-700">
+                                <thead class="bg-slate-100 dark:bg-slate-800">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Conceito Urbano</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Variável de Classificação</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Foco de Influência Territorial</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Exemplos de Centros Urbanos</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Cidade Global</td>
+                                        <td class="px-4 py-2">Funcionalidade corporativa, conectividade de rede e serviços financeiros avançados</td>
+                                        <td class="px-4 py-2">Global (atua como polo de coordenação espacial do capital)</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Nova Iorque, Londres, Tóquio, São Paulo</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Megacidade</td>
+                                        <td class="px-4 py-2">Dimensão demográfica (população superior a 10 milhões de habitantes)</td>
+                                        <td class="px-4 py-2">Regional ou Nacional (frequentemente com hipertrofia urbana)</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Bombaim, Cairo, Daca, Cidade do México</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "Questão 3",
+                text: "O debate teórico sobre o processo de urbanização capitalista e os movimentos sociais urbanos contemporâneos remete para as formulações clássicas de Henri Lefebvre e David Harvey sobre a produção do espaço social e o direito à cidade. Considere as afirmações abaixo sobre estas perspetivas teóricas.",
+                statements: [
+                    "I - David Harvey sustenta que a urbanização desempenha um papel macroeconómico decisivo na sobrevivência do sistema capitalista, atuando como um canal fulcral para a absorção de excedentes de capital e de força de trabalho através de ciclos sucessivos de expansão física e imobiliária.",
+                    "II - O \"direito à cidade\" é formulado por Lefebvre e Harvey como um direito essencialmente coletivo, e não individual, configurando o poder de transformar as condições de vida urbana por meio do exercício de uma vontade coletiva que conteste a mercantilização da terra e do quotidiano.",
+                    "III - A produção do espaço urbano sob o capitalismo apoia-se em processos de \"destruição criativa\" que, embora viabilizem a valorização do capital imobiliário, desapropriam sistematicamente as classes de baixo rendimento do usufruto do espaço público e das áreas centrais.",
+                    "IV - Para Lefebvre, a participação activa da população através de mecanismos de autogestão é incapaz de alterar as estruturas da vida quotidiana, razão pela qual o autor defende que o planeamento urbano deve ser estritamente delegado aos aparelhos tecnocráticos do Estado."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I e II." },
+                    { value: "B", text: "(B) Apenas II e III." },
+                    { value: "C", text: "(C) Apenas I, II e III." },
+                    { value: "D", text: "(D) Apenas I, III e IV." },
+                    { value: "E", text: "(E) I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Apenas I, II e III estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Correta.</strong> David Harvey teoriza que a acumulação de capital depara-se sistematicamente com barreiras de sobreacumulação. Para contornar estas crises de rentabilidade, o capital recorre à produção do espaço urbano, direcionando excedentes financeiros para a construção de infraestruturas físicas, habitação e reorganização territorial, transformando a urbanização num esteio macroeconómico do capitalismo.</li>
+                            <li><strong>Afirmação II: Correta.</strong> Na perspetiva lefevriana e harveyana, o direito à cidade afasta-se de perspetivas reformistas ou meramente individuais de acesso a bens mercantilizados. Trata-se de um direito coletivo e revolucionário de reinventar as condições de vida metropolitana, gerindo democraticamente os excedentes e priorizando as necessidades humanas sobre o lucro de promotores imobiliários.</li>
+                            <li><strong>Afirmação III: Correta.</strong> A produção capitalista do espaço opera sob a lógica da "destruição criativa", substituindo tecidos urbanos consolidados e bairros populares por novos empreendimentos financeiros ou residenciais de alto padrão. Este processo expulsa as populações de menor rendimento, fragmentando comunidades e reduzindo o espaço de vivência pública destas classes.</li>
+                            <li><strong>Afirmação IV: Incorreta.</strong> Henri Lefebvre defende precisamente o oposto: a transformação radical das metrópoles e da sociedade decorre da participação popular autónoma e da autogestão quotidiana, que se insurgem contra a dominação do planeamento tecnocrático estatal e do poder corporativo.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "Questão 4",
+                text: "<strong>Instrução:</strong> Assinale a alternativa que preenche, correta e respectivamente, as lacunas do texto abaixo sobre a distribuição e a evolução dos fluxos globais de deslocamento forçado.<br><br>O agravamento das crises humanitárias e dos conflitos geopolíticos alterou de forma dramática os padrões de mobilidade forçada no planeta. De acordo com os relatórios das Nações Unidas, o Sudão consolidou-se como o país com a maior crise de deslocamento do mundo, registando um total de ________ de refugiados e deslocados internos. Esta crise humanitária de proporções severas superou os volumes históricos registados na Síria, que contabilizava ________, no Afeganistão, com ________, e na Ucrânia, que registava ________ de pessoas afetadas por deslocamentos forçados.",
+                prompt: "Assinale a alternativa que preenche correta e respetivamente as lacunas acima:",
+                options: [
+                    { value: "A", text: "(A) 14,3 milhões — 13,5 milhões — 10,3 milhões — 8,8 milhões" },
+                    { value: "B", text: "(B) 11,6 milhões — 9,1 milhões — 5,7 milhões — 3,9 milhões" },
+                    { value: "C", text: "(C) 14,3 milhões — 11,6 milhões — 9,1 milhões — 5,7 milhões" },
+                    { value: "D", text: "(D) 12,1 milhões — 10,3 milhões — 8,8 milhões — 5,7 milhões" },
+                    { value: "E", text: "(E) 11,6 milhões — 10,3 milhões — 9,1 milhões — 3,9 milhões" }
+                ],
+                correct: "A",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (A) - 14,3 milhões — 13,5 milhões — 10,3 milhões — 8,8 milhões</strong>
+                        </div>
+                        <p class="readable-prose text-sm text-slate-800 dark:text-slate-100">
+                            <strong>Análise das lacunas:</strong> A crise no Sudão converteu o país no maior polo de deslocados do mundo, somando <strong>14,3 milhões</strong> de pessoas forçadas a abandonar os seus locais de residência habitual (entre refugiados e deslocados internos). Esta situação superou a crise na Síria, que registava <strong>13,5 milhões</strong> de pessoas deslocadas, o Afeganistão com <strong>10,3 milhões</strong> de indivíduos, e a Ucrânia com <strong>8,8 milhões</strong> de pessoas forçadas a deslocar-se devido à intervenção russa e aos conflitos militares em curso.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                title: "Questão 5",
+                text: "Associe a primeira coluna, que apresenta conceitos estruturantes da geografia urbana e da sociologia política contemporâneas, à segunda coluna, que contém as respetivas caracterizações teóricas baseadas na literatura crítica do espaço global.<br><br><strong>Coluna 1 — Conceitos</strong><br>1. Estado-Rede<br>2. Heterotopia<br>3. Cidades Contínuas<br>4. Urbanização Desurbanizada<br><br><strong>Coluna 2 — Caracterizações</strong><br>( ) Designa a produção de espaços alternativos e diferenciados de resistência social que rompem com a homogeneidade espacial imposta pelo planeamento urbanístico tecnocrático e mercantil.<br>( ) Caracteriza-se pela partilha de autoridade e pela emanação de uma pluralidade de fontes de poder por meio de instituições que operam de forma descentralizada e assimétrica, sem um centro regulador exclusivo.<br>( ) Refere-se à expansão urbana fragmentada que, ao priorizar a mercantilização do solo e a segregação habitacional, esvazia as funções de sociabilidade, encontro e cidadania das metrópoles, reduzindo o direito à vida urbana.<br>( ) Aglomerações metropolitanas densas e sobrelotadas que se expandem de forma ilimitada pelo território, diluindo as fronteiras regionais e estruturando uma malha de fluxos contínuos de resíduos, capitais e pessoas.",
+                prompt: "A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    { value: "A", text: "(A) 2 — 1 — 4 — 3" },
+                    { value: "B", text: "(B) 4 — 2 — 1 — 3" },
+                    { value: "C", text: "(C) 2 — 4 — 1 — 3" },
+                    { value: "D", text: "(D) 1 — 2 — 3 — 4" },
+                    { value: "E", text: "(E) 4 — 1 — 2 — 3" }
+                ],
+                correct: "A",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (A) - Sequência: 2 — 1 — 4 — 3</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Primeira associação (2):</strong> <strong>Heterotopia</strong> refere-se aos espaços sociais alternativos e zonas de diferença que se contrapõem e resistem à homogeneidade espacial ditada pelo capital e pelas estruturas tecnocráticas de ordenamento imobiliário.</li>
+                            <li><strong>Segunda associação (1):</strong> O <strong>Estado-Rede</strong>, conforme teorizado por Castells e Lefebvre, caracteriza-se pela partilha de autoridade descentralizada e pela pluralidade de fontes de poder em canais assimétricos sem um centro regulador unificado.</li>
+                            <li><strong>Terceira associação (4):</strong> A <strong>Urbanização Desurbanizada</strong> designa o crescimento das metrópoles desprovido do direito à vida urbana e de sociabilidade, caracterizado pela segregação e pela perda das funções de encontro coletivo.</li>
+                            <li><strong>Quarta associação (3):</strong> As <strong>Cidades Contínuas</strong> constituem aglomerações regionais contínuas e complexas que se expandem pelo espaço, gerando problemas severos de qualidade de vida e de gestão ecológica dos seus resíduos e fluxos de pessoas.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "Questão 6",
+                text: "Manuel Castells analisa as transformações estruturais da sociedade contemporânea a partir do surgimento do paradigma da tecnologia da informação e da emergência da sociedade em rede. Sobre este paradigma tecnológico e as suas implicações na organização espacial e política do mundo globalizado, considere as seguintes afirmações.",
+                statements: [
+                    "I - O paradigma da tecnologia da informação assenta na premissa de que a informação constitui a matéria-prima sobre a qual as tecnologias atuam, caracterizando-se pela penetrabilidade dos seus efeitos em todas as esferas da atividade humana.",
+                    "II - A lógica de redes, a flexibilidade organizacional e a convergência de tecnologias específicas em sistemas altamente integrados constituem propriedades fundamentais que conferem dinamismo e capacidade de adaptação às estruturas da sociedade em rede.",
+                    "III - No âmbito da governança contemporânea, o avanço da sociedade em rede fortalece o modelo clássico de Estado-Nação centralizado e simétrico, eliminando a necessidade de cooperação com atores não estatais e extinguindo a assimetria das relações institucionais."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I." },
+                    { value: "B", text: "(B) Apenas II." },
+                    { value: "C", text: "(C) Apenas I e II." },
+                    { value: "D", text: "(D) Apenas II e III." },
+                    { value: "E", text: "(E) I, II e III." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Apenas I e II estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Correta.</strong> No paradigma informacional de Castells, a informação atua diretamente sobre a informação, convertendo-se em matéria-prima essencial e motor das próprias ferramentas tecnológicas. A sua penetrabilidade atinge todas as dimensões da vida quotidiana e institucional.</li>
+                            <li><strong>Afirmação II: Correta.</strong> A lógica de redes e a flexibilidade permitem uma reorganização profunda das esferas produtivas e governamentais, viabilizando a convergência de novos sistemas tecnológicos integrados em plataformas dinâmicas e adaptáveis.</li>
+                            <li><strong>Afirmação III: Incorreta.</strong> O advento da era da informação induz a fragmentação do poder estatal clássico, forçando a transição para um modelo de Estado-Rede. Este modelo caracteriza-se pela partilha de competências e autoridade com múltiplos níveis subnacionais, supranacionais e agentes sociais em redes que frequentemente são desiguais e marcadamente assimétricas.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: "Questão 7",
+                text: "As alterações climáticas globais e a ocorrência de desastres socioambientais severos têm reconfigurado de forma profunda as dinâmicas de deslocamento humano e as vulnerabilidades espaciais. Considere as seguintes afirmações sobre os padrões de migração interna e de refúgio climático.",
+                statements: [
+                    "I - De acordo com o Relatório Global sobre Deslocamentos Internos (GRID), os desastres naturais, tais como inundações, secas severas e ciclones, geraram cerca de 45,8 milhões de deslocamentos internos em 2024, correspondendo a aproximadamente 70% das movimentações registadas no período.",
+                    "II - Os impactos socioambientais extremos incidem de forma desproporcional sobre grupos vulneráveis, afetando gravemente o percurso educacional infantil — estima-se que 1 em cada 7 estudantes tenha tido a escolaridade interrompida por desastres em 2024 — e agravando as assimetrias de género e de deficiência em contextos de acolhimento.",
+                    "III - A maioria das populações forçadas a deslocar-se devido a crises ambientais encontra abrigo em nações de elevado rendimento do Norte Global, uma vez que estes territórios dispõem de canais automáticos de concessão de asilo climático ao abrigo da Convenção de 1951.",
+                    "IV - O aumento do número de países que registam simultaneamente cenários de conflito armado e desastres socioambientais triplicou desde 2009, o que atua como uma barreira severa a soluções duradouras, dificultando o retorno de populações deslocadas e gerando crises humanitárias recorrentes."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I e III." },
+                    { value: "B", text: "(B) Apenas II e IV." },
+                    { value: "C", text: "(C) Apenas I, II e IV." },
+                    { value: "D", text: "(D) Apenas II, III e IV." },
+                    { value: "E", text: "(E) I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Apenas I, II e IV estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Correta.</strong> O Relatório Global de 2025 do IDMC realçou que desastres naturais repentinos ou de progressão lenta geraram um total expressivo de 45,8 milhões de deslocamentos de caráter interno em 2024, constituindo aproximadamente 70% das novas movimentações internas a nível mundial.</li>
+                            <li><strong>Afirmação II: Correta.</strong> Os impactos ambientais incidem assimetricamente sobre as populações em contextos desfavorecidos. Cerca de 1 em cada 7 estudantes registou a interrupção da sua frequência escolar no ano de 2024 por causa de eventos climáticos severos, observando-se ainda que mulheres, crianças e pessoas portadoras de deficiências sofrem maiores riscos de exclusão e de exposição à violência de género em infraestruturas provisórias de acolhimento.</li>
+                            <li><strong>Afirmação III: Incorreta.</strong> A maior parte dos deslocados devido a desastres climáticos e conflitos armados permanece abrigada em países de rendimento baixo ou médio-baixo, não se verificando a concessão automática de asilo climático no Norte Global, uma vez que a Convenção de 1951 exige a comprovação de receio fundamentado de perseguição direta baseada em raça, religião, grupo social ou convicção política.</li>
+                            <li><strong>Afirmação IV: Correta.</strong> A exposição cumulativa a crises ambientais e a cenários de guerra civil triplicou desde 2009 nos países de acolhimento vulneráveis. Esta sobreposição de crises atua de forma a enfraquecer a adaptação comunitária, inviabilizando o regresso seguro e estruturando ciclos repetidos de deslocamento.</li>
+                        </ul>
+                        
+                        <div class="overflow-x-auto mt-6">
+                            <table class="min-w-full text-xs divide-y divide-gray-200 border border-gray-100 rounded-lg overflow-hidden dark:divide-slate-700 dark:border-slate-700">
+                                <thead class="bg-slate-100 dark:bg-slate-800">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Categoria de Impacto Ambiental</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Volume ou Percentagem Registada</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Populações e Regiões Mais Afetadas</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Deslocamentos por Desastres (2024)</td>
+                                        <td class="px-4 py-2">45,8 milhões de novos casos</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Concentração em inundações, secas e tempestades severas.</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Proporção nos Deslocamentos Internos</td>
+                                        <td class="px-4 py-2">70% de todas as movimentações</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Supera os novos fluxos provocados por guerras e violência.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Interrupção Escolar Infantil (2024)</td>
+                                        <td class="px-4 py-2">1 em cada 7 estudantes</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">74% dos estudantes afetados em países vulneráveis.</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Exposição Demográfica Crítica</td>
+                                        <td class="px-4 py-2">> 86 milhões de deslocados</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Residência em nações com exposição climática extrema.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: "Questão 8",
+                text: "As dinâmicas migratórias internacionais e o processamento de solicitações de refúgio no Brasil sofreram mutações significativas no seu perfil de nacionalidade, volume e distribuição espacial na última década. Com base nos relatórios estatísticos do Observatório das Migrações Internacionais (OBMigra) e do ACNUR, considere as afirmações abaixo.",
+                statements: [
+                    "I - O Estado brasileiro registou um incremento substantivo na proteção de populações deslocadas, ultrapassando o patamar de 165 mil pessoas formalmente reconhecidas como refugiadas, após acolher cerca de 75,6 mil novas solicitações em 2025.",
+                    "II - No ano de 2025, verificou-se uma alteração inédita no perfil de origem dos solicitantes de refúgio: os cidadãos cubanos ultrapassaram historicamente os venezuelanos em volume de novos pedidos, passando a responder por 55,4% das solicitações registadas no país, enquanto os venezuelanos representaram 28,1%.",
+                    "III - O acumulado histórico de solicitações de reconhecimento da condição de refugiado no Brasil, desde o ano de 2010, superou a marca de 550 mil pedidos, o que evidencia a relevância do país na rota da mobilidade humana regional e internacional.",
+                    "IV - Toda a infraestrutura física e o processamento administrativo destas solicitações concentram-se de forma exclusiva nos estados da Região Sul do Brasil, não existindo postos de atendimento ou processos de triagem nas fronteiras terrestres das regiões Norte ou Centro-Oeste."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I e II." },
+                    { value: "B", text: "(B) Apenas III e IV." },
+                    { value: "C", text: "(C) Apenas I, II e III." },
+                    { value: "D", text: "(D) Apenas II, III e IV." },
+                    { value: "E", text: "(E) I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Apenas I, II e III estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Correta.</strong> O Brasil registou um incremento notável no processamento de refúgio, superando o patamar cumulativo de 165 mil pessoas legalmente reconhecidas como refugiadas sob a égide do Conare. Apenas no decurso do ano de 2025, o país acolheu cerca de 75,6 mil novas petições de asilo.</li>
+                            <li><strong>Afirmação II: Correta.</strong> O relatório Refúgio em Números de 2026 constatou uma mutação histórica de nacionalidades: pela primeira vez na última década, os pedidos de cidadãos cubanos superaram os de cidadãos venezuelanos, representando 55,4% dos novos pedidos de refúgio efetuados no decurso de 2025, contra 28,1% dos de venezuelanos.</li>
+                            <li><strong>Afirmação III: Correta.</strong> O registo histórico do país aponta para a acumulação de 551.072 solicitações formais de refúgio desde o ano de 2010, consolidando o território brasileiro como um nó de trânsito e acolhimento regional expressivo.</li>
+                            <li><strong>Afirmação IV: Incorreta.</strong> O processamento administrativo e o acolhimento físico não ocorrem apenas na Região Sul. A maioria dos fluxos iniciais terrestres concentra-se nas fronteiras do Norte do Brasil, com destaque para as estruturas de triagem e acolhimento em Pacaraima e Boa Vista (Roraima), articulando-se com processos nacionais de interiorização para diversas capitais metropolitanas.</li>
+                        </ul>
+                        
+                        <div class="overflow-x-auto mt-6">
+                            <table class="min-w-full text-xs divide-y divide-gray-200 border border-gray-100 rounded-lg overflow-hidden dark:divide-slate-700 dark:border-slate-700">
+                                <thead class="bg-slate-100 dark:bg-slate-800">
+                                    <tr>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Parâmetro de Monitorização (OBMigra)</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Volume Registado</th>
+                                        <th class="px-4 py-2 text-left font-semibold text-slate-700 dark:text-slate-300">Distribuição / Tendências Recentes</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 dark:divide-slate-700 bg-white dark:bg-slate-900">
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Total de Refugiados Reconhecidos</td>
+                                        <td class="px-4 py-2">165.774 pessoas</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Crescimento contínuo e consolidação da acolhida humanitária.</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Novas Solicitações de Refúgio (2025)</td>
+                                        <td class="px-4 py-2">75,6 mil pedidos</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Incremento na procura de proteção jurídica no país.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Solicitações Acumuladas (Desde 2010)</td>
+                                        <td class="px-4 py-2">551.072 solicitações</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Consolidação do Brasil no fluxo de migração intrarregional.</td>
+                                    </tr>
+                                    <tr class="bg-slate-50/50 dark:bg-slate-850">
+                                        <td class="px-4 py-2 font-medium">Participação Cubana nos Pedidos (2025)</td>
+                                        <td class="px-4 py-2">55,4% do total anual</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Mudança inédita no perfil nacional de migração.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 font-medium">Participação Venezuelana nos Pedidos (2025)</td>
+                                        <td class="px-4 py-2">28,1% do total anual</td>
+                                        <td class="px-4 py-2 text-slate-500 dark:text-slate-400">Deslocação para o segundo posto nos pedidos anuais.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                title: "Questão 9",
+                text: "A partir das análises críticas de David Harvey e de Robert Park sobre a articulação entre o desenvolvimento urbano, a acumulação de excedentes de capital e a desigualdade socioespacial nas metrópoles contemporâneas, assinale a alternativa <strong>INCORRETA</strong>.",
+                prompt: "Assinale a alternativa incorreta:",
+                options: [
+                    { value: "A", text: "(A) A urbanização constitui um fenómeno intrinsecamente ligado à produção de excedentes de capital, uma vez que o reinvestimento contínuo do lucro gerado na economia de mercado necessita de canais geográficos e infraestruturais para evitar crises de sobreacumulação." },
+                    { value: "B", text: "(B) A remodelação urbana empreendida pelo Barão de Haussmann na Paris do século XIX e os projetos de Robert Moses em Nova Iorque no pós-guerra ilustram a íntima conexão entre a reorganização espacial e a superação de crises económicas sistémicas de acumulação capitalista." },
+                    { value: "C", text: "(C) As formas espaciais das grandes cidades atuais estruturam-se progressivamente através de fragmentos fortificados, comunidades fechadas e espaços públicos privatizados sob vigilância constante, o que reflete a pacificação dos conflitos de classe e a democratização plena da experiência urbana para todas as camadas da população." },
+                    { value: "D", text: "(D) O direito à cidade transcende a mera liberdade de acesso individual aos recursos existentes na malha urbana; configura, pelo contrário, um direito coletivo de mudar a nós mesmos através da transformação radical e democrática dos processos de urbanização." },
+                    { value: "E", text: "(E) O mercado habitacional desregulado e a financeirização imobiliária assentam frequentemente em mecanismos de crédito e especulação que, embora funcionem temporariamente como estabilizadores económicos, acabam por deflagrar crises hipotecárias severas e processos de exclusão social." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Afirmação incorreta selecionada.</strong>
+                        </div>
+                        <p class="readable-prose text-sm text-slate-800 dark:text-slate-100">
+                            <strong>Justificativa:</strong> A alternativa (C) está <strong>incorreta</strong> porque a expansão de condomínios fechados, espaços públicos privatizados, câmaras de vigilância eletrónica constante e barreiras físicas nas metrópoles contemporâneas não representa a pacificação de classes ou a democratização plena da experiência metropolitana. Na perspetiva geográfica crítica de Harvey, estas transformações espaciais configuram antes a fratura socioespacial violenta e a segregação das populações de menor rendimento, as quais são desapropriadas do direito ao usufruto da cidade pública. Trata-se de um processo de securitização e exclusão espacial imposto para garantir os interesses de acumulação imobiliária e a valorização especulativa do solo urbano pelas elites metropolitanas. Todas as demais alternativas refletem com correção e precisão teórica os argumentos e conclusões dos autores estudados.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                title: "Questão 10",
+                text: "Os movimentos sociais urbanos e as pressões populares nas metrópoles contemporâneas revelam como o espaço geográfico se constitui como arena de conflitos políticos e lutas de classe. Considere as seguintes afirmações sobre a atuação destes movimentos e as dinâmicas sociais urbanas globais.",
+                statements: [
+                    "I - Os protestos urbanos de grande escala registados na última década, como as mobilizações contra o aumento de tarifas de transporte público e as ocupações de espaços centrais ociosos, utilizam o conceito de \"direito à cidade\" como uma plataforma política para reivindicar a universalização dos serviços e contestar a mercantilização do solo urbano.",
+                    "II - A exclusão social nas megacidades gera processos de segregação que se refletem na dificuldade de mobilidade das classes trabalhadoras: os sucessivos aumentos tarifários geram uma espiral de exclusão que restringe a circulação física da população de baixo rendimento, violando o direito à vida urbana.",
+                    "III - As dinâmicas de exclusão alimentar e a proliferação de ambientes obesogénicos em áreas metropolitanas vulneráveis, agravadas pela pandemia de Covid-19 e pela descontinuidade de políticas de segurança alimentar, motivaram o surgimento de \"hotspots\" de insegurança nutricional, redefinindo as pautas de luta pela sobrevivência nas periferias globais.",
+                    "IV - A atuação dos movimentos sociais urbanos globais contemporâneos é caracterizada por uma coordenação altamente centralizada e monocêntrica, o que lhes permite anular as especificidades locais e impor agendas uniformes em todas as realidades metropolitanas do planeta."
+                ],
+                prompt: "Quais estão corretas?",
+                options: [
+                    { value: "A", text: "(A) Apenas I e II." },
+                    { value: "B", text: "(B) Apenas III e IV." },
+                    { value: "C", text: "(C) Apenas I, II e III." },
+                    { value: "D", text: "(D) Apenas I, III e IV." },
+                    { value: "E", text: "(E) I, II, III e IV." }
+                ],
+                correct: "C",
+                resolution: `
+                    <div class="space-y-4">
+                        <div class="p-3 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-lg text-slate-800 dark:bg-slate-800 dark:text-slate-100">
+                            <strong>Gabarito: (C) - Apenas I, II e III estão corretas.</strong>
+                        </div>
+                        <ul class="space-y-3 readable-prose text-sm list-disc pl-5">
+                            <li><strong>Afirmação I: Correta.</strong> Manifestações metropolitanas contemporâneas de grande relevo e movimentos de ocupação recorrem expressamente ao "direito à cidade" como uma palavra de ordem. O termo é mobilizado para contestar a primazia dos lucros imobiliários em detrimento da função social da propriedade e do espaço público, exigindo o acesso universal aos transportes públicos, educação e moradia digna.</li>
+                            <li><strong>Afirmação II: Correta.</strong> A exclusão social nas megacidades capitalistas adquire dimensões de segregação espacial drástica. Os custos elevados das tarifas de transporte público operam como mecanismos de exclusão física, de tal forma que os sucessivos aumentos restringem e inviabilizam a circulação das classes populares no espaço urbano, cerceando o seu usufruto da cidade e fragmentando a sua inserção económica.</li>
+                            <li><strong>Afirmação III: Correta.</strong> Pesquisas recentes no campo da geografia e sociologia da saúde evidenciam que a pandemia de Covid-19 e a supressão de políticas sociais alteraram as necessidades e o acesso alimentar das populações mais desfavorecidas nas grandes periferias urbanas. A emergência de "hotspots" de insegurança alimentar e de ambientes obesogénicos reconfigura as formas de luta pela sobrevivência e dignidade nas franjas periurbanas contemporâneas.</li>
+                            <li><strong>Afirmação IV: Incorreta.</strong> Os movimentos sociais urbanos contemporâneos estruturam-se primordialmente por meio de redes descentralizadas, igualitárias e horizontais, e não de organizações centralizadas ou monocêntricas. Estas redes operam de forma flexível e adaptada às particularidades territoriais locais, permitindo a cooperação mútua na escala global sem anular as lutas específicas de cada espaço metropolitano.</li>
+                        </ul>
+                    </div>
+                `
+            }
+        ];
+
+        // State variables
+        let userSelections = {};
+        let quizSubmitted = false;
+        let startTime = null;
+
+        // Theme setter function (Warm, Sepia, Dark)
+        function setTheme(theme) {
+            document.body.className = "font-sans antialiased min-h-screen pb-24";
+            document.body.classList.add('theme-' + theme);
+            
+            // Adjust active buttons styles
+            const themes = ['warm', 'sepia', 'dark'];
+            themes.forEach(t => {
+                const btn = document.getElementById('btn-theme-' + t);
+                if (t === theme) {
+                    btn.className = "px-2.5 py-1 text-xs font-semibold rounded-md bg-indigo-600 text-white shadow-sm cursor-pointer";
+                } else {
+                    btn.className = "px-2.5 py-1 text-xs font-medium rounded-md text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer";
+                }
+            });
+        }
+
+        // Build the entire quiz inside the DOM on load
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, index) => {
+                const qNum = index + 1;
+                
+                // Construct statements block if it exists
+                let statementsHtml = '';
+                if (q.statements && q.statements.length > 0) {
+                    statementsHtml = `
+                        <div class="space-y-3 pl-4 border-l-2 border-indigo-200 dark:border-slate-700 my-4 text-sm readable-prose italic">
+                            ${q.statements.map(stmt => `<p>${stmt}</p>`).join('')}
+                        </div>
+                    `;
+                }
+
+                // Render options
+                let optionsHtml = '';
+                q.options.forEach(opt => {
+                    optionsHtml += `
+                        <button id="opt-${q.id}-${opt.value}" onclick="selectOption(${q.id}, '${opt.value}')" class="option-button w-full text-left p-4 rounded-xl border border-theme card-reading hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800/50 cursor-pointer flex items-start gap-3">
+                            <span class="flex-shrink-0 w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold option-indicator">
+                                ${opt.value}
+                            </span>
+                            <span class="text-sm font-medium pr-2 leading-relaxed readable-prose">${opt.text}</span>
+                        </button>
+                    `;
+                });
+
+                const questionBlock = `
+                    <section id="question-sec-${qNum}" class="p-6 md:p-8 rounded-2xl border border-theme card-reading shadow-sm transition-all relative">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-xs font-semibold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">FAURGS - Concurso Público</span>
+                            <span class="text-sm font-semibold text-muted-theme">Questão ${qNum} de 10</span>
+                        </div>
+                        
+                        <div class="readable-prose text-base md:text-md font-medium leading-relaxed mb-4">
+                            ${q.text}
+                        </div>
+
+                        ${statementsHtml}
+
+                        <p class="text-sm font-bold mt-6 mb-4 readable-prose">${q.prompt}</p>
+
+                        <div class="grid grid-cols-1 gap-3 mt-4">
+                            ${optionsHtml}
+                        </div>
+
+                        <!-- Individual Question Resolution Card (Shown only after final submit) -->
+                        <div id="resolution-block-${q.id}" class="hidden mt-8 pt-6 border-t border-theme border-dashed">
+                            <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-theme">
+                                <h4 class="text-sm font-bold flex items-center gap-2 mb-3">
+                                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                                    Resolução Comentada da Questão
+                                </h4>
+                                <div class="text-sm leading-relaxed">${q.resolution}</div>
+                            </div>
+                        </div>
+                    </section>
+                `;
+                container.insertAdjacentHTML('beforeend', questionBlock);
+            });
+
+            startTime = new Date();
+        }
+
+        // Handle option selection by clicking on the button
+        function selectOption(questionId, value) {
+            if (quizSubmitted) return; // Freeze selections once submitted
+
+            userSelections[questionId] = value;
+            
+            // Clear current states of indicator buttons for this question
+            const q = quizData.find(item => item.id === questionId);
+            q.options.forEach(opt => {
+                const btn = document.getElementById(`opt-${questionId}-${opt.value}`);
+                const ind = btn.querySelector('.option-indicator');
+                
+                btn.className = "option-button w-full text-left p-4 rounded-xl border border-theme card-reading hover:bg-slate-50 hover:border-slate-400 dark:hover:bg-slate-800/50 cursor-pointer flex items-start gap-3";
+                ind.className = "flex-shrink-0 w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold option-indicator";
+            });
+
+            // Set active state on the clicked button
+            const selectedBtn = document.getElementById(`opt-${questionId}-${value}`);
+            const selectedInd = selectedBtn.querySelector('.option-indicator');
+            
+            selectedBtn.className = "option-button w-full text-left p-4 rounded-xl border-2 border-indigo-500 bg-indigo-50/20 cursor-pointer flex items-start gap-3 shadow-sm";
+            selectedInd.className = "flex-shrink-0 w-6 h-6 rounded-full border-2 border-indigo-600 bg-indigo-600 text-white flex items-center justify-center text-xs font-bold option-indicator";
+
+            updateProgressBar();
+        }
+
+        // Keep visual stats updated
+        function updateProgressBar() {
+            const answeredCount = Object.keys(userSelections).length;
+            const progressPercent = (answeredCount / 10) * 100;
+            
+            document.getElementById('quiz-progress-text').innerText = `${answeredCount} de 10 respondidas`;
+            document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+        }
+
+        // Scroll gracefully to target element
+        function scrollToQuestion(number) {
+            const target = document.getElementById(`question-sec-${number}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Submit handler
+        function calculateAndFinishQuiz() {
+            if (quizSubmitted) return;
+
+            const answeredCount = Object.keys(userSelections).length;
+            if (answeredCount < 10) {
+                // If not all answered, show beautiful feedback container dynamically
+                showUnansweredWarning(10 - answeredCount);
+                return;
+            }
+
+            quizSubmitted = true;
+            const endTime = new Date();
+            const timeDiff = Math.round((endTime - startTime) / 1000); // in seconds
+            const minutes = Math.floor(timeDiff / 60);
+            const seconds = timeDiff % 60;
+            const formattedTime = `${minutes}m ${seconds}s`;
+
+            // Grade questions
+            let correctAnswersCount = 0;
+            quizData.forEach(q => {
+                const userVal = userSelections[q.id];
+                const isCorrect = userVal === q.correct;
+                if (isCorrect) correctAnswersCount++;
+
+                // Reveal explanation blocks
+                const resBlock = document.getElementById(`resolution-block-${q.id}`);
+                resBlock.classList.remove('hidden');
+
+                // Style the option list blocks according to correctness
+                q.options.forEach(opt => {
+                    const btn = document.getElementById(`opt-${q.id}-${opt.value}`);
+                    const ind = btn.querySelector('.option-indicator');
+                    
+                    // Reset class to prevent overrides
+                    btn.className = "option-button w-full text-left p-4 rounded-xl border flex items-start gap-3 cursor-default";
+                    
+                    if (opt.value === q.correct) {
+                        // Highlight correct answer in emerald
+                        btn.classList.add('border-green-500', 'bg-green-50/20');
+                        ind.className = "flex-shrink-0 w-6 h-6 rounded-full border-2 border-green-600 bg-green-600 text-white flex items-center justify-center text-xs font-bold";
+                    } else if (userVal === opt.value) {
+                        // Highlight incorrect selected option in rose red
+                        btn.classList.add('border-rose-500', 'bg-rose-50/20');
+                        ind.className = "flex-shrink-0 w-6 h-6 rounded-full border-2 border-rose-600 bg-rose-600 text-white flex items-center justify-center text-xs font-bold";
+                    } else {
+                        // Neutral styled options
+                        btn.classList.add('border-theme', 'card-reading', 'opacity-60');
+                        ind.className = "flex-shrink-0 w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600 flex items-center justify-center text-xs font-bold";
+                    }
+                });
+            });
+
+            // Update Statistics
+            const percentage = Math.round((correctAnswersCount / 10) * 100);
+            document.getElementById('stat-score').innerText = `${correctAnswersCount}/10`;
+            document.getElementById('stat-percentage').innerText = `${percentage}%`;
+            document.getElementById('stat-time').innerText = formattedTime;
+
+            let evaluation = "Excelente!";
+            if (percentage < 50) evaluation = "Revisar";
+            else if (percentage < 80) evaluation = "Muito Bom";
+            document.getElementById('stat-evaluation').innerText = evaluation;
+
+            // Remove quiz control widget and reveal results panel
+            document.getElementById('quiz-control-card').classList.add('hidden');
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.remove('hidden');
+            resultsPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Custom warning block replacement for alerts
+        function showUnansweredWarning(missingCount) {
+            let existingWarning = document.getElementById('unanswered-warning');
+            if (existingWarning) existingWarning.remove();
+
+            const warningBlock = `
+                <div id="unanswered-warning" class="mt-4 p-4 rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-950 dark:border-amber-900 text-amber-900 dark:text-amber-200 text-sm font-semibold max-w-md mx-auto animate-bounce">
+                    Atenção! Você precisa responder todas as questões antes de finalizar. Ainda faltam ${missingCount} questão(ões).
+                </div>
+            `;
+            const controlCard = document.getElementById('quiz-control-card');
+            controlCard.insertAdjacentHTML('beforeend', warningBlock);
+            
+            setTimeout(() => {
+                const w = document.getElementById('unanswered-warning');
+                if (w) w.remove();
+            }, 5000);
+        }
+
+        // Restart entire state cleanly
+        function restartQuiz() {
+            userSelections = {};
+            quizSubmitted = false;
+            
+            // Re-render fresh container elements and reset state counters
+            renderQuiz();
+            
+            // Toggle view visibility
+            document.getElementById('results-panel').classList.add('hidden');
+            const controlCard = document.getElementById('quiz-control-card');
+            controlCard.classList.remove('hidden');
+            
+            updateProgressBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.onload = function() {
+            setTheme('warm');
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>

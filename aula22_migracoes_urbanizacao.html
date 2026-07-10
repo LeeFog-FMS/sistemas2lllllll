@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparatório Geografia IFSC - FAURGS</title>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                },
+            },
+        }
+    </script>
+    <!-- FontAwesome para ícones do player de áudio -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Grifos estilizados com transição suave */
+        mark {
+            background-color: #fef08a; /* Amarelo bem suave */
+            color: #1e293b;
+            padding: 0.1em 0.3em;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        /* Ajuste de transição para o player e interações */
+        .interactive-element {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased font-sans line-height-relaxed selection:bg-yellow-200">
+
+    <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Cabeçalho Principal -->
+        <header class="border-b border-slate-200 pb-6 mb-8">
+            <div class="flex items-center space-x-2 text-sm font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                <span>Geografia Escolar & Acadêmica</span>
+                <span>•</span>
+                <span>Foco IFSC / FAURGS</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Migrações Internacionais e Espaço Urbano Global
+            </h1>
+            <p class="mt-2 text-lg text-slate-600 font-normal">
+                Resumo de Alta Densidade Teórica e Prática para o Cargo de Professor de Geografia (EBTT).
+            </p>
+        </header>
+
+        <!-- Seção do Reprodutor de Áudio Inteligente -->
+        <section class="bg-slate-50 rounded-2xl border border-slate-200 p-5 mb-10 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                
+                <!-- Informações do Player -->
+                <div class="flex-1">
+                    <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                        <span class="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        Estudo por Áudio (Audiobook do Resumo)
+                    </h3>
+                    
+                    <!-- Campo de Entrada para o nome do MP3 -->
+                    <div class="mt-2.5 flex items-center gap-2 max-w-md">
+                        <label for="audio-filename" class="text-xs font-semibold text-slate-500 whitespace-nowrap">Arquivo MP3:</label>
+                        <input type="text" id="audio-filename" value="resumo_geografia.mp3" 
+                            class="w-full bg-white text-xs text-slate-700 px-3 py-1.5 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 font-mono"
+                            placeholder="Ex: aula_migracoes.mp3">
+                        <button id="btn-load-audio" class="interactive-element bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg whitespace-nowrap">
+                            Carregar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Elemento HTML5 Audio (oculto, controlado via JS) -->
+                <audio id="audio-element" src="urb_geografia.mp3" preload="metadata"></audio>
+
+                <!-- Controles Customizados do Player -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 bg-white p-3 rounded-xl border border-slate-200/80 shadow-xs w-full md:w-auto">
+                    
+                    <!-- Play/Pause e Progresso -->
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button id="btn-play-pause" class="interactive-element h-10 w-10 flex items-center justify-center rounded-full bg-slate-900 text-white hover:bg-slate-800 focus:outline-none">
+                            <i id="play-icon" class="fa-solid fa-play text-sm translate-x-0.5"></i>
+                        </button>
+                        
+                        <!-- Barra de Progresso Customizada -->
+                        <div class="flex flex-col flex-1 sm:w-32">
+                            <span id="audio-time" class="text-[10px] font-mono text-slate-500 text-right mb-1">00:00 / 00:00</span>
+                            <input type="range" id="audio-progress" value="0" class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800">
+                        </div>
+                    </div>
+
+                    <!-- Divisor Vertical Oculto no Mobile -->
+                    <div class="hidden sm:block w-px h-8 bg-slate-200"></div>
+
+                    <!-- Velocidade de Reprodução e Volume -->
+                    <div class="flex items-center justify-between sm:justify-start gap-4 w-full sm:w-auto">
+                        <!-- Botão de Velocidade -->
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs font-semibold text-slate-500">Velocidade:</span>
+                            <button id="btn-speed" class="interactive-element bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-2.5 py-1.5 rounded-md border border-slate-300 min-w-[50px]">
+                                1.0x
+                            </button>
+                        </div>
+
+                        <!-- Controle de Volume -->
+                        <div class="flex items-center gap-2">
+                            <i id="volume-icon" class="fa-solid fa-volume-high text-xs text-slate-500"></i>
+                            <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.8" class="w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-800">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            
+            <!-- Alerta Amigável sobre o Arquivo de Áudio -->
+            <div id="audio-status-msg" class="mt-2 text-[11px] text-slate-500 italic flex items-center gap-1">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Insira o nome exato do arquivo MP3 que está em sua máquina ou servidor para escutar o áudio integrado.</span>
+            </div>
+        </section>
+
+        <!-- Conteúdo do Resumo -->
+        <main class="space-y-12">
+            
+            <!-- Seção 1: Migrações Contemporâneas e Fragmentação Urbana -->
+            <section class="prose prose-slate max-w-none">
+                <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3 mb-4 flex items-center gap-2">
+                    <span class="text-slate-400 font-mono text-lg">01</span>
+                    Migrações Contemporâneas e Fragmentação Urbana
+                </h2>
+                
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    A reestruturação produtiva global pós-1970 aprofundou expressivamente a <mark>divisão internacional do trabalho</mark>, reordenando fluxos de capitais e gerando dois fluxos migratórios dialeticamente opostos e complementares: a <mark>migração econômica voluntária</mark> (que oscila entre quadros corporativos altamente qualificados e trabalhadores submetidos a postos hiperprecarizados) e os <mark>deslocamentos forçados</mark> de populações refugiadas e vulnerabilizadas.
+                </p>
+
+                <p class="text-slate-700 leading-relaxed mb-4">
+                    Na escala física das metrópoles e redes globais, a inserção contínua desses novos contingentes populacionais resulta em uma <mark>geografia urbana fragmentada e descontínua</mark>, caracterizada pelos seguintes fenômenos:
+                </p>
+
+                <ul class="space-y-3 pl-0 list-none my-6">
+                    <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                        <div class="h-6 w-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">A</div>
+                        <div>
+                            <strong class="text-slate-950 font-semibold block mb-1">Segregação Socioespacial Extrema</strong>
+                            Materializa-se na oposição drástica entre os condomínios de alta segurança e <mark>enclaves fortificados</mark> das classes dominantes, em contraposição direta às <mark>áreas de extrema exclusão</mark>, favelas e assentamentos informais, desprovidos da provisão básica de serviços estatais e de infraestrutura física.
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200/60">
+                        <div class="h-6 w-6 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 font-bold text-xs mt-0.5">B</div>
+                        <div>
+                            <strong class="text-slate-950 font-semibold block mb-1">Guetização e Espacialidades Paralelas</strong>
+                            A moradia dos novos imigrantes concentra-se frequentemente em bairros operários tradicionais decadentes ou em zonas centrais deterioradas. Nesses pontos, estruturam-se simultaneamente economias de subsistência informais e complexas <mark>redes de solidariedade comunitária</mark>, resultando em sínteses territoriais e hibridismos identitários no tecido metropolitano.
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Seção 2: Ficha de Memorização Rápida: Conceitos e Legislação -->
+            <section class="space-y-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3 mb-2 flex items-center gap-2">
+                        <span class="text-slate-400 font-mono text-lg">02</span>
+                        Ficha de Memorização Rápida: Conceitos e Legislação
+                    </h2>
+                    <p class="text-sm text-slate-600 mb-6">
+                        Tabelas conceituais formatadas para otimizar a visualização em dispositivos móveis e desktops, com foco nos principais "peguinhas" aplicados pela banca FAURGS.
+                    </p>
+                </div>
+
+                <!-- Tabela 1: Dinâmicas Urbanas e Demográficas -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-city text-slate-500 text-sm"></i>
+                        A) Dinâmicas Urbanas e Demográficas
+                    </h3>
+
+                    <!-- Visão Desktop: Tabela real (oculta em telas muito pequenas) -->
+                    <div class="hidden md:block border border-slate-200 rounded-xl overflow-hidden bg-white shadow-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                                    <th class="p-4 w-1/4">Conceito</th>
+                                    <th class="p-4 w-5/12">Definição Direta</th>
+                                    <th class="p-4 w-4/12">Foco do Peguinha (Banca FAURGS)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-sm">
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Emigração</td>
+                                    <td class="p-4">Saída espontânea ou induzida de indivíduos de seu próprio território nacional ou regional.</td>
+                                    <td class="p-4 text-slate-600"><mark>Inversão semântica</mark> direta com o conceito de imigração (entrada).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Imigração</td>
+                                    <td class="p-4">Processo de entrada e estabelecimento de estrangeiros em um novo território nacional.</td>
+                                    <td class="p-4 text-slate-600">Associá-la exclusivamente à migração qualificada de executivos.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Êxodo Rural</td>
+                                    <td class="p-4">Deslocamento populacional massivo, concentrado e acelerado do espaço do campo para as cidades.</td>
+                                    <td class="p-4 text-slate-600">Tratar o êxodo como uma transição demográfica lenta ou planejada.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Conurbação</td>
+                                    <td class="p-4">Integração espacial e união física de manchas urbanas anteriormente individualizadas e distintas.</td>
+                                    <td class="p-4 text-slate-600">Confundir com <mark>Região Metropolitana</mark> (que exige ato de institucionalização jurídica).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Macrocefalia Urbana</td>
+                                    <td class="p-4">Crescimento acelerado e desordenado das metrópoles, saturando serviços públicos básicos.</td>
+                                    <td class="p-4 text-slate-600">Representar o inchaço urbano como indicador direto de desenvolvimento econômico.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Desmetropolização</td>
+                                    <td class="p-4">Perda de ritmo de crescimento das metrópoles, com expansão acelerada das <mark>cidades médias</mark>.</td>
+                                    <td class="p-4 text-slate-600">Definir como decorrência de esvaziamento econômico e migração de retorno espontânea.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Gentrificação</td>
+                                    <td class="p-4">Reestruturação e elitização urbana, encarecendo o custo de vida e expulsando populações tradicionais.</td>
+                                    <td class="p-4 text-slate-600">Enquadrá-la de forma neutra como mera "revitalização" ou "recuperação social democrática".</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Ajuste Espacial</td>
+                                    <td class="p-4">Mecanismo onde capitais excedentes em crise são aplicados na infraestrutura física das cidades.</td>
+                                    <td class="p-4 text-slate-600">Tratá-lo como solução sustentável de longo prazo e pacificação da contradição ecológica.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Ilusão Urbanística</td>
+                                    <td class="p-4">Crença utópica de que modificações e planos físicos da arquitetura alteram de forma isolada as estruturas sociais.</td>
+                                    <td class="p-4 text-slate-600">Rotulá-la como uma crítica sistemática contra movimentos populares e autogestão.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Visão Mobile: Lista de Cartões (Sem Scroll e Altamente Legível) -->
+                    <div class="block md:hidden space-y-4">
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Emigração</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Saída espontânea ou induzida de indivíduos de seu próprio território nacional ou regional.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> <mark>Inversão semântica</mark> direta com o conceito de imigração (entrada).</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Imigração</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Processo de entrada e estabelecimento de estrangeiros em um novo território nacional.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Associá-la exclusivamente à migração qualificada de executivos.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Êxodo Rural</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Deslocamento populacional massivo, concentrado e acelerado do espaço do campo para as cidades.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Tratar o êxodo como uma transição demográfica lenta ou planejada.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Conurbação</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Integração espacial e união física de manchas urbanas anteriormente individualizadas e distintas.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Confundir com <mark>Região Metropolitana</mark> (que exige ato de institucionalização jurídica).</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Macrocefalia Urbana</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Crescimento acelerado e desordenado das metrópoles, saturando serviços públicos básicos.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Representar o inchaço urbano como indicador direto de desenvolvimento econômico.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Desmetropolização</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Perda de ritmo de crescimento das metrópoles, com expansão acelerada das <mark>cidades médias</mark>.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Definir como decorrência de esvaziamento econômico e migração de retorno espontânea.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Gentrificação</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Reestruturação e elitização urbana, encarecendo o custo de vida e expulsando populações tradicionais.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Enquadrá-la de forma neutra como mera "revitalização" ou "recuperação social democrática".</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Ajuste Espacial</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Mecanismo onde capitais excedentes em crise são aplicados na infraestrutura física das cidades.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Tratá-lo como solução sustentável de longo prazo e pacificação da contradição ecológica.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Conceito</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Ilusão Urbanística</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Crença utópica de que modificações e planos físicos da arquitetura alteram de forma isolada as estruturas sociais.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Peguinha FAURGS:</span> Rotulá-la como uma crítica sistemática contra movimentos populares e autogestão.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- B) Direito Migratório e de Refúgio (Marcos Legais) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-scale-balanced text-slate-500 text-sm"></i>
+                        B) Direito Migratório e de Refúgio (Marcos Legais)
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Convenção de Genebra (1951)</h4>
+                            <p class="text-sm text-slate-700">
+                                Define refugiado com base no <mark>fundado temor de perseguição subjetiva</mark> fundamentado em motivos de raça, religião, nacionalidade, pertencimento a grupo social ou opiniões políticas.
+                            </p>
+                        </div>
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Declaração de Cartagena (1984)</h4>
+                            <p class="text-sm text-slate-700">
+                                Expande radicalmente o conceito de refúgio na América Latina, integrando as situações de <mark>violência generalizada</mark>, conflitos armados internos e violação massiva de direitos humanos.
+                            </p>
+                        </div>
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Lei de Refúgio do Brasil (Lei nº 9.474/1997)</h4>
+                            <p class="text-sm text-slate-700">
+                                Incorpora o critério ampliado de Cartagena ao ordenamento jurídico pátrio e estabelece legalmente as bases do <mark>CONARE</mark> (Comitê Nacional para os Refugiados).
+                            </p>
+                        </div>
+                        <div class="p-4 border border-slate-200 rounded-xl bg-slate-50/50">
+                            <h4 class="font-bold text-slate-900 text-sm mb-1.5">Lei de Migração do Brasil (Lei nº 13.445/2017)</h4>
+                            <p class="text-sm text-slate-700">
+                                Substitui o Estatuto do Estrangeiro, foca integralmente nos <mark>Direitos Humanos</mark>, impede categoricamente a criminalização do migrante irregular e institui o visto de acolhida humanitária.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- C) Medidas de Retirada Compulsória (Cai Sempre!) -->
+                <div class="space-y-4 pt-4">
+                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation text-slate-500 text-sm"></i>
+                        C) Medidas de Retirada Compulsória (Distinção Crítica)
+                    </h3>
+
+                    <!-- Visão Desktop: Tabela real -->
+                    <div class="hidden md:block border border-slate-200 rounded-xl overflow-hidden bg-white shadow-xs">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                                    <th class="p-4 w-1/4">Medida</th>
+                                    <th class="p-4 w-1/2">Definição Técnica e Características</th>
+                                    <th class="p-4 w-1/4">Regulamentação e Limites</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 text-sm">
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Repatriação</td>
+                                    <td class="p-4">Medida administrativa imediata aplicada <mark>diretamente na fronteira</mark>. Devolução imediata ao país de procedência devido ao impedimento legal de ingresso.</td>
+                                    <td class="p-4 text-slate-600">Não exige instauração de processo judicial, mas impede o retorno violento em condições degradantes.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Deportação</td>
+                                    <td class="p-4">Medida decorrente do <mark>vínculo de irregularidade documental</mark> ou administrativa de estada. O migrante é notificado formalmente a regularizar sua situação ou deixar o país voluntariamente.</td>
+                                    <td class="p-4 text-slate-600">Cumprido o prazo de regularização ou saída voluntária sem sucesso, processa-se a saída compulsória do estrangeiro.</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Expulsão</td>
+                                    <td class="p-4">Medida que pune criminalmente o migrante condenado por crime comum doloso grave ou crimes contra a humanidade. Impede formalmente o reingresso nacional por prazo fixado.</td>
+                                    <td class="p-4 text-slate-600">Requer processo administrativo formal com amplo direito de defesa. Há impedimentos específicos (como dependência econômica de filhos brasileiros).</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-4 font-semibold text-slate-900 bg-slate-50/30">Extradição</td>
+                                    <td class="p-4">Processo de cooperação internacional em que o indivíduo é <mark>entregue pelas autoridades brasileiras a outro Estado soberano</mark> para responder a julgamento ou cumprir pena criminal prévia.</td>
+                                    <td class="p-4 text-slate-600">Depende de solicitação de Estado estrangeiro e da homologação jurídica do Supremo Tribunal Federal (STF).</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Visão Mobile: Lista de Cartões (Sem Scroll) -->
+                    <div class="block md:hidden space-y-4">
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Medida Compulsória</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Repatriação</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Devolução imediata ao país de procedência aplicada <mark>diretamente na fronteira</mark> devido ao impedimento de ingresso legal.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Regra:</span> Não exige instauração de processo judicial complexo, mas veda o tratamento desumano.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Medida Compulsória</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Deportação</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Retirada motivada por <mark>irregularidade documental ou administrativa</mark>. Concede-se prazo prévio para que o estrangeiro saia voluntariamente ou se regularize.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Regra:</span> Caso o prazo se esgote, promove-se a saída compulsória.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Medida Compulsória</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Expulsão</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Aplicada ao estrangeiro condenado judicialmente no Brasil por crimes comuns dolosos graves ou infrações de natureza humanitária internacional.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Regra:</span> Impede o reingresso definitivo por período determinado e veda a expulsão caso haja dependentes econômicos locais.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Medida Compulsória</span>
+                            <h4 class="text-base font-bold text-slate-900 mb-2">Extradição</h4>
+                            <div class="space-y-1.5 text-sm">
+                                <p><span class="font-semibold text-slate-700">Definição:</span> Entrega do indivíduo de volta a um <mark>país solicitante</mark> para fins de persecução penal ou execução de pena anteriormente aplicada.</p>
+                                <p class="text-slate-600"><span class="font-semibold text-slate-700">Regra:</span> Requer tratado formal e deferimento constitucional de mérito conduzido privativamente pelo STF.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Princípio Geral e Inegociável -->
+                    <div class="p-4 border-l-4 border-emerald-500 bg-emerald-50/40 rounded-r-xl text-sm">
+                        <strong class="text-emerald-950 font-bold block mb-1">O Princípio do Non-Refoulement (Não Devolução)</strong>
+                        É o pilar máximo do direito humanitário e migratório internacional. Proíbe categoricamente qualquer Estado de forçar a expulsão, deportação ou devolução forçada de um indivíduo para locais onde sua vida ou liberdade física estejam severamente ameaçadas devido a raça, religião ou opinião política.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção 3: Geopolítica Urbana: Cidade Global vs Megacidade -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3 mb-4 flex items-center gap-2">
+                    <span class="text-slate-400 font-mono text-lg">03</span>
+                    Geopolítica Urbana: Cidade Global vs Megacidade
+                </h2>
+
+                <p class="text-slate-700 leading-relaxed">
+                    A banca FAURGS frequentemente testa a distinção teórica pioneiramente proposta pela socióloga <mark>Saskia Sassen</mark>, fundada no papel econômico e nas funções ativas de comando exercidas pelas metrópoles na rede globalizada, em direta oposição ao mero tamanho demográfico das populações urbanas.
+                </p>
+
+                <!-- Diagrama Responsivo Customizado (Substitui o ASCII por HTML/CSS Limpo) -->
+                <div class="bg-slate-50 rounded-2xl border border-slate-200 p-6 my-6">
+                    <div class="text-center font-bold text-slate-900 uppercase tracking-widest text-xs mb-8">
+                        Rede Urbana Global e suas Ramificações
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+                        <!-- Conectores visuais (apenas desktop) -->
+                        <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-slate-300"></div>
+                        
+                        <!-- Lado A: Cidade Global -->
+                        <div class="flex flex-col items-center text-center space-y-3">
+                            <div class="h-12 w-12 rounded-xl bg-slate-900 text-white flex items-center justify-center shadow-sm">
+                                <i class="fa-solid fa-chart-line text-lg"></i>
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-base">Cidade Global (Saskia Sassen)</h4>
+                            <span class="bg-slate-200 text-slate-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Critério Qualitativo</span>
+                            <ul class="text-sm text-slate-600 space-y-1.5 text-center leading-relaxed">
+                                <li>Nós de Comando Financeiro Mundial</li>
+                                <li>Mercados de Serviços e Design Avançados</li>
+                                <li>Conectividade Elevada de Infraestrutura</li>
+                                <li class="text-slate-800 font-medium italic pt-1"><span class="underline">Exemplo</span>: Zurique (Global, mas sem ser Megacidade)</li>
+                            </ul>
+                        </div>
+
+                        <!-- Lado B: Megacidade -->
+                        <div class="flex flex-col items-center text-center space-y-3">
+                            <div class="h-12 w-12 rounded-xl bg-slate-200 text-slate-800 flex items-center justify-center border border-slate-300 shadow-sm">
+                                <i class="fa-solid fa-people-group text-lg"></i>
+                            </div>
+                            <h4 class="font-extrabold text-slate-900 text-base">Megacidade (Critério ONU)</h4>
+                            <span class="bg-slate-200 text-slate-800 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">Critério Quantitativo</span>
+                            <ul class="text-sm text-slate-600 space-y-1.5 text-center leading-relaxed">
+                                <li>População Igual ou Superior a <mark>10 Milhões</mark></li>
+                                <li>Concentração Física de Massa Demográfica</li>
+                                <li>Macrocefalia Urbana e Desafios Estruturais</li>
+                                <li class="text-slate-800 font-medium italic pt-1"><span class="underline">Exemplo</span>: Dhaka (Megacidade, mas não Cidade Global)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="prose prose-slate">
+                        <h4 class="font-bold text-slate-900 text-sm mb-1.5">As Cidades Globais:</h4>
+                        <p class="text-sm text-slate-700">
+                            Atuam como os centros nervosos de coordenação da economia informacionalizada mundial. Controlam a rede de fluxos global por intermédio de mercados altamente especializados, finanças corporativas, design, publicidade e holdings transnacionais. São catalogadas empiricamente pelo prestigiado GaWC em níveis hierárquicos <mark>Alfa, Beta e Gama</mark>.
+                        </p>
+                    </div>
+                    <div class="prose prose-slate">
+                        <h4 class="font-bold text-slate-900 text-sm mb-1.5">As Megacidades:</h4>
+                        <p class="text-sm text-slate-700">
+                            Agrupam aglomerações e regiões metropolitanas que ultrapassam a marca dos 10 milhões de habitantes. Localizadas predominantemente nos territórios de industrialização tardia do Sul Global, estas formações sofrem com gargalos estruturais históricos e a hipertrofia de mercados de trabalho informais e precários.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção 4: Teoria Urbana Crítica: Lefebvre e Harvey -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3 mb-4 flex items-center gap-2">
+                    <span class="text-slate-400 font-mono text-lg">04</span>
+                    Teoria Urbana Crítica: Lefebvre e Harvey
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Lado Henri Lefebvre -->
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-xs">
+                        <div class="flex items-center gap-2.5 mb-3">
+                            <span class="h-8 w-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-900 font-bold">HL</span>
+                            <h3 class="font-extrabold text-slate-900 text-base">Henri Lefebvre <span class="font-normal text-slate-500 block text-xs">O Direito à Cidade</span></h3>
+                        </div>
+                        <ul class="text-sm text-slate-700 space-y-2.5 list-disc pl-4">
+                            <li>
+                                Denuncia o primado sistemático do <mark>valor de troca</mark> (a mercantilização privatizante da infraestrutura e dos bens de capital imobiliários) sobre o <mark>valor de uso</mark> (a fruição e a vivência do cotidiano urbano).
+                            </li>
+                            <li>
+                                Concebe a cidade em sua totalidade como uma "obra coletiva" (l'œuvre) a ser continuamente autogerida pelos trabalhadores locais.
+                            </li>
+                            <li>
+                                Postula o direito à participação ativa nas decisões do Estado e à apropriação imediata dos territórios de lazer e convívio cotidiano.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Lado David Harvey -->
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-xs">
+                        <div class="flex items-center gap-2.5 mb-3">
+                            <span class="h-8 w-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-900 font-bold">DH</span>
+                            <h3 class="font-extrabold text-slate-900 text-base">David Harvey <span class="font-normal text-slate-500 block text-xs">Ajuste Espacial e Acumulação</span></h3>
+                        </div>
+                        <ul class="text-sm text-slate-700 space-y-2.5 list-disc pl-4">
+                            <li>
+                                Explica que a reestruturação e a expansão física das redes urbanas atuam como amortecedores essenciais para a absorção dos <mark>capitais financeiros excedentes</mark> em períodos críticos de sobreacumulação sistêmica de capital.
+                            </li>
+                            <li>
+                                Demonstra como o processo de "destruição criativa" desapropria as populações de baixa renda de seus próprios bairros para dar lugar a investimentos imobiliários altamente rentáveis.
+                            </li>
+                            <li>
+                                Enfatiza que as lutas dos movimentos sociais populares resgatam a emancipação social ao subverter a lógica imposta pelas rendas do solo urbano.
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="p-4 border border-slate-200 bg-slate-50 rounded-xl text-sm">
+                    <strong class="font-bold text-slate-900 block mb-1">O papel dos Movimentos Sociais Urbanos</strong>
+                    Eles constituem a face material da resistência cotidiana ao articularem lutas anticapitalistas complexas em escalas locais e globais: resistem a despejos arbitrários de minorias, reivindicam reformas agrárias e urbanas, exigem o passe livre ou subsídios tarifários para o transporte coletivo urbano e disputam de modo frontal os orçamentos participativos do planejamento urbano tecnocrático.
+                </div>
+            </section>
+
+            <!-- Seção 5: Estratégia de Prova e Contexto IFSC / Santa Catarina -->
+            <section class="space-y-6">
+                <h2 class="text-2xl font-bold text-slate-900 border-l-4 border-slate-800 pl-3 mb-4 flex items-center gap-2">
+                    <span class="text-slate-400 font-mono text-lg">05</span>
+                    Estratégia de Prova e Contexto IFSC / Santa Catarina
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Bloco A: Perfil das Etapas do Concurso -->
+                    <div class="p-4 border border-slate-200 rounded-xl">
+                        <div class="text-slate-900 font-bold text-sm uppercase tracking-wide mb-2 pb-1 border-b border-slate-100 flex items-center gap-1.5">
+                            <i class="fa-solid fa-paste text-slate-500 text-xs"></i>
+                            Etapas do Concurso
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            A seleção engloba a <strong>Prova Escrita</strong> (múltipla escolha de conhecimentos gerais e específicos de Geografia mais uma questão discursiva pedagógica integrada), a crucial <strong>Prova de Desempenho Didático</strong> (aula de 30 a 50 minutos gravada, exigindo domínio profundo da transposição didática das teorias urbanas) e a <strong>Avaliação de Títulos</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Bloco B: Policentrismo Catarinense -->
+                    <div class="p-4 border border-slate-200 rounded-xl">
+                        <div class="text-slate-900 font-bold text-sm uppercase tracking-wide mb-2 pb-1 border-b border-slate-100 flex items-center gap-1.5">
+                            <i class="fa-solid fa-map-location-dot text-slate-500 text-xs"></i>
+                            A Escala Catarinense
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Santa Catarina apresenta uma <mark>rede urbana policêntrica descentralizada</mark>, caracterizada pela desconcentração de eixos de desenvolvimento altamente competitivos (Grande Florianópolis, Vale do Itajaí, Chapecó e Joinville). A banca FAURGS frequentemente cobra questões de associação que exigem relacionar esses polos regionais e suas dinâmicas socioeconômicas específicas.
+                        </p>
+                    </div>
+
+                    <!-- Bloco C: Imigração Recente em SC -->
+                    <div class="p-4 border border-slate-200 rounded-xl">
+                        <div class="text-slate-900 font-bold text-sm uppercase tracking-wide mb-2 pb-1 border-b border-slate-100 flex items-center gap-1.5">
+                            <i class="fa-solid fa-people-roof text-slate-500 text-xs"></i>
+                            Migração em SC
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            O estado catarinense atua como grande polo atrator de correntes imigratórias recentes do Sul Global (especialmente do Haiti, Venezuela e Senegal). Esse novo contigente encontra inserção prioritária na construção civil, agroindústria e setor de serviços básicos, impondo novos desafios de acolhida pedagógica e inclusão social na prática cotidiana das escolas e institutos federais, como o IFSC.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Tabela de Dicas contra Pegadinhas da FAURGS -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/20 p-5 mt-6">
+                    <h3 class="text-base font-bold text-slate-900 mb-3 flex items-center gap-1.5">
+                        <i class="fa-solid fa-shield-halved text-slate-600"></i>
+                        Guia Blindado Contra Pegadinhas (FAURGS)
+                    </h3>
+                    <ul class="space-y-3.5 text-sm text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-500 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span><strong>Cuidado com Inversões de Proteções Jurídicas:</strong> Questões conceituais podem tentar trocar propositalmente os motivadores legais da <em>Deportação</em> (irregularidade meramente burocrática) e da <em>Expulsão</em> (vínculo com atividade delituosa ou crime comum contra as leis nacionais).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-500 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span><strong>Identifique o Determinismo Demográfico:</strong> Fique atento às assertivas malthusianas que tentam argumentar que o crescimento demográfico populacional é a causa pura da degradação das condições ambientais urbanas, ignorando as dinâmicas sociais excludentes.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-500 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                            <span><strong>Desconfie de Termos Radicais e Absolutos:</strong> Palavras como "exclusivamente", "sempre", "anula em sua totalidade" ou "elimina por completo" costumam invalidar a questão, pois as dinâmicas territoriais urbanas são marcadas pela coexistência de múltiplas lógicas desiguais e contraditórias.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Rodapé e Navegação -->
+        <footer class="mt-16 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-xs text-slate-500 text-center sm:text-left">
+                <p>© 2026 Preparatório de Geografia IFSC. Todos os direitos reservados.</p>
+                <p class="mt-1 font-mono">Banca Executora: FAURGS</p>
+            </div>
+            
+            <!-- Botão de Ação para Questões (Conforme especificado pelo usuário) -->
+            <a href="urbquestoes.html" class="interactive-element group inline-flex items-center justify-center gap-2 bg-slate-900 text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-slate-800 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
+                Ir para o Banco de Questões
+                <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const audio = document.getElementById('audio-element');
+            const btnPlayPause = document.getElementById('btn-play-pause');
+            const playIcon = document.getElementById('play-icon');
+            const audioProgress = document.getElementById('audio-progress');
+            const audioTime = document.getElementById('audio-time');
+            const btnSpeed = document.getElementById('btn-speed');
+            const volumeControl = document.getElementById('volume-control');
+            const volumeIcon = document.getElementById('volume-icon');
+            const audioFilename = document.getElementById('audio-filename');
+            const btnLoadAudio = document.getElementById('btn-load-audio');
+
+            // Lista de velocidades permitidas para alternar ciclicamente
+            const playbackRates = [1.0, 1.25, 1.5, 1.75, 2.0, 0.75];
+            let currentRateIndex = 0;
+
+            // Formatação de tempo (exemplo: 02:45)
+            function formatTime(seconds) {
+                if (isNaN(seconds)) return '00:00';
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            // Atualização de tempos e barra de progresso
+            function updateTimeDisplay() {
+                audioTime.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+                if (audio.duration) {
+                    audioProgress.value = (audio.currentTime / audio.duration) * 100;
+                }
+            }
+
+            // Ação de Play / Pause
+            function togglePlay() {
+                if (audio.paused) {
+                    audio.play().then(() => {
+                        playIcon.className = 'fa-solid fa-pause text-sm';
+                    }).catch(err => {
+                        console.warn('Não foi possível iniciar a reprodução. Verifique se o arquivo existe.', err);
+                        // Mensagem de fallback amigável
+                        const status = document.getElementById('audio-status-msg');
+                        status.className = "mt-2 text-[11px] text-red-500 font-medium flex items-center gap-1";
+                        status.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i><span>Erro ao reproduzir o arquivo "${audioFilename.value}". Verifique se o nome está correto e se ele existe na mesma pasta.</span>`;
+                    });
+                } else {
+                    audio.pause();
+                    playIcon.className = 'fa-solid fa-play text-sm translate-x-0.5';
+                }
+            }
+
+            // Carregamento de um novo áudio
+            function loadAudioFile() {
+                const filename = audioFilename.value.trim();
+                if (filename) {
+                    // Reseta o estado
+                    audio.src = filename;
+                    audio.load();
+                    playIcon.className = 'fa-solid fa-play text-sm translate-x-0.5';
+                    
+                    // Reseta a mensagem de status
+                    const status = document.getElementById('audio-status-msg');
+                    status.className = "mt-2 text-[11px] text-slate-500 italic flex items-center gap-1";
+                    status.innerHTML = `<i class="fa-solid fa-circle-info"></i><span>Áudio "${filename}" carregado com sucesso. Pressione Play para reproduzir.</span>`;
+                }
+            }
+
+            // Event Listeners
+            btnPlayPause.addEventListener('click', togglePlay);
+            btnLoadAudio.addEventListener('click', loadAudioFile);
+
+            // Carregar áudio caso o usuário aperte "Enter" no campo
+            audioFilename.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    loadAudioFile();
+                }
+            });
+
+            audio.addEventListener('timeupdate', updateTimeDisplay);
+            audio.addEventListener('loadedmetadata', updateTimeDisplay);
+
+            // Arrastar barra de progresso
+            audioProgress.addEventListener('input', () => {
+                if (audio.duration) {
+                    audio.currentTime = (audioProgress.value / 100) * audio.duration;
+                }
+            });
+
+            // Alterar velocidade de reprodução ciclicamente
+            btnSpeed.addEventListener('click', () => {
+                currentRateIndex = (currentRateIndex + 1) % playbackRates.length;
+                const newRate = playbackRates[currentRateIndex];
+                audio.playbackRate = newRate;
+                btnSpeed.textContent = `${newRate.toFixed(2)}x`;
+            });
+
+            // Controle de Volume
+            volumeControl.addEventListener('input', () => {
+                audio.volume = volumeControl.value;
+                if (audio.volume === 0) {
+                    volumeIcon.className = 'fa-solid fa-volume-mute text-xs text-slate-400';
+                } else if (audio.volume < 0.5) {
+                    volumeIcon.className = 'fa-solid fa-volume-low text-xs text-slate-500';
+                } else {
+                    volumeIcon.className = 'fa-solid fa-volume-high text-xs text-slate-500';
+                }
+            });
+
+            // Quando terminar o áudio volta ao começo
+            audio.addEventListener('ended', () => {
+                playIcon.className = 'fa-solid fa-play text-sm translate-x-0.5';
+                audioProgress.value = 0;
+                audioTime.textContent = `00:00 / ${formatTime(audio.duration)}`;
+            });
+        });
+    </script>
+</body>
+</html>
