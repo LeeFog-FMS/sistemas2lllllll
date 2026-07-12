@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo - O Quadro Natural Brasileiro (FAURGS)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter (Interface) and Lora (Academic/Reading comfort) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fcfaf2',
+                            100: '#f7f3e3',
+                            600: '#8c6d31',
+                            700: '#735824',
+                            800: '#5c461c',
+                            900: '#403013',
+                        },
+                        paper: {
+                            light: '#FAF9F5', // Eye-friendly warm off-white
+                            dark: '#1C1B19',
+                            card: '#FFFFFF',
+                            text: '#2E2D2A', // Softer than pure black
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom smooth focus states and selections */
+        body {
+            font-family: 'Lora', Georgia, serif;
+            background-color: #FAF9F5;
+            color: #2E2D2A;
+        }
+        .ui-font {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1EFEA;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9D5CB;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #BFB9AB;
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased flex flex-col justify-between selection:bg-amber-100 selection:text-amber-900">
+
+    <!-- Top Progress Bar (Sticky) -->
+    <div class="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-stone-200/80 shadow-xs py-3 px-4 transition-all duration-300">
+        <div class="max-w-4xl mx-auto flex items-center justify-between gap-4 ui-font">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-200 uppercase tracking-wider">FAURGS</span>
+                <span class="text-xs md:text-sm font-semibold text-stone-600 hidden sm:inline">Quadro Natural Brasileiro</span>
+            </div>
+            <div class="flex-1 max-w-md mx-4">
+                <div class="flex justify-between text-xs text-stone-500 mb-1">
+                    <span id="progress-text">0 de 10 respondidas</span>
+                    <span id="progress-pct">0%</span>
+                </div>
+                <div class="w-full bg-stone-100 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-amber-600 h-full w-0 transition-all duration-300 ease-out"></div>
+                </div>
+            </div>
+            <button id="scroll-to-bottom-btn" onclick="scrollToFinish()" class="text-xs font-medium text-amber-700 hover:text-amber-900 border border-amber-200 hover:border-amber-400 bg-amber-50/50 py-1.5 px-3 rounded-lg transition-all duration-200">
+                Ir ao final
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-8 flex-grow">
+        <!-- Header -->
+        <header class="border-b border-stone-200/80 pb-6 mb-10 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-stone-900 leading-tight tracking-tight mb-3">
+                Simulado: O Quadro Natural Brasileiro
+            </h1>
+            <p class="text-stone-600 leading-relaxed text-base md:text-lg max-w-3xl">
+                Questões inéditas e adaptadas no estilo rigoroso da banca <strong class="text-stone-800 font-semibold">FAURGS</strong>. Foco em geomorfologia, climatologia, hidrografia e biogeografia com resoluções comentadas de alto nível pedagógico.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 justify-center md:justify-start text-xs md:text-sm ui-font text-stone-500">
+                <span><i class="fa-regular fa-file-lines mr-1.5"></i> 10 Questões de Múltipla Escolha</span>
+                <span class="hidden md:inline">•</span>
+                <span><i class="fa-regular fa-clock mr-1.5"></i> Sem limite de tempo</span>
+                <span class="hidden md:inline">•</span>
+                <span class="text-amber-700 font-medium"><i class="fa-solid fa-circle-check mr-1.5"></i> Gabarito com resoluções explicativas</span>
+            </div>
+        </header>
+
+        <!-- Quiz Section Container -->
+        <form id="quiz-form" onsubmit="event.preventDefault();" class="space-y-12">
+            <div id="questions-container" class="space-y-12">
+                <!-- Questions will be injected here dynamically by JavaScript -->
+                <div class="flex items-center justify-center py-20">
+                    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-600"></div>
+                </div>
+            </div>
+
+            <!-- Submit Panel -->
+            <div id="action-panel" class="bg-white border border-stone-200 p-6 md:p-8 rounded-2xl shadow-sm text-center space-y-4 ui-font transition-all">
+                <h3 class="text-lg md:text-xl font-bold text-stone-800">Pronto para finalizar o simulado?</h3>
+                <p class="text-stone-500 text-sm max-w-md mx-auto">
+                    Certifique-se de ter respondido todas as 10 questões de forma consciente. Você receberá seu feedback imediato acompanhado das resoluções analíticas detalhadas.
+                </p>
+                <div class="flex flex-wrap gap-3 justify-center pt-2">
+                    <button type="button" onclick="submitQuiz()" class="bg-amber-700 hover:bg-amber-800 text-white font-semibold py-3 px-8 rounded-xl shadow-md shadow-amber-900/10 hover:shadow-lg transition-all duration-200">
+                        Finalizar e Ver Resoluções
+                    </button>
+                    <button type="button" onclick="clearAnswers()" class="text-stone-500 hover:text-stone-700 hover:bg-stone-100 py-3 px-6 rounded-xl transition-all duration-200">
+                        Limpar Respostas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Scoreboard (Initially Hidden) -->
+            <div id="results-panel" class="hidden bg-white border-2 border-amber-100 p-6 md:p-10 rounded-2xl shadow-md space-y-8 ui-font transform transition-all duration-500">
+                <div class="text-center space-y-3">
+                    <span class="inline-flex items-center justify-center bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-wider">Resultado do Simulado</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-stone-900">Seu Desempenho Geral</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 text-center">
+                    <div class="bg-stone-50 border border-stone-150 p-5 rounded-xl">
+                        <p class="text-sm text-stone-500 uppercase tracking-wider font-semibold mb-1">Acertos</p>
+                        <p class="text-4xl font-extrabold text-amber-700" id="score-text">0/10</p>
+                    </div>
+                    <div class="bg-stone-50 border border-stone-150 p-5 rounded-xl">
+                        <p class="text-sm text-stone-500 uppercase tracking-wider font-semibold mb-1">Aproveitamento</p>
+                        <p class="text-4xl font-extrabold text-emerald-600" id="percent-text">0%</p>
+                    </div>
+                    <div class="bg-stone-50 border border-stone-150 p-5 rounded-xl">
+                        <p class="text-sm text-stone-500 uppercase tracking-wider font-semibold mb-1">Status</p>
+                        <p class="text-2xl font-extrabold" id="status-text">-</p>
+                    </div>
+                </div>
+
+                <!-- Custom motivational recommendation based on grade -->
+                <div class="p-4 rounded-xl text-stone-700 text-sm md:text-base border border-stone-200 bg-amber-50/20" id="motivational-message"></div>
+
+                <!-- Fast Anchors for reviewing specific questions -->
+                <div class="pt-4 border-t border-stone-150">
+                    <h4 class="text-sm font-bold text-stone-700 uppercase tracking-wider mb-3 text-center md:text-left">Navegar por questões:</h4>
+                    <div class="flex flex-wrap gap-2 justify-center md:justify-start" id="results-fast-navigation">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-2">
+                    <button type="button" onclick="resetQuiz()" class="inline-flex items-center gap-2 bg-stone-900 hover:bg-stone-800 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refazer Simulado
+                    </button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <!-- Custom Modal Popup instead of standard Alert (Design Rule Requirement) -->
+    <div id="custom-modal" class="hidden fixed inset-0 z-50 bg-stone-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full border border-stone-200 p-6 shadow-xl transform scale-95 transition-transform duration-300">
+            <div class="flex items-center gap-3 text-amber-700 mb-4 ui-font">
+                <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+                <h3 class="text-lg font-bold text-stone-900" id="modal-title">Atenção</h3>
+            </div>
+            <p class="text-stone-600 text-sm leading-relaxed mb-6" id="modal-body">
+                Por favor, responda todas as questões do simulado antes de finalizar para obter um diagnóstico preciso.
+            </p>
+            <div class="flex justify-end gap-3 ui-font">
+                <button onclick="closeModal()" class="bg-stone-150 hover:bg-stone-200 text-stone-800 font-semibold py-2 px-4 rounded-xl transition-colors">
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-stone-100 border-t border-stone-200/80 py-8 px-4 mt-20 ui-font">
+        <div class="max-w-4xl mx-auto text-center space-y-4">
+            <p class="text-stone-500 text-xs md:text-sm">
+                Ambiente de Estudos Integrado • Desenvolvido com foco em Ergonomia de Leitura e Alto Rendimento para Concursos.
+            </p>
+            <div class="text-stone-400 text-[11px] leading-relaxed">
+                As fontes científicas oficiais utilizadas incluem os trabalhos clássicos de Aroldo de Azevedo (1940), Aziz Ab'Sáber (1960), Jurandyr Ross (1989), Projeto RADAMBRASIL, Lei Federal nº 9.433/1997 ("Lei das Águas") e estudos biogeográficos gaúchos sobre o bioma Pampa e a hidrografia do Rio Grande do Sul (FEPAM, CEEE, CERILUZ).
+            </div>
+        </div>
+    </footer>
+
+    <!-- Quiz Script with comprehensive Question Data and Interactive Logic -->
+    <script>
+        // Full Dataset of Questions, Options, Answer Key, and detailed Resolutions from the Document
+        const quizData = [
+            {
+                id: 1,
+                subject: "Compartimentação do Relevo",
+                question: "Considere as seguintes afirmações sobre a evolução dos critérios de classificação e compartimentação do relevo brasileiro estabelecidos pelas propostas de Aroldo de Azevedo (1940), Aziz Ab'Sáber (1960) e Jurandyr Ross (1989):<br><br>" +
+                          "I - A classificação de Aroldo de Azevedo dividiu o território nacional em oito grandes compartimentos, utilizando um critério essencialmente altimétrico e topográfico, no qual as áreas de planalto correspondiam a superfícies que superavam a cota altimétrica de 200 metros.<br><br>" +
+                          "II - A classificação de Aziz Ab'Sáber avançou ao propor o critério fisiográfico e morfoclimático, definindo os compartimentos com base no balanço entre os processos morfogenéticos, onde os planaltos se caracterizam como áreas em que os processos de erosão superam os de sedimentação, enquanto as planícies são domínios onde a deposição supera o desgaste.<br><br>" +
+                          "III - A classificação de Jurandyr Ross, amparada nos levantamentos por radar do Projeto RADAMBRASIL, estruturou um sistema taxonômico que inseriu a categoria das depressões, identificando áreas rebaixadas por processos de erosão diferencial localizadas nas bordas das bacias sedimentares em contato com os núcleos cristalinos.<br><br>" +
+                          "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                resolution: `<strong>Gabarito: E (I, II e III.)</strong><br><br>
+                A evolução dos estudos geomorfológicos no Brasil reflete a transição de métodos puramente descritivos para modelos empírico-analíticos e morfoclimáticos:<br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> A classificação de Aroldo de Azevedo (1940) baseou-se em critérios topográficos e altimétricos simples. Ele estabeleceu o limite de 200 metros de altitude para diferenciar planaltos (superiores a essa cota) de planícies (inferiores a essa cota). Essa classificação dividiu o país em 8 grandes unidades.</li>
+                    <li><strong>Afirmação II (Correta):</strong> Aziz Ab'Sáber (1960) introduziu o critério morfoclimático e a dinâmica de processos geomórficos. Planaltos passaram a ser definidos como superfícies onde a denudação (erosão) supera a sedimentação, e planícies como áreas em que o acúmulo de sedimentos supera o desgaste.</li>
+                    <li><strong>Afirmação III (Correta):</strong> Jurandyr Ross (1989) valeu-se dos dados instrumentais do Projeto RADAMBRASIL (imagens de radar de abertura sintética). Ross integrou morfoestrutura, morfoescultura e morfocronologia para propor 28 unidades, individualizando as depressões como áreas rebaixadas formadas por erosão marginal ao longo do contato entre coberturas sedimentares menos resistentes e núcleos cristalinos de alta resistência.</li>
+                </ul>`
+            },
+            {
+                id: 2,
+                subject: "Macroestruturas Geológicas",
+                question: "Numere a segunda coluna de acordo com a primeira, associando as principais macroestruturas geológicas do território brasileiro às suas respectivas características litoestruturais, dinâmicas de desgaste e potencialidades econômicas:<br><br>" +
+                          "<div class='overflow-x-auto my-4 bg-stone-100 p-4 rounded-xl border border-stone-200/80'>" +
+                          "<table class='w-full text-sm font-sans text-stone-800' style='min-width: 500px;'>" +
+                          "<thead><tr class='border-b border-stone-300'><th class='text-left pb-2 w-1/2'>Coluna 1: Macroestruturas</th><th class='text-left pb-2 w-1/2'>Coluna 2: Características e Potencialidades</th></tr></thead>" +
+                          "<tbody>" +
+                          "<tr class='border-b border-stone-200/60'><td class='py-3 pr-4 font-semibold' valign='top'>(1) Crátons e Escudos Cristalinos</td><td class='py-3' valign='top'>( ) Coberturas sedimentares clásticas e basálticas formadas ao longo do Fanerozoico, propensas ao desenvolvimento de relevos tabulares, como chapadas e cuestas, abrigando aquíferos de grande extensão e bacias de hidrocarbonetos.</td></tr>" +
+                          "<tr class='border-b border-stone-200/60'><td class='py-3 pr-4 font-semibold' valign='top'>(2) Bacias Sedimentares</td><td class='py-3' valign='top'>( ) Estruturas de dobramentos antigos, consolidadas no Proterozoico, que sofreram reativações tectônicas e intenso desgaste erosivo, sendo ricas em jazidas de minerais metálicos e caracterizadas pela ausência de vulcanismo ativo moderno.</td></tr>" +
+                          "<tr><td class='py-3 pr-4 font-semibold' valign='top'>(3) Cinturões Orogênicos</td><td class='py-3' valign='top'>( ) Núcleos continentais consolidados no Pré-Cambriano, compostos por rochas ígneas e metamórficas de elevada resistência, que formam o embasamento estável do relevo e impedem a ocorrência de dobramentos modernos.</td></tr>" +
+                          "</tbody></table></div>" +
+                          "A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    { key: "A", text: "2 – 3 – 1." },
+                    { key: "B", text: "1 – 2 – 3." },
+                    { key: "C", text: "3 – 1 – 2." },
+                    { key: "D", text: "2 – 1 – 3." },
+                    { key: "E", text: "3 – 2 – 1." }
+                ],
+                answer: "A",
+                resolution: `<strong>Gabarito: A (2 – 3 – 1.)</strong><br><br>
+                A associação correta fundamenta-se nas características morfotectônicas e econômicas das estruturas geológicas brasileiras:<br>
+                <ul>
+                    <li><strong>Bacias Sedimentares (2):</strong> Correspondem ao primeiro parêntese. São depressões tectônicas preenchidas por sedimentos clásticos e basálticos fanerozoicos, propensas ao desenvolvimento de relevos tabulares (chapadas, cuestas), e abrigam aquíferos de grande extensão (como o Aquífero Guarani na Bacia do Paraná) e jazidas fósseis.</li>
+                    <li><strong>Cinturões Orogênicos / Dobramentos Antigos (3):</strong> Correspondem ao segundo parêntese. São estruturas de dobramentos antigos consolidadas no Proterozoico, ricas em jazidas metálicas (ferro, manganês) devido à sua história metamórfica, e marcadas por estabilidade tectônica moderna.</li>
+                    <li><strong>Crátons e Escudos Cristalinos (1):</strong> Correspondem ao terceiro parêntese. São núcleos continentais pré-cambrianos de altíssima resistência (granitos, gnaisses) que formam o embasamento estável e estável do relevo, impedindo dobramentos modernos.</li>
+                </ul>`
+            },
+            {
+                id: 3,
+                subject: "Dinâmica Climática",
+                question: "A dinâmica atmosférica sobre o território brasileiro é caracterizada pela atuação de diferentes massas de ar, cujas interações determinam as variações de temperatura e os índices pluviométricos nas várias regiões do país. Sobre a atuação dessas massas de ar, considere as seguintes afirmações:<br><br>" +
+                          "I - A Massa Equatorial Continental (mEc), embora tenha sua área de gênese no interior do continente, apresenta elevado teor de umidade em decorrência da intensa evapotranspiração promovida pela cobertura florestal amazônica, expandindo sua influência sobre grande parte do território brasileiro durante o verão austral.<br><br>" +
+                          "II - A Massa Polar Atlântica (mPa), de natureza fria e úmida, avança sobre o continente de forma canalizada pelas planícies centrais da América do Sul durante o inverno, sendo responsável pela formação de geadas na Região Sul e pelo declínio térmico brusco conhecido como friagem na porção ocidental da Amazônia.<br><br>" +
+                          "III - A Massa Tropical Continental (mTc), originada na Depressão do Chaco, caracteriza-se por ser quente e seca, exercendo forte influência sobre o Centro-Oeste e partes do Sul e Sudeste durante o inverno, contribuindo para longos períodos de estabilidade atmosférica e baixos índices de umidade relativa do ar.<br><br>" +
+                          "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas I e II." },
+                    { key: "C", text: "Apenas II e III." },
+                    { key: "D", text: "Apenas I e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                resolution: `<strong>Gabarito: E (I, II e III.)</strong><br><br>
+                A climatologia do Brasil é diretamente influenciada pelas massas de ar sazonais:<br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> A mEc é gerada sobre a bacia amazônica e, embora continental, é extremamente úmida devido à evapotranspiração da floresta equatorial. No verão austral, expande-se para as regiões Centro-Oeste, Sudeste e Sul do Brasil, alimentando a Zona de Convergência do Atlântico Sul (ZCAS).</li>
+                    <li><strong>Afirmação II (Correta):</strong> A mPa é fria e úmida. Ela avança pelo interior do continente de forma canalizada pela calha do rio Paraguai e depressão platina, provocando geadas fortes na Região Sul e o declínio térmico brusco conhecido como friagem na porção ocidental da Amazônia.</li>
+                    <li><strong>Afirmação III (Correta):</strong> A mTc (Depressão do Chaco) é de fato quente e seca por se formar em uma zona interiorana sob influência de alta pressão subtropical de inverno. Bloqueia frentes frias e provoca baixos índices de umidade e estabilidade atmosférica prolongada.</li>
+                </ul>`
+            },
+            {
+                id: 4,
+                subject: "Domínios Morfoclimáticos",
+                question: "Numere a segunda coluna de acordo com a primeira, associando os domínios morfoclimáticos brasileiros, conforme a proposição de Aziz Ab'Sáber, às suas respectivas características integradas de relevo, solos, dinâmica climática e cobertura vegetal:<br><br>" +
+                          "<div class='overflow-x-auto my-4 bg-stone-100 p-4 rounded-xl border border-stone-200/80'>" +
+                          "<table class='w-full text-sm font-sans text-stone-800' style='min-width: 500px;'>" +
+                          "<thead><tr class='border-b border-stone-300'><th class='text-left pb-2 w-1/3'>Coluna 1: Domínios</th><th class='text-left pb-2 w-2/3'>Coluna 2: Características Integradas</th></tr></thead>" +
+                          "<tbody>" +
+                          "<tr class='border-b border-stone-200/60'><td class='py-3 font-semibold' valign='top'>(1) Domínio das Caatingas</td><td class='py-3' valign='top'>( ) Relevo de planaltos com superfícies tabulares (chapadas) e solos profundos, ácidos e intemperizados, sob clima tropical de duas estações bem marcadas (verão chuvoso e inverno seco), que sustenta uma vegetação tropófila de troncos retorcidos.</td></tr>" +
+                          "<tr class='border-b border-stone-200/60'><td class='py-3 font-semibold' valign='top'>(2) Domínio dos Cerrados</td><td class='py-3' valign='top'>( ) Domínio caracterizado por depressões interplanálticas sob clima semiárido, com solos rasos e pedregosos, drenagem temporária e presença de vegetação xerófila adaptada ao estresse hídrico severo.</td></tr>" +
+                          "<tr class='border-b border-stone-200/60'><td class='py-3 font-semibold' valign='top'>(3) Domínio dos Mares de Morros</td><td class='py-3' valign='top'>( ) Encostas serranas e planaltos intensamente dissecados em formas convexas (meias-laranjas), desenvolvidos sob clima tropical úmido e sujeitos a processos de movimentos de massa acelerados devido à degradação da cobertura florestal original.</td></tr>" +
+                          "<tr><td class='py-3 font-semibold' valign='top'>(4) Domínio das Pradarias</td><td class='py-3' valign='top'>( ) Relevo suave-ondulado composto por coxilhas recobertas de vegetação campestre sob clima subtropical, historicamente alterado por atividades pastoris e com ocorrência de processos de arenização em solos arenosos degradados.</td></tr>" +
+                          "</tbody></table></div>" +
+                          "A sequência correta de preenchimento dos parênteses, de cima para baixo, é:",
+                options: [
+                    { key: "A", text: "2 – 1 – 3 – 4." },
+                    { key: "B", text: "1 – 2 – 3 – 4." },
+                    { key: "C", text: "2 – 3 – 1 – 4." },
+                    { key: "D", text: "3 – 2 – 1 – 4." },
+                    { key: "E", text: "4 – 3 – 2 – 1." }
+                ],
+                answer: "A",
+                resolution: `<strong>Gabarito: A (2 – 1 – 3 – 4.)</strong><br><br>
+                A compartimentação morfoclimática proposta por Aziz Ab'Sáber sintetiza a paisagem brasileira a partir da associação estreita entre relevo, clima, solos e vegetação:<br>
+                <ul>
+                    <li><strong>Domínio dos Cerrados (2):</strong> Corresponde ao primeiro parêntese. Caracteriza-se por solos latossólicos ácidos e lixiviados, clima tropical típico com duas estações bem marcadas e relevo de chapadas (superfícies tabulares) coberto por vegetação savânica de troncos retorcidos.</li>
+                    <li><strong>Domínio das Caatingas (1):</strong> Corresponde ao segundo parêntese. Possui relevo de depressões interplanálticas semiáridas com solos rasos, rios temporários e vegetação xerófila adaptada à escassez prolongada de água.</li>
+                    <li><strong>Domínio dos Mares de Morros (3):</strong> Corresponde ao terceiro parêntese. Envolve encostas de morros mamelonares (convexos ou "meia-laranja") sob clima tropical úmido litorâneo, propensos a deslizamentos de terra.</li>
+                    <li><strong>Domínio das Pradarias (4):</strong> Corresponde ao quarto parêntese. Também chamado de "Coxilhas de Campos do Sul", apresenta relevo ondulado no RS e vulnerabilidade ao processo de arenização.</li>
+                </ul>`
+            },
+            {
+                id: 5,
+                subject: "Dinâmica Fluvial",
+                question: "A dinâmica fluvial e o regime hidrológico de um canal de drenagem expressam a integração de fatores geológicos, geomorfológicos e climáticos de sua respectiva bacia hidrográfica. Sobre esse tema, assinale a alternativa <strong>INCORRETA</strong>:",
+                options: [
+                    { key: "A", text: "O regime hidrológico de um canal fluvial se refere às variações de volume de água ao longo de um ano, sendo que o escoamento superficial direto e o escoamento subsuperficial dependem diretamente do clima e do padrão de cobertura vegetal da bacia." },
+                    { key: "B", text: "O perfil longitudinal de equilíbrio de um rio expressa a relação entre a declividade e a capacidade de transporte de sedimentos, tendendo a apresentar um traçado regularizado e côncavo em bacias maduras, embora possa sofrer rupturas decorrentes de controles litoestruturais tectônicos." },
+                    { key: "C", text: "A maior parte dos rios brasileiros apresenta caráter perene, mantendo fluxo d'água contínuo ao longo de todo o ano, com exceção de bacias situadas no semiárido nordestino, onde ocorrem rios intermitentes temporários." },
+                    { key: "D", text: "O Rio Amazonas apresenta um regime hidrológico misto, pois seu fluxo principal é influenciado tanto pela precipitação pluvial sazonal na Bacia Amazônica quanto pelo derretimento de neve (regime nival) nas cabeceiras da Cordilheira dos Andes." },
+                    { key: "E", text: "O regime hidrológico de bacias hidrográficas tropicais é imune a mudanças na cobertura do solo, uma vez que a infiltração de água e o abastecimento de lençóis freáticos dependem unicamente da estrutura geológica profunda e da presença de falhamentos cristalinos, sem influência do desmatamento ou da urbanização." }
+                ],
+                answer: "E",
+                resolution: `<strong>Gabarito: E (Alternativa INCORRETA)</strong><br><br>
+                A alternativa <strong>E</strong> está incorreta porque o regime hidrológico das bacias tropicais <strong>NÃO</strong> é imune a mudanças na cobertura do solo. O desmatamento da cobertura florestal ou a impermeabilização decorrente da urbanização reduzem drasticamente a infiltração de água no solo. Isso diminui a taxa de recarga do lençol freático e acelera o escoamento superficial rápido, causando picos severos de vazão, enchentes sistemáticas nas cheias e secas acentuadas no período de vazão mínima, além do aumento da erosão das vertentes fluviais.`
+            },
+            {
+                id: 6,
+                subject: "Gestão de Recursos Hídricos",
+                question: "A gestão dos recursos hídricos no Brasil passou por profundas transformações institucionais a partir da promulgação da Lei Federal nº 9.433/1997, conhecida como a \"Lei das Águas\".<br><br>" +
+                          "Assinale a alternativa que preenche corretamente as lacunas do enunciado abaixo, na ordem em que aparecem.<br><br>" +
+                          "A Lei Federal nº 9.433/1997 estabelece que a água é um bem de domínio __________, um recurso natural limitado e dotado de valor __________. A referida lei adota a __________ como unidade físico-territorial para a implementação da Política Nacional de Recursos Hídricos, determinando que a gestão desse recurso deve ser descentralizada e proporcionar o uso __________ da água.",
+                options: [
+                    { key: "A", text: "privado – ecológico – bacia hidrográfica – múltiplo" },
+                    { key: "B", text: "público – econômico – bacia hidrográfica – múltiplo" },
+                    { key: "C", text: "público – social – região metropolitana – sustentável" },
+                    { key: "D", text: "privado – econômico – unidade de conservação – múltiplo" },
+                    { key: "E", text: "público – estético – bacia hidrográfica – restrito" }
+                ],
+                answer: "B",
+                resolution: `<strong>Gabarito: B (público – econômico – bacia hidrográfica – múltiplo)</strong><br><br>
+                A Lei nº 9.433/1997 (Lei das Águas) estabelece os seguintes fundamentos basilares de governança dos recursos hídricos no Brasil:<br>
+                <ul>
+                    <li>A água é um bem de <strong>domínio público</strong> (superando a apropriação puramente privada atrelada à terra);</li>
+                    <li>É um recurso limitado dotado de <strong>valor econômico</strong> (o que fundamenta a cobrança pelo uso da água para racionalização e conservação);</li>
+                    <li>A unidade territorial básica de gestão é a <strong>bacia hidrográfica</strong> (independente de divisas políticas municipais ou estaduais);</li>
+                    <li>A gestão descentralizada deve garantir o <strong>uso múltiplo</strong> da água (garantindo prioridade para o consumo humano e dessedentação de animais em crises hídricas).</li>
+                </ul>`
+            },
+            {
+                id: 7,
+                subject: "Dinâmica do Semiárido",
+                question: "O semiárido brasileiro apresenta características singulares que o diferenciam de outras regiões áridas e semiáridas do planeta, exigindo estratégias específicas de convivência hídrica e conservação ambiental. Sobre a dinâmica natural e a gestão hídrica nesse espaço, considere as seguintes afirmações:<br><br>" +
+                          "I - O Semiárido brasileiro apresenta uma precipitação pluviométrica média anual relativamente elevada para padrões globais, variando de 200 mm a 800 mm, mas caracteriza-se por uma acentuada irregularidade espacial e temporal de suas chuvas.<br><br>" +
+                          "II - O balanço hídrico regional revela que a quantidade de chuva é menor do que o índice de evaporação potencial, que chega a 3.000 mm/ano, o que significa que a evaporação é cerca de três vezes superior à precipitação média incidente, gerando um constante déficit hídrico.<br><br>" +
+                          "III - Diante do déficit hídrico, tecnologias de captação e armazenamento de águas pluviais, como cisternas domésticas, cisternas-calçadão, cisternas escolares e barragens subterrâneas, constituem estratégias fundamentais para garantir a segurança hídrica da população rural e viabilizar a produção agrícola adaptada.<br><br>" +
+                          "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                resolution: `<strong>Gabarito: E (I, II e III.)</strong><br><br>
+                As três afirmações detalham perfeitamente a lógica físico-geográfica e socioambiental do Semiárido brasileiro:<br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> O semiárido brasileiro é o mais chuvoso do mundo (média de até 800 mm). Sua principal fragilidade é a má distribuição espacial (temporalidade curta com chuvas torrenciais) e longos períodos de seca extrema.</li>
+                    <li><strong>Afirmação II (Correta):</strong> O balanço hídrico revela que o potencial de evapotranspiração regional excede amplamente a chuva recebida, alcançando cerca de 3.000 mm anuais devido à forte insolação e temperaturas, provocando déficit hídrico permanente.</li>
+                    <li><strong>Afirmação III (Correta):</strong> Tecnologias como cisternas, cisternas-calçadão e barragens subterrâneas (que retêm a água subterrânea na zona de areia do leito aluvial, livre do efeito de intensa evaporação direta em reservatórios abertos) constituem pilares de convivência com a estiagem.</li>
+                </ul>`
+            },
+            {
+                id: 8,
+                subject: "Metodologia Geomorfológica de Ross",
+                question: "De acordo com a classificação do relevo brasileiro proposta por Jurandyr Ross (1989), as formas que compõem o modelado terrestre são analisadas a partir de um ordenamento taxonômico estruturado em seis níveis de detalhamento geomorfológico. Considere as seguintes afirmações sobre a aplicação dessa metodologia taxonômica:<br><br>" +
+                          "I - O primeiro táxon corresponde às grandes unidades estruturais da crosta (morfoestruturas), que possuem caráter macrogeomorfológico e são representadas pelas bacias sedimentares e pelos crátons.<br><br>" +
+                          "II - O segundo táxon refere-se às morfoesculturas, que são compartimentos gerados pela ação dos agentes climáticos (externos) sobre as morfoestruturas ao longo do tempo geológico, englobando as subunidades de planaltos, planícies e depressões.<br><br>" +
+                          "III - O terceiro táxon identifica as formas de relevo individuais ou agrupadas por padrões de semelhança morfométrica, caracterizadas pelo grau de dissecação do relevo e pela declividade média das encostas.<br><br>" +
+                          "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas I e II." },
+                    { key: "C", text: "Apenas II e III." },
+                    { key: "D", text: "Apenas I e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                resolution: `<strong>Gabarito: E (I, II e III.)</strong><br><br>
+                A metodologia de classificação e ordenação hierárquica do relevo proposta por Jurandyr Ross utiliza conceitos de taxonomia geomorfológica estruturados da seguinte forma:<br>
+                <ul>
+                    <li><strong>1º Táxon - Morfoestrutura:</strong> Unidades associadas à natureza geológica e tectônica profunda (bacias sedimentares e escudos cristalinos).</li>
+                    <li><strong>2º Táxon - Morfoescultura:</strong> Feições modeladas pelas forças climáticas exógenas sobre as morfoestruturas (planaltos, depressões e planícies).</li>
+                    <li><strong>3º Táxon - Modelados de Relevo:</strong> Formas específicas agrupadas por semelhança geométrica e morfométrica, classificadas pelo padrão de dissecação ou dissecação da superfície (vales, colinas).</li>
+                </ul>`
+            },
+            {
+                id: 9,
+                subject: "Gestão Ambiental gaúcha",
+                question: "A Bacia do Rio Uruguai, inserida na Região Hidrográfica do Uruguai, apresenta características físicas e socioambientais que exigem planejamento integrado para a gestão de suas águas e o licenciamento de atividades econômicas. Sobre a dinâmica dessa bacia e a gestão de recursos hídricos no Rio Grande do Sul, considere as seguintes afirmações:<br><br>" +
+                          "I - A bacia apresenta elevado potencial hidrelétrico, aproveitando os desníveis do relevo do Planalto Meridional, o que motiva estudos de fragilidade ambiental para avaliar o impacto cumulativo de inventários de barragens e usinas.<br><br>" +
+                          "II - Os Comitês de Gerenciamento de Bacias Hidrográficas atuam como instâncias deliberativas e consultivas descentralizadas, viabilizando a participação paritária do Poder Público, dos usuários da água e da sociedade civil na tomada de decisões ambientais.<br><br>" +
+                          "III - A hidrografia do setor ocidental do estado sofre forte influência do relevo de coxilhas e das planícies aluviais, onde o uso intensivo do solo para monoculturas agrícolas exige controle rigoroso sobre a outorga de captação de água para irrigação e sobre o escoamento de defensivos químicos.<br><br>" +
+                          "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                resolution: `<strong>Gabarito: E (I, II e III.)</strong><br><br>
+                A gestão de bacias hidrográficas no Rio Grande do Sul é marcada por dinâmicas específicas e pela estrutura administrativa do Estado:<br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> A Bacia do Uruguai e afluentes (ex: rio Ijuí) estendem-se pelo Planalto Meridional (rochas basálticas da formação Serra Geral) com grande desnível altimétrico. Isso confere alto potencial hidroelétrico. O licenciamento ambiental exige do órgão ambiental (FEPAM) estudos integrados devido ao impacto sinérgico/cumulativo de barragens e usinas.</li>
+                    <li><strong>Afirmação II (Correta):</strong> Os comitês de bacia (como U90 do Ijuí e U40 do Piratinim-Butuí) operam de forma tripartite e descentralizada, garantindo a gestão integrada da água através de discussões abertas e participativas.</li>
+                    <li><strong>Afirmação III (Correta):</strong> Na região da Campanha e Fronteira Oeste, o relevo ondulado de coxilhas e as planícies fluviais dão espaço à produção intensiva de monoculturas (soja e arroz por inundação), demandando pesadas outorgas e controles contra a contaminação por agrotóxicos.</li>
+                </ul>`
+            },
+            {
+                id: 10,
+                subject: "Campos Sulinos / Bioma Pampa",
+                question: "Os Campos Sulinos (Bioma Pampa) constituem um sistema biogeográfico singular na porção meridional do Brasil. Considere as seguintes afirmações sobre a dinâmica morfoclimática, paleoclimática e os impactos ambientais recentes que afetam a conservação desse ecossistema:<br><br>" +
+                          "I - A substituição da vegetação original e a modificação da paisagem por meio da agricultura, do pastoreio e do plantio de pinus e eucaliptos têm alterado significativamente a cobertura campestre original desse bioma.<br><br>" +
+                          "II - Registros palinológicos, como os obtidos em Cambará do Sul, documentam a dinâmica histórica da vegetação campestre e demonstram a expansão posterior das florestas com araucárias sobre os campos a partir do estabelecimento de um clima mais úmido no Holoceno tardio.<br><br>" +
+                          "III - As espécies forrageiras nativas dos Campos Sulinos não são exploradas comercialmente no bioma Pampa, uma vez que não possuem valor econômico agregado para a atividade pecuária regional.<br><br>" +
+                          "IV - A invasão biológica do capim-annoni no bioma Pampa ocorre como uma consequência ecológica direta e exclusiva do plantio de eucaliptos nas áreas de silvicultura.<br><br>" +
+                          "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas I e II." },
+                    { key: "C", text: "Apenas II e III." },
+                    { key: "D", text: "Apenas I, III e IV." },
+                    { key: "E", text: "I, II, III e IV." }
+                ],
+                answer: "B",
+                resolution: `<strong>Gabarito: B (Apenas I e II)</strong><br><br>
+                A dinâmica paleoclimática e antrópica no Bioma Pampa envolve os seguintes fatores de conservação e biogeografia:<br>
+                <ul>
+                    <li><strong>Afirmação I (Correta):</strong> A conversão de terras nativas do Pampa para lavouras comerciais e plantios florestais exóticos (silvicultura de pinus/eucalipto) gera descaracterização acentuada da paisagem e degradação dos solos arenosos.</li>
+                    <li><strong>Afirmação II (Correta):</strong> Registros de pólen fóssil (palinológicos) confirmam que o campo é uma formação vegetal antiga, estabelecida em clima frio e seco. As florestas de araucárias expandiram-se sobre os campos posteriormente (Holoceno tardio) com a vinda de climas mais úmidos e quentes.</li>
+                    <li><strong>Afirmação III (Incorreta):</strong> O pastoreio de gado sobre espécies campestres nativas altamente nutritivas é o principal pilar socioeconômico e cultural da pecuária tradicional sulina, integrando conservação e atividade produtiva.</li>
+                    <li><strong>Afirmação IV (Incorreta):</strong> O capim-annoni (<em>Eragrostis plana</em>) foi introduzido acidentalmente na década de 1970 como contaminante em sementes forrageiras importadas da África do Sul, e não devido ao plantio de eucaliptos. É uma das espécies exóticas invasoras mais nocivas devido à sua disseminação por rodovias e pastagens degradadas.</li>
+                </ul>`
+            }
+        ];
+
+        // Quiz State Object
+        const state = {
+            userAnswers: {}, // Format: { questionId: 'A' }
+            submitted: false
+        };
+
+        // LocalStorage Key
+        const STORAGE_KEY = "faurgs_natural_brasil_answers";
+
+        // Initialize and Render Questions
+        window.onload = function() {
+            loadSavedProgress();
+            renderQuestions();
+            updateProgress();
+            
+            // If quiz was already completed, calculate results immediately
+            if (localStorage.getItem("faurgs_quiz_submitted") === "true") {
+                state.submitted = true;
+                calculateAndShowResults(false); // don't scroll
+            }
+        };
+
+        // Load answers from localStorage if present
+        function loadSavedProgress() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    state.userAnswers = JSON.parse(saved);
+                }
+            } catch (e) {
+                console.error("Error loading cached state", e);
+            }
+        }
+
+        // Save progress to localStorage
+        function saveProgress() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state.userAnswers));
+            } catch (e) {
+                console.error("Error saving state", e);
+            }
+        }
+
+        // Render questions dynamically
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            quizData.forEach((q, index) => {
+                const qNumStr = String(index + 1).padStart(2, '0');
+                const savedAnswer = state.userAnswers[q.id];
+
+                // Question Box Container
+                const qCard = document.createElement('div');
+                qCard.id = `question-card-${q.id}`;
+                qCard.className = `bg-white border rounded-2xl p-6 md:p-8 shadow-xs transition-all duration-300 relative ${
+                    savedAnswer ? 'border-amber-200 bg-amber-50/5' : 'border-stone-200'
+                }`;
+
+                // Header metadata
+                let qHTML = `
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4 border-b border-stone-100 pb-3 ui-font">
+                        <div class="flex items-center gap-2">
+                            <span class="inline-flex items-center justify-center bg-stone-900 text-stone-100 font-extrabold text-sm px-3 py-1 rounded-lg">Questão ${qNumStr}</span>
+                            <span class="text-xs bg-stone-100 text-stone-600 font-medium px-2.5 py-1 rounded-full border border-stone-200/50">${q.subject}</span>
+                        </div>
+                        <div class="text-xs text-stone-400">FAURGS Geografia Física</div>
+                    </div>
+                    
+                    <div class="text-stone-850 text-base md:text-[17px] font-medium leading-relaxed mb-6 font-serif select-text">
+                        ${q.question}
+                    </div>
+                `;
+
+                // Render option list
+                qHTML += `<div class="space-y-3 ui-font">`;
+                q.options.forEach(opt => {
+                    const isChecked = savedAnswer === opt.key;
+                    qHTML += `
+                        <label class="flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer select-none transition-all duration-200 group relative ${
+                            isChecked 
+                            ? 'border-amber-600 bg-amber-50/30 font-medium text-stone-900 shadow-xs' 
+                            : 'border-stone-200 bg-stone-50/30 text-stone-600 hover:border-stone-400 hover:bg-stone-50'
+                        }" id="opt-container-${q.id}-${opt.key}">
+                            <input type="radio" 
+                                   name="question-${q.id}" 
+                                   value="${opt.key}" 
+                                   class="sr-only" 
+                                   ${isChecked ? 'checked' : ''} 
+                                   ${state.submitted ? 'disabled' : ''}
+                                   onclick="selectOption(${q.id}, '${opt.key}')">
+                            <span class="flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border transition-colors ${
+                                isChecked 
+                                ? 'bg-amber-700 border-amber-700 text-white' 
+                                : 'bg-white border-stone-300 text-stone-500 group-hover:border-stone-400'
+                            }" id="opt-bubble-${q.id}-${opt.key}">
+                                ${opt.key}
+                            </span>
+                            <span class="text-sm md:text-base pt-0.5 leading-snug">${opt.text}</span>
+                        </label>
+                    `;
+                });
+                qHTML += `</div>`;
+
+                // Resolution box placeholder (will be filled if submitted)
+                qHTML += `
+                    <div id="resolution-block-${q.id}" class="hidden mt-6 pt-6 border-t border-stone-200/80 transform translate-y-2 opacity-0 transition-all duration-500">
+                        <div class="p-5 md:p-6 rounded-xl text-stone-700 text-sm md:text-base leading-relaxed font-serif" id="resolution-content-${q.id}"></div>
+                    </div>
+                `;
+
+                qCard.innerHTML = qHTML;
+                container.appendChild(qCard);
+            });
+        }
+
+        // Handle user selection of an option
+        function selectOption(qId, key) {
+            if (state.submitted) return; // Lock selections after submit
+
+            state.userAnswers[qId] = key;
+            saveProgress();
+            updateProgress();
+
+            // Visual update for option cards
+            const parentCard = document.getElementById(`question-card-${qId}`);
+            parentCard.classList.remove('border-stone-200');
+            parentCard.classList.add('border-amber-200', 'bg-amber-50/5');
+
+            // Reset all siblings, highlight current active
+            quizData.find(q => q.id === qId).options.forEach(opt => {
+                const label = document.getElementById(`opt-container-${qId}-${opt.key}`);
+                const bubble = document.getElementById(`opt-bubble-${qId}-${opt.key}`);
+                
+                if (opt.key === key) {
+                    label.className = "flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer select-none transition-all duration-200 group relative border-amber-600 bg-amber-50/30 font-medium text-stone-900 shadow-xs";
+                    bubble.className = "flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border transition-colors bg-amber-700 border-amber-700 text-white";
+                } else {
+                    label.className = "flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer select-none transition-all duration-200 group relative border-stone-200 bg-stone-50/30 text-stone-600 hover:border-stone-400 hover:bg-stone-50";
+                    bubble.className = "flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border transition-colors bg-white border-stone-300 text-stone-500 group-hover:border-stone-400";
+                }
+            });
+        }
+
+        // Calculate and update top sticky progress bar
+        function updateProgress() {
+            const total = quizData.length;
+            const answered = Object.keys(state.userAnswers).length;
+            const pct = Math.round((answered / total) * 100);
+
+            document.getElementById('progress-text').innerText = `${answered} de ${total} respondidas`;
+            document.getElementById('progress-pct').innerText = `${pct}%`;
+            document.getElementById('progress-bar').style.width = `${pct}%`;
+        }
+
+        // Show a beautiful modal popup instead of standard browser alert
+        function showModal(title, body) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-body').innerHTML = body;
+            const m = document.getElementById('custom-modal');
+            m.classList.remove('hidden');
+            setTimeout(() => {
+                m.firstElementChild.classList.remove('scale-95');
+                m.firstElementChild.classList.add('scale-100');
+            }, 50);
+        }
+
+        function closeModal() {
+            const m = document.getElementById('custom-modal');
+            m.firstElementChild.classList.remove('scale-100');
+            m.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                m.classList.add('hidden');
+            }, 200);
+        }
+
+        // Scroll cleanly to the bottom or results
+        function scrollToFinish() {
+            const target = state.submitted ? document.getElementById('results-panel') : document.getElementById('action-panel');
+            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Submit entire Quiz and compute score
+        function submitQuiz() {
+            const total = quizData.length;
+            const answered = Object.keys(state.userAnswers).length;
+
+            if (answered < total) {
+                const missing = total - answered;
+                showModal(
+                    "Falta Pouco!", 
+                    `Você ainda possui <strong>${missing}</strong> ${missing === 1 ? 'questão' : 'questões'} sem resposta. Por favor, marque todas as questões para conferir suas resoluções de forma integral.`
+                );
+                return;
+            }
+
+            state.submitted = true;
+            localStorage.setItem("faurgs_quiz_submitted", "true");
+            calculateAndShowResults(true); // show animations and scroll
+        }
+
+        // Grade evaluation & Show comprehensive results
+        function calculateAndShowResults(animate = true) {
+            let correctCount = 0;
+            const total = quizData.length;
+
+            // Show and format results panel
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.remove('hidden');
+
+            const fastNavContainer = document.getElementById('results-fast-navigation');
+            fastNavContainer.innerHTML = '';
+
+            // Evaluate each question
+            quizData.forEach((q, index) => {
+                const selected = state.userAnswers[q.id];
+                const isCorrect = selected === q.answer;
+                if (isCorrect) correctCount++;
+
+                // Inline visual feedback inside question cards
+                const qCard = document.getElementById(`question-card-${q.id}`);
+                qCard.classList.remove('border-amber-200', 'bg-amber-50/5', 'border-stone-200');
+
+                // Apply correct/incorrect style borders
+                if (isCorrect) {
+                    qCard.classList.add('border-emerald-300', 'bg-emerald-50/10');
+                } else {
+                    qCard.classList.add('border-rose-300', 'bg-rose-50/10');
+                }
+
+                // Color each individual option inside current card
+                q.options.forEach(opt => {
+                    const label = document.getElementById(`opt-container-${q.id}-${opt.key}`);
+                    const bubble = document.getElementById(`opt-bubble-${q.id}-${opt.key}`);
+                    const input = label.querySelector('input');
+                    
+                    // Disable inputs
+                    input.disabled = true;
+                    
+                    // Defaults styling removal
+                    label.classList.remove('hover:border-stone-400', 'hover:bg-stone-50', 'cursor-pointer');
+                    label.classList.add('cursor-default');
+
+                    if (opt.key === q.answer) {
+                        // Correct option
+                        label.className = "flex items-start gap-3 p-3.5 rounded-xl border cursor-default select-none transition-all duration-200 font-semibold border-emerald-500 bg-emerald-50/40 text-emerald-900";
+                        bubble.className = "flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border bg-emerald-600 border-emerald-600 text-white";
+                    } else if (opt.key === selected) {
+                        // User selected wrong option
+                        label.className = "flex items-start gap-3 p-3.5 rounded-xl border cursor-default select-none transition-all duration-200 font-semibold border-rose-400 bg-rose-50/40 text-rose-900";
+                        bubble.className = "flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border bg-rose-600 border-rose-600 text-white";
+                    } else {
+                        // Unselected neutral options
+                        label.className = "flex items-start gap-3 p-3.5 rounded-xl border cursor-default select-none transition-all duration-200 border-stone-200 bg-stone-50/30 text-stone-400";
+                        bubble.className = "flex-shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold border bg-white border-stone-300 text-stone-400";
+                    }
+                });
+
+                // Display detailed resolution inline under the question
+                const resBlock = document.getElementById(`resolution-block-${q.id}`);
+                const resContent = document.getElementById(`resolution-content-${q.id}`);
+
+                resBlock.classList.remove('hidden');
+                resContent.className = `p-5 md:p-6 rounded-xl border leading-relaxed font-serif ${
+                    isCorrect ? 'bg-emerald-50/20 border-emerald-200/60 text-stone-850' : 'bg-rose-50/20 border-rose-200/60 text-stone-850'
+                }`;
+
+                // Append custom feedback heading
+                resContent.innerHTML = `
+                    <div class="flex items-center gap-2 mb-3 ui-font">
+                        <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${
+                            isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                        }">
+                            <i class="${isCorrect ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-xmark'}"></i>
+                            ${isCorrect ? 'Acertou' : 'Errou'} (Você escolheu: ${selected})
+                        </span>
+                    </div>
+                    ${q.resolution}
+                `;
+
+                // Add nice sliding animation
+                setTimeout(() => {
+                    resBlock.classList.remove('translate-y-2', 'opacity-0');
+                }, index * 100);
+
+                // Add Fast Navigation Anchor Buttons to results card
+                const anchorBtn = document.createElement('button');
+                anchorBtn.type = 'button';
+                anchorBtn.className = `w-10 h-10 rounded-xl font-bold flex items-center justify-center border transition-all ${
+                    isCorrect 
+                    ? 'bg-emerald-500 border-emerald-500 text-white hover:bg-emerald-600 hover:border-emerald-600' 
+                    : 'bg-rose-500 border-rose-500 text-white hover:bg-rose-600 hover:border-rose-600'
+                }`;
+                anchorBtn.innerText = index + 1;
+                anchorBtn.onclick = () => {
+                    document.getElementById(`question-card-${q.id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                };
+                fastNavContainer.appendChild(anchorBtn);
+            });
+
+            // Update score values
+            const pct = Math.round((correctCount / total) * 100);
+            document.getElementById('score-text').innerText = `${correctCount}/${total}`;
+            document.getElementById('percent-text').innerText = `${pct}%`;
+
+            // Adjust message based on percentage
+            const statusText = document.getElementById('status-text');
+            const motivationalMessage = document.getElementById('motivational-message');
+            
+            if (pct === 100) {
+                statusText.innerText = "Excelente! 🎯";
+                statusText.className = "text-2xl font-extrabold text-emerald-600";
+                motivationalMessage.innerHTML = "<strong>Desempenho Perfeito!</strong> Você demonstra pleno domínio do quadro geomorfológico, climático e hidrológico nacional, bem como excelente compreensão das classificações do relevo e da legislação hídrica. Ótimo preparo no estilo rigoroso da FAURGS!";
+            } else if (pct >= 80) {
+                statusText.innerText = "Muito Bom! 👏";
+                statusText.className = "text-2xl font-extrabold text-emerald-600";
+                motivationalMessage.innerHTML = "<strong>Excelente Desempenho!</strong> Você demonstra sólida compreensão da geografia física brasileira e de seus complexos processos associados. Algumas pequenas revisões pontuais nas classificações ou na gestão hídrica o levarão ao topo.";
+            } else if (pct >= 60) {
+                statusText.innerText = "Regular 🧐";
+                statusText.className = "text-2xl font-extrabold text-amber-600";
+                motivationalMessage.innerHTML = "<strong>Desempenho Mediano!</strong> Você compreendeu as noções fundamentais, mas a banca FAURGS exige foco em detalhes conceituais, especialmente nas taxonomias de Ross, nas massas de ar e na legislação. Sugerimos reler atentamente as resoluções comentadas inline.";
+            } else {
+                statusText.innerText = "Atenção ⚠️";
+                statusText.className = "text-2xl font-extrabold text-rose-600";
+                motivationalMessage.innerHTML = "<strong>Necessita de Revisão!</strong> O quadro natural brasileiro possui classificações ricas em termos técnicos e dinâmicas atmosféricas complexas. Utilize este simulado como base: leia as explicações analíticas de cada questão para sedimentar o conhecimento teórico.";
+            }
+
+            // Hide the default Action panel
+            document.getElementById('action-panel').classList.add('hidden');
+
+            // Scroll to results cleanly if animation is enabled
+            if (animate) {
+                setTimeout(() => {
+                    resultsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
+
+        // Reset state, clear local storages, and reload cards
+        function resetQuiz() {
+            state.userAnswers = {};
+            state.submitted = false;
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem("faurgs_quiz_submitted");
+
+            document.getElementById('results-panel').classList.add('hidden');
+            document.getElementById('action-panel').classList.remove('hidden');
+
+            renderQuestions();
+            updateProgress();
+            
+            // Scroll back to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Clear answers but keep interactive (Reset only current options)
+        function clearAnswers() {
+            state.userAnswers = {};
+            saveProgress();
+            updateProgress();
+            renderQuestions();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorização Ativa - Geografia IFSC (Banca FAURGS)</title>
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts para tipografia premium de alta legibilidade (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones informativos de auxílio visual -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Efeito sutil de transição para interações */
+        .transition-all-200 {
+            transition: all 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Cabeçalho Principal -->
+    <header class="border-b border-slate-200 bg-slate-50 py-6 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-600 text-white p-2.5 rounded-lg font-bold text-xl shadow-sm tracking-wider">
+                    IFSC
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight text-slate-900 sm:text-xl">Professor de Geografia</h1>
+                    <p class="text-xs text-slate-500 font-medium uppercase tracking-wider">Foco de Pesquisa: Banca FAURGS</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-full text-amber-800 text-xs font-semibold">
+                <i class="fa-solid fa-graduation-cap"></i> Guia de Memorização Ativa
+            </div>
+        </div>
+    </header>
+
+    <!-- Painel de Áudio Superior -->
+    <section class="bg-slate-50 border-b border-slate-200 py-6 px-4">
+        <div class="max-w-3xl mx-auto bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="w-full md:w-1/2">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="p-1.5 bg-sky-50 text-sky-600 rounded text-xs"><i class="fa-solid fa-headphones"></i></span>
+                        <label for="audio-source-input" class="text-xs font-bold text-slate-700 uppercase tracking-wide">Áudio de Apoio / Podcast</label>
+                    </div>
+                    <!-- Entrada para o arquivo de áudio -->
+                    <div class="flex gap-2">
+                        <input type="text" id="audio-source-input" value="aula_geografia_faurgs.mp3" 
+                            class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 text-slate-600 font-mono"
+                            placeholder="Ex: aula_geografia_faurgs.mp3">
+                        <button onclick="updateAudioSource()" 
+                            class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-all-200 flex items-center gap-1.5">
+                            <i class="fa-solid fa-rotate"></i> Carregar
+                        </button>
+                    </div>
+                    <p class="text-[10px] text-slate-400 mt-1">Insira o nome do arquivo MP3 presente na mesma pasta do servidor.</p>
+                </div>
+
+                <div class="w-full md:w-1/2 flex flex-col justify-end">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-slate-700 uppercase tracking-wide">Controle de Reprodução</span>
+                        <span id="speed-indicator" class="text-xs font-semibold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full">Velocidade: 1.0x</span>
+                    </div>
+                    
+                    <!-- Elemento nativo de áudio customizado via JS -->
+                    <audio id="study-audio" class="w-full mb-3 hidden" controls>
+                        <source id="audio-source-element" src="natural_geografia_faurgs.mp3" type="audio/mpeg">
+                        Seu navegador não suporta o reprodutor de áudio.
+                    </audio>
+
+                    <!-- Interface Customizada do Player -->
+                    <div class="flex items-center gap-2 justify-between bg-slate-50 p-2 rounded-lg border border-slate-200">
+                        <div class="flex items-center gap-1.5">
+                            <button id="btn-play-pause" onclick="togglePlay()" class="w-9 h-9 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:bg-emerald-700 transition-all-200 focus:outline-none">
+                                <i class="fa-solid fa-play" id="play-icon"></i>
+                            </button>
+                            <span id="audio-timer" class="text-xs font-mono text-slate-500 ml-1">00:00 / 00:00</span>
+                        </div>
+                        
+                        <!-- Controles de Velocidade -->
+                        <div class="flex gap-1">
+                            <button onclick="changeSpeed(1.0)" class="btn-speed px-2 py-1 bg-white border border-slate-200 text-xs font-bold rounded hover:bg-slate-100 transition-all-200 text-slate-700" data-speed="1.0">1x</button>
+                            <button onclick="changeSpeed(1.25)" class="btn-speed px-2 py-1 bg-white border border-slate-200 text-xs font-bold rounded hover:bg-slate-100 transition-all-200 text-slate-700" data-speed="1.25">1.25x</button>
+                            <button onclick="changeSpeed(1.5)" class="btn-speed px-2 py-1 bg-white border border-slate-200 text-xs font-bold rounded hover:bg-slate-100 transition-all-200 text-slate-700" data-speed="1.5">1.5x</button>
+                            <button onclick="changeSpeed(1.75)" class="btn-speed px-2 py-1 bg-white border border-slate-200 text-xs font-bold rounded hover:bg-slate-100 transition-all-200 text-slate-700" data-speed="1.75">1.75x</button>
+                            <button onclick="changeSpeed(2.0)" class="btn-speed px-2 py-1 bg-white border border-slate-200 text-xs font-bold rounded hover:bg-slate-100 transition-all-200 text-slate-700" data-speed="2.0">2x</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Notificação amigável de status do áudio -->
+            <div id="audio-status" class="hidden mt-2 p-2 bg-amber-50 text-amber-800 text-[11px] rounded border border-amber-200 text-center font-medium">
+                <i class="fa-solid fa-circle-info"></i> Certifique-se de que o arquivo de áudio está na mesma pasta antes de reproduzir.
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        
+        <!-- Bloco de Introdução com Instruções de Estudo -->
+        <div class="mb-10 p-6 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col md:flex-row gap-5 items-start">
+            <div class="bg-indigo-600 text-white p-3 rounded-xl shadow-md shrink-0">
+                <i class="fa-solid fa-lightbulb text-2xl"></i>
+            </div>
+            <div>
+                <h2 class="text-base font-bold text-slate-900 mb-1">Como usar este Guia de Memorização Ativa?</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Este material foi estruturado estrategicamente para otimizar os padrões de memorização visual e de áudio. As marcações em <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">amarelo pastel</span> destacam as predileções de cobrança da <span class="font-bold text-slate-900">FAURGS</span>. Leia o material acompanhando com o áudio gravado e responda às questões simuladas ao fim para fixação.
+                </p>
+            </div>
+        </div>
+
+        <article class="space-y-12">
+            
+            <!-- Título do Documento -->
+            <div class="text-center border-b border-slate-200 pb-8">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">O QUADRO NATURAL BRASILEIRO</h2>
+                <p class="text-sm sm:text-base text-slate-500 font-medium mt-1">Guia de Memorização Ativa para o Concurso de Professor do IFSC — Banca FAURGS</p>
+            </div>
+
+            <!-- PÁGINA 1: GEOLOGIA, EVOLUÇÃO DO RELEVO E DINÂMICA CLIMÁTICA -->
+            <section class="space-y-6">
+                <div class="flex items-center gap-2 border-b-2 border-emerald-600 pb-2">
+                    <span class="text-emerald-700 text-xl font-extrabold">PÁGINA 1:</span>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 uppercase tracking-tight">Geologia, Relevo e Clima</h3>
+                </div>
+
+                <!-- Subtópico 1 -->
+                <div class="space-y-3">
+                    <h4 class="text-md sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs text-slate-600">1</span>
+                        Estrutura Geológica: O Esqueleto do Território
+                    </h4>
+                    
+                    <ul class="space-y-3 pl-2 sm:pl-6 text-sm sm:text-base leading-relaxed text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-circle-check"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Placa Tectônica:</strong> O Brasil está integralmente localizado no <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">centro da Placa Sul-Americana</span>, o que resulta em notável estabilidade tectônica, com ausência de vulcanismo ativo ou terremotos contemporâneos de grande magnitude.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-circle-check"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Dobramentos Modernos:</strong> Há <span class="bg-rose-100 px-1 rounded text-rose-950 font-bold">ZERO ocorrência</span> de dobramentos modernos no território brasileiro. Esta é uma clássica pegadinha que tenta confundir o candidato ao citar serras antigas.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-circle-check"></i></span>
+                            <div class="w-full">
+                                <strong class="text-slate-900">Duas Grandes Estruturas Litoestratigráficas:</strong>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                                        <div class="text-xs font-bold text-indigo-700 uppercase tracking-wider mb-1">Escudos Cristalinos (Crátons) - 36%</div>
+                                        <p class="text-xs sm:text-sm text-slate-600">
+                                            Rochas ígneas e metamórficas do período Pré-Cambriano. São ricos em <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">minerais metálicos</span> (como ferro e manganês). <strong class="text-slate-800">Atenção:</strong> Não possuem fósseis, pois o calor extremo de sua formação os destruiria.
+                                        </p>
+                                    </div>
+                                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl">
+                                        <div class="text-xs font-bold text-teal-700 uppercase tracking-wider mb-1">Bacias Sedimentares - 64%</div>
+                                        <p class="text-xs sm:text-sm text-slate-600">
+                                            Depósitos acumulados do Paleozoico ao Cenozoico. Concentram de forma <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">absolutamente exclusiva os combustíveis fósseis</span> (como carvão mineral e petróleo), além de fósseis preservados de forma estável.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Subtópico 2: Compartimentação do Relevo -->
+                <div class="space-y-4 pt-4">
+                    <h4 class="text-md sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs text-slate-600">2</span>
+                        Compartimentação do Relevo: A Batalha das Três Classificações
+                    </h4>
+                    
+                    <p class="text-sm text-slate-600 leading-relaxed pl-2 sm:pl-6">
+                        A banca FAURGS frequentemente elabora questões confrontando os critérios, metodologias e nomenclatura adotados por cada um dos grandes geógrafos do país. Memorize com precisão a tabela comparativa abaixo:
+                    </p>
+
+                    <!-- Tabela Responsiva Sem Scroll Horizontal (Formato de Cartões Flexíveis no Mobile, Tabela Limpa no Desktop) -->
+                    <div class="pl-2 sm:pl-6">
+                        
+                        <!-- Visualização Desktop (Tabela compactada perfeitamente ajustada para não estourar largura) -->
+                        <div class="hidden sm:block overflow-hidden border border-slate-200 rounded-xl">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 text-xs uppercase font-bold tracking-wider">
+                                        <th class="p-3 w-1/4">Parâmetro</th>
+                                        <th class="p-3 w-1/4">Aroldo de Azevedo (1940)</th>
+                                        <th class="p-3 w-1/4">Aziz Ab'Sáber (1960)</th>
+                                        <th class="p-3 w-1/4">Jurandyr Ross (1980/1990)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-xs sm:text-sm divide-y divide-slate-200 text-slate-700">
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-3 font-semibold text-slate-900 bg-slate-50">Critério Principal</td>
+                                        <td class="p-3">Altimétrico rígido.</td>
+                                        <td class="p-3">Morfogenético (balanço de processos superficiais).</td>
+                                        <td class="p-3"><span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Morfoestrutural + Climático (morfoclimático)</span>.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-3 font-semibold text-slate-900 bg-slate-50">Unidades Fundamentais</td>
+                                        <td class="p-3">Planaltos (&gt;200m) e Planícies (&lt;200m).</td>
+                                        <td class="p-3">Planaltos (erosão &gt; sedimentação) e Planícies (sedimentação &gt; erosão).</td>
+                                        <td class="p-3">Planaltos, Planícies e <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Depressões (unidade inédita)</span>.</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-3 font-semibold text-slate-900 bg-slate-50">Quantitativo</td>
+                                        <td class="p-3">7 Unidades.</td>
+                                        <td class="p-3">8 Unidades (redesenhou as bordas de Azevedo).</td>
+                                        <td class="p-3"><span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">28 Unidades</span> (11 planaltos, 11 depressões, 6 planícies).</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50">
+                                        <td class="p-3 font-semibold text-slate-900 bg-slate-50">Base Técnica</td>
+                                        <td class="p-3">Esboços cartográficos rudimentares e bibliografia.</td>
+                                        <td class="p-3">Aerofotogrametria e observações de campo direta.</td>
+                                        <td class="p-3">Radar aerotransportado do <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Projeto RADAMBRASIL</span>.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Visualização Mobile Alternativa (Evita COMPLETAMENTE o scroll horizontal no celular) -->
+                        <div class="block sm:hidden space-y-4">
+                            <div class="p-3 border border-slate-200 rounded-xl bg-slate-50 space-y-2">
+                                <div class="text-xs font-extrabold text-indigo-700 uppercase tracking-wider border-b border-slate-200 pb-1">Aroldo de Azevedo (1940)</div>
+                                <div class="text-xs text-slate-700 space-y-1">
+                                    <p><strong>Critério:</strong> Altimétrico rígido</p>
+                                    <p><strong>Unidades:</strong> Planaltos (&gt;200m) e Planícies (&lt;200m)</p>
+                                    <p><strong>Quantitativo:</strong> 7 Unidades</p>
+                                    <p><strong>Base:</strong> Esboços cartográficos rudimentares</p>
+                                </div>
+                            </div>
+                            <div class="p-3 border border-slate-200 rounded-xl bg-slate-50 space-y-2">
+                                <div class="text-xs font-extrabold text-teal-700 uppercase tracking-wider border-b border-slate-200 pb-1">Aziz Ab'Sáber (1960)</div>
+                                <div class="text-xs text-slate-700 space-y-1">
+                                    <p><strong>Critério:</strong> Morfogenético (Balanço de processos)</p>
+                                    <p><strong>Unidades:</strong> Planaltos (erosão) e Planícies (sedimentação)</p>
+                                    <p><strong>Quantitativo:</strong> 8 Unidades</p>
+                                    <p><strong>Base:</strong> Aerofotogrametria e campo</p>
+                                </div>
+                            </div>
+                            <div class="p-3 border-2 border-emerald-600 rounded-xl bg-emerald-50/30 space-y-2">
+                                <div class="text-xs font-extrabold text-emerald-800 uppercase tracking-wider border-b border-emerald-200 pb-1">Jurandyr Ross (1980/1990) - Crítico!</div>
+                                <div class="text-xs text-slate-700 space-y-1">
+                                    <p><strong>Critério:</strong> Morfoestrutural + Climático (morfoclimático)</p>
+                                    <p><strong>Unidades:</strong> Planaltos, Planícies e <span class="bg-amber-100 px-1 rounded font-bold">Depressões</span></p>
+                                    <p><strong>Quantitativo:</strong> 28 Unidades (11 planaltos, 11 depressões, 6 planícies)</p>
+                                    <p><strong>Base:</strong> Radar aerotransportado do <span class="bg-amber-100 px-1 rounded font-bold">RADAMBRASIL</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Detalhes de Ross -->
+                    <ul class="space-y-3 pl-2 sm:pl-6 text-sm sm:text-base leading-relaxed text-slate-700 mt-4">
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 shrink-0 mt-1"><i class="fa-solid fa-angles-right"></i></span>
+                            <div>
+                                <strong class="text-slate-950">As Depressões de Ross:</strong> São superfícies ligeiramente rebaixadas por intemperismo e erosão diferencial. Variam altimetricamente de 100m a 500m de altitude. Subdividem-se em <span class="bg-slate-100 px-1 rounded font-mono text-slate-900 text-xs sm:text-sm">marginais</span> (bordas de bacias sedimentares) e <span class="bg-slate-100 px-1 rounded font-mono text-slate-900 text-xs sm:text-sm">periféricas</span> (zonas de contato litoestratigráfico).
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 shrink-0 mt-1"><i class="fa-solid fa-angles-right"></i></span>
+                            <div>
+                                <strong class="text-slate-950">As Planícies de Ross:</strong> São superfícies extremamente planas geradas estritamente por <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">deposição quaternária recente (período Cenozoico)</span>. Sua área no mapa foi drasticamente reduzida comparada a classificações passadas (muito do que era "Planície Amazônica" virou "Depressão do Rio Amazonas" em seu mapeamento).
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 shrink-0 mt-1"><i class="fa-solid fa-angles-right"></i></span>
+                            <div>
+                                <strong class="text-slate-950">Tabuleiros Costeiros:</strong> Relevos predominantemente planos litorâneos (com altitudes variando de 20 a 50 metros) que terminam de maneira abrupta em direção ao mar na forma de falésias, típica morfologia do litoral Nordeste.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Subtópico 3: Dinâmica Climática -->
+                <div class="space-y-3 pt-4">
+                    <h4 class="text-md sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs text-slate-600">3</span>
+                        Dinâmica Climática e Circulação Atmosférica
+                    </h4>
+                    
+                    <p class="text-sm text-slate-600 leading-relaxed pl-2 sm:pl-6">
+                        O Brasil possui 5 grandes massas de ar principais regulando a dinâmica de pluviosidade e ventos sazonais:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pl-2 sm:pl-6">
+                        <!-- mEc -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded">mEc</span>
+                                <span class="text-xs text-slate-500">Quente / Úmida</span>
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-900">Equatorial Continental</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Superúmida</span>. É a exceção mundial à regra continental devido à forte evapotranspiração da Floresta Amazônica. Expande-se no verão do Hemisfério Sul levando chuvas.
+                            </p>
+                        </div>
+                        <!-- mEa -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded">mEa</span>
+                                <span class="text-xs text-slate-500">Quente / Úmida</span>
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-900">Equatorial Atlântica</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Forma-se no oceano, na zona de calmaria equatorial. Atua predominantemente de forma direta no litoral das Regiões Norte e Nordeste setentrional.
+                            </p>
+                        </div>
+                        <!-- mTc -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded">mTc</span>
+                                <span class="text-xs text-slate-500">Quente / Seca</span>
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-900">Tropical Continental</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Origina-se na depressão do Chaco. Tem comportamento <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">quente e seco</span>, atuando como um bloqueador atmosférico para frentes frias no inverno, gerando forte estiagem sazonal.
+                            </p>
+                        </div>
+                        <!-- mTa -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded">mTa</span>
+                                <span class="text-xs text-slate-500">Quente / Úmida</span>
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-900">Tropical Atlântica</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Responsável por provocar chuvas orográficas constantes ao longo de todo o ano, principalmente nas encostas da Serra do Mar e do Espinhaço.
+                            </p>
+                        </div>
+                        <!-- mPa -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1 sm:col-span-2 md:col-span-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-mono font-bold text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">mPa</span>
+                                <span class="text-xs text-slate-500">Fria / Úmida</span>
+                            </div>
+                            <h5 class="text-xs font-bold text-slate-900">Polar Atlântica</h5>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Única massa de origem polar. Atua fortemente nos meses de inverno de três formas distintas: <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">frentes frias/chuvas frontais</span> no litoral, <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">neve e geada</span> no Sul/Sudeste, e provoca a famosa <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">friagem</span> no interior da Amazônia Ocidental.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pl-2 sm:pl-6 space-y-3 pt-2">
+                        <h5 class="text-sm font-bold text-slate-950">Dois Grandes Sistemas de Convergência Sazonais:</h5>
+                        <ul class="space-y-3 text-sm sm:text-base leading-relaxed text-slate-700">
+                            <li class="flex items-start gap-2">
+                                <span class="text-amber-600 shrink-0 mt-1"><i class="fa-solid fa-cloud-rain"></i></span>
+                                <div>
+                                    <strong class="text-slate-900">ZCIT (Zona de Convergência Intertropical):</strong> Área de encontro dos ventos alísios vindos do nordeste e do sudeste na faixa equatorial. Sua movimentação latitudinal dita os níveis de precipitação do Norte e do Nordeste setentrional brasileiro.
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="text-amber-600 shrink-0 mt-1"><i class="fa-solid fa-cloud-rain"></i></span>
+                                <div>
+                                    <strong class="text-slate-900">ZCAS (Zona de Convergência do Atlântico Sul):</strong> Banda de nebulosidade e umidade persistentes estendendo-se da Amazônia ao Oceano Atlântico Sudeste. É um fenômeno típico do <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">verão</span> brasileiro, alimentado pelo acoplamento da umidade da <span class="font-semibold text-slate-950">mEc</span> com frentes frias estacionárias meridionais.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Subtópico 4: Domínios Morfoclimáticos -->
+                <div class="space-y-3 pt-4">
+                    <h4 class="text-md sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs text-slate-600">4</span>
+                        Domínios Morfoclimáticos (Ab'Sáber)
+                    </h4>
+                    
+                    <p class="text-sm text-slate-600 leading-relaxed pl-2 sm:pl-6">
+                        Conjuntos espaciais homogêneos de escala subcontinental, integrados por interações dinâmicas entre clima, relevo, solos, vegetação e rede hidrográfica:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pl-2 sm:pl-6">
+                        <!-- Dominio Amazonico -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <h5 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                                Amazônico
+                            </h5>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Terras baixas florestadas, solos do tipo latossolo lixiviados de baixa fertilidade mineral, floresta ombrófila latifoliada perenifólia e clima do tipo equatorial quente e superúmido.
+                            </p>
+                        </div>
+                        <!-- Cerrado -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <h5 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+                                Cerrado
+                            </h5>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Planaltos e chapadas localizados no Brasil Central. Caracterizado por solos latossolos profundos, extremamente ácidos (altos teores de ferro/alumínio) e clima tropical típico com <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">duas estações bem marcadas</span> (verão chuvoso e inverno intensamente seco). Age como a grande "caixa d'água" distribuidora do Brasil.
+                            </p>
+                        </div>
+                        <!-- Mares de Morros -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <h5 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+                                Mares de Morros
+                            </h5>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Relevo fortemente dissecado em formas convexas e suaves (chamadas popularmente de <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">meias-laranjas ou mamelonização</span>) estruturado sobre embasamento cristalino pré-cambriano. Possui solos profundos formados por intemperismo químico em clima tropical úmido.
+                            </p>
+                        </div>
+                        <!-- Caatinga -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <h5 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-orange-400"></span>
+                                Caatinga
+                            </h5>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Depressões interplanálticas aplainadas com presença marcante de <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">inselbergs (morros testemunhos de relevo residual)</span>. Solos rasos e pedregosos onde atua predominantemente o intemperismo físico sob clima semiárido quente.
+                            </p>
+                        </div>
+                        <!-- Araucarias -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <h5 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-teal-600"></span>
+                                Araucárias
+                            </h5>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Planalto Meridional com solos férteis derivados do derramamento basáltico de Mesozoico (terra roxa). Clima predominantemente subtropical, marcado por invernos frios e geadas constantes.
+                            </p>
+                        </div>
+                        <!-- Pradarias -->
+                        <div class="p-4 border border-slate-200 bg-white rounded-xl shadow-sm space-y-1">
+                            <h5 class="text-sm font-bold text-slate-950 flex items-center gap-1.5">
+                                <span class="w-2.5 h-2.5 rounded-full bg-lime-500"></span>
+                                Pradarias
+                            </h5>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Relevo dominado por coxilhas (colinas suaves e onduladas com vegetação herbácea rasteira) no extremo sul do Rio Grande do Sul (Bioma Pampa). Clima temperado/subtropical de marcante amplitude térmica anual.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PÁGINA 2: RECURSOS HÍDRICOS, GESTÃO E O "FILTRO" FAURGS DE QUESTÕES -->
+            <section class="space-y-6 pt-6 border-t border-slate-200">
+                <div class="flex items-center gap-2 border-b-2 border-emerald-600 pb-2">
+                    <span class="text-emerald-700 text-xl font-extrabold">PÁGINA 2:</span>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 uppercase tracking-tight">Recursos Hídricos, Gestão e Pegadinhas</h3>
+                </div>
+
+                <!-- Subtópico 1: Hidrografia Brasileira -->
+                <div class="space-y-3">
+                    <h4 class="text-md sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs text-slate-600">1</span>
+                        Hidrografia Brasileira: Distribuição e Tipologia
+                    </h4>
+                    
+                    <ul class="space-y-3 pl-2 sm:pl-6 text-sm sm:text-base leading-relaxed text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-droplet"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Regime e Alimentação:</strong> Os rios brasileiros são predominantemente <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">perenes</span> (não secam de forma sazonal, salvo exceções severas no sertão semiárido) e possuem regime de alimentação predominantemente pluvial.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-droplet"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Rios de Planalto:</strong> Possuem vales encaixados e alta declividade natural do relevo. São marcados por apresentar um <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">alto potencial de aproveitamento hidrelétrico</span> (destaque absoluto para a Bacia do Paraná).
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-droplet"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Rios de Planície:</strong> Apresentam caminhos meândricos de forte sinuosidade, sendo ideais e altamente propícios para as redes fluviais de navegação de carga e passageiros (Bacia Amazônica).
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-droplet"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Assimetria Geográfica Hídrica:</strong> A Região Norte concentra cerca de 68% de toda a água superficial do Brasil, contudo abriga somente de 8% a 9% da população nacional. Em extremo contraste, o Sudeste aglomera 42% da população, mas dispõe de apenas 6% da reserva hídrica superficial do país.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-emerald-600 shrink-0 mt-1"><i class="fa-solid fa-droplet"></i></span>
+                            <div>
+                                <strong class="text-slate-900">Consumo Setorial:</strong> As atividades de <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">irrigação agrícola e pecuária</span> lideram massivamente o consumo de água, totalizando aproximadamente <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">60%</span> da demanda hídrica nacional. O consumo urbano e o industrial representam, somados, menos de 20% do volume total.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Subtópico 2: Lei das Águas -->
+                <div class="space-y-3 pt-4">
+                    <h4 class="text-md sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-xs text-slate-600">2</span>
+                        Lei das Águas (Lei Federal nº 9.433/1997)
+                    </h4>
+                    
+                    <p class="text-sm text-slate-600 leading-relaxed pl-2 sm:pl-6">
+                        A legislação hídrica nacional está alicerçada em seis fundamentos jurídicos inalienáveis e de altíssima cobrança em provas:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pl-2 sm:pl-6 text-xs sm:text-sm">
+                        <!-- Fundamento 1 -->
+                        <div class="p-3 border border-slate-200 bg-slate-50/50 rounded-xl space-y-1">
+                            <div class="text-emerald-700 font-bold">1. Domínio Público</div>
+                            <p class="text-slate-600 leading-snug">A água é um bem de domínio público. <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Não existe propriedade privada</span> de água bruta em todo o território nacional.</p>
+                        </div>
+                        <!-- Fundamento 2 -->
+                        <div class="p-3 border border-slate-200 bg-slate-50/50 rounded-xl space-y-1">
+                            <div class="text-emerald-700 font-bold">2. Recurso Limitado</div>
+                            <p class="text-slate-600 leading-snug">A água é um recurso natural de caráter finito e dotado de <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">valor econômico comprovado</span> (o que justifica as cobranças).</p>
+                        </div>
+                        <!-- Fundamento 3 -->
+                        <div class="p-3 border border-slate-200 bg-slate-50/50 rounded-xl space-y-1">
+                            <div class="text-emerald-700 font-bold">3. Uso Múltiplo</div>
+                            <p class="text-slate-600 leading-snug">A política de recursos hídricos deve prever e conciliar os variados usos simultâneos da água nas bacias.</p>
+                        </div>
+                        <!-- Fundamento 4 -->
+                        <div class="p-3 border border-slate-200 bg-slate-50/50 rounded-xl space-y-1">
+                            <div class="text-emerald-700 font-bold">4. Prioridade de Escassez</div>
+                            <p class="text-slate-600 leading-snug">Em circunstâncias de extrema escassez, <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">o consumo humano e a dessedentação animal</span> detêm prioridade absoluta de abastecimento.</p>
+                        </div>
+                        <!-- Fundamento 5 -->
+                        <div class="p-3 border border-slate-200 bg-slate-50/50 rounded-xl space-y-1">
+                            <div class="text-emerald-700 font-bold">5. Unidade de Planejamento</div>
+                            <p class="text-slate-600 leading-snug">A <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">bacia hidrográfica</span> é definida legalmente como a unidade básica territorial de planejamento e gestão ambiental.</p>
+                        </div>
+                        <!-- Fundamento 6 -->
+                        <div class="p-3 border border-slate-200 bg-slate-50/50 rounded-xl space-y-1">
+                            <div class="text-emerald-700 font-bold">6. Descentralização</div>
+                            <p class="text-slate-600 leading-snug">A gestão hídrica é obrigatoriamente descentralizada e participativa através dos <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Comitês de Bacia Hidrográfica (CBH)</span>.</p>
+                        </div>
+                    </div>
+
+                    <div class="pl-2 sm:pl-6 space-y-3 pt-4">
+                        <div class="p-4 bg-emerald-50/30 border border-emerald-200 rounded-2xl">
+                            <h5 class="text-sm font-bold text-emerald-900 mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-signature"></i> O Instrumento Jurídico da Outorga
+                            </h5>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-700">
+                                <div>
+                                    <strong class="text-slate-900">Atividades Sujeitas à Outorga:</strong>
+                                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                                        <li>Captações e derivações de rios de água superficial;</li>
+                                        <li>Extrações diretas de poços de águas subterrâneas (aquíferos);</li>
+                                        <li><span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Lançamento de efluentes sanitários ou industriais para diluição</span>;</li>
+                                        <li>Aproveitamentos de recursos para fins hidrelétricos.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <strong class="text-slate-900">Atividades Isentas de Outorga:</strong>
+                                    <ul class="list-disc pl-5 mt-1 space-y-1">
+                                        <li>Captações e usos avaliados como insignificantes pelo órgão regulador;</li>
+                                        <li>Satisfação emergencial de necessidades hídricas básicas de pequenas populações rurais dispersas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloco de Pegadinhas Críticas: FAURGS -->
+                <div class="space-y-4 pt-6">
+                    <div class="flex items-center gap-2 border-b border-rose-200 pb-1">
+                        <span class="text-rose-700 text-lg font-bold"><i class="fa-solid fa-triangle-exclamation"></i> ALERTA DE PEGA-RATÃO:</span>
+                        <span class="text-xs text-rose-500 font-bold uppercase tracking-wider">As Armadilhas Clássicas da FAURGS</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <!-- Pegadinha 1 -->
+                        <div class="p-5 border-l-4 border-rose-600 bg-rose-50/30 rounded-r-xl space-y-2">
+                            <h5 class="text-sm sm:text-base font-bold text-rose-950">Pega-Ratão 1: Arenização vs. Desertificação no Sudoeste do RS</h5>
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                A banca costuma tentar inverter as localizações e climas geográficos correspondentes para enganar o candidato.
+                            </p>
+                            <div class="bg-white p-3 rounded-lg border border-rose-100 text-xs sm:text-sm space-y-2">
+                                <p>
+                                    <strong class="text-slate-900">Arenização (O que cai na prova):</strong> Ocorre especificamente sob <span class="bg-amber-100 px-1 rounded text-amber-950 font-bold">clima subtropical úmido</span> (Campanha Gaúcha), marcado por chuvas volumosas e bem distribuídas sem uma estação seca absoluta prolongada. É um processo puramente morfogenético de dinâmica de erosão hídrica, acelerado pelo manejo inadequado de agropecuária intensiva.
+                                </p>
+                                <p>
+                                    <strong class="text-slate-900">Desertificação (O distrator errado):</strong> Ocorre estritamente em climas áridos, semiáridos ou subúmidos secos (como o semiárido do Nordeste do Brasil), com elevadíssima taxa de evaporação.
+                                </p>
+                                <div class="text-[11px] text-rose-700 font-bold">
+                                    <i class="fa-solid fa-ban"></i> Fique Esperto: A prova dirá que a Campanha Gaúcha sofre de desertificação. É Arenização!
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pegadinha 2 -->
+                        <div class="p-5 border-l-4 border-rose-600 bg-rose-50/30 rounded-r-xl space-y-2">
+                            <h5 class="text-sm sm:text-base font-bold text-rose-950">Pega-Ratão 2: As Dinâmicas Locais do Rio Grande do Sul</h5>
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                Devido ao fato de a banca FAURGS ser sediada e focada no estado do Rio Grande do Sul, as questões geográficas locais apresentam exigências técnicas severas:
+                            </p>
+                            <div class="bg-white p-3 rounded-lg border border-rose-100 text-xs sm:text-sm space-y-2">
+                                <ul class="list-disc pl-5 space-y-2">
+                                    <li>
+                                        <strong class="text-slate-900">O Escoamento do Guaíba:</strong> A banca pode criar afirmativas falsas sugerindo que ventos vindos do norte causam enchentes em Porto Alegre. <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Incorreto!</span> São especificamente os <span class="bg-amber-100 px-1 rounded text-amber-950 font-bold">ventos soprando do quadrante SUL</span> (como o Pampeiro) que causam o represamento físico das águas no Guaíba contra a Laguna dos Patos, gerando as inundações na capital gaúcha.
+                                    </li>
+                                    <li>
+                                        <strong class="text-slate-900">Continentalidade x Maritimidade:</strong> Na comparação clássica entre Alegrete (interior) e Tramandaí (litoral), saiba que a continentalidade faz com que Alegrete registre amplitudes térmicas anuais e diárias muito maiores.
+                                    </li>
+                                    <li>
+                                        <strong class="text-slate-900">Efeito Térmico da Altitude:</strong> Cidades como São Francisco de Paula ou São Joaquim registram menores temperaturas anuais em virtude do gradiente altimétrico sistemático médio de decréscimo térmico de <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">0,6 °C a cada 100 metros</span> de elevação.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Pegadinha 3 -->
+                        <div class="p-5 border-l-4 border-rose-600 bg-rose-50/30 rounded-r-xl space-y-2">
+                            <h5 class="text-sm sm:text-base font-bold text-rose-950">Pega-Ratão 3: Erros Críticos na Legislação das Águas (9.433/97)</h5>
+                            <p class="text-sm text-slate-700 leading-relaxed">
+                                Pegadinhas institucionais e regulatórias comuns em concursos do IFSC:
+                            </p>
+                            <div class="bg-white p-3 rounded-lg border border-rose-100 text-xs sm:text-sm space-y-2">
+                                <ul class="list-disc pl-5 space-y-2">
+                                    <li>
+                                        <strong class="text-slate-900">Incompetência Municipal na Outorga:</strong> A prova criará narrativas onde Prefeituras Municipais emitem outorgas de uso de bacias ou poços. <strong class="text-rose-700">Falso!</strong> A emissão de outorgas de águas é competência estrita e indelegável da <span class="bg-amber-100 px-1 rounded text-amber-950 font-bold">União</span> (rios federais e interestaduais) e dos <span class="bg-amber-100 px-1 rounded text-amber-950 font-bold">Estados</span> (rios estaduais e águas subterrâneas). Municípios não outorgam águas!
+                                    </li>
+                                    <li>
+                                        <strong class="text-slate-900">Lançamento de Esgoto e Efluentes:</strong> Textos de prova afirmam que lançar esgoto devidamente tratado não requer autorização/outorga. <span class="bg-amber-100 px-1 rounded text-amber-950 font-semibold">Incorreto!</span> Qualquer lançamento que demande volume de diluição de poluentes exige outorga do órgão governamental.
+                                    </li>
+                                    <li>
+                                        <strong class="text-slate-900">Papel dos Comitês de Bacia:</strong> A FAURGS frequentemente afirma que os Comitês possuem papel "meramente consultivo" e estrutura "estritamente estatal". <strong class="text-rose-700">Mentira!</strong> Os Comitês são colegiados participativos e de natureza essencialmente <span class="bg-amber-100 px-1 rounded text-amber-950 font-bold">deliberativa</span> (tomam decisões oficiais de caráter legal e aprovam valores de cobrança).
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- Botão para Próxima Etapa (Simulado de Questões) -->
+        <div class="mt-16 pt-8 border-t border-slate-200 text-center">
+            <p class="text-sm text-slate-500 mb-4 font-medium">Pronto para testar seus conhecimentos em questões reais da banca?</p>
+            <a href="naturalquestoes.html" 
+               class="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all-200 focus:outline-none focus:ring-4 focus:ring-emerald-300">
+                <span>Ir para o Simulado de Questões</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-slate-50 border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-4xl mx-auto px-4 text-center text-xs text-slate-500 space-y-1">
+            <p>&copy; 2026 — Plataforma de Preparação de Alto Rendimento IFSC.</p>
+            <p>Este material de memorização é de uso exclusivo para o candidato cadastrado.</p>
+        </div>
+    </footer>
+
+    <!-- Script JavaScript para o Funcionamento Dinâmico do Reprodutor de Áudio -->
+    <script>
+        const audio = document.getElementById('study-audio');
+        const audioSourceInput = document.getElementById('audio-source-input');
+        const playPauseBtn = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const timerDisplay = document.getElementById('audio-timer');
+        const speedIndicator = document.getElementById('speed-indicator');
+        const statusNotification = document.getElementById('audio-status');
+
+        // Formatar tempo em mm:ss
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Atualizar temporizador na interface
+        audio.addEventListener('timeupdate', () => {
+            timerDisplay.textContent = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+        });
+
+        // Quando o áudio é carregado totalmente
+        audio.addEventListener('loadedmetadata', () => {
+            timerDisplay.textContent = `00:00 / ${formatTime(audio.duration)}`;
+            statusNotification.classList.add('hidden');
+        });
+
+        // Exibir aviso se houver falha de carregamento
+        audio.addEventListener('error', () => {
+            statusNotification.classList.remove('hidden');
+            statusNotification.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> O arquivo "<strong>${audioSourceInput.value}</strong>" não foi localizado nesta pasta local do servidor. Por favor, certifique-se de salvá-lo lá.`;
+        });
+
+        // Alternar Play / Pause
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playIcon.className = "fa-solid fa-pause";
+                        playPauseBtn.className = "w-9 h-9 bg-rose-600 text-white rounded-full flex items-center justify-center hover:bg-rose-700 transition-all-200 focus:outline-none";
+                    })
+                    .catch(error => {
+                        console.error("Incapaz de reproduzir arquivo de áudio:", error);
+                        statusNotification.classList.remove('hidden');
+                    });
+            } else {
+                audio.pause();
+                playIcon.className = "fa-solid fa-play";
+                playPauseBtn.className = "w-9 h-9 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:bg-emerald-700 transition-all-200 focus:outline-none";
+            }
+        }
+
+        // Alterar velocidade de reprodução
+        function changeSpeed(rate) {
+            audio.playbackRate = rate;
+            speedIndicator.textContent = `Velocidade: ${rate.toFixed(2)}x`;
+            
+            // Destacar o botão de velocidade ativo
+            document.querySelectorAll('.btn-speed').forEach(btn => {
+                if (parseFloat(btn.getAttribute('data-speed')) === rate) {
+                    btn.classList.remove('bg-white', 'text-slate-700', 'border-slate-200');
+                    btn.classList.add('bg-slate-800', 'text-white', 'border-slate-800');
+                } else {
+                    btn.classList.remove('bg-slate-800', 'text-white', 'border-slate-800');
+                    btn.classList.add('bg-white', 'text-slate-700', 'border-slate-200');
+                }
+            });
+        }
+
+        // Atualizar o nome do arquivo MP3 digitado pelo usuário
+        function updateAudioSource() {
+            const fileName = audioSourceInput.value.trim();
+            if (fileName === '') return;
+            
+            audio.pause();
+            playIcon.className = "fa-solid fa-play";
+            playPauseBtn.className = "w-9 h-9 bg-emerald-600 text-white rounded-full flex items-center justify-center hover:bg-emerald-700 transition-all-200 focus:outline-none";
+            
+            // Alterar o SRC do elemento e recarregar
+            const audioSrcElement = document.getElementById('audio-source-element');
+            audioSrcElement.src = fileName;
+            audio.load();
+            
+            // Adicionar uma indicação visual momentânea de que foi atualizado
+            const origValue = audioSourceInput.value;
+            audioSourceInput.value = "Carregando novo áudio...";
+            setTimeout(() => {
+                audioSourceInput.value = fileName;
+            }, 500);
+        }
+
+        // Inicializar botões de velocidade ao abrir a página
+        window.addEventListener('DOMContentLoaded', () => {
+            changeSpeed(1.0);
+        });
+    </script>
+</body>
+</html>

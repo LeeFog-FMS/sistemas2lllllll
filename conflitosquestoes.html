@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado: O Mundo Contemporâneo e Conflitos Armados (FAURGS)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter para legibilidade acadêmica e executiva) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos adicionais para controle de seleção e impressão */
+        .option-checked {
+            border-color: #4f46e5 !important;
+            background-color: #f5f3ff !important;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; color: black; }
+            .print-card { page-break-inside: avoid; border: 1px solid #cbd5e1 !important; margin-bottom: 2rem !important; }
+            .resolution-box { display: block !important; }
+        }
+    </style>
+</head>
+<body class="bg-stone-50/70 text-slate-800 min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
+
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm no-print">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <span class="bg-indigo-600 text-white text-xs font-bold px-2.5 py-1 rounded-md uppercase tracking-wider">FAURGS</span>
+                <h1 class="text-sm md:text-base font-semibold text-slate-700 truncate">Geopolítica Contemporânea</h1>
+            </div>
+            <!-- Barra de Progresso Real-time -->
+            <div class="flex items-center space-x-4 w-1/2 justify-end">
+                <div class="text-xs font-medium text-slate-500 whitespace-nowrap" id="progress-text">0 / 10 respondidas</div>
+                <div class="w-24 md:w-32 bg-slate-200 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8 md:py-12">
+        <section class="mb-10 text-center md:text-left">
+            <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Simulado de Exame: O Mundo Contemporâneo e Conflitos Armados
+            </h2>
+            <p class="mt-3 text-base md:text-lg text-slate-600 leading-relaxed max-w-3xl">
+                Teste seus conhecimentos com questões rigorosamente elaboradas no padrão da banca <strong class="text-slate-800">FAURGS</strong>. 
+                Foco em economia, geopolítica e dinâmicas sociais do século XXI. 
+            </p>
+            <div class="mt-4 flex flex-wrap gap-2 justify-center md:justify-start text-xs text-slate-500">
+                <span class="bg-slate-200 px-3 py-1 rounded-full font-medium">10 Questões de Múltipla Escolha</span>
+                <span class="bg-slate-200 px-3 py-1 rounded-full font-medium">Correção automática comentada</span>
+                <span class="bg-slate-200 px-3 py-1 rounded-full font-medium">Padrão de Prova Superior</span>
+            </div>
+        </section>
+
+        <form id="quiz-form" onsubmit="event.preventDefault();" class="space-y-8">
+            
+            <!-- QUESTÃO 1 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="1">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 01</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Julgamento de Itens</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    A eclosão de conflitos armados no século XXI tem evidenciado uma profunda reconfiguração na arquitetura de segurança global, tensionando os limites do direito internacional e redesenhando as cadeias de suprimentos globais. No que concerne à dinâmica geopolítica do conflito entre a Federação Russa e a Ucrânia e suas ramificações globais, considere as propostas a seguir:
+                </p>
+
+                <div class="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6 text-sm text-slate-700 leading-relaxed">
+                    <p><strong>I -</strong> A anexação da península da Crimeia em 2014 e a subsequente invasão em larga escala do território ucraniano em 2022 representam uma contestação direta às premissas de integridade territorial consagradas na ordem de segurança europeia pós-Guerra Fria.</p>
+                    <p><strong>II -</strong> A expansão da Organização do Tratado do Atlântico Norte (OTAN) em direção ao Leste Europeu é interpretada pela doutrina de segurança de Moscou como uma ameaça existencial ao seu espaço de influência estratégica, servindo como uma das principais justificativas retóricas para a intervenção militar.</p>
+                    <p><strong>III -</strong> A resposta econômica das potências ocidentais ao conflito resultou em um realinhamento do mercado energético da União Europeia, caracterizado pela drástica redução na importação de gás natural por gasoduto de origem russa e pela consequente expansão da infraestrutura para recebimento de gás natural liquefeito (GNL) proveniente de fornecedores alternativos, como os Estados Unidos.</p>
+                    <p><strong>IV -</strong> A Geórgia e a Moldávia, devido à sua condição geográfica de neutralidade garantida por tratados multilaterais sob a égide direta da Organização das Nações Unidas (ONU), permanecem inteiramente imunes às pressões territoriais e à influência geopolítica da Federação Russa na região pós-soviética.</p>
+                </div>
+
+                <p class="font-medium text-slate-800 mb-4">Quais estão corretas?</p>
+
+                <div class="space-y-3" data-name="q1">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q1" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) Apenas I e II.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q1" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q1" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) Apenas I, II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q1" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) Apenas I, III e IV.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q1" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) I, II, III e IV.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q1" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: C)
+                    </h4>
+                    <p class="mb-3">
+                        <strong>I, II e III estão corretas.</strong> A anexação da Crimeia (2014) e o avanço em 2022 implodiram de fato o Acordo de Budapeste e as fronteiras soberanas do pós-Guerra Fria (I). A expansão da OTAN é o principal vetor militar de justificativa de segurança estratégica adotado por Moscou (II). O embargo ocidental provocou o abandono do tráfego de gás russo e impulsionou a adoção estrutural de GNL americano no mercado europeu (III).
+                    </p>
+                    <p>
+                        A <strong>IV está incorreta</strong> porque tanto Geórgia quanto Moldávia não possuem neutralidade pacífica garantida pela ONU; sofrem historicamente com a ocupação russa e conflitos congelados (como a Transnístria na Moldávia, e Abecásia/Ossétia do Sul na Geórgia), gerando permanente vulnerabilidade regional.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 2 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="2">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 02</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold font-semibold">Associação de Colunas</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    As tensões territoriais e os movimentos de caráter separatista no século XXI refletem a complexa interação entre identidades étnico-culturais históricas, interesses econômicos regionais e a busca por autonomia política perante governos centrais. Numere a segunda coluna de acordo com a primeira, associando adequadamente os territórios sob tensão ou disputa geopolítica contemporânea às suas respectivas características estruturais:
+                </p>
+
+                <!-- Colunas de Associação -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <p class="font-bold text-slate-700 border-b border-slate-200 pb-1 mb-2">Primeira Coluna</p>
+                        <p><strong>(1)</strong> Região Autônoma de Xinjiang</p>
+                        <p><strong>(2)</strong> Transnístria</p>
+                        <p><strong>(3)</strong> Alto Karabakh (Nagorno-Karabakh)</p>
+                        <p><strong>(4)</strong> Catalunha</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
+                        <p class="font-bold text-slate-700 border-b border-slate-200 pb-1 mb-2">Segunda Coluna</p>
+                        <p><strong>( &nbsp; )</strong> Enclave territorial situado em território moldavo, de maioria demográfica russófona, que declarou independência unilateral após o colapso da União Soviética e que mantém, até a atualidade, um status de conflito congelado com o apoio de forças militares russas estacionadas na região.</p>
+                        <p><strong>( &nbsp; )</strong> Região montanhosa localizada no Cáucaso Meridional, foco de disputas bélicas intensas entre a Armênia e o Azerbaijão, cuja soberania de facto foi alterada recentemente após operações militares que culminaram na dissolução das instituições governamentais locais e no êxodo de sua população armênia histórica.</p>
+                        <p><strong>( &nbsp; )</strong> Comunidade autônoma de elevado dinamismo econômico e industrial no sudoeste europeu, cujas demandas por emancipação política em relação ao governo central culminaram na realização de referendos de autodeterminação considerados inconstitucionais pelo poder judiciário nacional.</p>
+                        <p><strong>( &nbsp; )</strong> Território de vasta extensão na Ásia Central sob administração de uma potência asiática, marcado por tensões étnicas recorrentes envolvendo a minoria muçulmana uigur e por acusações internacionais de violações de direitos humanos associadas a políticas estatais de segurança e integração demográfica.</p>
+                    </div>
+                </div>
+
+                <p class="font-medium text-slate-800 mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+
+                <div class="space-y-3" data-name="q2">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q2" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) 2 – 3 – 4 – 1.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q2" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) 3 – 1 – 4 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q2" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) 2 – 4 – 3 – 1.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q2" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) 1 – 2 – 4 – 3.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q2" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) 4 – 3 – 2 – 1.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q2" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: A)
+                    </h4>
+                    <p class="mb-2">
+                        A correlação correta baseia-se nas seguintes localizações e características geopolíticas:
+                    </p>
+                    <ul class="list-disc list-inside space-y-1 mb-2">
+                        <li><strong>(2) Transnístria:</strong> Situa-se na Moldávia, tem maioria russófona e forças russas instaladas.</li>
+                        <li><strong>(3) Alto Karabakh:</strong> Cáucaso Meridional, centro de guerra de longa duração Armênia x Azerbaijão, recentemente reintegrado pelo Azerbaijão com êxodo de armênios em 2023.</li>
+                        <li><strong>(4) Catalunha:</strong> Região rica do nordeste da Espanha, de forte industrialização, que realizou referendo inconstitucional de autodeterminação em 2017.</li>
+                        <li><strong>(1) Xinjiang:</strong> Noroeste da China, território uigur (muçulmano) com relatos de monitoramento estatal intenso e repressão internacionalmente debatida.</li>
+                    </ul>
+                    <p>A sequência obtida é <strong>2 - 3 - 4 - 1</strong>.</p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 3 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="3">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 03</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Preenchimento de Lacunas</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    As chamadas guerras por procuração (<em>proxy wars</em>) representam um mecanismo de projeção de poder amplamente utilizado por potências globais e regionais no século XXI, permitindo a disputa de áreas de influência estratégica sem o confronto militar direto entre os Estados patrocinadores. Assinale a alternativa que preenche, correta e respectivamente, as lacunas do fragmento de texto abaixo, referente ao cenário de conflito no Oriente Médio:
+                </p>
+
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-6 text-sm md:text-base text-slate-700 leading-relaxed italic">
+                    "O conflito civil instalado no Iêmen ao longo da última década converteu-se em uma complexa arena de disputa por procuração, opondo os interesses geopolíticos da <span class="border-b-2 border-slate-400 px-4 py-0.5 bg-slate-100 not-italic font-bold text-indigo-700">__________</span>, que lidera uma coalizão militar de suporte ao governo oficialmente reconhecido, aos do <span class="border-b-2 border-slate-400 px-4 py-0.5 bg-slate-100 not-italic font-bold text-indigo-700">__________</span>, patrocinador da milícia insurgente de orientação xiita conhecida como Houthi. Para além do severo impacto humanitário sobre a sociedade civil, a instabilidade na região adquiriu contornos econômicos globais devido a ataques sistemáticos perpetrados pelos insurgentes contra a navegação mercantil no <span class="border-b-2 border-slate-400 px-4 py-0.5 bg-slate-100 not-italic font-bold text-indigo-700">__________</span>, um dos principais pontos de estrangulamento (<em>chokepoints</em>) do comércio marítimo internacional."
+                </div>
+
+                <div class="space-y-3" data-name="q3">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q3" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) Turquia – Egito – Estreito de Ormuz</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q3" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) Arábia Saudita – Irã – Estreito de Bab-el-Mandeb</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q3" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) Arábia Saudita – Turquia – Canal de Suez</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q3" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) Irã – Arábia Saudita – Estreito de Ormuz</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q3" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) Síria – Irã – Estreito de Bab-el-Mandeb</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q3" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: B)
+                    </h4>
+                    <p>
+                        A guerra do Iêmen opõe a coalizão liderada pela <strong>Arábia Saudita</strong> (potência sunita que apoia o governo deposto) ao <strong>Irã</strong> (teocracia xiita patrocinadora dos Houthis). A atuação militar Houthi no sul do Mar Vermelho ocorre no <strong>Estreito de Bab-el-Mandeb</strong>, que regula o acesso ao Canal de Suez e é um gargalo comercial de altíssima relevância. Portanto, as lacunas são completadas corretamente por: Arábia Saudita – Irã – Estreito de Bab-el-Mandeb.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 4 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="4">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 04</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Identificação de Incorreta</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    O Mar do Sul da China converteu-se em um dos teatros de operações de maior fricção geopolítica do século XXI, envolvendo disputas de soberania territorial e o controle de recursos energéticos e pesqueiros em uma das principais artérias do comércio marítimo global. A respeito desse cenário de tensão internacional, assinale a alternativa <strong>INCORRETA</strong>:
+                </p>
+
+                <div class="space-y-3" data-name="q4">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q4" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) A República Popular da China fundamenta suas amplas reivindicações de soberania sobre a quase totalidade do espaço marítimo em questão por meio da chamada "Linha de Nove Traços", confrontando as zonas econômicas exclusivas de países do Sudeste Asiático.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q4" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) O processo de militarização conduzido por Pequim na região inclui a dragagem de recifes de coral e a construção de ilhas artificiais equipadas com pistas de pouso, hangares militares e sistemas de defesa aérea e de mísseis antinavio.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q4" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium"><strong class="text-indigo-600">C)</strong> O Tribunal Permanente de Arbitragem em Haia, ao analisar uma representação formal apresentada pelas Filipinas, emitiu uma sentença favorável à soberania histórica chinesa, validando a legitimidade jurídica da "Linha de Nove Traços" proposta por Pequim.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q4" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) Os Estados Unidos, embora não possuam reivindicações territoriais na região, realizam patrulhas navais regulares sob a denominação de Operações de Liberdade de Navegação (<em>Freedom of Navigation Operations</em> - FONOPs) para contestar as pretensões de controle marítimo chinesas.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q4" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) As disputas pelo controle das Ilhas Paracel e das Ilhas Spratly envolvem, além de questões de segurança nacional, o acesso prioritário a estimativas de reservas consideráveis de hidrocarbonetos na plataforma continental.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q4" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: C - INCORRETA)
+                    </h4>
+                    <p>
+                        A alternativa <strong>C está incorreta</strong> (e constitui o gabarito) porque em 2016 o Tribunal Permanente de Arbitragem em Haia emitiu parecer unânime <strong>desfavorável</strong> à China. O colegiado determinou que a "Linha de Nove Traços" não possuía sustentação de direito internacional público ou histórico, violando a Zona Econômica Exclusiva (ZEE) das Filipinas e de outras nações vizinhas. A decisão foi ostensivamente ignorada e rejeitada de forma unilateral por Pequim.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 5 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="5">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 05</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Julgamento de Itens</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    A economia política global no século XXI tem sido marcada pelo uso estratégico de sanções comerciais e financeiras como ferramentas de coerção em resposta a conflitos armados e violações de fronteiras soberanas. Considere as características abaixo:
+                </p>
+
+                <div class="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6 text-sm text-slate-700 leading-relaxed">
+                    <p><strong>I -</strong> A exclusão de instituições bancárias de um país do sistema internacional de mensagens de pagamento SWIFT e o congelamento de reservas cambiais custodiadas no exterior representam a consolidação da "armamentização" (<em>weaponization</em>) da infraestrutura financeira global.</p>
+                    <p><strong>II -</strong> A imposição de sanções de elevada severidade pelas potências ocidentais estimulou o desenvolvimento de sistemas alternativos de compensação financeira e o avanço de iniciativas de desdolarização do comércio exterior por parte de países emergentes, notadamente no âmbito dos BRICS.</p>
+                    <p><strong>III -</strong> A elevada concentração geográfica da produção de semicondutores e o processamento de metais de terras raras conferem a determinadas nações uma alavancagem estratégica na cadeia global de suprimentos tecnológicos, operando como fatores de vulnerabilidade no comércio mundial.</p>
+                    <p><strong>IV -</strong> A aplicação sistemática de sanções econômicas multilaterais tem demonstrado eficácia absoluta no século XXI, forçando a desocupação imediata e pacífica de territórios anexados militarmente por potências nucleares.</p>
+                </div>
+
+                <p class="font-medium text-slate-800 mb-4">Quais estão corretas?</p>
+
+                <div class="space-y-3" data-name="q5">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q5" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) Apenas I e II.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q5" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q5" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) Apenas I, II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q5" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) Apenas I, III e IV.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q5" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) I, II, III e IV.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q5" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: C)
+                    </h4>
+                    <p class="mb-3">
+                        Os <strong>itens I, II e III são inteiramente corretos.</strong> O uso coordenado do SWIFT e o bloqueio de reservas russas demonstrou como nós estruturais do sistema financeiro foram transformados em recursos defensivos ("weaponization" do dólar e canais mercantis) (I). Esse movimento acelerou a busca de potências médias por desdolarização (II). A dependência estrutural em torno de microchips de Taiwan e terras raras processadas na Ásia gera gargalos profundos nas cadeias (III).
+                    </p>
+                    <p>
+                        O <strong>item IV está incorreto</strong> por conta do termo absoluto "demonstrado eficácia absoluta" e do resultado "forçando desocupação imediata". Casos empíricos (como Ucrânia e Crimeia) evidenciam que sanções severas causam estresse financeiro prolongado, mas não detêm unilateralmente ou imediatamente dinâmicas agressivas de Estados com armamento nuclear.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 6 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="6">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 06</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Identificação de Incorreta</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    A faixa geográfica do Sahel africano consolidou-se, nas primeiras décadas do século XXI, como uma das áreas de maior instabilidade multidimensional do planeta, caracterizada por crises de governabilidade, violência extremista e dinâmicas de exclusão social. Sobre a dinâmica de conflitos, sociedade e geopolítica na região do Sahel, assinale a alternativa <strong>INCORRETA</strong>:
+                </p>
+
+                <div class="space-y-3" data-name="q6">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q6" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) A fragilidade institucional e a crise de representação política na região foram evidenciadas pela ocorrência de sucessivos golpes de Estado conduzidos por juntas militares em nações como Mali, Burkina Faso e Níger.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q6" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) A consolidação de facções armadas associadas a redes terroristas transnacionais, como a Al-Qaeda e o Estado Islâmico, atua como vetor de desestabilização territorial e agravamento de crises de deslocados internos e refugiados.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q6" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) As tensões geopolíticas locais provocaram uma reconfiguração diplomática profunda, marcada pela saída formal de Mali, Burkina Faso e Níger da Comunidade Econômica dos Estados da África Ocidental (CEDEAO) e pela fundação da Aliança dos Estados do Sahel (AES).</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q6" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium"><strong class="text-indigo-600">D)</strong> As dinâmicas de violência no Sahel possuem motivações exclusivamente étnico-religiosas e históricas, mantendo-se inteiramente dissociadas de fatores biogeográficos, como o processo de desertificação e as disputas pelo acesso à água induzidas pelas mudanças climáticas.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q6" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) O declínio da cooperação militar clássica com potências ocidentais, em especial com a França, abriu espaço para a ampliação de acordos de segurança com a Federação Russa, com forte atuação de forças militares privadas e instrutores de segurança na região.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q6" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: D - INCORRETA)
+                    </h4>
+                    <p>
+                        A alternativa <strong>D está incorreta</strong> (e constitui o gabarito) porque as tensões no Sahel estão <strong>intimamente ligadas</strong> a fatores socioambientais e climáticos. O avanço acelerado da desertificação, a perda de terras férteis e a diminuição severa de recursos hídricos na borda do Saara intensificam disputas históricas por pasto e água entre pastores nômades e agricultores sedentários. Portanto, categorizar as crises do Sahel como puramente étnicas ou dissociadas do clima é um grave erro geográfico.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 7 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="7">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 07</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Preenchimento de Lacunas</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    Assinale a alternativa que preenche, correta e respectivamente, as lacunas do texto abaixo, referente às transformações no conflito israelense-palestino e na dinâmica de segurança regional do Oriente Médio no século XXI:
+                </p>
+
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200 mb-6 text-sm md:text-base text-slate-700 leading-relaxed italic">
+                    "A dinâmica política interna palestina caracteriza-se por uma fragmentação administrativa e geográfica, na qual o grupo de orientação islâmica <span class="border-b-2 border-slate-400 px-4 py-0.5 bg-slate-100 not-italic font-bold text-indigo-700">__________</span> exerce o controle de facto sobre a Faixa de Gaza desde 2007, enquanto a facção secular e nacionalista Fatah atua de forma limitada na governança da Cisjordânia sob a estrutura da <span class="border-b-2 border-slate-400 px-4 py-0.5 bg-slate-100 not-italic font-bold text-indigo-700">__________</span>. Paralelamente, a diplomacia do Oriente Médio foi reconfigurada pela assinatura dos <span class="border-b-2 border-slate-400 px-4 py-0.5 bg-slate-100 not-italic font-bold text-indigo-700">__________</span>, que promoveram a normalização das relações oficiais de Israel com nações árabes como os Emirados Árabes Unidos e o Bahrein, contornando a exigência prévia de resolução da questão da soberania palestina."
+                </div>
+
+                <div class="space-y-3" data-name="q7">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q7" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) Hamas – Organização de Libertação da Palestina – Acordos de Oslo</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q7" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) Hamas – Autoridade Nacional Palestina (ANP) – Acordos de Abraão</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q7" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) Hesbolá – Autoridade Nacional Palestina (ANP) – Acordos de Camp David</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q7" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) Hesbolá – Liga Árabe – Acordos de Abraão</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q7" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) Hamas – Autoridade Nacional Palestina (ANP) – Acordos de Oslo</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q7" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: B)
+                    </h4>
+                    <p>
+                        A primeira lacuna exige o nome do grupo **Hamas**, que controla a Faixa de Gaza administrativamente desde os atritos civis de 2007. A segunda refere-se à **Autoridade Nacional Palestina (ANP)**, órgão secular limitado à Cisjordânia. A terceira aborda os acordos de normalização com nações do Golfo (EAU e Bahrein) ocorridos em 2020 sob fomento norte-americano, denominados **Acordos de Abraão**.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 8 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="8">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 08</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Associação de Colunas</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    As disputas por fronteiras internacionais e o controle de porções geográficas de elevado valor estratégico ou econômico continuam a produzir episódios de atrito diplomático e escalada militar no cenário global contemporâneo. Numere a segunda coluna de acordo com a primeira, correlacionando adequadamente as regiões fronteiriças disputadas ou reivindicadas às suas respectivas descrições geopolíticas:
+                </p>
+
+                <!-- Colunas de Associação -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm">
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
+                        <p class="font-bold text-slate-700 border-b border-slate-200 pb-1 mb-2">Primeira Coluna</p>
+                        <p><strong>(1)</strong> Região do Essequibo</p>
+                        <p><strong>(2)</strong> Estreito de Taiwan</p>
+                        <p><strong>(3)</strong> Caxemira</p>
+                        <p><strong>(4)</strong> Ilhas Curilas</p>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
+                        <p class="font-bold text-slate-700 border-b border-slate-200 pb-1 mb-2">Segunda Coluna</p>
+                        <p><strong>( &nbsp; )</strong> Território sob administração russa cuja soberania é reivindicada pelo governo japonês, referida historicamente como os Territórios do Norte, disputa que tem obstaculizado o estabelecimento formal de um tratado de paz de longo prazo entre as duas potências desde o fim da Segunda Guerra Mundial.</p>
+                        <p><strong>( &nbsp; )</strong> Região montanhosa situada no sul da Ásia, dividida por uma linha de controle provisório e militarizada de modo ostensivo, cuja soberania é disputada historicamente por duas potências dotadas de capacidade bélica nuclear.</p>
+                        <p><strong>( &nbsp; )</strong> Área rica em biodiversidade e recursos energéticos em águas territoriais adjacentes sob jurisdição administrativa da Guiana, a qual tem sido alvo de contestações diplomáticas renovadas e ações de pressão militar por parte do governo da Venezuela.</p>
+                        <p><strong>( &nbsp; )</strong> Espaço marítimo estratégico onde se cruzam fluxos vitais do comércio tecnológico e cujas tensões estão associadas às reivindicações de unificação territorial por parte de uma potência asiática, gerando recorrentes manobras navais preventivas na região da Ásia-Pacífico.</p>
+                    </div>
+                </div>
+
+                <p class="font-medium text-slate-800 mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+
+                <div class="space-y-3" data-name="q8">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q8" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) 4 – 3 – 1 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q8" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) 3 – 4 – 1 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q8" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) 4 – 1 – 3 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q8" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) 1 – 3 – 4 – 2.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q8" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) 3 – 4 – 2 – 1.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q8" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: A)
+                    </h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>(4) Ilhas Curilas:</strong> Disputa histórica herdada entre Rússia e Japão (Territórios do Norte) impedindo assinatura formal de paz perpétua pós-1945.</li>
+                        <li><strong>(3) Caxemira:</strong> Zona de montanha no norte do subcontinente indiano disputada por duas superpotências nucleares (Índia e Paquistão).</li>
+                        <li><strong>(1) Região do Essequibo:</strong> Litígio centenário reaceso pela Venezuela contra o território gerido administrativamente pela Guiana, rico em petróleo.</li>
+                        <li><strong>(2) Estreito de Taiwan:</strong> Ponto focal de tráfego de semicondutores e canais de exportação sob risco permanente de unificação bélica de Pequim.</li>
+                    </ul>
+                    <p class="mt-2">A sequência exata de cima para baixo é <strong>4 – 3 – 1 – 2</strong>.</p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 9 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="9">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 09</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Julgamento de Itens</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    A evolução tecnológica militar no século XXI alterou profundamente a doutrina de segurança de diversos Estados Nacionais, promovendo a convergência entre táticas de combate tradicionais e ações no domínio digital. A respeito do emprego de operações cibernéticas e da guerra híbrida no mundo contemporâneo, considere as características abaixo:
+                </p>
+
+                <div class="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-200 mb-6 text-sm text-slate-700 leading-relaxed">
+                    <p><strong>I -</strong> A guerra híbrida articula, de forma coordenada e sem a necessidade de uma declaração formal de conflito armado, recursos de agressão convencional, táticas de desinformação cibernética, pressões de caráter energético e ações de desestabilização política interna.</p>
+                    <p><strong>II -</strong> Ataques digitais patrocinados por agências estatais ou operados por procuradores cibernéticos (<em>cyber proxies</em>) têm como alvo prioritário a infraestrutura crítica de nações adversárias, comprometendo o funcionamento de redes elétricas, sistemas de tráfego aéreo e comunicações governamentais.</p>
+                    <p><strong>III -</strong> As operações de desinformação em massa, amplificadas por algoritmos de redes sociais e inteligência artificial, atuam como instrumentos contemporâneos de projeção de poder geopolítico, visando fraturar a coesão social e a confiança institucional no interior de sociedades soberanas.</p>
+                    <p><strong>IV -</strong> O direito internacional humanitário clássico, estruturado a partir das Convenções de Genebra, oferece diretrizes de aplicação imediata, inequívoca e autoexecutável para todos os atos de hostilidade conduzidos exclusivamente no domínio virtual, tornando irrelevante a criação de novos tratados sobre cibersegurança.</p>
+                </div>
+
+                <p class="font-medium text-slate-800 mb-4">Quais estão corretas?</p>
+
+                <div class="space-y-3" data-name="q9">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q9" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) Apenas I e II.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q9" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) Apenas II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q9" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">C) Apenas I, II e III.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q9" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) Apenas I, III e IV.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q9" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) I, II, III e IV.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q9" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: C)
+                    </h4>
+                    <p class="mb-3">
+                        <strong>Os itens I, II e III são verdadeiros.</strong> O conceito de guerra híbrida une canais de fomento e pressão de forma cinzenta (sem formalização de guerra direta) (I). Alvos prioritários de infraestrutura crítica (portos, energia, comunicações) são atacados recorrentemente via ransomwares ou malwares sofisticados operados por procuradores (II). E as redes sociais tornaram-se domínios táticos informacionais de polarização social artificialmente fomentada (III).
+                    </p>
+                    <p>
+                        O <strong>item IV é manifestamente falso</strong> pois o arcabouço jurídico clássico das Convenções de Genebra de 1949 deparou-se com imensos vazios conceituais no ciberespaço (questões de anonimato, atribuição de autoria, e o que define um 'ataque' e uma 'baixa' em sistemas informáticos), exigindo discussões inovadoras constantes no plano de segurança global.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 10 -->
+            <div class="question-card bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8 transition-all hover:border-slate-300" data-qindex="10">
+                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+                    <span class="text-indigo-600 font-bold text-lg">Questão 10</span>
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Múltipla Escolha</span>
+                </div>
+                
+                <p class="text-slate-800 font-normal leading-relaxed text-base md:text-lg mb-4">
+                    As dinâmicas associadas às mudanças climáticas globais atuam frequentemente como multiplicadoras de ameaças, alterando as condições de acesso a recursos escassos e abrindo novas fronteiras para a competição econômica e estratégica internacional. O recuo sistemático das calotas de gelo no Oceano Glacial Ártico ao longo do século XXI tem produzido o seguinte desdobramento geopolítico imediato:
+                </p>
+
+                <div class="space-y-3" data-name="q10">
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q10" value="A" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">A) A desmilitarização completa do Polo Norte, imposta por consenso no comitê de segurança da ONU com vistas a preservar as espécies marinhas endêmicas.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q10" value="B" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">B) A eliminação das disputas de soberania marítima entre os países do Conselho do Ártico, que acordaram em ceder a jurisdição territorial da região a um consórcio científico internacional.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q10" value="C" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium"><strong class="text-indigo-600">C)</strong> O acirramento das disputas estratégicas e jurídicas pelo controle de novas rotas de navegação comercial marítima, como a Rota do Norte, e pelo acesso a extensas jazidas de combustíveis fósseis localizadas na plataforma continental ártica.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q10" value="D" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">D) A redução do interesse geopolítico da China na porção setentrional do planeta, devido ao foco estratégico exclusivo de Pequim na expansão de corredores terrestres na Ásia Central.</span>
+                    </label>
+                    <label class="option-label flex items-start p-4 border border-slate-200 rounded-lg cursor-pointer hover:bg-indigo-50/50 hover:border-indigo-300 transition gap-3">
+                        <input type="radio" name="q10" value="E" class="mt-1 h-4 w-4 text-indigo-600 border-slate-300 focus:ring-indigo-500">
+                        <span class="text-sm md:text-base text-slate-700 font-medium">E) O abandono das reivindicações de ampliação da plataforma continental por parte da Federação Russa e dos Estados Unidos face à assinatura de moratórias ambientais globais compulsórias sobre combustíveis fósseis.</span>
+                    </label>
+                </div>
+
+                <!-- Resolução Oculta -->
+                <div id="res-q10" class="hidden mt-6 bg-amber-50/50 border-l-4 border-amber-500 p-5 rounded-r-lg text-slate-700 text-sm leading-relaxed resolution-box">
+                    <h4 class="font-bold text-amber-800 text-base mb-2 flex items-center gap-1.5">
+                        <svg class="w-5 h-5 text-amber-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></svg>
+                        Resolução & Justificativa (Gabarito: C)
+                    </h4>
+                    <p>
+                        A alternativa <strong>C é correta</strong> porque o degelo contínuo abriu vias cruciais de tráfego, como a Rota do Norte (ao longo da Sibéria), poupando tempo em relação ao Canal de Suez. Adicionalmente, estimativas indicam que a plataforma continental ártica encerra cerca de 22% dos recursos energéticos fósseis globais não mapeados, acirrando disputas jurídicas territoriais entre Rússia, Canadá, EUA, Dinamarca e Noruega.
+                    </p>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 no-print border-t border-slate-200 mt-12">
+                <button type="button" onclick="confirmReset()" class="w-full sm:w-auto px-6 py-3 border border-slate-300 rounded-lg hover:bg-slate-100 text-slate-700 font-medium transition active:scale-[0.98]">
+                    Reiniciar Simulado
+                </button>
+                <button type="button" onclick="handleSubmit()" id="submit-btn" class="w-full sm:w-auto px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition transform active:scale-[0.98]">
+                    Finalizar e Corrigir Simulado
+                </button>
+            </div>
+        </form>
+
+        <section id="results-section" class="hidden mt-12 bg-white rounded-xl border border-indigo-100 shadow-xl p-6 md:p-8 space-y-6 scroll-mt-24">
+            <div class="text-center border-b border-slate-100 pb-6">
+                <div class="inline-flex p-3 rounded-full bg-indigo-50 text-indigo-600 mb-3">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-extrabold text-slate-900">Resultado do Seu Simulado</h3>
+                <p class="text-slate-500 mt-1">Sua correção personalizada baseada nos critérios de prova FAURGS</p>
+                
+                <!-- Placar -->
+                <div class="mt-6 inline-flex items-baseline space-x-2 bg-slate-50 px-6 py-4 rounded-2xl border border-slate-200">
+                    <span id="score-correct" class="text-4xl md:text-5xl font-black text-indigo-600">0</span>
+                    <span class="text-xl text-slate-400 font-semibold">/ 10 acertos</span>
+                </div>
+                
+                <div class="mt-4 text-base font-semibold" id="feedback-rating"></div>
+            </div>
+
+            <!-- Painel de Filtro de Perguntas -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 bg-slate-50 p-4 rounded-lg border border-slate-200 no-print">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Filtrar Questões</span>
+                <div class="flex flex-wrap gap-2">
+                    <button type="button" onclick="filterQuestions('all')" id="btn-filter-all" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-sm transition">Todas</button>
+                    <button type="button" onclick="filterQuestions('correct')" id="btn-filter-correct" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-600 hover:bg-slate-300 transition">Acertos</button>
+                    <button type="button" onclick="filterQuestions('incorrect')" id="btn-filter-incorrect" class="px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-600 hover:bg-slate-300 transition">Erros</button>
+                </div>
+            </div>
+
+            <div class="pt-4 flex flex-col sm:flex-row gap-4 justify-center no-print">
+                <button type="button" onclick="window.print()" class="px-6 py-2.5 border border-indigo-200 text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg text-sm font-medium transition inline-flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-3a2 2 0 00-2-2H9a2 2 0 00-2 2v3a2 2 0 002 2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14"></path></svg>
+                    Imprimir Simulado / Salvar PDF
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <div id="confirm-modal" class="hidden fixed inset-0 z-50 overflow-y-auto no-print" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-amber-100 text-amber-600 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-bold text-slate-900" id="modal-title">Questões Pendentes</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-slate-500" id="modal-text">Você não respondeu a todas as questões. Deseja finalizar o simulado mesmo assim?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
+                    <button type="button" onclick="forceSubmit()" class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-semibold text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">Finalizar Mesmo Assim</button>
+                    <button type="button" onclick="closeModal()" class="mt-3 w-full inline-flex justify-center rounded-lg border border-slate-300 shadow-sm px-4 py-2 bg-white text-base font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm">Continuar Respondendo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 text-center text-xs mt-20">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-slate-300">Simulado: O Mundo Contemporâneo e Conflitos Armados</p>
+            <p>Elaborado em consonância estrita com as tendências metodológicas da banca FAURGS.</p>
+            <p class="text-slate-500">&copy; 2026. Feito com foco em performance acadêmica e usabilidade.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gabarito oficial mapeado
+        const answersTemplate = {
+            q1: "C",
+            q2: "A",
+            q3: "B",
+            q4: "C",
+            q5: "C",
+            q6: "D",
+            q7: "B",
+            q8: "A",
+            q9: "C",
+            q10: "C"
+        };
+
+        let userSelection = {};
+        let examSubmitted = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => {
+                input.addEventListener('change', (e) => {
+                    const qName = e.target.name;
+                    const qValue = e.target.value;
+                    userSelection[qName] = qValue;
+
+                    // Destaca visualmente o card selecionado
+                    const parentLabels = document.querySelectorAll(`[data-name="${qName}"] .option-label`);
+                    parentLabels.forEach(label => label.classList.remove('option-checked'));
+                    e.target.closest('.option-label').classList.add('option-checked');
+
+                    updateProgress();
+                });
+            });
+        });
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userSelection).length;
+            const progressPct = (answeredCount / 10) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+            document.getElementById('progress-text').innerText = `${answeredCount} / 10 respondidas`;
+        }
+
+        function handleSubmit() {
+            if (examSubmitted) return;
+            
+            const answeredCount = Object.keys(userSelection).length;
+            if (answeredCount < 10) {
+                const pending = 10 - answeredCount;
+                document.getElementById('modal-text').innerText = `Você deixou ${pending} questão(ões) sem resposta. Deseja realmente finalizar o simulado e receber a nota agora?`;
+                document.getElementById('confirm-modal').classList.remove('hidden');
+            } else {
+                processResults();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+
+        function forceSubmit() {
+            closeModal();
+            processResults();
+        }
+
+        function processResults() {
+            examSubmitted = true;
+            let score = 0;
+
+            // Desabilita novas edições nos inputs
+            const inputs = document.querySelectorAll('input[type="radio"]');
+            inputs.forEach(input => input.disabled = true);
+
+            // Mapeia correção por card de questão
+            const cards = document.querySelectorAll('.question-card');
+            cards.forEach(card => {
+                const qNum = card.getAttribute('data-qindex');
+                const qKey = `q${qNum}`;
+                const userChoice = userSelection[qKey];
+                const correctAnswer = answersTemplate[qKey];
+
+                const isCorrect = userChoice === correctAnswer;
+                if (isCorrect) score++;
+
+                // Marca os cards com status de acerto/erro
+                card.setAttribute('data-result', isCorrect ? 'correct' : 'incorrect');
+
+                // Revela a Resolução Detalhada integrada no card
+                const resBox = document.getElementById(`res-q${qNum}`);
+                if (resBox) {
+                    resBox.classList.remove('hidden');
+                }
+
+                // Customização visual das opções (Sucesso/Erro)
+                const optionsGroup = card.querySelectorAll('.option-label');
+                optionsGroup.forEach(label => {
+                    const radio = label.querySelector('input[type="radio"]');
+                    const value = radio.value;
+
+                    // Remove estilo de hover padrão
+                    label.classList.remove('hover:bg-indigo-50/50', 'hover:border-indigo-300', 'cursor-pointer');
+                    label.classList.add('cursor-default');
+
+                    if (value === correctAnswer) {
+                        // Resposta correta sempre fica em verde
+                        label.classList.add('border-green-500', 'bg-green-50', 'text-green-900');
+                        label.classList.remove('option-checked');
+                        label.innerHTML += `<span class="ml-auto text-green-600 font-bold text-xs uppercase tracking-wider flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></svg>
+                            Gabarito</span>`;
+                    } else if (value === userChoice && !isCorrect) {
+                        // Se o usuário escolheu incorretamente, pinta em vermelho
+                        label.classList.add('border-red-400', 'bg-red-50', 'text-red-900');
+                        label.classList.remove('option-checked');
+                        label.innerHTML += `<span class="ml-auto text-red-500 font-bold text-xs uppercase tracking-wider flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414 0L10 9.586 8.293 7.879a1 1 0 00-1.414 1.414L8.586 11l-1.707 1.707a1 1 0 001.414 1.414L10 12.414l1.707 1.707a1 1 0 001.414-1.414L11.414 11l1.707-1.707a1 1 0 000-1.414z" clip-rule="evenodd"></svg>
+                            Sua Escolha</span>`;
+                    }
+                });
+            });
+
+            document.getElementById('score-correct').innerText = score;
+            
+            const ratingText = document.getElementById('feedback-rating');
+            if (score === 10) {
+                ratingText.innerHTML = `<span class="text-green-600">★ Desempenho Excepcional!</span> Você dominou totalmente as nuances da banca FAURGS.`;
+            } else if (score >= 8) {
+                ratingText.innerHTML = `<span class="text-indigo-600">★ Excelente Rendimento!</span> Excelente base analítica. Pronto para a concorrência real.`;
+            } else if (score >= 5) {
+                ratingText.innerHTML = `<span class="text-amber-600">✦ Bom Desempenho!</span> Bom progresso, mas revise as pegadinhas e os comentários de cada erro.`;
+            } else {
+                ratingText.innerHTML = `<span class="text-red-600">✦ Precisa de Reforço!</span> Revise as leituras e as resoluções detalhadas com atenção redobrada.`;
+            }
+
+            document.getElementById('results-section').classList.remove('hidden');
+            document.getElementById('submit-btn').classList.add('hidden');
+
+            // Scroll suave automático para o painel de notas
+            setTimeout(() => {
+                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+            }, 300);
+        }
+
+        function filterQuestions(filterType) {
+            const cards = document.querySelectorAll('.question-card');
+            
+            // Gerencia classes ativas nos botões de filtro
+            const buttons = {
+                all: document.getElementById('btn-filter-all'),
+                correct: document.getElementById('btn-filter-correct'),
+                incorrect: document.getElementById('btn-filter-incorrect')
+            };
+
+            Object.keys(buttons).forEach(key => {
+                if (key === filterType) {
+                    buttons[key].className = "px-4 py-1.5 rounded-full text-xs font-semibold bg-indigo-600 text-white shadow-sm transition";
+                } else {
+                    buttons[key].className = "px-4 py-1.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-600 hover:bg-slate-300 transition";
+                }
+            });
+
+            // Filtra os cards
+            cards.forEach(card => {
+                const status = card.getAttribute('data-result');
+                if (filterType === 'all') {
+                    card.classList.remove('hidden');
+                } else if (filterType === 'correct' && status === 'correct') {
+                    card.classList.remove('hidden');
+                } else if (filterType === 'incorrect' && status === 'incorrect') {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+
+        function confirmReset() {
+            if (confirm('Deseja realmente reiniciar todo o simulado e limpar suas respostas?')) {
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
