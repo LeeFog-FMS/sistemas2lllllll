@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Interativo: Geografia do Brasil e Santa Catarina</title>
+    <!-- Tailwind CSS para estilização moderna e ágil -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para alta legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 para evitar o brilho do branco puro */
+        }
+        /* Ajuste fino para leitura confortável: limite de largura de linha para texto corrido */
+        .readable-text {
+            max-width: 75ch;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+        <div class="max-w-6xl mx-auto px-4 py-4 sm:py-5 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 mb-1">
+                    Banca FAURGS • Nível Superior/Médio
+                </span>
+                <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Simulado de Geografia</h1>
+                <p class="text-xs sm:text-sm text-slate-500 mt-0.5">Organização Regional do Brasil & Geografia de Santa Catarina</p>
+            </div>
+            
+            <!-- Painel de Progresso / Timer Superior -->
+            <div class="flex items-center gap-4 w-full sm:w-auto justify-end">
+                <div class="text-right hidden md:block">
+                    <p class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Tempo Decorrido</p>
+                    <p id="timer" class="text-lg font-mono font-bold text-slate-700">00:00:00</p>
+                </div>
+                <div class="h-10 w-[1px] bg-slate-200 hidden md:block"></div>
+                <div class="w-full sm:w-auto">
+                    <button id="btn-submit-top" onclick="checkQuiz(true)" class="w-full sm:w-auto px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-sm transition duration-150 flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        Finalizar Simulado
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Barra de Progresso Real do Quiz -->
+        <div class="w-full bg-slate-100 h-1.5 overflow-hidden">
+            <div id="quiz-progress-bar" class="bg-indigo-600 h-1.5 transition-all duration-300" style="width: 0%"></div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Bloco Esquerdo: Questões -->
+        <section class="lg:col-span-8 flex flex-col gap-8">
+            
+            <!-- Introdução do Simulado -->
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 rounded-2xl shadow-sm relative overflow-hidden">
+                <div class="absolute right-0 bottom-0 opacity-10 pointer-events-none transform translate-y-8 translate-x-8">
+                    <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h-2v2h2v4H9v2h6v-2zm-1-8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"></path></svg>
+                </div>
+                <h2 class="text-lg font-semibold mb-1">Simulado Modelo FAURGS</h2>
+                <p class="text-slate-300 text-sm leading-relaxed max-w-2xl">
+                    Este simulado contém exatamente as mesmas 10 questões detalhadas do seu caderno de estudos. Teste os seus conhecimentos com marcação dinâmica e confira o gabarito comentado aprofundado logo após concluir.
+                </p>
+                <div class="mt-4 flex flex-wrap gap-4 text-xs text-slate-300">
+                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 10 Questões de Múltipla Escolha</span>
+                    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-indigo-400"></span> Correção em Tempo Real</span>
+                </div>
+            </div>
+
+            <!-- Toast de Alerta Interno (Substitui o alert()) -->
+            <div id="custom-alert" class="hidden transform translate-y-2 transition-all duration-300 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-xs">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-amber-800" id="custom-alert-title">Atenção</p>
+                        <p class="text-xs text-amber-700 mt-1" id="custom-alert-msg">Por favor, responda a todas as questões antes de finalizar o simulado.</p>
+                    </div>
+                    <button onclick="hideAlert()" class="ml-auto text-amber-600 hover:text-amber-800">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contêiner Dinâmico de Questões -->
+            <div id="questions-container" class="flex flex-col gap-8">
+                <!-- Carregado dinamicamente via JS -->
+            </div>
+
+            <!-- Botão de Ação de Final de Página -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 text-center shadow-xs">
+                <h3 class="text-slate-800 font-semibold text-lg mb-1">Revisou todas as respostas?</h3>
+                <p class="text-slate-500 text-sm mb-4">Clique no botão abaixo para calcular o seu percentual e ler as resoluções detalhadas.</p>
+                <div class="flex justify-center gap-4">
+                    <button id="btn-submit-bottom" onclick="checkQuiz(true)" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-sm transition duration-150 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        Finalizar e Revelar Resoluções
+                    </button>
+                    <button id="btn-reset" onclick="resetQuiz()" class="hidden px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition duration-150">
+                        Reiniciar Simulado
+                    </button>
+                </div>
+            </div>
+
+            <div id="material-apoio" class="hidden bg-slate-100 border border-slate-200 rounded-2xl p-6 transition-all duration-300">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="bg-indigo-100 text-indigo-700 p-2.5 rounded-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Material de Apoio e Revisão Geral</h3>
+                        <p class="text-xs text-slate-500">Síntese Cartográfica, Climatológica e Industrial das Mesorregiões de SC</p>
+                    </div>
+                </div>
+                <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+                    <table class="w-full text-left text-xs sm:text-sm border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 border-b border-slate-200 text-slate-700 font-semibold">
+                                <th class="p-3">Mesorregião</th>
+                                <th class="p-3">Principais Centros</th>
+                                <th class="p-3">Clima Predominante</th>
+                                <th class="p-3">Base Econômico-Industrial</th>
+                                <th class="p-3">Logística & Portos</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-slate-600">
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">Norte Catarinense</td>
+                                <td class="p-3">Joinville, Jaraguá do Sul, São Bento do Sul</td>
+                                <td class="p-3">Subtropical Úmido (<span class="italic font-serif">Cfa</span>/Cfb)</td>
+                                <td class="p-3">Metal-mecânica, fundição, motores elétricos, polo moveleiro de exportação</td>
+                                <td class="p-3 font-medium">Porto de São Francisco do Sul, ferrovias litorâneas</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-semibold text-slate-900">Vale do Itajaí</td>
+                                <td class="p-3">Blumenau, Brusque, Itajaí, Navegantes</td>
+                                <td class="p-3">Subtropical Úmido (<span class="italic font-serif">Cfa</span>)</td>
+                                <td class="p-3">Setor têxtil/vestuário, fiação, química, polo de tecnologia de software</td>
+                                <td class="p-3 font-medium">Complexo Portuário do Rio Itajaí-Açu (Itajaí e Navegantes)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">Grande Florianópolis</td>
+                                <td class="p-3">Florianópolis, São José, Palhoça, Biguaçu</td>
+                                <td class="p-3">Subtropical Úmido Marítimo (<span class="italic font-serif">Cfa</span>)</td>
+                                <td class="p-3">Administração pública, tecnologia (TI), turismo litorâneo, comércio/serviços</td>
+                                <td class="p-3 font-medium">Aeroporto Internacional Hercílio Luz, Rodovia BR-101</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-semibold text-slate-900">Sul Catarinense</td>
+                                <td class="p-3">Criciúma, Tubarão, Araranguá, Imbituba</td>
+                                <td class="p-3">Subtropical Úmido (<span class="italic font-serif">Cfa</span> frentes polares)</td>
+                                <td class="p-3">Carvão mineral, revestimentos cerâmicos, plásticos descartáveis, metalurgia leve</td>
+                                <td class="p-3 font-medium">Porto de Imbituba (cargas de granéis e contêineres)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900">Oeste e Meio-Oeste</td>
+                                <td class="p-3">Chapecó, Concórdia, Joaçaba, Xanxerê, Caçador</td>
+                                <td class="p-3">Subtropical Mesotérmico (<span class="italic font-serif">Cfa</span>/Cfb)</td>
+                                <td class="p-3">Complexo agroalimentar de aves/suínos integrados, grãos, silvicultura</td>
+                                <td class="p-3 font-medium">Complexo rodoviário (BR-282 e BR-153) aos portos de leste</td>
+                            </tr>
+                            <tr class="bg-slate-50/50">
+                                <td class="p-3 font-semibold text-slate-900">Planalto Serrano</td>
+                                <td class="p-3">Lages, São Joaquim, Curitibanos</td>
+                                <td class="p-3">Subtropical de Altitude (<span class="italic font-serif">Cfb</span> geada/neve)</td>
+                                <td class="p-3">Madeira, papel/celulose, pecuária extensiva, maçã, turismo de inverno</td>
+                                <td class="p-3 font-medium">Entroncamento rodoferroviário do planalto central</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <aside class="lg:col-span-4 lg:sticky lg:top-28 h-fit flex flex-col gap-6">
+            
+            <!-- Card de Controle e Status -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs flex flex-col gap-4">
+                <h3 class="font-bold text-slate-900 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    Painel do Simulado
+                </h3>
+
+                <!-- Progresso Circular/Indicadores -->
+                <div class="grid grid-cols-2 gap-4 py-2 border-y border-slate-100">
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Respondidas</p>
+                        <p class="text-2xl font-extrabold text-slate-800"><span id="answered-count">0</span><span class="text-slate-400 text-sm font-normal"> / 10</span></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400 font-semibold uppercase">Restantes</p>
+                        <p class="text-2xl font-extrabold text-slate-800" id="remaining-count">10</p>
+                    </div>
+                </div>
+
+                <!-- Temporizador para Mobile e painel Geral -->
+                <div class="flex items-center justify-between text-sm md:hidden">
+                    <span class="text-slate-500">Cronômetro ativo:</span>
+                    <span id="timer-mobile" class="font-mono font-bold text-slate-800">00:00:00</span>
+                </div>
+
+                <!-- Lista de Navegação Rápida entre Questões -->
+                <div>
+                    <p class="text-xs text-slate-400 font-bold uppercase mb-2">Cartão de Respostas</p>
+                    <div class="grid grid-cols-5 gap-2" id="grid-navigation">
+                        <!-- Botões de navegação serão inseridos pelo JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card de Resultado Final (Aparece após finalização) -->
+            <div id="results-card" class="hidden bg-white border-2 border-indigo-100 rounded-2xl p-6 shadow-sm flex flex-col gap-5 transition-all duration-500 scale-95 opacity-0">
+                <div class="text-center">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 mb-2">
+                        🎉 Simulado Concluído!
+                    </span>
+                    <h3 class="text-xl font-bold text-slate-900">Seu Desempenho</h3>
+                </div>
+
+                <!-- Gráfico de Pizza SVG de Score -->
+                <div class="relative flex items-center justify-center">
+                    <svg class="w-36 h-36" viewBox="0 0 36 36">
+                        <path class="text-slate-100" stroke="currentColor" stroke-width="4" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path id="progress-circle" class="text-emerald-500 transition-all duration-1000 ease-out" stroke-dasharray="0, 100" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div class="absolute text-center">
+                        <span id="score-fraction" class="text-3xl font-extrabold text-slate-900">0/10</span>
+                        <p id="score-percentage" class="text-xs text-slate-500 font-semibold mt-0.5">0% de Acertos</p>
+                    </div>
+                </div>
+
+                <!-- Informações e Feedbacks de Resultados -->
+                <div class="bg-slate-50 p-4 rounded-xl text-center border border-slate-100">
+                    <h4 class="font-bold text-slate-900 text-sm" id="result-feedback-title">Excelente Trabalho!</h4>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed" id="result-feedback-msg">Você demonstra sólido conhecimento sobre os temas abordados.</p>
+                </div>
+
+                <!-- Detalhamento por legenda -->
+                <div class="flex flex-col gap-2 text-xs text-slate-600">
+                    <div class="flex justify-between">
+                        <span>Tempo Total de Prova:</span>
+                        <span class="font-semibold text-slate-900" id="result-time">00:00:00</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Status de Aprovação:</span>
+                        <span class="font-semibold" id="result-status">Aprovado</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <button onclick="scrollToExplanation(1)" class="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-medium rounded-lg text-xs transition duration-150 flex items-center justify-center gap-1.5">
+                        Começar Revisão de Resoluções
+                    </button>
+                    <button onclick="resetQuiz()" class="w-full py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 font-medium rounded-lg text-xs transition duration-150">
+                        Fazer Novamente
+                    </button>
+                </div>
+            </div>
+            
+        </aside>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-xs sm:text-sm text-slate-400">Desenvolvido como ferramenta de estudo adaptativo de Geografia Humana e Regional.</p>
+            <p class="text-xs text-slate-300 mt-1">Gabarito baseado em fontes oficiais do IBGE e teses clássicas de Milton Santos.</p>
+        </div>
+    </footer>
+
+    <script>
+        const QUESTIONS = [
+            {
+                id: 1,
+                title: "Questão 01",
+                text: `<p class="mb-4">A divisão regional do espaço geográfico brasileiro reflete diferentes metodologias e objetivos políticos, econômicos e científicos ao longo da história. A respeito dos critérios de regionalização do Brasil adotados pelo Instituto Brasileiro de Geografia e Estatística (IBGE) e da proposta dos Complexos Geoeconômicos (ou Regiões Geoeconômicas), analise as seguintes afirmações:</p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm mb-4 flex flex-col gap-2">
+                    <p><strong>I.</strong> A regionalização oficial do IBGE, estruturada em cinco Grandes Regiões (Norte, Nordeste, Centro-Oeste, Sudeste e Sul), utiliza como critério de delimitação a homogeneidade física, humana e econômica, respeitando rigorosamente os limites político-administrativos das unidades da federação.</p>
+                    <p><strong>II.</strong> A proposta de regionalização geoeconômica, formulada pelo geógrafo Pinchas Geiger em 1967, divide o país em três grandes complexos (Amazônia, Nordeste e Centro-Sul), tendo como base as características socioespaciais, o processo histórico de formação territorial e as dinâmicas de integração econômica sob o desenvolvimento capitalista.</p>
+                    <p><strong>III.</strong> Por se basear na integração econômica e nas contradições do desenvolvimento capitalista regional, a delimitação dos Complexos Geoeconômicos rompe com as fronteiras estaduais, inserindo, por exemplo, o norte de Minas Gerais no complexo do Nordeste e o extremo sul de Tocantins no Centro-Sul.</p>
+                </div>
+                <p class="font-medium text-sm text-slate-700 mb-3">Quais estão corretas?</p>`,
+                options: [
+                    { letter: "A", text: "Apenas I." },
+                    { letter: "B", text: "Apenas II." },
+                    { letter: "C", text: "Apenas I e II." },
+                    { letter: "D", text: "Apenas II e III." },
+                    { letter: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                explanation: `
+                <div class="space-y-4 text-slate-700 leading-relaxed text-sm">
+                    <div class="flex items-center gap-2 text-emerald-600 font-bold mb-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Análise de Itens Detalhada:
+                    </div>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Afirmação I (Correta):</strong> O IBGE propõe a divisão regional do país respeitando rigorosamente as divisas estaduais para facilitar o cálculo e a divulgação de dados estatísticos unificados entre as federações.</li>
+                        <li><strong>Afirmação II (Correta):</strong> Formulada pelo geógrafo Pinchas Geiger em 1967, a regionalização geoeconômica é focada em dinâmicas históricas, econômicas e sociais do processo do capital e urbanização tardios.</li>
+                        <li><strong>Afirmação III (Correta):</strong> Os limites geoeconômicos rompem com os limites administrativos do IBGE, inserindo o norte de Minas no Nordeste devido ao padrão socioespacial seco do sertão e o sul do Tocantins no Centro-Sul devido às correntes da fronteira agrícola.</li>
+                    </ul>
+                    <div class="mt-4 p-4 bg-white border border-slate-200 rounded-xl">
+                        <p class="font-semibold text-slate-800 mb-2">Tabela Comparativa Rápida:</p>
+                        <table class="w-full text-left text-xs border border-collapse">
+                            <thead>
+                                <tr class="bg-slate-100 border-b">
+                                    <th class="p-2 font-semibold">Critério</th>
+                                    <th class="p-2 font-semibold">Macroregiões (IBGE)</th>
+                                    <th class="p-2 font-semibold">Complexos (Geiger)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="p-2 font-semibold">Divisas Estaduais</td>
+                                    <td class="p-2 text-emerald-600 font-medium">Respeitadas rigorosamente</td>
+                                    <td class="p-2 text-amber-600 font-medium">Transpassadas livremente</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2 font-semibold">Eixos Principais</td>
+                                    <td class="p-2">Homogeneidade ambiental e demográfica</td>
+                                    <td class="p-2">Processo histórico e acumulação capitalista</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`
+            },
+            {
+                id: 2,
+                title: "Questão 02",
+                text: `<p class="mb-4">Com base na análise de Milton Santos e María Laura Silveira a respeito da organização regional do Brasil contemporâneo, os autores propõem a divisão do território em "Quatro Brasis", estruturada a partir da difusão desigual das variáveis do meio técnico-científico-informacional.</p>
+                <p class="font-medium text-sm text-slate-700 mb-3">Assinale a alternativa que caracteriza corretamente a chamada "Região Concentrada" nesse esquema de regionalização.</p>`,
+                options: [
+                    { letter: "A", text: "Compreende as Regiões Nordeste e Sudeste, caracterizadas por abrigarem as maiores densidades demográficas do país e a infraestrutura portuária herdada do ciclo agroexportador cafeeiro." },
+                    { letter: "B", text: "Configura-se pela fusão espacial das regiões Sul e Centro-Oeste, cujas dinâmicas produtivas são pautadas pela expansão acelerada da fronteira agrícola moderna e do agronegócio exportador de grãos." },
+                    { letter: "C", text: "Engloba as regiões Sudeste e Sul, caracterizando-se pela elevada densidade de fluxos de informações, mercadorias, capitais e pessoas, além de concentrar as sedes das grandes corporações financeiras, centros de pesquisa e a maior parte do parque industrial nacional." },
+                    { letter: "D", text: "Caracteriza-se por uma forte desconcentração de suas atividades de telecomunicação e fluxos aéreos, expandindo as tomadas de decisões corporativas para a periferia amazônica e o meio-norte semiárido." },
+                    { letter: "E", text: "Restringe-se exclusivamente ao estado de São Paulo e ao Distrito Federal, por serem os únicos polos emissores de ordens econômicas e de inovações tecnológicas do território nacional." }
+                ],
+                answer: "C",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>A formulação teórica dos <strong>"Quatro Brasis"</strong> (Amazônia, Nordeste, Centro-Oeste e Região Concentrada) foca na difusão do Meio Técnico-Científico-Informacional (MTCI).</p>
+                    <p>A <strong>Região Concentrada</strong> unifica geograficamente as regiões Sul e Sudeste brasileiras. Ela destaca-se pela alta densidade de infovias, rotas de fluxo acelerado de capital, produtos de alta tecnologia e centralização dos escritórios corporativos e redes bancárias do país, aglutinando o verdadeiro comando geoeconômico nacional.</p>
+                    <p class="italic text-slate-500">Por que as outras alternativas estão incorretas?</p>
+                    <ul class="list-disc pl-5 space-y-1 text-xs">
+                        <li><strong>A:</strong> O Nordeste não integra a Região Concentrada neste modelo teórico.</li>
+                        <li><strong>B:</strong> O Centro-Oeste e o Sul não se fundem nesse conceito; o Centro-Oeste constitui uma macrorregião isolada do agronegócio exportador mecanizado.</li>
+                        <li><strong>D:</strong> Há maior adensamento de infraestrutura de rede de fibra e antenas na região e não desconcentração dispersa.</li>
+                        <li><strong>E:</strong> A região é muito mais ampla do que apenas SP e DF, englobando todo o Sul e o Sudeste de forma interconectada.</li>
+                    </ul>
+                </div>`
+            },
+            {
+                id: 3,
+                title: "Questão 03",
+                text: `<p class="mb-4">As macroregiões brasileiras apresentam profundas disparidades socioeconômicas e diversidades em seus quadros naturais. Sobre as características gerais dessas regiões, assinale a alternativa correta.</p>`,
+                options: [
+                    { letter: "A", text: "A Região Centro-Oeste consolidou sua economia a partir da industrialização pesada de base siderúrgica e metalúrgica, atraindo fluxos migratórios maciços do Leste Europeu ao longo do século XX." },
+                    { letter: "B", text: "A Região Norte, apesar de abrigar a maior floresta tropical do planeta, apresenta dinâmicas econômicas diversificadas, com destaque para a extração mineral de ferro na Serra dos Carajás, a agropecuária de fronteira ao longo do 'Arco do Desflorestamento' e o polo industrial de eletroeletrônicos da Zona Franca de Manaus." },
+                    { letter: "C", text: "A Região Nordeste possui um quadro natural homogêneo, em que o semiárido ocupa a totalidade do território regional, condicionando uma economia baseada estritamente no pastoreio extensivo de caprinos e na ausência completa de núcleos urbano-industriais modernos." },
+                    { letter: "D", text: "A Região Sul destaca-se nacionalmente pela total ausência de vazios demográficos e por possuir relevo predominantemente montanhoso, o que inviabilizou historicamente a mecanização agrícola de grãos e estimulou a concentração fundiária em latifúndios monocultores de café." },
+                    { letter: "E", text: "A Região Sudeste apresenta taxas nulas de crescimento urbano e estagnação do setor de serviços devido à desconcentração industrial acelerada que transferiu todas as suas sedes corporativas de logística para a Região Norte do país." }
+                ],
+                answer: "B",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>A <strong>Região Norte</strong> possui uma economia multifacetada que vai muito além de atividades primárias rudimentares. O gabarito correto (B) aborda de forma cirúrgica os três principais pilares de desenvolvimento modernos da região:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Extrativismo mineral metálico:</strong> Grande foco na Província Mineral de Carajás (ferro de alta pureza, manganês e cobre).</li>
+                        <li><strong>Fronteira Agrícola:</strong> Dinâmica de ocupação agropecuária ativa no chamado "Arco do Desflorestamento".</li>
+                        <li><strong>Indústria de Alta Tecnologia:</strong> O Polo Industrial de Manaus (PIM), referência na montagem de eletrônicos e motocicletas.</li>
+                    </ul>
+                </div>`
+            },
+            {
+                id: 4,
+                title: "Questão 04",
+                text: `<p class="mb-4">A Geografia Física do estado de Santa Catarina é marcada por uma transição abrupta entre o Litoral e o Interior, o que condiciona variações climáticas, hidrográficas e fitogeográficas significativas. Considere as seguintes afirmações sobre o quadro natural catarinense:</p>
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 text-sm mb-4 flex flex-col gap-2">
+                    <p><strong>I.</strong> O relevo é caracterizado pela presença da escarpa da Serra Geral (Planalto de Lages e São Joaquim), que divide a planície costeira a leste dos planaltos basálticos e sedimentares a oeste, apresentando as maiores altitudes do estado, onde se registram as menores temperaturas médias anuais.</p>
+                    <p><strong>II.</strong> O clima de Santa Catarina é predominantemente Subtropical, dividindo-se entre o clima subtropical úmido com verão quente (<em>Cfa</em>), localizado nas menores altitudes (litoral e vales), e o clima subtropical úmido com verão temperado (<em>Cfb</em>), presente nas áreas de planalto, onde ocorrem geadas frequentes e precipitações de neve ocasionais.</p>
+                    <p><strong>III.</strong> A hidrografia do estado divide-se em duas grandes vertentes: a Vertente do Interior (ou do Uruguai), cujos rios correm em direção ao oeste, alimentando a Bacia do Prata, e a Vertente do Atlântico (ou de Leste), formada por rios menores que desaguam diretamente no oceano e possuem grande relevância para o abastecimento urbano e industrial local.</p>
+                </div>
+                <p class="font-medium text-sm text-slate-700 mb-3">Quais estão corretas?</p>`,
+                options: [
+                    { letter: "A", text: "Apenas I." },
+                    { letter: "B", text: "Apenas II." },
+                    { letter: "C", text: "Apenas I e II." },
+                    { letter: "D", text: "Apenas II e III." },
+                    { letter: "E", text: "I, II e III." }
+                ],
+                answer: "E",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>Todas as três afirmações caracterizam perfeitamente a complexidade física do território catarinense:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>I está correta:</strong> A Serra Geral é o grande marco morfológico de SC. No planalto serrano (Lages e São Joaquim), as altitudes de até 1.800 metros justificam o clima de extremos de frio no inverno.</li>
+                        <li><strong>II está correta:</strong> A transição do relevo orienta as microrregiões climáticas na classificação Köppen: <em>Cfa</em> nas faixas de menor altitude (temperaturas elevadas no verão) e <em>Cfb</em> nos planaltos serranos e do norte (verões amenos e invernos com precipitações sólidas eventuais).</li>
+                        <li><strong>III está correta:</strong> Divisão hidrográfica perfeita. O topo da Serra Geral funciona como divisor de águas: rios que correm a oeste alimentam a rede platina/Uruguai; os rios que vão ao leste compõem as bacias do atlântico (como a Bacia do Rio Itajaí-Açu), essenciais para as indústrias e abastecimento do Vale.</li>
+                    </ul>
+                </div>`
+            },
+            {
+                id: 5,
+                title: "Questão 05",
+                text: `<p class="mb-4">A formação territorial de Santa Catarina reflete a inserção de diferentes correntes migratórias e dinâmicas geopolíticas e socioeconômicas ao longo dos séculos. Sobre o processo de ocupação histórica e colonização do território catarinense, assinale a alternativa correta.</p>`,
+                options: [
+                    { letter: "A", text: "A colonização açoriana do século XVIII concentrou-se prioritariamente no Extremo Oeste catarinense, visando à proteção das fronteiras contra incursões espanholas por meio da implantação de latifúndios cafeeiros baseados na mão de obra escravizada." },
+                    { letter: "B", text: "A colonização alemã e italiana, ocorrida a partir do século XIX, estruturou-se em áreas do Vale do Itajaí e no Sul do estado, sob o regime da pequena propriedade familiar (<em>minifúndio</em>) e da policultura de subsistência, evoluindo posteriormente para importantes polos industriais regionais." },
+                    { letter: "C", text: "A ocupação do Planalto Serrano catarinense deu-se de forma tardia, no final do século XX, motivada exclusivamente pela instalação de indústrias de alta tecnologia e pela total ausência de atividades ligadas ao tropeirismo e à pecuária extensiva." },
+                    { letter: "D", text: "A região do Meio-Oeste e do Oeste catarinense foi colonizada no século XIX diretamente por imigrantes de origem japonesa, que implantaram a rizicultura inundada nas escarpas da Serra Geral de forma homogênea." },
+                    { letter: "E", text: "A Guerra do Contestado (1912-1916) foi um conflito de caráter puramente urbano, travado em Florianópolis, que opôs a elite cafeeira açoriana aos comerciantes de carvão mineral do sul do estado." }
+                ],
+                answer: "B",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>A colonização não-portuguesa (alemã e italiana) do século XIX alterou profundamente as bases socioeconômicas e geográficas do norte, vale do Itajaí e sul do estado catarinense. Caracterizou-se por:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Regime fundiário de minifúndios:</strong> Pequenas glebas familiares de terra, em contraste com os grandes latifúndios cafeeiros do resto do país.</li>
+                        <li><strong>Policultura de subsistência:</strong> Diversidade produtiva de lavoura e pequenos animais.</li>
+                        <li><strong>Empreendedorismo industrial precoce:</strong> O desenvolvimento de pequenos ofícios que evoluíram para o moderno parque fabril (têxtil, metal-mecânico e metalúrgico).</li>
+                    </ul>
+                </div>`
+            },
+            {
+                id: 6,
+                title: "Questão 06",
+                text: `<p class="mb-4">A dinâmica demográfica de Santa Catarina apresenta características singulares quando comparada ao cenário nacional, especialmente no que tange à distribuição espacial de sua população e aos seus indicadores socioeconômicos.</p>
+                <p class="font-medium text-sm text-slate-700 mb-3">A respeito desse tema, assinale a alternativa correta.</p>`,
+                options: [
+                    { letter: "A", text: "Santa Catarina apresenta uma rede urbana altamente centralizada na capital, Florianópolis, que concentra mais de 70% da população total do estado e todas as atividades industriais, gerando um fenômeno de macrocefalia urbana extrema." },
+                    { letter: "B", text: "O estado caracteriza-se por uma rede urbana policêntrica, na qual diversas cidades de médio porte (como Joinville, Blumenau, Chapecó, Criciúma e Lages) exercem papéis de centralidade econômica e demográfica regional em suas respectivas mesorregiões." },
+                    { letter: "C", text: "Santa Catarina possui as menores taxas de expectativa de vida ao nascer do Brasil e índices de desenvolvimento humano comparáveis aos das regiões de menor dinamismo econômico da Amazônia Legal." },
+                    { letter: "D", text: "Os fluxos migratórios internos recentes em direção a Santa Catarina cessaram completamente devido à ausência de postos de trabalho no setor de tecnologia e na agroindústria, transformando o estado em uma área de forte evasão populacional." },
+                    { letter: "E", text: "A transição demográfica catarinense encontra-se em estágio inicial, com taxas de natalidade extremamente elevadas e predomínio absoluto de uma população majoritariamente jovem e rural em todo o território estadual." }
+                ],
+                answer: "B",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>Santa Catarina é um caso de destaque nacional por sua <strong>rede urbana descentralizada e policêntrica</strong>. Ao contrário de estados vizinhos ou do Sudeste onde a capital acumula todo o contingente populacional e decisório (macrocefalia urbana), SC possui:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Joinville:</strong> O maior contingente populacional do estado (polo metal-mecânico).</li>
+                        <li><strong>Blumenau:</strong> Polo de fiação e tecnologia no Vale do Itajaí.</li>
+                        <li><strong>Chapecó:</strong> Capital do agronegócio no Oeste catarinense.</li>
+                        <li><strong>Criciúma:</strong> Sede industrial no Sul do estado.</li>
+                    </ul>
+                    <p>Isso equilibra o fluxo migratório e garante uma forte qualidade de vida com altos índices de IDH gerais.</p>
+                </div>`
+            },
+            {
+                id: 7,
+                title: "Questão 07",
+                text: `<p class="mb-4">A economia catarinense ocupa uma posição de destaque no cenário nacional, caracterizando-se por uma estrutura produtiva diversificada, descentralizada e integrada ao mercado global por meio de uma complexa infraestrutura logística de transportes e portos.</p>
+                <p class="font-medium text-sm text-slate-700 mb-3">Sobre a economia de Santa Catarina, assinale a alternativa correta.</p>`,
+                options: [
+                    { letter: "A", text: "O setor agroindustrial do Oeste catarinense destaca-se nacionalmente pela criação e processamento de aves e suínos, sendo controlado por grandes complexos corporativos integrados que abastecem o mercado interno e externo, sustentando o PIB de exportações do estado." },
+                    { letter: "B", text: "O estado possui uma economia essencialmente primário-exportadora, com fraco desenvolvimento industrial e dependência exclusiva da exportação de minério de ferro bruto extraído de suas jazidas escarpadas no Planalto Serrano." },
+                    { letter: "C", text: "O setor portuário catarinense restringe-se ao Porto de Imbituba, sendo os portos de São Francisco do Sul, Itajaí e Navegantes inexpressivos para a balança comercial por operarem unicamente com navegação de cabotagem pesada de carvão mineral." },
+                    { letter: "D", text: "O polo tecnológico catarinense concentra-se exclusivamente em Lages, cidade que centraliza a totalidade dos investimentos em pesquisa de semicondutores e desenvolvimento de softwares de inteligência artificial da Região Sul." },
+                    { letter: "E", text: "A indústria metal-mecânica catarinense é praticamente inexistente, concentrando-se a produção secundária do estado apenas em pequenas olarias familiares situadas no extremo sul litorâneo." }
+                ],
+                answer: "A",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>O <strong>Oeste de Santa Catarina</strong> é um gigante mundial no processamento de proteína animal (aves e suínos), ancorado em um modelo de parceria inovador:</p>
+                    <p class="bg-indigo-50 p-3 rounded-lg border-l-4 border-indigo-500 font-medium text-indigo-900 text-xs sm:text-sm">
+                        "O sistema de integração vertical une as grandes indústrias (que fornecem matrizes biológicas, ração, assessoria técnica e logística de abate) às pequenas famílias de agricultores familiares (proprietários integrados que cuidam das granjas)."
+                    </p>
+                    <p>Marcas líderes como BRF e Aurora operam a partir dessa engrenagem para exportar alimentos de alto valor agregado a dezenas de países pelos portos do leste.</p>
+                </div>`
+            },
+            {
+                id: 8,
+                title: "Questão 08",
+                text: `<p class="mb-4">A diversidade econômica regional de Santa Catarina está diretamente ligada à especialização produtiva de suas mesorregiões geográficas.</p>
+                <p class="font-medium text-sm text-slate-700 mb-2">Numere a segunda coluna de acordo com a primeira, associando adequadamente as mesorregiões de Santa Catarina às suas respectivas especializações econômico-industriais predominantemente desenvolvidas:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100 text-xs sm:text-sm mb-4">
+                    <div>
+                        <p class="font-semibold text-slate-800 mb-1">Mesorregiões:</p>
+                        <p><strong>( 1 )</strong> Norte Catarinense</p>
+                        <p><strong>( 2 )</strong> Vale do Itajaí</p>
+                        <p><strong>( 3 )</strong> Sul Catarinense</p>
+                        <p><strong>( 4 )</strong> Oeste Catarinense</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-slate-800 mb-1">Especializações:</p>
+                        <p><strong>( &nbsp; )</strong> Polo têxtil, de vestuário e fiação, associado à colonização alemã (artigos de cama, mesa e banho).</p>
+                        <p><strong>( &nbsp; )</strong> Polo metal-mecânico de motores elétricos, compressores herméticos e fundição de ferro (Joinville e Jaraguá do Sul).</p>
+                        <p><strong>( &nbsp; )</strong> Extração de carvão mineral, revestimentos cerâmicos e plásticos descartáveis (Criciúma).</p>
+                        <p><strong>( &nbsp; )</strong> Complexo agroalimentar de carnes de aves e suínos, soja e milho.</p>
+                    </div>
+                </div>
+                <p class="font-medium text-sm text-slate-700 mb-3">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>`,
+                options: [
+                    { letter: "A", text: "1 – 2 – 3 – 4." },
+                    { letter: "B", text: "2 – 1 – 4 – 3." },
+                    { letter: "C", text: "2 – 1 – 3 – 4." },
+                    { letter: "D", text: "4 – 3 – 2 – 1." },
+                    { letter: "E", text: "3 – 1 – 2 – 4." }
+                ],
+                answer: "C",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>Esta questão aborda a divisão regional do trabalho industrial catarinense. A correta associação de cima para baixo é:</p>
+                    <ol class="list-decimal pl-5 space-y-2">
+                        <li><strong>( 2 ) Vale do Itajaí:</strong> O centro têxtil catarinense de renome nacional (Blumenau, Brusque, Indaial).</li>
+                        <li><strong>( 1 ) Norte Catarinense:</strong> A região industrial metal-mecânica e polo moveleiro (Joinville, Jaraguá do Sul, São Bento do Sul).</li>
+                        <li><strong>( 3 ) Sul Catarinense:</strong> Carvão e indústrias de cerâmica esmaltada de revestimento (Criciúma).</li>
+                        <li><strong>( 4 ) Oeste Catarinense:</strong> Força dos frigoríficos de carnes de aves e suínos e agricultura integradora (Chapecó, Concórdia).</li>
+                    </ol>
+                    <p class="font-semibold text-indigo-700 mt-2">Dando origem à sequência: 2 – 1 – 3 – 4 (Opção C).</p>
+                </div>`
+            },
+            {
+                id: 9,
+                title: "Questão 09",
+                text: `<p class="mb-4">A fitogeografia original de Santa Catarina encontra-se profundamente alterada devido aos ciclos de exploração econômica e expansão das fronteiras agropecuárias ao longo da história do estado.</p>
+                <p class="font-medium text-sm text-slate-700 mb-3">A esse respeito, assinale a alternativa que descreve <strong>incorretamente</strong> as formações vegetais catarinenses ou sua correlação com o relevo e clima locais.</p>`,
+                options: [
+                    { letter: "A", text: "A Floresta Ombrófila Densa (Mata Atlântica de encosta) recobre as encostas da Serra do Mar e da Serra Geral voltadas para o oceano, beneficiando-se das elevadas precipitações geradas pelas chuvas de relevo (orográficas)." },
+                    { letter: "B", text: "A Floresta Ombrófila Mista (Mata de Araucárias) estende-se pelas áreas planálticas do interior do estado, sob influência do clima subtropical de altitude (Cfb), tendo sido intensamente devastada pelo ciclo madeireiro e pela expansão da agricultura temperada de grãos." },
+                    { letter: "C", text: "Os Campos de Altitude localizam-se nas porções mais elevadas do Planalto Meridional catarinense (região de São Joaquim e Lages), servindo historicamente como base física para o desenvolvimento da pecuária extensiva de corte." },
+                    { letter: "D", text: "Os ecossistemas costeiros, representados por manguezais, dunas e restingas, ocupam as planícies fluviomarinhas, sofrendo severa pressão antrópica decorrente da especulação imobiliária e da urbanização litorânea." },
+                    { letter: "E", text: "A Caatinga hiperxerófila e a vegetação semiárida de savana de espinhos dominam o Vale do Rio Uruguai na divisa com o Rio Grande do Sul, devido à ocorrência de um microclima seco com secas prolongadas de oito meses ao ano nessa mesorregião." }
+                ],
+                answer: "E",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <p>A questão solicita a alternativa <strong>INCORRETA</strong>.</p>
+                    <p>A alternativa <strong>E</strong> é geograficamente descabida porque a <strong>Caatinga hiperxerófila é uma formação exclusiva do Nordeste brasileiro</strong>. Santa Catarina possui clima inteiramente subtropical, sem estações secas prolongadas ou climas áridos.</p>
+                    <p>No Vale do Rio Uruguai catarinense, a formação vegetal nativa é a <strong>Floresta Estacional Decidual</strong>, que se caracteriza pela perda de folhas de parte das espécies arbóreas durante os meses mais frios de inverno (regulado pela temperatura e não pela seca hídrica).</p>
+                </div>`
+            },
+            {
+                id: 10,
+                title: "Questão 10",
+                text: `<p class="mb-4">Em um mapa temático de planejamento logístico do estado de Santa Catarina, elaborado na escala numérica de <span class="font-mono font-semibold">1:2.000.000</span>, a distância gráfica em linha reta entre a capital, Florianópolis (no Litoral), e o município de Chapecó (no Grande Oeste), mede exatamente <span class="font-mono font-semibold">22,5 cm</span>.</p>
+                <p class="font-medium text-sm text-slate-700 mb-3">Considerando essas informações cartográficas, qual é a distância real aproximada, em linha reta, entre as duas cidades?</p>`,
+                options: [
+                    { letter: "A", text: "45 km." },
+                    { letter: "B", text: "138 km." },
+                    { letter: "C", text: "250 km." },
+                    { letter: "D", text: "450 km." },
+                    { letter: "E", text: "4.500 km." }
+                ],
+                answer: "D",
+                explanation: `
+                <div class="space-y-4 text-slate-700 text-sm leading-relaxed">
+                    <div class="flex items-center gap-2 text-indigo-600 font-bold mb-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        Resolução Matemática Passo a Passo:
+                    </div>
+                    <p>A fórmula padrão da escala cartográfica é:</p>
+                    <div class="bg-slate-50 p-3 rounded-lg text-center font-mono font-semibold text-slate-800 border border-slate-100 text-base">
+                        D = d × E
+                    </div>
+                    <div class="text-xs sm:text-sm flex flex-col gap-1 pl-4 border-l-2 border-indigo-200">
+                        <p>• <strong class="text-slate-600">D:</strong> Distância real no terreno (o que queremos saber)</p>
+                        <p>• <strong class="text-slate-600">d:</strong> Distância gráfica no papel (<span class="font-mono text-xs">22,5 cm</span>)</p>
+                        <p>• <strong class="text-slate-600">E:</strong> Escala do mapa (<span class="font-mono text-xs">2.000.000</span>)</p>
+                    </div>
+                    <p class="font-semibold text-slate-800">Cálculo:</p>
+                    <div class="font-mono bg-slate-50 p-3 rounded-lg text-xs sm:text-sm text-slate-700 border border-slate-100 space-y-1">
+                        <p>D = 22,5 cm × 2.000.000</p>
+                        <p>D = 45.000.000 cm</p>
+                    </div>
+                    <p class="font-semibold text-slate-800">Conversão de Centímetros para Quilômetros:</p>
+                    <p>Sabemos que <strong class="font-mono">1 km = 100.000 cm</strong>. Para obter a distância em quilômetros, basta dividir o resultado em centímetros por 100.000 (cortar 5 zeros):</p>
+                    <div class="font-mono bg-slate-50 p-3 rounded-lg text-xs sm:text-sm text-slate-700 border border-slate-100">
+                        D = 45.000.000 / 100.000 = 450 km
+                    </div>
+                    <p class="font-semibold text-emerald-600">Logo, a distância real em linha reta aproximada é de 450 km (Opção D).</p>
+                </div>`
+            }
+        ];
+
+        let userAnswers = {};
+        let isSubmitted = false;
+        let secondsElapsed = 0;
+        let timerInterval = null;
+
+        window.onload = function() {
+            renderQuestions();
+            renderNavigation();
+            startTimer();
+            updateProgress();
+        };
+
+        // Função do cronômetro de estudo
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            secondsElapsed = 0;
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const hrs = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+                const mins = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                
+                const formattedTime = `${hrs}:${mins}:${secs}`;
+                document.getElementById('timer').innerText = formattedTime;
+                document.getElementById('timer-mobile').innerText = formattedTime;
+            }, 1000);
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            QUESTIONS.forEach((q) => {
+                const card = document.createElement('article');
+                card.id = `question-card-${q.id}`;
+                card.className = "bg-white border border-slate-200 rounded-2xl p-6 shadow-xs hover:shadow-md transition duration-200 relative";
+                
+                let optionsHTML = '';
+                q.options.forEach((opt) => {
+                    optionsHTML += `
+                        <button 
+                            id="option-${q.id}-${opt.letter}" 
+                            onclick="selectOption(${q.id}, '${opt.letter}')"
+                            class="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50 transition duration-150 flex items-start gap-3 text-slate-700 text-sm md:text-base cursor-pointer"
+                        >
+                            <span id="badge-${q.id}-${opt.letter}" class="flex-shrink-0 w-6 h-6 rounded-full border border-slate-300 bg-white flex items-center justify-center font-bold text-xs text-slate-500 transition duration-150">
+                                ${opt.letter}
+                            </span>
+                            <span class="leading-relaxed font-normal">${opt.text}</span>
+                        </button>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                        <h3 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
+                            <span class="w-2 h-6 bg-indigo-600 rounded-full"></span>
+                            ${q.title}
+                        </h3>
+                        <div id="status-badge-${q.id}" class="hidden flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold">
+                            <!-- Inserido dinamicamente após submissão -->
+                        </div>
+                    </div>
+                    
+                    <!-- Corpo da Questão -->
+                    <div class="text-slate-800 text-sm sm:text-base leading-relaxed readable-text mb-6">
+                        ${q.text}
+                    </div>
+
+                    <!-- Alternativas -->
+                    <div class="flex flex-col gap-3" id="options-group-${q.id}">
+                        ${optionsHTML}
+                    </div>
+
+                    <!-- Bloco de Resolução Oculto -->
+                    <div id="explanation-box-${q.id}" class="hidden mt-6 pt-6 border-t border-slate-100 transition-all duration-300">
+                        <div class="bg-slate-50 rounded-2xl p-4 sm:p-6 border border-slate-200">
+                            <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-3">Resolução da Banca FAURGS:</h4>
+                            <div class="readable-text">
+                                ${q.explanation}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(questionId, letter) {
+            if (isSubmitted) return; // Desativa cliques após finalização
+
+            userAnswers[questionId] = letter;
+            
+            // Remove realce anterior de todas as opções da questão
+            const q = QUESTIONS.find(x => x.id === questionId);
+            q.options.forEach(opt => {
+                const optButton = document.getElementById(`option-${questionId}-${opt.letter}`);
+                const badge = document.getElementById(`badge-${questionId}-${opt.letter}`);
+                
+                optButton.className = "w-full text-left p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:bg-slate-50 transition duration-150 flex items-start gap-3 text-slate-700 text-sm md:text-base cursor-pointer";
+                badge.className = "flex-shrink-0 w-6 h-6 rounded-full border border-slate-300 bg-white flex items-center justify-center font-bold text-xs text-slate-500 transition duration-150";
+            });
+
+            // Adiciona realce à selecionada
+            const selectedButton = document.getElementById(`option-${questionId}-${letter}`);
+            const selectedBadge = document.getElementById(`badge-${questionId}-${letter}`);
+            
+            selectedButton.className = "w-full text-left p-4 rounded-xl border-2 border-indigo-600 bg-indigo-50/50 transition duration-150 flex items-start gap-3 text-indigo-900 text-sm md:text-base font-medium cursor-pointer";
+            selectedBadge.className = "flex-shrink-0 w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs transition duration-150";
+
+            updateProgress();
+            renderNavigation();
+        }
+
+        // Atualiza a barra de progresso no topo e painéis
+        function updateProgress() {
+            const total = QUESTIONS.length;
+            const answered = Object.keys(userAnswers).length;
+            const remaining = total - answered;
+            const pct = (answered / total) * 100;
+
+            document.getElementById('answered-count').innerText = answered;
+            document.getElementById('remaining-count').innerText = remaining;
+            document.getElementById('quiz-progress-bar').style.width = `${pct}%`;
+        }
+
+        // Cria botões rápidos de navegação lateral (Cartão de Respostas)
+        function renderNavigation() {
+            const navGrid = document.getElementById('grid-navigation');
+            navGrid.innerHTML = '';
+
+            QUESTIONS.forEach((q) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full aspect-square flex flex-col items-center justify-center rounded-lg border text-xs font-semibold transition duration-150 cursor-pointer";
+                
+                const isAnswered = userAnswers[q.id] !== undefined;
+
+                if (isSubmitted) {
+                    const isCorrect = userAnswers[q.id] === q.answer;
+                    if (isCorrect) {
+                        btn.className += " bg-emerald-50 border-emerald-500 text-emerald-700 hover:bg-emerald-100";
+                        btn.innerHTML = `<span>${q.id}</span><span class="text-[8px] mt-0.5">✔</span>`;
+                    } else {
+                        btn.className += " bg-rose-50 border-rose-500 text-rose-700 hover:bg-rose-100";
+                        btn.innerHTML = `<span>${q.id}</span><span class="text-[8px] mt-0.5">✘</span>`;
+                    }
+                } else {
+                    if (isAnswered) {
+                        btn.className += " bg-indigo-50 border-indigo-500 text-indigo-700 hover:bg-indigo-100";
+                        btn.innerHTML = `<span>${q.id}</span><span class="text-[8px] mt-0.5">${userAnswers[q.id]}</span>`;
+                    } else {
+                        btn.className += " bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100";
+                        btn.innerHTML = `<span>${q.id}</span>`;
+                    }
+                }
+
+                btn.onclick = () => {
+                    const el = document.getElementById(`question-card-${q.id}`);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                };
+                navGrid.appendChild(btn);
+            });
+        }
+
+        function showAlert(title, msg) {
+            const alertBox = document.getElementById('custom-alert');
+            document.getElementById('custom-alert-title').innerText = title;
+            document.getElementById('custom-alert-msg').innerText = msg;
+            
+            alertBox.classList.remove('hidden');
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function hideAlert() {
+            document.getElementById('custom-alert').classList.add('hidden');
+        }
+
+        function checkQuiz(confirmRequired) {
+            const answeredCount = Object.keys(userAnswers).length;
+            
+            if (confirmRequired && answeredCount < QUESTIONS.length) {
+                showAlert(
+                    "Simulado Incompleto", 
+                    `Você respondeu apenas ${answeredCount} de ${QUESTIONS.length} questões. Para uma melhor avaliação, tente resolver todas as questões antes de enviar.`
+                );
+                return;
+            }
+
+            hideAlert();
+            isSubmitted = true;
+            clearInterval(timerInterval);
+
+            let score = 0;
+
+            QUESTIONS.forEach((q) => {
+                const userChoice = userAnswers[q.id];
+                const isCorrect = userChoice === q.answer;
+                if (isCorrect) score++;
+
+                const statusBadge = document.getElementById(`status-badge-${q.id}`);
+                statusBadge.classList.remove('hidden');
+
+                // Revela as explicações de todas as questões respondidas
+                document.getElementById(`explanation-box-${q.id}`).classList.remove('hidden');
+
+                if (isCorrect) {
+                    statusBadge.className = "flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200";
+                    statusBadge.innerHTML = `<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Correto`;
+                } else {
+                    statusBadge.className = "flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200";
+                    statusBadge.innerHTML = `<svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg> Incorreto`;
+                }
+
+                // Estilização das alternativas para mostrar as corretas em verde e as erradas do aluno em vermelho
+                q.options.forEach((opt) => {
+                    const btn = document.getElementById(`option-${q.id}-${opt.letter}`);
+                    const badge = document.getElementById(`badge-${q.id}-${opt.letter}`);
+                    
+                    // Bloqueia interações de ponteiro
+                    btn.style.pointerEvents = "none";
+
+                    if (opt.letter === q.answer) {
+                        // Resposta correta oficial
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 transition duration-150 flex items-start gap-3 text-emerald-900 text-sm md:text-base font-medium";
+                        badge.className = "flex-shrink-0 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs transition duration-150";
+                    } else if (opt.letter === userChoice && userChoice !== q.answer) {
+                        // Resposta incorreta marcada pelo aluno
+                        btn.className = "w-full text-left p-4 rounded-xl border-2 border-rose-500 bg-rose-50 transition duration-150 flex items-start gap-3 text-rose-900 text-sm md:text-base font-medium";
+                        badge.className = "flex-shrink-0 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold text-xs transition duration-150";
+                    } else {
+                        // Outros distratores não selecionados
+                        btn.className = "w-full text-left p-4 rounded-xl border border-slate-200 opacity-60 flex items-start gap-3 text-slate-500 text-sm md:text-base";
+                        badge.className = "flex-shrink-0 w-6 h-6 rounded-full border border-slate-200 bg-slate-50 flex items-center justify-center font-bold text-xs text-slate-400";
+                    }
+                });
+            });
+
+            // Desbloqueia Material de Apoio Geral no Final
+            document.getElementById('material-apoio').classList.remove('hidden');
+
+            // Exibe e Configura o painel de resultados lateral
+            showResultsPanel(score);
+            
+            // Oculta botão superior de submissão
+            document.getElementById('btn-submit-top').classList.add('hidden');
+            document.getElementById('btn-submit-bottom').classList.add('hidden');
+            document.getElementById('btn-reset').classList.remove('hidden');
+
+            renderNavigation();
+        }
+
+        function showResultsPanel(score) {
+            const panel = document.getElementById('results-card');
+            panel.classList.remove('hidden');
+            
+            // Força reflow para transição CSS suave de opacidade
+            setTimeout(() => {
+                panel.className = "bg-white border-2 border-indigo-100 rounded-2xl p-6 shadow-sm flex flex-col gap-5 transition-all duration-500 scale-100 opacity-100";
+            }, 10);
+
+            // Ajusta o progresso do circulo de score SVG
+            const total = QUESTIONS.length;
+            const percentage = Math.round((score / total) * 100);
+            const circumference = 2 * Math.PI * 15.9155; // aprox 100
+            const strokeDash = `${percentage}, 100`;
+
+            document.getElementById('progress-circle').setAttribute('stroke-dasharray', strokeDash);
+            document.getElementById('score-fraction').innerText = `${score}/${total}`;
+            document.getElementById('score-percentage').innerText = `${percentage}% de Acertos`;
+
+            // Textos dinâmicos de aprovação baseados no rendimento
+            const feedbackTitle = document.getElementById('result-feedback-title');
+            const feedbackMsg = document.getElementById('result-feedback-msg');
+            const statusLabel = document.getElementById('result-status');
+
+            if (score >= 9) {
+                feedbackTitle.innerText = "Excelente! Desempenho de Elite 🏆";
+                feedbackMsg.innerText = "Você domina completamente o edital da FAURGS nestes tópicos. Excelente preparação!";
+                statusLabel.innerText = "Altamente Apto";
+                statusLabel.className = "font-semibold text-emerald-600";
+            } else if (score >= 7) {
+                feedbackTitle.innerText = "Muito Bom! Ótimo Aproveitamento 📈";
+                feedbackMsg.innerText = "Parabéns. Sua pontuação demonstra uma ótima bagagem. Revise os poucos pontos perdidos.";
+                statusLabel.innerText = "Apto para Aprovação";
+                statusLabel.className = "font-semibold text-indigo-600";
+            } else if (score >= 5) {
+                feedbackTitle.innerText = "Atenção! Estudo em Progresso ⚠️";
+                feedbackMsg.innerText = "Você obteve média aceitável, mas há lacunas que podem custar vagas. Revise as resoluções de apoio.";
+                statusLabel.innerText = "Abaixo da Média Segura";
+                statusLabel.className = "font-semibold text-amber-600";
+            } else {
+                feedbackTitle.innerText = "Alerta! Necessita Reforço Crítico 🚨";
+                feedbackMsg.innerText = "Os tópicos de Geografia Física e Regionalização estão cobrando mais atenção. Refaça o simulado com o material aberto.";
+                statusLabel.innerText = "Necessita Atenção Urgente";
+                statusLabel.className = "font-semibold text-rose-600";
+            }
+
+            // Exibe o tempo total gasto
+            const hrs = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+            const secs = String(secondsElapsed % 60).padStart(2, '0');
+            document.getElementById('result-time').innerText = `${hrs}:${mins}:${secs}`;
+
+            // Rola suavemente até o topo dos resultados
+            panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Função de âncora rápida para navegar nas resoluções
+        function scrollToExplanation(id) {
+            const el = document.getElementById(`question-card-${id}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function resetQuiz() {
+            userAnswers = {};
+            isSubmitted = false;
+
+            // Restaura botões superiores e ocultação de painéis
+            document.getElementById('btn-submit-top').classList.remove('hidden');
+            document.getElementById('btn-submit-bottom').classList.remove('hidden');
+            document.getElementById('btn-reset').classList.add('hidden');
+            document.getElementById('material-apoio').classList.add('hidden');
+
+            const resultsCard = document.getElementById('results-card');
+            resultsCard.classList.add('hidden');
+            resultsCard.className = "hidden bg-white border-2 border-indigo-100 rounded-2xl p-6 shadow-sm flex flex-col gap-5 transition-all duration-500 scale-95 opacity-0";
+
+            renderQuestions();
+            updateProgress();
+            renderNavigation();
+            startTimer();
+
+            // Rola até o topo de forma suave
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

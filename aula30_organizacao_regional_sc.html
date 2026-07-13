@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparação de Alto Rendimento - IFSC Docente (Geografia)</title>
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons para iconografia fluida e leve -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Fonte Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b; /* slate-800 */
+        }
+        /* Efeito de marca-texto realista para pontos cruciais de prova */
+        .highlight-yellow {
+            background-color: #fef08a; /* yellow-200 */
+            color: #854d0e; /* yellow-900 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .highlight-green {
+            background-color: #bbf7d0; /* green-200 */
+            color: #166534; /* green-900 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+        }
+        .highlight-red {
+            background-color: #fecaca; /* red-200 */
+            color: #991b1b; /* red-900 */
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+        }
+        /* Suavização de scroll para links âncoras */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Cabeçalho de Identificação Institucional -->
+    <header class="border-b border-slate-100 bg-white sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-emerald-50 text-emerald-700 rounded-lg">
+                    <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 leading-tight">PREPARAÇÃO DOCENTE IFSC</h1>
+                    <p class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Foco Especializado: Banca FAURGS</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    Geografia Regional & Santa Catarina
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção de Controle do Player de Áudio -->
+    <section class="border-b border-slate-100 bg-slate-50/50 py-6 px-4">
+        <div class="max-w-3xl mx-auto bg-white rounded-xl border border-slate-200/80 p-5 shadow-sm">
+            <div class="flex flex-col gap-4">
+                <!-- Controle de Configuração do Áudio -->
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                    <div class="flex-1">
+                        <label for="audio-src-input" class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                            Arquivo MP3 da Aula (digite o nome abaixo):
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="audio-src-input" value="audio_aula.mp3" 
+                                class="w-full px-3 py-2 pr-20 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all text-slate-700 font-mono"
+                                placeholder="ex: aula_revisao.mp3">
+                            <button id="btn-load-audio" class="absolute right-1 top-1 bottom-1 px-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-md transition-colors flex items-center gap-1">
+                                <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Carregar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Velocidade de Reprodução -->
+                    <div class="flex flex-col justify-end">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">Velocidade:</span>
+                        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg self-start">
+                            <button class="speed-btn px-2.5 py-1 text-xs font-bold rounded text-slate-600 hover:text-slate-900 transition-all" data-speed="1.0">1x</button>
+                            <button class="speed-btn px-2.5 py-1 text-xs font-bold rounded text-slate-600 hover:text-slate-900 transition-all" data-speed="1.25">1.25x</button>
+                            <button class="speed-btn px-2.5 py-1 text-xs font-bold rounded bg-white text-emerald-700 shadow-sm transition-all" data-speed="1.5">1.5x</button>
+                            <button class="speed-btn px-2.5 py-1 text-xs font-bold rounded text-slate-600 hover:text-slate-900 transition-all" data-speed="1.75">1.75x</button>
+                            <button class="speed-btn px-2.5 py-1 text-xs font-bold rounded text-slate-600 hover:text-slate-900 transition-all" data-speed="2.0">2x</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Barra de Áudio Nativa Estilizada -->
+                <div class="flex flex-col sm:flex-row items-center gap-4 border-t border-slate-100 pt-4">
+                    <!-- Elemento Audio Invisível para Controle Personalizado -->
+                    <audio id="lesson-audio" src="regional_aula.mp3" preload="metadata"></audio>
+                    
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-center">
+                        <button id="btn-play-pause" class="w-11 h-11 flex items-center justify-center rounded-full bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-100 transition-all transform active:scale-95 focus:outline-none">
+                            <i data-lucide="play" class="w-5 h-5 fill-current" id="play-icon"></i>
+                        </button>
+                    </div>
+
+                    <div class="flex-1 w-full flex items-center gap-3">
+                        <span id="current-time" class="text-xs font-medium text-slate-400 font-mono w-10">00:00</span>
+                        <input type="range" id="audio-progress" min="0" max="100" value="0" 
+                            class="flex-1 h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none">
+                        <span id="duration-time" class="text-xs font-medium text-slate-400 font-mono w-10">00:00</span>
+                    </div>
+
+                    <!-- Mute / Volume -->
+                    <div class="flex items-center gap-2">
+                        <button id="btn-mute" class="text-slate-400 hover:text-slate-600 transition-colors">
+                            <i data-lucide="volume-2" class="w-4 h-4"></i>
+                        </button>
+                        <input type="range" id="audio-volume" min="0" max="1" step="0.1" value="0.8" 
+                            class="w-16 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 focus:outline-none">
+                    </div>
+                </div>
+                
+                <!-- Feedback de Status de Arquivo -->
+                <div id="audio-status" class="text-center text-xs text-slate-400 mt-1">
+                    Arquivo atual: <span class="font-mono text-emerald-600 font-semibold">audio_aula.mp3</span> (Certifique-se de que o arquivo esteja na pasta do servidor local para tocar).
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Layout de Coluna de Conteúdo -->
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Navegação Lateral Rápida (Sticky Sidebar) -->
+        <aside class="lg:col-span-1">
+            <div class="sticky top-24 space-y-6">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                        <i data-lucide="menu" class="w-4 h-4"></i> Roteiro de Aula
+                    </h3>
+                    <nav class="space-y-1">
+                        <a href="#tema-1" class="block px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white border border-transparent hover:border-slate-100 transition-all">
+                            1. Regionalização do Brasil
+                        </a>
+                        <a href="#tema-2" class="block px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white border border-transparent hover:border-slate-100 transition-all">
+                            2. As Grandes Regiões
+                        </a>
+                        <a href="#tema-3" class="block px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white border border-transparent hover:border-slate-100 transition-all">
+                            3. Santa Catarina: Aspectos Físicos
+                        </a>
+                        <a href="#tema-4" class="block px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white border border-transparent hover:border-slate-100 transition-all">
+                            4. SC: História e Economia
+                        </a>
+                        <a href="#tema-5" class="block px-3 py-2 text-sm font-medium rounded-lg text-slate-600 hover:text-emerald-700 hover:bg-white border border-transparent hover:border-slate-100 transition-all text-red-700">
+                            5. Driblando Pegadinhas
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100/70">
+                    <h4 class="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i> Alerta FAURGS
+                    </h4>
+                    <p class="text-xs text-amber-700 leading-relaxed">
+                        A FAURGS valoriza muito a <strong class="text-amber-950 font-bold">exatidão dos conceitos físicos</strong> e a interpretação geométrica de cartografia. Memorize as fórmulas e termos estruturantes fornecidos abaixo.
+                    </p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Corpo Principal de Conteúdo -->
+        <article class="lg:col-span-3 space-y-12 pb-16">
+            
+            <!-- Introdução -->
+            <div class="border-b border-slate-100 pb-6">
+                <span class="text-xs font-bold text-emerald-600 tracking-wider uppercase">Documento de Memorização Máxima</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight mt-1">Guia Exclusivo para Concurso Docente IFSC</h2>
+                <p class="text-sm text-slate-500 mt-2 leading-relaxed">
+                    Este compêndio reúne a teoria estrutural com foco cirúrgico no estilo de cobrança da banca FAURGS. Use as marcações coloridas para fixar conceitos em revisões rápidas de véspera.
+                </p>
+            </div>
+
+            <!-- Tópico 1 -->
+            <section id="tema-1" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm">1</span>
+                    <h3 class="text-xl font-bold text-slate-900">Critérios de Regionalização do Brasil: Três Modelos Fundamentais</h3>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Regionalizar é uma operação de ordenamento territorial, planejamento e poder. Para a FAURGS, você deve discernir rigorosamente as premissas e os limites das três principais divisões brasileiras:
+                </p>
+
+                <!-- Divisão A -->
+                <div class="bg-white border border-slate-100 p-5 rounded-xl shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-md font-bold text-slate-800">A) Divisão Oficial do IBGE (1990 vs. 2017)</h4>
+                        <span class="px-2 py-0.5 text-xs font-bold rounded bg-slate-100 text-slate-600">Oficial</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-600 leading-relaxed">
+                        <li>
+                            <strong class="text-slate-800">Regra de Ouro:</strong> <span class="highlight-yellow">Respeita estritamente as divisas político-administrativas</span> dos estados. Nenhum estado brasileiro é seccionado pelas linhas das grandes regiões.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">A transição de 2017:</strong> O IBGE abandonou as antigas mesorregiões e microrregiões, que se apoiavam em determinantes físicos estáveis (relevo, vegetação, economia agrícola).
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">O Novo Paradigma:</strong> Foram criadas as <span class="highlight-green">Regiões Geográficas Intermediárias (RGI) e Regiões Geográficas Imediatas (RGIm)</span>. O critério unificador é a <span class="highlight-green">polarização urbana, fluxos de redes, acesso a serviços</span> (saúde, comércio, trabalho) e não mais a contiguidade física homogênea.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Aplicação em Santa Catarina:</strong> O território catarinense está fragmentado em <span class="highlight-yellow">7 RGIs</span> (Florianópolis, Criciúma, Lages, Chapecó, Caçador, Joinville e Blumenau), que polarizam <span class="highlight-yellow">24 RGIm</span>.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Divisão B -->
+                <div class="bg-white border border-slate-100 p-5 rounded-xl shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-md font-bold text-slate-800">B) Complexos Geoeconômicos (Pedro Pinchas Geiger, 1967)</h4>
+                        <span class="px-2 py-0.5 text-xs font-bold rounded bg-red-50 text-red-600 border border-red-100">Não-Oficial</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-600 leading-relaxed">
+                        <li>
+                            <strong class="text-slate-800">Regra de Ouro:</strong> <span class="highlight-red">NÃO respeita as divisas dos estados</span>. O critério é o processo histórico de ocupação, integração do mercado econômico interno e o grau de industrialização.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Divisão Tripartite:</strong> Amazônia, Nordeste e Centro-Sul.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Anomalias Geopolíticas (Altíssima recorrência na FAURGS):</strong>
+                            <ul class="list-disc pl-5 mt-1 space-y-1">
+                                <li>O <span class="highlight-yellow">Norte de Minas Gerais</span> é alocado no <span class="highlight-yellow">Nordeste</span> devido à semiaridez e características históricas. O sul fica no Centro-Sul.</li>
+                                <li>O <span class="highlight-yellow">Oeste do Maranhão</span> integra a <span class="highlight-yellow">Amazônia</span> por transição ecológica; o restante do estado fica no Nordeste.</li>
+                                <li>O <span class="highlight-yellow">Norte de Mato Grosso</span> pertence à <span class="highlight-yellow">Amazônia</span>; a porção sul é enquadrada no Centro-Sul.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Divisão C -->
+                <div class="bg-white border border-slate-100 p-5 rounded-xl shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-md font-bold text-slate-800">C) Os "Quatro Brasis" (Milton Santos e Maria Laura Silveira, 2001)</h4>
+                        <span class="px-2 py-0.5 text-xs font-bold rounded bg-blue-50 text-blue-600 border border-blue-100">Teoria Social</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-slate-600 leading-relaxed">
+                        <li>
+                            <strong class="text-slate-800">Regra de Ouro:</strong> O critério unificador é o <span class="highlight-yellow">Meio Técnico-Científico-Informacional (MTCI)</span>, analisando como o território se conecta a redes de informação, fluxos financeiros e técnicas modernas.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Divisão Estruturada:</strong>
+                            <ul class="list-disc pl-5 mt-1 space-y-1">
+                                <li><strong class="text-slate-800">Região Concentrada (Sul e Sudeste):</strong> Elevada densidade de redes, controle de fluxos, finanças e infovias.</li>
+                                <li><strong class="text-slate-800">Centro-Oeste:</strong> Agronegócio moderno e altamente técnico, porém dependente e subordinado de centros financeiros externos (comandos tomados na Região Concentrada).</li>
+                                <li><strong class="text-slate-800">Nordeste:</strong> Penetração técnica de forma seletiva e pontual.</li>
+                                <li><strong class="text-slate-800">Amazônia:</strong> Densidade informacional extremamente baixa, marcada por enclaves de exploração mineral e vegetal agroexportadora.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Tópico 2 -->
+            <section id="tema-2" class="scroll-mt-24 space-y-4">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm">2</span>
+                    <h3 class="text-xl font-bold text-slate-900">Quadro Resumo: Grandes Regiões do IBGE</h3>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed mb-4">
+                    Para garantir que não haja necessidade de barra de rolagem horizontal em nenhum dispositivo móvel ou desktop, a comparação estrutural das Grandes Regiões do IBGE está detalhada abaixo em formato de blocos de alto contraste.
+                </p>
+
+                <!-- Cards Comparativos das Regiões (Garante 100% de legibilidade sem Scroll) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- Bloco Região Norte -->
+                    <div class="border border-slate-200/80 rounded-xl p-5 hover:border-emerald-200 transition-colors bg-white">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                            <h4 class="text-base font-bold text-slate-900">Região Norte</h4>
+                            <span class="px-2 py-0.5 text-xs font-bold rounded bg-green-50 text-green-700">Equatorial</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li><strong class="text-slate-800">Geologia e Relevo:</strong> Bacias sedimentares extensas e depressões margeadas por escudos cristalinos antigos; dominada por baixas altitudes.</li>
+                            <li><strong class="text-slate-800">Clima:</strong> Equatorial úmido, baixas amplitudes térmicas e elevados índices pluviométricos ao longo de todo o ano.</li>
+                            <li><strong class="text-slate-800">Vegetação:</strong> Floresta Ombrófila Densa (Floresta Amazônica).</li>
+                            <li><strong class="text-slate-800">Economia:</strong> Extrativismo vegetal e mineral de grande escala; agronegócio pressionando a borda meridional (arco do desmatamento).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloco Região Nordeste -->
+                    <div class="border border-slate-200/80 rounded-xl p-5 hover:border-emerald-200 transition-colors bg-white">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                            <h4 class="text-base font-bold text-slate-900">Região Nordeste</h4>
+                            <span class="px-2 py-0.5 text-xs font-bold rounded bg-amber-50 text-amber-700">Semiárido</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li><strong class="text-slate-800">Geologia e Relevo:</strong> Maciços cristalinos dissecados; Planalto da Borborema atuando como barreira orográfica aos ventos alísios de leste.</li>
+                            <li><strong class="text-slate-800">Clima:</strong> Tropical semiárido no Sertão, com forte variabilidade espacial e temporal de chuvas.</li>
+                            <li><strong class="text-slate-800">Vegetação:</strong> Caatinga (xerófila, decídua estacional, alto índice de endemismo).</li>
+                            <li><strong class="text-slate-800">Economia:</strong> Quatro sub-regiões (Zona da Mata, Agreste, Sertão e Meio-Norte). Convivência de agricultura de subsistência e polos irrigados (Vale do São Francisco).</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloco Região Centro-Oeste -->
+                    <div class="border border-slate-200/80 rounded-xl p-5 hover:border-emerald-200 transition-colors bg-white">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                            <h4 class="text-base font-bold text-slate-900">Região Centro-Oeste</h4>
+                            <span class="px-2 py-0.5 text-xs font-bold rounded bg-orange-50 text-orange-700">Savana</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li><strong class="text-slate-800">Geologia e Relevo:</strong> Domínio de grandes chapadões e planaltos sedimentares na Bacia do Paraná.</li>
+                            <li><strong class="text-slate-800">Clima:</strong> Tropical típico ou alternadamente úmido e seco (verão chuvoso, inverno nitidamente seco).</li>
+                            <li><strong class="text-slate-800">Vegetação:</strong> Cerrado (vegetação savânica com solos ácidos e de baixa fertilidade natural que demandam correção química).</li>
+                            <li><strong class="text-slate-800">Economia:</strong> Dinamismo agroexportador de grãos (soja, milho) e pecuária bovina intensiva; vanguarda da fronteira agrícola.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloco Região Sudeste -->
+                    <div class="border border-slate-200/80 rounded-xl p-5 hover:border-emerald-200 transition-colors bg-white">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                            <h4 class="text-base font-bold text-slate-900">Região Sudeste</h4>
+                            <span class="px-2 py-0.5 text-xs font-bold rounded bg-purple-50 text-purple-700">Mares de Morros</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li><strong class="text-slate-800">Geologia e Relevo:</strong> Cinturões de dobramentos do Pré-Cambriano dissecados; presença marcante de mares de morros e serras abruptas.</li>
+                            <li><strong class="text-slate-800">Clima:</strong> Tropical úmido, tropical de altitude em áreas de serra, e subtropical em transição ao sul.</li>
+                            <li><strong class="text-slate-800">Vegetação:</strong> Floresta Ombrófila Densa (Mata Atlântica) e enclaves de Cerrado no interior.</li>
+                            <li><strong class="text-slate-800">Economia:</strong> Principal centro financeiro, industrial e urbano do Brasil. Altíssima densidade de infraestrutura.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Bloco Região Sul -->
+                    <div class="border border-slate-200/80 rounded-xl p-5 hover:border-emerald-200 transition-colors bg-white md:col-span-2">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
+                            <h4 class="text-base font-bold text-slate-900">Região Sul</h4>
+                            <span class="px-2 py-0.5 text-xs font-bold rounded bg-blue-50 text-blue-700">Subtropical</span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><strong class="text-slate-800">Geologia e Relevo:</strong> Planaltos basálticos formados por derrames de lavas vulcânicas do Mesozoico e escudos de dobramentos na porção leste.</li>
+                                <li><strong class="text-slate-800">Clima:</strong> Subtropical úmido, sem estação seca definida. Amplitude térmica anual bem demarcada em relação ao resto do país.</li>
+                            </ul>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><strong class="text-slate-800">Vegetação:</strong> Floresta Ombrófila Mista (Mata de Araucárias) nas altitudes e os Campos Sulinos (pampas) no extremo sul.</li>
+                                <li><strong class="text-slate-800">Economia:</strong> Estrutura fundiária com forte incidência de minifúndios de policultura familiar e cooperativas agroindustriais integradas.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Tópico 3 -->
+            <section id="tema-3" class="scroll-mt-24 space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm">3</span>
+                    <h3 class="text-xl font-bold text-slate-900">Geografia de Santa Catarina: Aspectos Físicos de Alta Precisão</h3>
+                </div>
+                
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    Com <span class="highlight-yellow">95.730,690 km²</span> de área territorial, Santa Catarina é o estado mais montanhoso e acidentado do Sul do Brasil. Cerca de <span class="highlight-yellow">77% de sua superfície está situada acima de 300 metros</span> de altitude.
+                </p>
+
+                <!-- Perfil do Relevo Simplificado -->
+                <div class="bg-slate-50 border border-slate-100 p-5 rounded-xl space-y-3">
+                    <h4 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Perfil Longitudinal do Relevo Catarinense (Leste -> Oeste):</h4>
+                    <div class="flex flex-col md:flex-row items-center gap-2 text-xs text-center font-semibold">
+                        <div class="flex-1 bg-white border border-slate-200 p-2.5 rounded-lg w-full">
+                            <span class="block text-emerald-700 font-bold">1. Baixada Litorânea</span>
+                            <span class="text-[11px] font-normal text-slate-500">Planícies sedimentares quaternárias arenosas</span>
+                        </div>
+                        <div class="hidden md:block text-slate-400"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                        <div class="flex-1 bg-white border border-slate-200 p-2.5 rounded-lg w-full">
+                            <span class="block text-emerald-700 font-bold">2. Serra do Mar</span>
+                            <span class="text-[11px] font-normal text-slate-500">Maciços cristalinos pré-cambrianos dissecados</span>
+                        </div>
+                        <div class="hidden md:block text-slate-400"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                        <div class="flex-1 bg-white border border-slate-200 p-2.5 rounded-lg w-full">
+                            <span class="block text-emerald-700 font-bold">3. Planalto Paleozoico</span>
+                            <span class="text-[11px] font-normal text-slate-500">Formações de rochas sedimentares da Bacia do Paraná</span>
+                        </div>
+                        <div class="hidden md:block text-slate-400"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                        <div class="flex-1 bg-white border border-slate-200 p-2.5 rounded-lg w-full">
+                            <span class="block text-emerald-700 font-bold">4. Planalto Basáltico</span>
+                            <span class="text-[11px] font-normal text-slate-500">Derrames de lavas da Serra Geral (inclinação para o Oeste)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detalhes do Relevo -->
+                <div class="space-y-4">
+                    <h4 class="text-md font-bold text-slate-800">Estruturas de Relevo Detalhadas:</h4>
+                    <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                        <p>
+                            <strong>Baixada Litorânea:</strong> Apresenta largura muito desigual. Registra <span class="highlight-yellow">26 km de largura no norte</span> (Garuva), alcança a <span class="highlight-yellow">largura máxima de 85 km</span> no baixo vale do Itajaí-Açu e reduz-se drasticamente a escassos <span class="highlight-red">500 metros em Florianópolis</span>, onde o embasamento cristalino toca as águas oceânicas.
+                        </p>
+                        <p>
+                            <strong>Serra Geral (Planalto Basáltico):</strong> Trata-se da borda escarpada de leste do planalto de derrames basálticos mesozoicos. Forma grandes canyons e despenhadeiros com quedas de altitude abruptas superiores a <span class="highlight-yellow">1.000 metros</span>. O relevo inclina-se de modo suave no sentido oeste (em direção ao leito do Rio Uruguai).
+                        </p>
+                    </div>
+
+                    <!-- Clima de Santa Catarina -->
+                    <h4 class="text-md font-bold text-slate-800 pt-2">Clima de Santa Catarina (Critério de Köppen):</h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Santa Catarina é um estado totalmente subtropical úmido, desprovido de estação seca. É segmentado em dois regimes principais:
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="inline-block px-2 py-0.5 text-xs font-bold bg-amber-100 text-amber-800 rounded mb-2">Clima Cfa</span>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                <strong class="text-slate-800">Verão Quente:</strong> Médias térmicas do mês mais quente superam os <span class="highlight-yellow">22°C</span>. Ocorre na Baixada Litorânea, no médio/baixo Vale do Itajaí, no Extremo-Oeste e nos vales de menor altitude do Rio Uruguai.
+                            </p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                            <span class="inline-block px-2 py-0.5 text-xs font-bold bg-blue-100 text-blue-800 rounded mb-2">Clima Cfb</span>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                <strong class="text-slate-800">Verão Fresco:</strong> Médias térmicas do mês mais quente não alcançam os <span class="highlight-yellow">22°C</span>. Característico dos Planaltos Serrano e Norte. <span class="highlight-green">A altitude do relevo, e não a latitude, é o fator determinante para o frio de inverno</span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Divisores de Águas e Hidrografia -->
+                    <h4 class="text-md font-bold text-slate-800 pt-2">Hidrografia e Divisão de Águas:</h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        As cristas da Serra do Mar e da Serra Geral atuam como divisores de águas, estabelecendo duas vertentes de drenagem independentes:
+                    </p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600 space-y-2 leading-relaxed">
+                        <li>
+                            <strong class="text-slate-800">Vertente do Atlântico (37% do território):</strong> Rios independentes que deságuam no mar. Destaque para a <span class="highlight-yellow">Bacia do Rio Itajaí-Açu (15.500 km²)</span>. Os cursos superiores de montanha são acidentados e propícios para geração energética, enquanto o baixo curso apresenta meandros lentos em áreas sedimentares planas sujeitas a cheias graves. Encontra-se aqui estâncias termais ricas em minerais, como Gravatal e Caldas da Imperatriz.
+                        </li>
+                        <li>
+                            <strong class="text-slate-800">Vertente do Interior (63% do território):</strong> Integrante da grande Bacia Platina. Os rios correm sobre o planalto com expressivo potencial hidrelétrico instalável. É formada pelos rios da <span class="highlight-yellow">Bacia do Rio Uruguai</span> (alimentada pelos rios Canoas e Pelotas) e da <span class="highlight-yellow">Bacia do Rio Iguaçu</span> (com destaque para o Rio Negro na divisa com o estado do Paraná).
+                        </li>
+                    </ul>
+
+                    <!-- Biomas de Santa Catarina -->
+                    <h4 class="text-md font-bold text-slate-800 pt-2">Cobertura Vegetal e Biomas Nativos de SC:</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-600">
+                        <div class="border border-slate-100 p-3 rounded-lg">
+                            <strong class="text-slate-800 block mb-1">Mata Atlântica (Floresta Ombrófila Densa):</strong>
+                            Originalmente cobria 31% do território, predominando na encosta voltada para o mar e na baixada costeira. Rica em palmito-juçara, epífitas e lianas.
+                        </div>
+                        <div class="border border-slate-100 p-3 rounded-lg">
+                            <strong class="text-slate-800 block mb-1">Mata de Araucárias (Floresta Ombrófila Mista):</strong>
+                            Originalmente cobria 45% do território. Ocorre nas cotas superiores a 500 metros do planalto, tendo o pinheiro-do-paraná associado à imbuia e à erva-mate.
+                        </div>
+                        <div class="border border-slate-100 p-3 rounded-lg">
+                            <strong class="text-slate-800 block mb-1">Floresta Estacional Decidual (Mata Caducifólia):</strong>
+                            Cobria 8% do território, concentrando-se nas áreas de vale termicamente ameno da calha do rio Uruguai, no extremo oeste catarinense. <span class="highlight-red">Nesta floresta, a araucária não ocorre naturalmente</span>.
+                        </div>
+                        <div class="border border-slate-100 p-3 rounded-lg">
+                            <strong class="text-slate-800 block mb-1">Campos de Planalto (Campos Naturais):</strong>
+                            Cobriam originalmente 14% do território catarinense, em forma de pastagens herbáceas limpas distribuídas nos planaltos mais elevados.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tópico 4 -->
+            <section id="tema-4" class="scroll-mt-24 space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 font-bold text-sm">4</span>
+                    <h3 class="text-xl font-bold text-slate-900">História, Demografia e Economia Catarinense</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-md font-bold text-slate-800">Formação Territorial e Eventos Conflituosos:</h4>
+                    <div class="space-y-3 text-sm text-slate-600 leading-relaxed">
+                        <p>
+                            <strong class="text-slate-800">Povoamento Açoriano (Séc. XVIII):</strong> Organizado pela Coroa portuguesa para guarnecer e defender militarmente o litoral catarinense e a Ilha de Santa Catarina das incursões expansionistas espanholas no Prata.
+                        </p>
+                        <p>
+                            <strong class="text-slate-800">Colonização Europeia (Séc. XIX):</strong> Introdução de correntes migratórias alemãs (Blumenau, Joinville, São Pedro de Alcântara) e italianas (Sul catarinense e vales do Tubarão e Urussanga), assentados em pequenas propriedades familiares orientadas à policultura e ao desenvolvimento de manufaturas.
+                        </p>
+                        <p>
+                            <strong class="text-slate-800">Guerra do Contestado (1912-1916):</strong> Conflito social de forte viés messiânico na fronteira entre Paraná e Santa Catarina. Camponeses caboclos foram desapropriados para a concessão de terras à <span class="highlight-yellow">Brazil Railway Company</span> e exploração de madeira. O massacre imposto às forças populares desestruturou a cultura cabocla local. O litígio terminou no plano jurídico com o <span class="highlight-green">Acordo de Limites de 1916</span> que partilhou as terras em disputa, abrindo caminho para a venda do oeste a companhias de colonização privadas.
+                        </p>
+                        <p>
+                            <strong class="text-slate-800">Território Federal do Iguaçu (1943-1946):</strong> Instituído na Era Vargas por questões de segurança de fronteira frente ao Prata e fomento do povoamento. Desmembrou terras paranaenses e catarinenses (Chapecó) sob gestão direta da União. Foi extinto pela Constituição de 1946.
+                        </p>
+                    </div>
+
+                    <h4 class="text-md font-bold text-slate-800 pt-2">Estrutura Demográfica e Urbana Policêntrica:</h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Ao contrário de outros estados brasileiros que concentram a população na capital (macrocefalia), <span class="highlight-yellow">Santa Catarina se destaca por possuir uma rede urbana policêntrica e espacialmente dispersa</span>. O estado é polarizado por importantes capitais regionais de médio porte com funções industriais específicas:
+                    </p>
+
+                    <!-- Divisão Econômica de Santa Catarina -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white">
+                            <h5 class="text-sm font-bold text-slate-950 mb-1 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Norte Catarinense
+                            </h5>
+                            <p class="text-xs text-slate-500">
+                                Polo metal-mecânico de padrão tecnológico global, indústrias de fundição e polos de desenvolvimento de inovação tecnológica (Joinville e Jaraguá do Sul).
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white">
+                            <h5 class="text-sm font-bold text-slate-950 mb-1 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Vale do Itajaí
+                            </h5>
+                            <p class="text-xs text-slate-500">
+                                Polo industrial têxtil e de confecção de confecções de vestuário de alcance nacional, aliado à indústria de cristais finos e cervejarias (Blumenau e Brusque).
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white">
+                            <h5 class="text-sm font-bold text-slate-950 mb-1 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Grande Oeste
+                            </h5>
+                            <p class="text-xs text-slate-500">
+                                Gigantesco polo agroalimentar de processamento de carne aviária e suína integrada, sob gestão de complexos de frigoríficos transnacionais (Chapecó e Concórdia).
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white">
+                            <h5 class="text-sm font-bold text-slate-950 mb-1 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Sul Catarinense
+                            </h5>
+                            <p class="text-xs text-slate-500">
+                                Polo cerâmico e de extração de carvão mineral termoelétrico (Criciúma) aliado à indústria termoplástica e polo pesqueiro de grande relevância (Laguna).
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white">
+                            <h5 class="text-sm font-bold text-slate-950 mb-1 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Florianópolis
+                            </h5>
+                            <p class="text-xs text-slate-500">
+                                Centralização político-administrativa estadual, proeminência no turismo, comércio de serviços e polo de tecnologia da informação de alto valor agregado.
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-slate-100 bg-white">
+                            <h5 class="text-sm font-bold text-slate-950 mb-1 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span> Bolsões Históricos
+                            </h5>
+                            <p class="text-xs text-slate-500">
+                                O Planalto Norte e o vale do Contestado despontam como bolsões que receberam menos investimentos históricos, apresentando menores índices econômicos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tópico 5 -->
+            <section id="tema-5" class="scroll-mt-24 space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="w-8 h-8 rounded-lg bg-red-50 text-red-700 flex items-center justify-center font-bold text-sm border border-red-100">5</span>
+                    <h3 class="text-xl font-bold text-red-900">Treinamento de Elite: Evitando as Armadilhas da FAURGS</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        A banca FAURGS frequentemente elabora pegadinhas teóricas sutis em provas de concurso para cargos docentes. Domine estes três eixos estratégicos para obter pontos decisivos na prova objetiva:
+                    </p>
+
+                    <!-- Armadilha 1: Escala -->
+                    <div class="border border-red-100 bg-red-50/10 p-5 rounded-xl space-y-3">
+                        <div class="flex items-center gap-2 text-red-800">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+                            <h4 class="font-bold text-sm uppercase tracking-wider">Armadilha 1: Diferença entre Escala Linear e Escala de Área</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800">A Pegadinha:</strong> A banca apresenta uma escala numérica linear (ex: <span class="highlight-yellow">1:50.000</span>) e pede para você encontrar a área real correspondente a uma área desenhada no mapa (ex: <span class="highlight-yellow">3 cm²</span>). <span class="highlight-red">Se você fizer uma conversão simples linear direta, você cairá no distrator!</span>
+                        </p>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800">A Regra Prática de Resolução:</strong> A escala de área é dada pelo quadrado da escala linear correspondente. A fórmula direta para converter uma área gráfica de centímetros quadrados (\(cm^2\)) para quilômetros quadrados (\(km^2\)) é:
+                        </p>
+                        <div class="bg-white border border-slate-200 p-4 rounded-lg text-center font-mono text-sm font-semibold shadow-inner text-slate-800">
+                            Área Real (km²) = Área Gráfica (cm²) &times; ( Denominador da Escala / 100.000 )²
+                        </div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            <strong class="text-slate-700">Aplicação no Exemplo:</strong> Em uma escala de 1:50.000, dividindo o denominador por 100.000, obtemos <span class="highlight-green">0,5</span>. Elevando-o ao quadrado, temos <span class="highlight-green">0,25</span>. Multiplicando esse fator de correção pela área gráfica (3 cm²), a área real exata é de <span class="highlight-green">0,75 km²</span>.
+                        </p>
+                    </div>
+
+                    <!-- Armadilha 2: Clima -->
+                    <div class="border border-red-100 bg-red-50/10 p-5 rounded-xl space-y-3">
+                        <div class="flex items-center gap-2 text-red-800">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+                            <h4 class="font-bold text-sm uppercase tracking-wider">Armadilha 2: O Fator Dinâmico Climático de Santa Catarina</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800">A Pegadinha:</strong> Atribuir as baixas temperaturas do planalto, as ocorrências de geadas e episódios de precipitação nival (neve) exclusivamente à sua elevada latitude meridional no território brasileiro.
+                        </p>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800">A Regra Prática de Resolução:</strong> <span class="highlight-yellow">É a altitude expressiva do Planalto Basáltico que determina o Clima Cfb</span> de verões frescos. Cidades litorâneas situadas na mesma faixa latitudinal pertencem ao clima Cfa de verões quentes porque estão localizadas em altitudes próximas do nível do mar.
+                        </p>
+                    </div>
+
+                    <!-- Armadilha 3: Vegetação -->
+                    <div class="border border-red-100 bg-red-50/10 p-5 rounded-xl space-y-3">
+                        <div class="flex items-center gap-2 text-red-800">
+                            <i data-lucide="shield-alert" class="w-5 h-5 text-red-600"></i>
+                            <h4 class="font-bold text-sm uppercase tracking-wider">Armadilha 3: O Mito da Araucária Onipresente no Oeste</h4>
+                        </div>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800">A Pegadinha:</strong> Afirmar sem ressalvas que a totalidade do Extremo-Oeste e do vale do Rio Uruguai catarinense é recoberta e caracterizada pela Mata de Araucárias.
+                        </p>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            <strong class="text-slate-800">A Regra Prática de Resolução:</strong> A calha do rio Uruguai, no Extremo-Oeste, possui menor altitude e clima quente Cfa. Essa área é domínio da <span class="highlight-yellow">Floresta Estacional Decidual</span> (que perde as folhas no inverno), <span class="highlight-red">onde a ocorrência nativa da araucária é nula</span>. Os pinheiros demandam altitudes superiores a 500 metros para se desenvolverem.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Botão de Navegação de Exercícios -->
+            <div class="pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900">Aula de Teoria Concluída!</h4>
+                    <p class="text-xs text-slate-500">Pronto para testar seus conhecimentos e fixar o conteúdo estudado?</p>
+                </div>
+                <a href="regionalquestoes.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl shadow-md shadow-slate-100 transition-all transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-slate-500">
+                    Ir para Simulado de Questões
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+        </article>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="border-t border-slate-100 bg-white py-6 mt-12 text-center text-xs text-slate-400">
+        <div class="max-w-5xl mx-auto px-4">
+            Plataforma Didática - Material focado no Edital IFSC Docente de Geografia. Desenvolvido para uso individual.
+        </div>
+    </footer>
+
+    <!-- Scripts de Controle -->
+    <script>
+        // Inicializar os ícones do Lucide
+        lucide.createIcons();
+
+        // Variáveis do Player de Áudio
+        const audio = document.getElementById('lesson-audio');
+        const playBtn = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const progressBar = document.getElementById('audio-progress');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationTimeEl = document.getElementById('duration-time');
+        const speedBtns = document.querySelectorAll('.speed-btn');
+        const volumeSlider = document.getElementById('audio-volume');
+        const muteBtn = document.getElementById('btn-mute');
+        
+        // Controle de Arquivo Customizado
+        const srcInput = document.getElementById('audio-src-input');
+        const loadBtn = document.getElementById('btn-load-audio');
+        const statusSpan = document.querySelector('#audio-status span');
+
+        // Carregar o arquivo personalizado digitado pelo usuário
+        function loadCustomAudio() {
+            const filename = srcInput.value.trim();
+            if (filename !== "") {
+                audio.src = filename;
+                audio.load();
+                statusSpan.textContent = filename;
+                
+                // Reset do visualizador de tempos
+                progressBar.value = 0;
+                currentTimeEl.textContent = "00:00";
+                
+                // Mudar ícone para play após carregar o novo arquivo
+                playIcon.setAttribute('data-lucide', 'play');
+                playIcon.classList.remove('text-emerald-300');
+                lucide.createIcons();
+            }
+        }
+
+        loadBtn.addEventListener('click', loadCustomAudio);
+
+        // Formatar tempo de reprodução (segundos para mm:ss)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Tocar ou Pausar Áudio
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playIcon.setAttribute('data-lucide', 'pause');
+                        lucide.createIcons();
+                    })
+                    .catch(err => {
+                        console.warn("Áudio não encontrado ou impossibilitado de reproduzir:", err);
+                        alert("Não foi possível reproduzir o arquivo. Certifique-se de que o arquivo '" + srcInput.value + "' está na mesma pasta desta página!");
+                    });
+            } else {
+                audio.pause();
+                playIcon.setAttribute('data-lucide', 'play');
+                lucide.createIcons();
+            }
+        }
+
+        playBtn.addEventListener('click', togglePlay);
+
+        // Atualizar barra de progresso em tempo real
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percent;
+                currentTimeEl.textContent = formatTime(audio.currentTime);
+            }
+        });
+
+        // Carregar duração do áudio assim que carregar os metadados
+        audio.addEventListener('loadedmetadata', () => {
+            durationTimeEl.textContent = formatTime(audio.duration);
+        });
+
+        // Permitir que o estudante avance/retorne na barra de progresso
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                const seekTime = (progressBar.value / 100) * audio.duration;
+                audio.currentTime = seekTime;
+            }
+        });
+
+        // Alterar Velocidade de Reprodução
+        speedBtns.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remover estilo ativo de todos
+                speedBtns.forEach(b => {
+                    b.classList.remove('bg-white', 'text-emerald-700', 'shadow-sm');
+                    b.classList.add('text-slate-600');
+                });
+                // Adicionar estilo ativo ao botão clicado
+                button.classList.add('bg-white', 'text-emerald-700', 'shadow-sm');
+                button.classList.remove('text-slate-600');
+
+                // Aplicar a nova velocidade de reprodução
+                const speed = parseFloat(button.getAttribute('data-speed'));
+                audio.playbackRate = speed;
+            });
+        });
+
+        // Controle de Volume e Mudo
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value;
+            if (audio.volume === 0) {
+                muteBtn.querySelector('i').setAttribute('data-lucide', 'volume-x');
+            } else {
+                muteBtn.querySelector('i').setAttribute('data-lucide', 'volume-2');
+            }
+            lucide.createIcons();
+        });
+
+        muteBtn.addEventListener('click', () => {
+            if (audio.muted) {
+                audio.muted = false;
+                muteBtn.querySelector('i').setAttribute('data-lucide', 'volume-2');
+                volumeSlider.value = audio.volume;
+            } else {
+                audio.muted = true;
+                muteBtn.querySelector('i').setAttribute('data-lucide', 'volume-x');
+                volumeSlider.value = 0;
+            }
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
