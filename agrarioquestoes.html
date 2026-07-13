@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo: Espaço Agrário Brasileiro (Estilo FAURGS)</title>
+    <!-- Importando Tailwind CSS para estilo utilitário moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Inter para interface legível e Merriweather para textos longos de leitura confortável -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    
+    <!-- Configuração de cores personalizadas e tipografia via Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        warmbg: '#FDFBF7', // Fundo creme suave que não cansa a vista
+                        warmdark: '#1C1917', // Texto escuro suave (stone-900)
+                        sage: {
+                            50: '#F4F7F5',
+                            100: '#E9EFEA',
+                            600: '#3D5E4A',
+                            700: '#2F483A',
+                            800: '#22342A',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilização suave para rádio buttons personalizados */
+        input[type="radio"]:checked + label {
+            border-color: #3d5e4a;
+            background-color: #f4f7f5;
+        }
+        .progress-bar-fill {
+            transition: width 0.4s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-warmbg text-stone-850 font-serif leading-relaxed min-h-full flex flex-col selection:bg-sage-100 selection:text-sage-800">
+
+    <!-- Cabeçalho Principal -->
+    <header class="border-b border-stone-200/80 bg-white/70 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="font-sans flex items-center gap-3">
+                <div class="bg-sage-700 text-white p-2 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-sage-800">Geografia Agrária</h1>
+                    <p class="text-xs text-stone-500 font-medium">Banca FAURGS • 10 Questões Inéditas</p>
+                </div>
+            </div>
+            
+            <!-- Barra de Progresso do Preenchimento -->
+            <div class="w-full sm:w-64 bg-stone-100 rounded-full h-2.5 overflow-hidden border border-stone-200">
+                <div id="progressBar" class="bg-sage-600 h-full progress-bar-fill w-0"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-4xl w-full mx-auto px-4 py-8">
+        <!-- Banner Informativo -->
+        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 font-sans">
+            <h2 class="text-2xl font-bold text-stone-900 mb-2">O Espaço Agrário Brasileiro: Potência e Contradições</h2>
+            <p class="text-stone-600 leading-relaxed text-sm">
+                Bem-vindo ao simulador interativo de questões. Este caderno foi projetado especificamente para reproduzir o rigor, a linguagem complexa e as estruturas de itens da banca <strong>FAURGS</strong>. Leia atentamente os textos de apoio e assinale a alternativa mais completa.
+            </p>
+            <div class="flex flex-wrap gap-4 mt-4 text-xs font-semibold text-sage-700">
+                <span class="bg-sage-50 px-3 py-1.5 rounded-full border border-sage-100">✔ Estrutura Fundiária</span>
+                <span class="bg-sage-50 px-3 py-1.5 rounded-full border border-sage-100">✔ Lei de Terras de 1850</span>
+                <span class="bg-sage-50 px-3 py-1.5 rounded-full border border-sage-100">✔ Modernização Conservadora</span>
+                <span class="bg-sage-50 px-3 py-1.5 rounded-full border border-sage-100">✔ Conflitos e Reforma Agrária</span>
+            </div>
+        </div>
+
+        <!-- Formulário do Quiz -->
+        <form id="quizForm" onsubmit="event.preventDefault(); evaluateQuiz();">
+
+            <!-- QUESTÃO 01 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q1">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 01</span>
+                    <span class="text-xs text-stone-400">FAURGS • História Agrária</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        A formação histórica do espaço agrário brasileiro é indissociável da evolução de sua estrutura jurídica e fundiária. O marco divisor desse processo no período imperial foi a promulgação da Lei nº 601, de 18 de setembro de 1850, conhecida como a Lei de Terras, cuja articulação política esteve estreitamente vinculada à abolição gradual do tráfico negreiro por meio da Lei Eusébio de Queirós.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Considere as seguintes afirmações sobre o impacto e os dispositivos da Lei de Terras de 1850 na estrutura agrária do país.
+                    </p>
+                    <div class="space-y-3 pl-4 border-l-2 border-stone-200 italic text-stone-700 text-sm mb-6">
+                        <p><strong>I -</strong> A legislação estabeleceu a compra onerosa em leilão público como a única via legal de aquisição de terras devolutas, proibindo formalmente novas doações de sesmarias e restringindo severamente a legitimação de posses por ocupação primária após sua vigência.</p>
+                        <p><strong>II -</strong> O desenho institucional da referida lei buscou democratizar o acesso à propriedade rústica, facilitando a concessão de créditos públicos para que os escravizados libertos e os imigrantes europeus de baixa renda adquirissem pequenas glebas de subsistência.</p>
+                        <p><strong>III -</strong> Os recursos arrecadados com a alienação das terras públicas destinavam-se, por determinação legal, ao financiamento da vinda de colonos livres estrangeiros, garantindo o suprimento de mão de obra para a grande lavoura monocultora de exportação e a reprodução do excedente cafeeiro.</p>
+                        <p><strong>IV -</strong> A lei instituiu o Registro Paroquial de Terras, delegando aos vigários de cada freguesia a atribuição de registrar as declarações de posse, dispositivo que, na ausência de levantamentos técnicos precisos, foi amplamente instrumentalizado pelas elites oligárquicas para consolidar fraudes cartoriais.</p>
+                    </div>
+                    <p class="text-stone-850 font-sans font-semibold text-sm mb-4">Quais estão corretas?</p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q1" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(A) Apenas I e II.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q1" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(B) Apenas II e III.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q1" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(C) Apenas I, III e IV.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q1" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(D) Apenas II, III e IV.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q1" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(E) I, II, III e IV.</span>
+                    </label>
+                </div>
+                <!-- Resolução (inicialmente oculta) -->
+                <div id="res-q1" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: C</strong><br>
+                        A análise das proposições revela a complexidade estrutural e a intencionalidade da Lei de Terras de 1850 na consolidação do latifúndio no Brasil. <br><br>
+                        A <strong>proposição I</strong> está correta porque a Lei de 1850 rompeu formalmente com as antigas formas de doações gratuitas e estabeleceu a compra em leilão público como única via.<br>
+                        A <strong>proposição II</strong> está incorreta porque o desenho de lei serviu de barreira para dificultar o acesso de libertos e camponeses de baixa renda, para manter a dependência do trabalho assalariado cafeeiro.<br>
+                        A <strong>proposição III</strong> está correta porque os recursos deveriam financiar a atração e o transporte de colonos livres estrangeiros.<br>
+                        A <strong>proposição IV</strong> está correta porque os Registros Paroquiais (do vigário) eram vulneráveis e foram largamente utilizados para consolidar fraudes e "grilagens" de terras desmarcadas.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 02 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q2">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 02</span>
+                    <span class="text-xs text-stone-400">FAURGS • Modernização Conservadora</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        A modernização da agricultura brasileira, intensificada a partir da década de 1970 sob a égide dos governos militares, é caracterizada na literatura geográfica como uma "modernização conservadora". Esse processo reestruturou profundamente as bases técnicas do campo e promoveu a articulação entre as atividades agrícolas e industriais.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Assinale com V (verdadeiro) ou F (falso) as afirmações a seguir sobre a modernização conservadora e a constituição dos Complexos Agroindustriais (CAIs).
+                    </p>
+                    <div class="space-y-2 text-stone-700 text-sm mb-6 font-sans">
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>A modernização conservadora promoveu um expressivo incremento na produtividade do campo por meio do uso intensivo de fertilizantes químicos, agrotóxicos, sementes selecionadas e mecanização pesada, operando tal transformação sem alterar a histórica concentração da propriedade fundiária.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>A consolidação dos Complexos Agroindustriais (CAIs) conferiu maior autonomia produtiva e comercial aos agricultores, que passaram a determinar de forma soberana as taxas de juros, o preço dos insumos e os canais de distribuição de suas safras.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>O processo de tecnificação do campo gerou uma descentralização geográfica seletiva das lavouras de grãos em direção ao Centro-Oeste, embora o comando estratégico e financeiro das redes produtivas tenha permanecido concentrado nas principais metrópoles do Sudeste brasileiro.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>A modernização agrícola promoveu a estabilização demográfica no meio rural ao criar postos de trabalho qualificados e permanentes para a grande massa de pequenos produtores, solucionando os fluxos históricos de êxodo rural.</span>
+                        </div>
+                    </div>
+                    <p class="text-stone-850 font-sans font-semibold text-sm mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q2" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(A) V – F – V – F.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q2" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(B) V – V – F – F.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q2" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(C) F – V – V – F.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q2" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(D) V – F – F – V.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q2" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(E) F – F – V – V.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q2" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: A</strong><br>
+                        • <strong>Verdadeiro:</strong> A modernização aumentou muito o rendimento no campo por maquinário/química, mas ocorreu sem realizar a reforma agrária, mantendo a concentração histórica (por isso "conservadora").<br>
+                        • <strong>Falso:</strong> A consolidação dos CAIs subordinou o agricultor a montante (indústrias de insumos e sementes) e a jusante (redes logísticas e tradings), retirando-lhe considerável autonomia comercial.<br>
+                        • <strong>Verdadeiro:</strong> A produção foi fisicamente descentralizada para o Cerrado (Centro-Oeste), mas o comando de capital das agroindústrias manteve-se altamente concentrado no Sudeste (São Paulo).<br>
+                        • <strong>Falso:</strong> Longe de fixar as famílias rurais, a mecanização substituiu massivamente a mão de obra, intensificando o desemprego tecnológico e o êxodo rural.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 03 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q3">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 03</span>
+                    <span class="text-xs text-stone-400">FAURGS • Geografia Legal & Módulos</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        O Instituto Nacional de Colonização e Reforma Agrária (INCRA) adota diferentes unidades de medida agrária para fins de cadastro, fiscalização, tributação e enquadramento das propriedades rurais brasileiras, destacando-se os conceitos de Módulo Rural e Módulo Fiscal.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Sobre esses conceitos normativos e suas aplicações na classificação da estrutura fundiária, assinale a alternativa correta.
+                    </p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q3" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(A) O módulo rural é uma unidade de medida homogênea e uniforme para todo o território nacional, calculada exclusivamente a partir da extensão geométrica do imóvel rústico.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q3" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(B) O módulo fiscal é fixado individualmente para cada município brasileiro pelo INCRA e representa a área mínima necessária para garantir a viabilidade econômica de uma propriedade familiar, variando entre 5 e 110 hectares conforme a região e o tipo de exploração dominante.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q3" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(C) A Fração Mínima de Parcelamento (FMP), correspondente à menor área em que um imóvel rural pode ser desmembrado em um dado município, é determinada pela legislação urbana local na extensão fixa de 125 m².</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q3" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(D) O cálculo do número de módulos fiscais de uma dada propriedade rústica é realizado por meio da multiplicação de sua área aproveitável pela Fração Mínima de Parcelamento fixada para o respectivo estado federativo.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q3" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(E) O módulo fiscal é utilizado unicamente para fins de cobrança sindical patronal, não possuindo qualquer aplicação prática no enquadramento de pequenas propriedades ou nas definições de isenções do Código Florestal.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q3" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: B</strong><br>
+                        • <strong>Incorreta (A):</strong> O módulo rural é heterogêneo (varia para cada imóvel) baseando-se no tipo de exploração e vias de escoamento.<br>
+                        • <strong>Correta (B):</strong> O módulo fiscal é determinado por município (variando de 5ha a 110ha) e visa espelhar a área ideal para o sustento familiar local.<br>
+                        • <strong>Incorreta (C):</strong> A Fração Mínima de Parcelamento (FMP) rural é definida pela legislação federal agrária vinculada ao INCRA (não legislações urbanas locais de 125 m²).<br>
+                        • <strong>Incorreta (D):</strong> O cálculo é uma <em>divisão</em> da área total do imóvel pelo módulo fiscal municipal, e não multiplicação.<br>
+                        • <strong>Incorreta (E):</strong> O módulo fiscal classifica os imóveis em pequeno (até 4 módulos), médio (4 a 15) ou grande (mais de 15) e é base do Código Florestal e do crédito familiar (PRONAF).
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 04 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q4">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 04</span>
+                    <span class="text-xs text-stone-400">FAURGS • Análise de Dados de Censo</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        Os padrões históricos de desigualdade e de concentração da propriedade da terra no território nacional são mensurados e acompanhados sistematicamente por meio dos Censos Agropecuários conduzidos pelo Instituto Brasileiro de Geografia e Estatística (IBGE).
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Considere a tabela abaixo, elaborada a partir de dados históricos dos Censos Agropecuários das últimas décadas:
+                    </p>
+                    
+                    <!-- Tabela Adaptada e Responsiva -->
+                    <div class="overflow-x-auto my-6 border border-stone-200 rounded-xl font-sans">
+                        <table class="min-w-full divide-y divide-stone-200 text-sm">
+                            <thead class="bg-stone-50">
+                                <tr class="text-stone-700 text-left">
+                                    <th class="px-4 py-3 font-semibold border-r border-stone-200">Classes de Área (ha)</th>
+                                    <th class="px-4 py-3 font-semibold border-r border-stone-200">% do Total de Estabelecimentos (2017)</th>
+                                    <th class="px-4 py-3 font-semibold border-r border-stone-200">% da Área Total Ocupada (2017)</th>
+                                    <th class="px-4 py-3 font-semibold">% da Área Total Ocupada (1985)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-stone-150 bg-white text-stone-800">
+                                <tr>
+                                    <td class="px-4 py-3 font-medium border-r border-stone-200 bg-stone-50/50"><strong>Menos de 100</strong></td>
+                                    <td class="px-4 py-3 border-r border-stone-200">80% a 90%</td>
+                                    <td class="px-4 py-3 border-r border-stone-200">~ 20,49%</td>
+                                    <td class="px-4 py-3">~ 21,22%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-medium border-r border-stone-200 bg-stone-50/50"><strong>100 a 1.000</strong></td>
+                                    <td class="px-4 py-3 border-r border-stone-200">~ 8% a 9%</td>
+                                    <td class="px-4 py-3 border-r border-stone-200">~ 31,99%</td>
+                                    <td class="px-4 py-3">~ 35,06%</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-medium border-r border-stone-200 bg-stone-50/50"><strong>1.000 e mais</strong></td>
+                                    <td class="px-4 py-3 border-r border-stone-200">~ 1% a 2%</td>
+                                    <td class="px-4 py-3 border-r border-stone-200">~ 47,52%</td>
+                                    <td class="px-4 py-3">~ 43,73%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-stone-850 font-bold mb-4">
+                        Com base nos dados apresentados e na dinâmica da estrutura fundiária no Brasil, assinale a afirmação correta.
+                    </p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q4" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(A) Os dados empíricos demonstram uma acentuada desconcentração da propriedade da terra no período de 1985 a 2017, evidenciada pelo crescimento expressivo da área ocupada pelos estabelecimentos rurais com menos de 100 hectares.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q4" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(B) A distribuição territorial revela que a classe de grandes propriedades (1.000 hectares e mais), embora represente uma fração insignificante do total dos estabelecimentos agropecuários rurais do país, expandiu sua participação e concentra quase metade de toda a área agrícola nacional.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q4" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(C) O Índice de Gini para a distribuição da posse da terra no Brasil registrou uma queda contínua e expressiva ao longo do período analisado, situando-se em patamares próximos de zero em 2017 devido às desapropriações sistemáticas do INCRA.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q4" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(D) As pequenas propriedades com área inferior a 100 hectares concentram a maior parte das terras aproveitáveis do território nacional, o que comprova a predominância geográfica de uma estrutura de minifúndios produtivos em detrimento do latifúndio agroexportador.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q4" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(E) A classe intermediária de propriedades (100 a 1.000 hectares) foi a que mais expandiu sua participação na área total ocupada do país, refletindo o fortalecimento de uma classe média rural consolidada e autônoma.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q4" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: B</strong><br>
+                        • <strong>Incorreta (A):</strong> O percentual de área das propriedades de menor porte de fato <em>decresceu</em> levemente de 21,22% para 20,49%, mostrando estabilidade e persistência na alta concentração fundiária.<br>
+                        • <strong>Correta (B):</strong> A elite de grandes fazendas representa apenas 1% a 2% do total numérico dos estabelecimentos do país, porém estende seu domínio em 47,52% da área total ocupada, evidenciando o padrão de concentração fundiária.<br>
+                        • <strong>Incorreta (C):</strong> O Gini agrário do Brasil continuou estagnado no patamar de extrema desigualdade (entre 0,858 e 0,864), longe de declinar para valores igualitários.<br>
+                        • <strong>Incorreta (D):</strong> As pequenas propriedades controlam apenas um quinto da área produtiva nacional (20,49%), de forma que as grandes controlam o restante.<br>
+                        • <strong>Incorreta (E):</strong> A classe média/intermediária (100-1.000 ha) perdeu representação, caindo de 35,06% para 31,99% em favor das propriedades gigantescas de commodities.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 05 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q5">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 05</span>
+                    <span class="text-xs text-stone-400">FAURGS • Função Social & Constituição</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        A reforma agrária constitui uma diretriz constitucional destinada a democratizar o acesso à terra e garantir que as propriedades rústicas atendam à sua função social, conforme os parâmetros instituídos pelo Estatuto da Terra (Lei nº 4.504/1964) e pela Constituição Federal de 1988.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Considere as seguintes afirmações sobre os mecanismos jurídicos da reforma agrária e a dinâmica de conflitos no campo brasileiro.
+                    </p>
+                    <div class="space-y-3 pl-4 border-l-2 border-stone-200 italic text-stone-700 text-sm mb-6">
+                        <p><strong>I -</strong> A desapropriação por interesse social, para fins de reforma agrária, incide sobre os imóveis rurais que descumprem simultaneamente os requisitos de aproveitamento racional e adequado, utilização apropriada dos recursos naturais disponíveis, observância das leis trabalhistas e preservação do bem-estar dos proprietários e trabalhadores.</p>
+                        <p><strong>II -</strong> As propriedades rurais caracterizadas como produtivas, nos termos fixados pela legislação agrária em relação ao Grau de Utilização da Terra (GUT) e ao Grau de Eficiência na Exploração (GEE), são passíveis de desapropriação sumária para assentamento de trabalhadores, independentemente do respeito às normas trabalhistas ou ambientais.</p>
+                        <p><strong>III -</strong> O avanço da fronteira agropecuária nas regiões de transição ecológica, impulsionado pelo agronegócio corporativo de exportação, tem gerado frequentes conflitos possessórios que afetam comunidades tradicionais, terras indígenas, territórios quilombolas e pequenos posseiros.</p>
+                        <p><strong>IV -</strong> A Lei nº 13.465/2017 promoveu alterações no rito de regularização fundiária ao priorizar a outorga de títulos de propriedade definitivos e alienáveis aos assentados, medida que conta com o apoio irrestrito de movimentos sociais camponeses tradicionais.</p>
+                    </div>
+                    <p class="text-stone-850 font-sans font-semibold text-sm mb-4">Quais estão corretas?</p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q5" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(A) Apenas I e II.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q5" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(B) Apenas I e III.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q5" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(C) Apenas II e IV.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q5" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(D) Apenas I, III e IV.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q5" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(E) I, II, III e IV.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q5" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: B</strong><br>
+                        • <strong>I (Correta):</strong> A função social da propriedade rural exige o cumprimento integral de todos os pilares (produtividade, preservação ambiental e respeito trabalhista) simultaneamente.<br>
+                        • <strong>II (Incorreta):</strong> A Constituição de 1988 assegura explicitamente que as propriedades que cumprem os índices de produtividade não podem ser desapropriadas para fins de reforma agrária.<br>
+                        • <strong>III (Correta):</strong> A fronteira agropecuária ao expandir-se rumo à Amazônia e às transições ecológicas gerou de fato choques territoriais severos com indígenas, ribeirinhos e quilombolas.<br>
+                        • <strong>IV (Incorreta):</strong> A Lei nº 13.465/2017 sofre críticas pesadas de movimentos tradicionais (como o MST), os quais denunciam que a privatização imediata de títulos (com permissão de venda) estimula a mercantilização da terra e força pequenos agricultores endividados a revender as terras para os latifundiários.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 06 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q6">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 06</span>
+                    <span class="text-xs text-stone-400">FAURGS • Conceituação dos Atores Sociais</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        A estrutura de posse do espaço agrário brasileiro abriga diferentes sujeitos e categorias territoriais que interagem em um cenário de intensas disputas jurídicas e espaciais.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Associe as definições apresentadas na coluna à esquerda às respectivas categorias rurais listadas na coluna à direita.
+                    </p>
+
+                    <!-- Painel Associativo de Duas Colunas -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6 font-sans text-sm">
+                        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
+                            <span class="text-xs font-bold text-stone-500 uppercase">Definições</span>
+                            <div><strong>1.</strong> Terras públicas que, não tendo sido aplicadas a algum uso público nacional, estadual ou municipal, e não tendo integrado de forma legítima o patrimônio privado, constituem patrimônio do Estado.</div>
+                            <div><strong>2.</strong> Agricultor que, desprovido de título de propriedade formal registrado em cartório, exerce a ocupação e o cultivo de fato de uma porção de terra devoluta ou particular desocupada, nela estabelecendo moradia e cultura.</div>
+                            <div><strong>3.</strong> Agente socioeconômico que se apropria de terras públicas ou de posses de terceiros por meio da falsificação de escrituras ou do uso de artifícios documentais fraudulentos.</div>
+                            <div><strong>4.</strong> Categoria dimensional de imóvel rural cujo tamanho é inferior ao módulo rural mínimo da zona típica correspondente, inviabilizando o sustento econômico e a subsistência de uma família típica.</div>
+                        </div>
+                        <div class="bg-stone-50/50 p-4 rounded-xl border border-stone-200 space-y-4 flex flex-col justify-center">
+                            <span class="text-xs font-bold text-stone-500 uppercase">Relação de Parênteses</span>
+                            <div class="space-y-2 text-stone-800">
+                                <p>( &nbsp; ) Grileiro</p>
+                                <p>( &nbsp; ) Terras Devolutas</p>
+                                <p>( &nbsp; ) Minifúndio</p>
+                                <p>( &nbsp; ) Posseiro</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-stone-850 font-bold mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q6" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(A) 3 – 1 – 4 – 2.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q6" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(B) 2 – 1 – 3 – 4.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q6" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(C) 3 – 2 – 1 – 4.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q6" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(D) 4 – 1 – 3 – 2.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q6" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(E) 2 – 3 – 4 – 1.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q6" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: A</strong><br>
+                        A associação correta desenvolve-se a partir das seguintes características sociojurídicas:<br>
+                        • <strong>Grileiro (3):</strong> O agente criminoso que forja escrituras cartoriais e usa de meios violentos de fato para consolidar latifúndios sobre fatias devolutas ou de camponeses.<br>
+                        • <strong>Terras Devolutas (1):</strong> Terras pertencentes ao Estado brasileiro desde o Império, desprovidas de destinação pública formal ou registro legítimo em domínio privado.<br>
+                        • <strong>Minifúndio (4):</strong> Imóvel rural de extensão inferior ao módulo rural municipal, o qual não fornece sustento básico e subsistência familiar autônoma.<br>
+                        • <strong>Posseiro (2):</strong> Produtor camponês desprovido de escrituras registradas que mora e retira seu sustento familiar do cultivo real direto na terra, amparando-se na função social.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 07 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q7">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 07</span>
+                    <span class="text-xs text-stone-400">FAURGS • Agronegócio vs. Agricultura Familiar</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        O espaço agrário brasileiro abriga dois projetos territoriais e sociopolíticos de desenvolvimento que disputam recursos, terras e incentivos estatais: o agronegócio corporativo e a agricultura de base familiar.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Sobre a dinâmica desses dois modelos produtivos no território nacional, assinale a alternativa correta.
+                    </p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q7" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(A) O agronegócio exportador caracteriza-se pela policultura intensiva e pela baixa dependência de insumos químicos industriais, voltando toda a sua produção para o abastecimento direto do mercado alimentício interno.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q7" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(B) A agricultura familiar, embora controle a menor parcela das terras nos estabelecimentos rurais do país, constitui a principal fonte de geração de empregos e postos de trabalho no campo e desempenha papel estratégico na produção de alimentos essenciais para a segurança alimentar do mercado interno.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q7" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(C) O campesinato é uma categoria social homogênea que prescinde de políticas públicas de apoio produtivo, financiamento e crédito rural, operando com total autonomia frente ao avanço do capital monopolista no campo.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q7" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(D) A distribuição de recursos de fomento do Plano Safra ao longo das últimas décadas tem priorizado de forma simétrica a agricultura familiar camponesa, em detrimento dos grandes produtores de commodities de grãos.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q7" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(E) O desenvolvimento do agronegócio corporativo eliminou a necessidade histórica de reforma agrária no país, uma vez que a expansion das grandes fazendas mecanizadas promoveu a democratização do acesso à terra e eliminou a pobreza rural.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q7" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: B</strong><br>
+                        • <strong>Incorreta (A):</strong> O agronegócio foca na monocultura em larga escala, extremamente dependente de insumos químicos e sementes industriais, e é majoritariamente exportadora.<br>
+                        • <strong>Correta (B):</strong> Embora a agricultura familiar detenha a menor proporção territorial nos estabelecimentos rurais brasileiros, responde por abrigar mais de 70% da força de trabalho rural e é o sustentáculo de alimentos básicos do mercado nacional (arroz, feijão, mandioca, hortaliças).<br>
+                        • <strong>Incorreta (C):</strong> O campesinato é muito heterogêneo e necessita de amparo institucional e econômico estatal constante para não ser esmagado pelas frentes capitalistas agrícolas.<br>
+                        • <strong>Incorreta (D):</strong> A partilha histórica dos recursos do Plano Safra destina o grosso dos montantes (70% a 80%) para as commodities agroexportadoras, deixando menor fração para a agricultura familiar (PRONAF).<br>
+                        • <strong>Incorreta (E):</strong> Pelo contrário, a modernização do agronegócio acirrou a concentração da terra de forma seletiva, provocando conflitos de posse.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 08 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q8">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 08</span>
+                    <span class="text-xs text-stone-400">FAURGS • Fronteira Agrícola & Cerrado</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        La expansão da fronteira agrícola brasileira a partir da segunda metade do século XX transformou profundamente as dinâmicas regionais do país, com destaque para a ocupação do bioma Cerrado nas regiões Centro-Oeste e na porção conhecida como MATOPIBA.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Considere as seguintes afirmações sobre as implicações espaciais, econômicas e ecológicas dessa expansão.
+                    </p>
+                    <div class="space-y-3 pl-4 border-l-2 border-stone-200 italic text-stone-700 text-sm mb-6">
+                        <p><strong>I -</strong> A correção da acidez do solo do Cerrado por meio de técnicas de calagem e o desenvolvimento de sementes híbridas adaptadas ao clima tropical permitiram a consolidação do Centro-Oeste como o principal polo de produção de grãos e de carnes do país.</p>
+                        <p><strong>II -</strong> A rápida expansão das monoculturas de soja e de algodão foi acompanhada de graves custos socioambientais, tais como o desmatamento de vegetação nativa, o assoreamento de cursos d'água devido ao surgimento de voçorocas e a contaminação de lençóis freáticos pelo uso intensivo de defensivos agrícolas.</p>
+                        <p><strong>III -</strong> A infraestrutura logística e de armazenamento (como silos e rodovias de escoamento) implantada nessas frentes pioneiras é controlada de forma cooperativa e igualitária pelos pequenos agricultores de subsistência locais, garantindo que o valor agregado da produção permaneça no território de origem.</p>
+                    </div>
+                    <p class="text-stone-850 font-sans font-semibold text-sm mb-4">Quais estão corretas?</p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q8" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(A) Apenas I.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q8" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(B) Apenas II.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q8" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(C) Apenas I e II.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q8" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(D) Apenas II e III.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q8" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(E) I, II e III.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q8" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: C</strong><br>
+                        • <strong>I (Correta):</strong> A revolução técnica e científica (Embrapa) utilizou calagem para reduzir acidez de solos ácidos e desenvolveu sementes tropificadas de soja, abrindo o cerrado para a colheita em escala.<br>
+                        • <strong>II (Correta):</strong> A monocultura intensa do MATOPIBA e do Centro-Oeste cobra alto preço ecológico: erosão severa do solo, perda de bioma, contaminação hídrica profunda por veneno químico.<br>
+                        • <strong>III (Incorreta):</strong> A infraestrutura (silos, ferrovias, canais de exportação) é dominada por grandes empresas oligárquicas globais (tradings) e fundos de investimentos, de modo que a maior fatia do valor sai das regiões de origem.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 09 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q9">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 09</span>
+                    <span class="text-xs text-stone-400">FAURGS • Semiárido & Caatinga</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        A dinâmica do espaço agrário no semiárido brasileiro é marcada por conflitos históricos e, ao mesmo tempo, por iniciativas de resistência e de transformação de paradigmas sociopolíticos e ambientais.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Assinale com V (verdadeiro) ou F (falso) as afirmações a seguir sobre o semiárido, a Caatinga e os modelos de desenvolvimento na região.
+                    </p>
+                    <div class="space-y-2 text-stone-700 text-sm mb-6 font-sans">
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>A proposta de "Convivência com o Semiárido" propõe uma ruptura teórica e prática com o assistencialismo das políticas tradicionais de combate às secas, priorizando a disseminação de tecnologias sociais descentralizadas de captação e armazenamento de águas pluviais.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>O bioma Caatinga, exclusivo do Brasil, abriga grande diversidade biológica e endemismo, de forma que as práticas agroecológicas sustentáveis desenvolvidas por famílias camponesas são aliadas fundamentais para conter a degradação ambiental e os processos de desertificação.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>A implantação de perímetros de irrigação voltados para a fruticultura de exportação de larga escala reduziu drasticamente as tensões e democratizou o acesso à terra e à água nas margens do Rio São Francisco.</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="font-bold shrink-0">( &nbsp; )</span>
+                            <span>A introdução de sementes crioulas tradicionais e o incentivo ao manejo agroecológico têm sido combatidos pelos movimentos camponeses de base, que defendem a substituição dessas práticas pela inserção de lavouras transgênicas e pacotes químicos fechados.</span>
+                        </div>
+                    </div>
+                    <p class="text-stone-850 font-sans font-semibold text-sm mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é:</p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q9" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(A) V – V – F – F.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q9" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(B) V – F – V – F.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q9" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(C) F – V – V – F.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q9" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(D) V – F – F – V.</span>
+                    </label>
+                    <label class="flex items-center gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q9" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300">
+                        <span>(E) F – F – V – V.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q9" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: A</strong><br>
+                        • <strong>Verdadeiro:</strong> A Convivência com o Semiárido combateu a histórica "indústria da seca" através de cisternas descentralizadas de captação de chuva nas moradias.<br>
+                        • <strong>Verdadeiro:</strong> Práticas agroecológicas na Caatinga são de suma importância para manter o ecossistema, ajudando a evitar a desertificação regional.<br>
+                        • <strong>Falso:</strong> Os perímetros de fruticultura irrigada no Vale do São Francisco geraram choques territoriais agudos pela partilha da água, com forte expropriação dos posseiros tradicionais.<br>
+                        • <strong>Falso:</strong> Pelo contrário, movimentos camponeses lutam fervorosamente para defender as sementes crioulas contra o controle corporativo de transgênicos e químicos.
+                    </p>
+                </div>
+            </div>
+
+            <!-- QUESTÃO 10 -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all" id="card-q10">
+                <div class="flex justify-between items-start mb-4 border-b border-stone-100 pb-3 font-sans">
+                    <span class="text-xs font-bold uppercase tracking-wider text-sage-600">Questão 10</span>
+                    <span class="text-xs text-stone-400">FAURGS • Dinâmicas Históricas Comparadas</span>
+                </div>
+                <div class="mb-6">
+                    <p class="text-stone-800 mb-4">
+                        A distribuição desigual da posse da terra e os consequentes conflitos agrários no campo brasileiro encontram fundamentos em condicionantes de longo prazo que perpassam as estruturas coloniais e imperiais do país.
+                    </p>
+                    <p class="text-stone-850 font-bold mb-4">
+                        Sobre as raízes históricas e institucionais do atraso tecnológico e da concentração fundiária no setor primário brasileiro, assinale a alternativa correta.
+                    </p>
+                </div>
+                <div class="space-y-3 font-sans">
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q10" value="A" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(A) O regime de sesmarias, extinto no momento da independência do país, caracterizava-se pela distribuição equitativa de lotes rurais com dimensões restritas a um módulo familiar, inviabilizando a formação de latifúndios monocultores de exportação.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q10" value="B" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(B) A revogação das sesmarias e a instauração da posse mansa e pacífica como a única via de apropriação de terras a partir de 1822 assegurou que as populações marginalizadas, compostas por homens livres pobres e ex-escravizados, pudessem registrar suas terras de forma gratuita.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q10" value="C" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(C) A Lei de Terras de 1850 estabeleceu um corte de classe e de raça ao impor a via de compra onerosa das terras devolutas em um contexto de transição da mão de obra escrava para a livre, garantindo o controle territorial das elites rurais e mantendo a submissão e a dependência econômica dos trabalhadores livres desprovidos de recursos.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q10" value="D" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(D) O atraso tecnológico na agricultura brasileira do século XIX decorreu exclusivamente da falta de recursos naturais no Sudeste cafeeiro, o que impediu a aquisição de equipamentos industriais modernos pelas elites agrárias.</span>
+                    </label>
+                    <label class="flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all">
+                        <input type="radio" name="q10" value="E" class="w-4 h-4 text-sage-600 focus:ring-sage-500 border-stone-300 mt-1">
+                        <span>(E) A criação do INCRA ocorreu no período imperial com a finalidade de mapear os latifúndios ociosos da cultura cafeeira e expropriá-los de forma sumária para a criação de colônias de ex-escravizados no oeste paulista.</span>
+                    </label>
+                </div>
+                <!-- Resolução -->
+                <div id="res-q10" class="hidden mt-6 pt-6 border-t border-stone-150 font-sans">
+                    <span class="inline-block bg-sage-100 text-sage-800 text-xs font-bold px-2.5 py-1 rounded-md mb-3">RESOLUÇÃO DETALHADA</span>
+                    <p class="text-sm text-stone-700 leading-relaxed">
+                        <strong>Gabarito: C</strong><br>
+                        • <strong>Incorreta (A):</strong> O sistema de sesmarias distribuía intencionalmente glebas gigantescas àqueles que comprovassem dispor de recursos para exploração, estimulando latifúndios de plantation escravista.<br>
+                        • <strong>Incorreta (B):</strong> O vácuo institucional gerado entre 1822 e 1850 não beneficiou as parcelas pobres, mas gerou disputas violentas e controle dos latifúndios pela força oligárquica.<br>
+                        • <strong>Correta (C):</strong> A Lei de Terras de 1850 buscou amarrar a posse territorial de modo a inviabilizar a posse camponesa aos libertos e imigrantes pobres, obrigando esta força de trabalho livre de recursos a aceitar o assalariamento em condições subalternas nas plantações cafeeiras ricas.<br>
+                        • <strong>Incorreta (D):</strong> O atraso tecnológico em boa parte do século XIX esteve atrelado ao modelo da mão de obra escravizada, a qual desencorajava investimentos de capital produtivo e inovação técnica.<br>
+                        • <strong>Incorreta (E):</strong> O INCRA foi instituído apenas em 1970 pelo regime militar de planejamento (não no Império).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Botão de Finalização e Validação do Quiz -->
+            <div class="bg-white rounded-2xl p-6 border border-stone-200/80 shadow-md text-center font-sans mb-12">
+                <p id="validationWarning" class="text-rose-600 text-sm font-semibold mb-4 hidden">
+                    ⚠ Atenção: Você ainda não respondeu a todas as questões! Veja a barra de progresso.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                    <button type="submit" id="submitBtn" class="bg-sage-700 hover:bg-sage-800 text-white font-bold px-8 py-3.5 rounded-xl shadow-sm transition-all focus:ring-4 focus:ring-sage-100 cursor-pointer w-full sm:w-auto">
+                        Finalizar Quiz e Ver Resultados
+                    </button>
+                    <button type="button" id="resetBtn" onclick="resetQuiz();" class="hidden bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold px-8 py-3.5 rounded-xl transition-all w-full sm:w-auto cursor-pointer">
+                        Refazer Simulador
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Seção de Resultados (inicialmente oculta) -->
+        <section id="resultsSection" class="hidden bg-white border-2 border-sage-600 rounded-3xl p-6 sm:p-8 shadow-xl mb-12 font-sans animate-fade-in">
+            <div class="flex flex-col items-center text-center">
+                <div class="bg-sage-100 text-sage-800 rounded-full p-4 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                    </svg>
+                </div>
+                <h3 class="text-3xl font-extrabold text-stone-900 mb-2">Desempenho no Simulador</h3>
+                <p class="text-stone-500 mb-6 max-w-md">Você acaba de concluir a rodada completa de exercícios no padrão de cobrança FAURGS. As resoluções de cada questão agora estão liberadas logo abaixo de cada uma delas!</p>
+                
+                <!-- Grade de Desempenho -->
+                <div class="grid grid-cols-2 gap-4 w-full max-w-sm mb-6">
+                    <div class="bg-stone-50 border border-stone-200 rounded-2xl p-4">
+                        <span class="text-xs text-stone-500 font-bold block uppercase tracking-wider">Acertos</span>
+                        <span id="scoreText" class="text-3xl font-black text-sage-700">0 / 10</span>
+                    </div>
+                    <div class="bg-stone-50 border border-stone-200 rounded-2xl p-4">
+                        <span class="text-xs text-stone-500 font-bold block uppercase tracking-wider">Percentual</span>
+                        <span id="percentText" class="text-3xl font-black text-amber-700">0%</span>
+                    </div>
+                </div>
+                
+                <!-- Feedback qualitativo -->
+                <div id="performanceFeedback" class="text-sm font-semibold px-6 py-3 rounded-full mb-2"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="border-t border-stone-200/80 bg-stone-50 py-8 text-center font-sans text-xs text-stone-500">
+        <div class="max-w-4xl mx-auto px-4 space-y-2">
+            <p>© 2026 Geografia Agrária Brasileira. Foco em Concursos Públicos.</p>
+            <p>Layout projetado em alta legibilidade. Desenvolvido com HTML, Tailwind CSS e Vanilla JS puro.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gabarito Oficial
+        const answerKey = {
+            q1: 'C',
+            q2: 'A',
+            q3: 'B',
+            q4: 'B',
+            q5: 'B',
+            q6: 'A',
+            q7: 'B',
+            q8: 'C',
+            q9: 'A',
+            q10: 'C'
+        };
+
+        const totalQuestions = 10;
+
+        // Monitorar preenchimento em tempo real para atualizar progresso
+        const quizForm = document.getElementById('quizForm');
+        const progressFill = document.getElementById('progressBar');
+
+        quizForm.addEventListener('change', updateProgress);
+
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                const checkedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (checkedOption) {
+                    answered++;
+                }
+            }
+            const percentage = (answered / totalQuestions) * 100;
+            progressFill.style.width = `${percentage}%`;
+        }
+
+        function evaluateQuiz() {
+            // Verificar respostas em branco
+            let unanswered = [];
+            for (let i = 1; i <= totalQuestions; i++) {
+                const checkedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if (!checkedOption) {
+                    unanswered.push(i);
+                }
+            }
+
+            const warningEl = document.getElementById('validationWarning');
+            if (unanswered.length > 0) {
+                warningEl.textContent = `⚠ Atenção: Você ainda não respondeu à(s) questão(ões): ${unanswered.join(', ')}! Por favor, selecione uma opção para continuar.`;
+                warningEl.classList.remove('hidden');
+                // Scroll suave até a primeira questão sem resposta
+                document.getElementById(`card-q${unanswered[0]}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            } else {
+                warningEl.classList.add('hidden');
+            }
+
+            // Calcular acertos
+            let score = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                const checkedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                const userAnswer = checkedOption.value;
+                const correctAnswer = answerKey[`q${i}`];
+                const card = document.getElementById(`card-q${i}`);
+                const options = document.querySelectorAll(`input[name="q${i}"]`);
+
+                // Bloquear inputs para não permitir alteração pós-envio
+                options.forEach(opt => opt.disabled = true);
+
+                // Destacar visualmente acertos e erros nas opções do card
+                options.forEach(opt => {
+                    const label = opt.closest('label');
+                    if (opt.value === correctAnswer) {
+                        // Marca a correta em verde
+                        label.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 text-emerald-900 font-semibold transition-all";
+                    } else if (opt.checked && opt.value !== correctAnswer) {
+                        // Se o usuário escolheu a errada, marca em vermelho
+                        label.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 border-rose-500 bg-rose-50/50 text-rose-900 font-semibold transition-all";
+                    } else {
+                        // Estilo neutro para as demais desmarcadas
+                        label.className = "flex items-start gap-3 p-3.5 rounded-xl border border-stone-150 bg-stone-50/30 text-stone-400 cursor-not-allowed transition-all";
+                    }
+                });
+
+                if (userAnswer === correctAnswer) {
+                    score++;
+                    card.classList.add('border-emerald-200', 'bg-emerald-50/10');
+                } else {
+                    card.classList.add('border-rose-200', 'bg-rose-50/10');
+                }
+
+                // Revelar resolução da questão correspondente
+                document.getElementById(`res-q${i}`).classList.remove('hidden');
+            }
+
+            // Preencher quadro de resultados
+            const percent = (score / totalQuestions) * 100;
+            document.getElementById('scoreText').textContent = `${score} / ${totalQuestions}`;
+            document.getElementById('percentText').textContent = `${percent}%`;
+
+            const feedbackEl = document.getElementById('performanceFeedback');
+            if (score >= 9) {
+                feedbackEl.textContent = "🥇 Excelente! Você dominou o estilo FAURGS e detém excelente base crítica agrária.";
+                feedbackEl.className = "text-sm font-semibold px-6 py-3 rounded-full bg-emerald-100 text-emerald-850 mt-4";
+            } else if (score >= 7) {
+                feedbackEl.textContent = "🥈 Bom rendimento! Mostrou domínio consistente, com pequenos detalhes de leitura.";
+                feedbackEl.className = "text-sm font-semibold px-6 py-3 rounded-full bg-sage-100 text-sage-800 mt-4";
+            } else if (score >= 5) {
+                feedbackEl.textContent = "🥉 Rendimento mediano. Recomendamos revisar os textos e reler os comentários fundamentais.";
+                feedbackEl.className = "text-sm font-semibold px-6 py-3 rounded-full bg-amber-100 text-amber-800 mt-4";
+            } else {
+                feedbackEl.textContent = "📚 Atenção! Necessário aprofundamento teórico na evolução fundiária nacional.";
+                feedbackEl.className = "text-sm font-semibold px-6 py-3 rounded-full bg-rose-100 text-rose-800 mt-4";
+            }
+
+            // Revelar Seção de Resultados no topo do fluxo ou ao final
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.classList.remove('hidden');
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Inverter botões de controle
+            document.getElementById('submitBtn').classList.add('hidden');
+            document.getElementById('resetBtn').classList.remove('hidden');
+        }
+
+        function resetQuiz() {
+            // Recarregar inputs
+            const options = document.querySelectorAll('input[type="radio"]');
+            options.forEach(opt => {
+                opt.disabled = false;
+                opt.checked = false;
+            });
+
+            // Limpar classes de feedback visual nos cards
+            for (let i = 1; i <= totalQuestions; i++) {
+                const card = document.getElementById(`card-q${i}`);
+                card.className = "bg-white rounded-2xl p-6 sm:p-8 border border-stone-200/80 shadow-sm mb-8 transition-all";
+                
+                // Resetar labels de opções para o estilo padrão de seleção
+                const labels = card.querySelectorAll('label');
+                labels.forEach(label => {
+                    label.className = "flex items-start gap-3 p-3.5 rounded-xl border border-stone-200 hover:border-stone-300 hover:bg-stone-50 cursor-pointer transition-all";
+                });
+
+                // Esconder resoluções novamente
+                document.getElementById(`res-q${i}`).classList.add('hidden');
+            }
+
+            // Ocultar quadro de resultados e alertas
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('validationWarning').classList.add('hidden');
+
+            // Resetar barra de progresso
+            document.getElementById('progressBar').style.width = '0%';
+
+            // Inverter botões
+            document.getElementById('submitBtn').classList.remove('hidden');
+            document.getElementById('resetBtn').classList.add('hidden');
+
+            // Scroll suave de volta ao topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

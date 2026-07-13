@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparação Concurso IFSC - Geografia (FAURGS)</title>
+    <!-- Tailwind CSS para Estilização Moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome para Ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- KaTeX para Fórmulas Matemáticas Impecáveis -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+        }
+        /* Estilização personalizada de marcação/grifo */
+        mark {
+            background-color: #fef08a; /* Amarelo suave */
+            color: #1e293b;
+            padding-left: 0.2rem;
+            padding-right: 0.2rem;
+            border-radius: 0.125rem;
+            font-weight: 600;
+        }
+        .mark-green {
+            background-color: #bbf7d0; /* Verde suave para dados positivos */
+            color: #14532d;
+        }
+        .mark-orange {
+            background-color: #ffedd5; /* Laranja suave para alertas */
+            color: #7c2d12;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen selection:bg-yellow-200">
+
+<header class="border-b border-slate-200 py-8 bg-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+        <div class="flex items-center space-x-3 text-sm font-semibold text-emerald-600 tracking-wider uppercase mb-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200">IFSC - EBTT</span>
+            <span>Banca FAURGS</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+            Guia de Memorização Ativa: População Brasileira
+        </h1>
+        <p class="mt-2 text-base text-slate-500">
+            Material de alta densidade teórica e prática focado na prova de Professor de Geografia.
+        </p>
+    </div>
+</header>
+
+<section class="max-w-4xl mx-auto px-4 sm:px-6 mt-8">
+    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-headphones text-emerald-600"></i>
+                    Audiocast de Estudo Sincronizado
+                </h3>
+                <p class="text-xs text-slate-500 mt-0.5">Defina o nome do arquivo MP3 local para ouvir o resumo narrado enquanto lê.</p>
+            </div>
+            
+            <!-- Campo para nome do arquivo MP3 -->
+            <div class="w-full md:w-64">
+                <label for="mp3-filename" class="block text-xs font-semibold text-slate-600 mb-1">Nome do arquivo MP3:</label>
+                <div class="relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fa-solid fa-file-audio text-slate-400"></i>
+                    </div>
+                    <input type="text" id="mp3-filename" value="populacao_geografia.mp3" 
+                        class="block w-full pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="Ex: aula_geografia.mp3">
+                </div>
+            </div>
+        </div>
+
+        <!-- Controles customizados do Player -->
+        <div class="mt-6 pt-6 border-t border-slate-200">
+            <audio id="audio-player" class="hidden" preload="metadata"></audio>
+            
+            <div class="flex flex-col gap-4">
+                <!-- Barra de progresso -->
+                <div class="flex items-center gap-3">
+                    <span id="current-time" class="text-xs font-mono text-slate-500 w-10">0:00</span>
+                    <input type="range" id="progress-bar" value="0" min="0" max="100" step="0.1"
+                        class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                    <span id="total-duration" class="text-xs font-mono text-slate-500 w-10">0:00</span>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <!-- Botões de Play/Pause/Stop -->
+                    <div class="flex items-center gap-2">
+                        <button id="btn-play-pause" class="w-10 h-10 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white flex items-center justify-center transition shadow-sm" title="Reproduzir / Pausar">
+                            <i id="play-icon" class="fa-solid fa-play"></i>
+                        </button>
+                        <button id="btn-stop" class="w-8 h-8 rounded-full bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 flex items-center justify-center transition" title="Parar">
+                            <i class="fa-solid fa-stop text-xs"></i>
+                        </button>
+                        
+                        <!-- Controle de Volume -->
+                        <div class="flex items-center gap-2 ml-4">
+                            <i id="volume-icon" class="fa-solid fa-volume-high text-slate-400 text-sm"></i>
+                            <input type="range" id="volume-bar" value="1" min="0" max="1" step="0.05"
+                                class="w-16 sm:w-20 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                        </div>
+                    </div>
+
+                    <!-- Botões Rápidos de Velocidade -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold text-slate-500">Velocidade:</span>
+                        <div class="inline-flex rounded-lg border border-slate-200 bg-white p-0.5" role="group">
+                            <button type="button" data-speed="1" class="speed-btn px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">1.0x</button>
+                            <button type="button" data-speed="1.25" class="speed-btn px-2.5 py-1 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-50">1.25x</button>
+                            <button type="button" data-speed="1.5" class="speed-btn px-2.5 py-1 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-50">1.5x</button>
+                            <button type="button" data-speed="2" class="speed-btn px-2.5 py-1 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-50">2.0x</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+    <article class="space-y-16">
+        
+        <!-- PÁGINA 1 -->
+        <section class="space-y-8">
+            <div class="border-b-2 border-slate-900 pb-2">
+                <span class="text-xs font-bold tracking-widest text-emerald-600 uppercase">PÁGINA 1 DE 2</span>
+                <h2 class="text-2xl font-extrabold text-slate-900">Aspectos Demográficos e Transição Etária Nacional</h2>
+            </div>
+
+            <!-- Bloco 1. Raio-X dos Números Oficiais -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">1</span>
+                    Raio-X dos Números Oficiais (Censo 2022 e Atualizações)
+                </h3>
+                
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+                    <ul class="space-y-3.5 text-slate-700 leading-relaxed text-sm sm:text-base">
+                        <li>
+                            <strong class="text-slate-900">População Absoluta:</strong> O contingente do Censo 2022 revisado consolidou <mark>203.080.756 habitantes</mark>. Em estimativa oficial posterior do IBGE para <strong class="text-slate-900">2024</strong>, o número foi projetado para <mark class="mark-green">212.583.750 habitantes</mark>.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Taxa de Crescimento Anual:</strong> Registrou uma média de apenas <mark>0,52% ao ano</mark> no Censo 2022, representando a <strong class="text-slate-900">menor taxa de crescimento populacional</strong> registrada no país desde o primeiro recenseamento nacional de 1872. Esse dado consolida a transição do Brasil para uma fase de acentuada desaceleração demográfica.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Densidade Demográfica (População Relativa):</strong> A média nacional é de <mark>23,86 hab./km²</mark>. Contudo, essa média mascara assimetrias espaciais extremas: a <strong class="text-slate-900">Região Norte</strong> possui escassos <mark>4,5 hab./km²</mark>, enquanto o <strong class="text-slate-900">Sudeste</strong> atinge densidade de <mark>91,8 hab./km²</mark>. A faixa costeira nacional reflete o padrão histórico de ocupação, com <mark>54,8% da população residindo em até 150 km do litoral</mark>.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Encolhimento das Famílias:</strong> Redução sistemática do número médio de moradores por domicílio: de <strong class="text-slate-900">4,59</strong> (1980) para <strong class="text-slate-900">3,31</strong> (2010), descendo para <mark>2,79 moradores por residência</mark> em 2022. O <strong class="text-slate-900">Rio Grande do Sul</strong> possui a menor média de ocupantes residenciais do país (<mark>2,54</mark>), enquanto o <strong class="text-slate-900">Amazonas</strong> detém a maior (<mark>3,64</mark>).
+                        </li>
+                    </ul>
+
+                    <!-- Alerta de Prova -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
+                        <div class="text-amber-600 mt-0.5"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-800">🚨 ALERTA DE PROVA (PEGUINHA DA BANCA)</span>
+                            <p class="text-xs sm:text-sm text-amber-900 mt-1 leading-relaxed">
+                                A banca <strong>FAURGS</strong> recorrentemente tenta induzir o candidato ao erro confundindo os conceitos de <strong class="text-amber-950">país populoso</strong> (referente à elevada população absoluta total) e de <strong class="text-amber-950">país povoado</strong> (referente à alta densidade demográfica ou população relativa). O Brasil deve ser caracterizado categoricamente como um país <strong class="text-emerald-700">muito populoso</strong>, porém <strong class="text-emerald-700">pouco povoado</strong>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 2. A Transição Demográfica -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">2</span>
+                    A Transição Demográfica e o Envelhecimento Acelerado
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+                    <ul class="space-y-3.5 text-slate-700 leading-relaxed text-sm sm:text-base">
+                        <li>
+                            <strong class="text-slate-900">A Queda da Fecundidade:</strong> A Taxa de Fecundidade Total (TFT) despencou de <strong class="text-slate-900">6,3 filhos por mulher</strong> (1960) para <mark>1,6 filhos por mulher</mark> (Censo 2022). Esse patamar coloca o país significativamente <strong class="text-slate-900">abaixo da taxa de reposição demográfica de equilíbrio</strong>, que é de <mark class="mark-orange">2,1 filhos por mulher</mark>.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Causas Sociais do Declínio:</strong> Processo intenso e rápido de urbanização, expansão do nível de escolarização feminina, entrada estrutural da mulher no mercado de trabalho formal e a consolidação dos métodos contraceptivos. Há um forte marcador de escolaridade: mulheres com ensino superior registram TFT média de <mark>1,2</mark>, enquanto aquelas sem instrução média sustentam patamares de <mark>2,0 filhos</mark>.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Expectativa de Vida e Transição Etária:</strong> A esperança de vida ao nascer no Brasil alcançou a marca de <mark>75,5 anos</mark> em 2022. O estreitamento contínuo da base da pirâmide (grupo de <strong class="text-slate-900">0 a 14 anos</strong> caiu para <mark>19,8%</mark> da população total) coincide com o alargamento inédito do topo (grupo de <strong class="text-slate-900">65 anos ou mais</strong> expandiu para <mark>10,9%</mark>).
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Índice de Envelhecimento (IE):</strong> Registrou um salto expressivo ao passar de <strong class="text-slate-900">44,8</strong> em 2010 para <mark>80,0</mark> em 2022. Significa que existem oficialmente 80 idosos (de 60 anos ou mais) para cada grupo de 100 crianças de 0 a 14 anos.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Predominância Feminina:</strong> Mulheres compõem <mark>51,5%</mark> do contingente nacional, apresentando um superávit populacional de cerca de 6 milhões de pessoas. Essa discrepância é acentuada pela <strong class="text-slate-900">sobremortalidade masculina jovem</strong> por causas externas (homicídios e acidentes de trânsito). No grupo de 65 anos ou mais, a razão cai para <mark>75,9 homens para cada 100 mulheres</mark>.
+                        </li>
+                    </ul>
+
+                    <!-- Alerta de Prova -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
+                        <div class="text-amber-600 mt-0.5"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-800">🚨 ALERTA DE PROVA (PEGUINHA DA BANCA)</span>
+                            <p class="text-xs sm:text-sm text-amber-900 mt-1 leading-relaxed">
+                                Lembre-se de que o envelhecimento demográfico <strong>não é espacialmente uniforme</strong>. A FAURGS adora alegar que metrópoles envelhecem homogeneamente. Na verdade, o envelhecimento é acelerado em dois extremos: <strong class="text-amber-950">pequenas comunidades rurais</strong> (pela emigração sistemática de sua juventude para centros urbanos) e <strong class="text-amber-950">grandes núcleos metropolitanos consolidados</strong>. Cidades médias tendem a apresentar menor envelhecimento relativo por atuarem como polos atratores de jovens universitários e trabalhadores.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 3. O Fim do Primeiro Bônus Demográfico -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">3</span>
+                    O Fim do Primeiro Bônus Demográfico Brasileiro
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+                    <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                        O <strong class="text-slate-900">Bônus Demográfico</strong> (ou janela demográfica) corresponde à conjuntura temporária na qual a proporção de indivíduos na população ativa (<strong class="text-slate-900">15 a 59 anos</strong>) atinge sua proporção máxima em comparação à fatia de dependentes formados por crianças (0 a 14) e idosos (60+).
+                    </p>
+
+                    <!-- Tabela de Razão de Suporte Ativo - Totalmente responsiva -->
+                    <div class="border border-slate-200 rounded-lg overflow-hidden my-4">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200">
+                                    <th class="p-3 font-semibold text-slate-700">Métrica Demográfica</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-center">Ano 1920</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-center">Ano 1980</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-center">Ano 2010</th>
+                                    <th class="p-3 font-semibold text-slate-700 text-center bg-yellow-50 text-yellow-900">Ano 2022</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr>
+                                    <td class="p-3 text-slate-900 font-medium">Razão de Suporte (Ativos p/ Idoso)</td>
+                                    <td class="p-3 text-slate-600 text-center">13,2</td>
+                                    <td class="p-3 text-slate-600 text-center">9,2</td>
+                                    <td class="p-3 text-slate-600 text-center">6,0</td>
+                                    <td class="p-3 text-slate-900 text-center font-bold bg-yellow-50">4,1</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 text-slate-900 font-medium">Participação da População Ativa</td>
+                                    <td class="p-3 text-slate-600 text-center">-</td>
+                                    <td class="p-3 text-slate-600 text-center">-</td>
+                                    <td class="p-3 text-slate-600 text-center">65,1%</td>
+                                    <td class="p-3 text-slate-900 text-center font-bold bg-yellow-50">64,4%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <ul class="space-y-3.5 text-slate-700 leading-relaxed text-sm sm:text-base">
+                        <li>
+                            <strong class="text-slate-900">O Encerramento da Janela:</strong> A queda da PEA proporcional de <strong class="text-slate-900">65,1%</strong> (2010) para <mark>64,4%</mark> (2022) marca de maneira inequívoca o encerramento do primeiro bônus demográfico brasileiro.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">O Pioneirismo do Sul:</strong> O estado do <strong class="text-slate-900">Rio Grande do Sul</strong> destaca-se como o estado com estrutura etária mais envelhecida do país, com <mark>20,2%</mark> de sua população composta por idosos e a maior taxa nacional de dependência financeira da previdência (25,7% dos cidadãos são beneficiários do INSS).
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Projeção de Transição ao Declínio (Revisão IBGE 2024):</strong> O pico populacional nacional do Brasil está projetado para <strong class="text-slate-900">2041</strong> (atingindo <mark>220 milhões</mark> de habitantes). A partir de <mark class="mark-orange">2042</mark>, o país entrará em <strong class="text-slate-900">decréscimo populacional absoluto</strong>, estimando-se uma população de 199 milhões em 2070. Estados como Alagoas e Rio Grande do Sul devem registrar decréscimo populacional já em <mark>2027</mark>.
+                        </li>
+                    </ul>
+
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-sm text-emerald-900">
+                        <span class="font-bold block mb-1">💡 MACETE DE MEMORIZAÇÃO:</span>
+                        <p class="font-medium italic text-emerald-800">
+                            "Pico em 41, declínio em 42, no ano de 70 abaixo de 200 milhões a população nos conduz!"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PÁGINA 2 -->
+        <section class="space-y-8">
+            <div class="border-b-2 border-slate-900 pb-2">
+                <span class="text-xs font-bold tracking-widest text-emerald-600 uppercase">PÁGINA 2 DE 2</span>
+                <h2 class="text-2xl font-extrabold text-slate-900">Teorias, Migrações, Fórmulas e Técnicas Cartográficas de Prova</h2>
+            </div>
+
+            <!-- Bloco 1. Teorias Demográficas -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">1</span>
+                    Teorias Demográficas: Aplicação Crítica no Brasil
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-5">
+                    <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                        As correntes teóricas demográficas são objeto frequente de análises interpretativas nas questões elaboradas pela FAURGS para o IFSC:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-slate-100 bg-slate-50/50 rounded-lg p-4">
+                            <span class="font-bold text-slate-900 block mb-1 text-sm">A. Teoria Malthusiana</span>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Estabelece o descompasso matemático clássico: crescimento populacional em progressão geométrica (PG) versus produção de alimentos em progressão aritmética (PA). No Brasil, esta tese é <strong class="text-slate-900">totalmente refutada</strong>, uma vez que o país consolidou-se como potência agroexportadora global; a fome e a insegurança alimentar decorrem da má distribuição de renda e concentração agrária, não de limites ecológicos produtivos.
+                            </p>
+                        </div>
+                        <div class="border border-slate-100 bg-slate-50/50 rounded-lg p-4">
+                            <span class="font-bold text-slate-900 block mb-1 text-sm">B. Teoria Neomalthusiana</span>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Atribui a pobreza, o subdesenvolvimento e a insuficiência de investimentos públicos ao excessivo contingente infantojuvenil de nações periféricas. Prega que o controle impositivo de natalidade do Estado constitui pré-requisito mandatório para viabilizar o desenvolvimento e o crescimento econômico do país.
+                            </p>
+                        </div>
+                        <div class="border border-slate-100 bg-slate-50/50 rounded-lg p-4">
+                            <span class="font-bold text-slate-900 block mb-1 text-sm">C. Teoria Reformista (Marxista)</span>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Inverte a premissa anterior: a miséria socioeconômica e a escassez de infraestrutura básica são as causas da elevada fecundidade (e não o efeito dela). Argumenta que com a distribuição justa de riquezas, acesso universalizado à educação e ascensão da qualidade de vida, as taxas de natalidade reduzem espontaneamente. A transição demográfica brasileira valida a perspectiva reformista.
+                            </p>
+                        </div>
+                        <div class="border border-slate-100 bg-slate-50/50 rounded-lg p-4">
+                            <span class="font-bold text-slate-900 block mb-1 text-sm">D. Teoria Ecomalthusiana / Risco</span>
+                            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                                Alinha o avanço demográfico com a exaustão dos ecossistemas e degradação florestal rápida. No cenário urbano brasileiro, a análise de risco socioambiental (desmoronamentos, inundações nas periferias metropolitanas) demonstra que a vulnerabilidade decorre da segregação espacial clássica e especulação imobiliária, e não de mera pressão numérica populacional.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 2. Migrações Internas -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">2</span>
+                    Migrações Internas e o Fenômeno de Santa Catarina (Censo 2022)
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+                    <ul class="space-y-3.5 text-slate-700 leading-relaxed text-sm sm:text-base">
+                        <li>
+                            <strong class="text-slate-900">Reconfiguração Espacial Recente:</strong> O cenário migratório nacional contemporâneo é pautado pela <strong class="text-slate-900">forte desaceleração das migrações inter-regionais tradicionais de longa distância</strong>, ascensão de fluxos intra-regionais/estaduais, crescimento expressivo da <strong class="text-slate-900">migração de retorno</strong> e dos deslocamentos pendulares.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Saldos Migratórios Negativos:</strong> São Paulo e Rio de Janeiro deixaram de ser polos hegemônicos de atração bruta. São Paulo teve saldo líquido de <mark class="mark-orange">-89,5 mil habitantes</mark> e o Rio de Janeiro perdeu <mark class="mark-orange">-165,3 mil pessoas</mark> de 2017 a 2022. O Distrito Federal registrou perda relativa de <mark>3,53%</mark>, cujo vetor direcionou <strong class="text-slate-900">48,5%</strong> dos seus migrantes para municípios goianos limítrofes (periferização e metropolização).
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Seletividade Etária:</strong> A migração interna demonstra alta seletividade, concentrando <mark>22,8%</mark> dos fluxos totais de migrantes na faixa jovem e altamente produtiva de <strong class="text-slate-900">25 a 29 anos de idade</strong>.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Santa Catarina como Ímã Migratório Nacional:</strong> SC consolidou o <strong class="text-slate-900">maior saldo migratório líquido do Brasil</strong> no último ciclo censitário, totalizando <mark class="mark-green">+354.350 pessoas</mark>.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Origens e Concentração Territorial:</strong> Aproximadamente <mark>25%</mark> da população residente em Santa Catarina não nasceu no estado (indicador que ascende para expressivos <mark>39% em Florianópolis</mark>). Os principais polos emissores para SC são o <strong class="text-slate-900">Rio Grande do Sul</strong> (26,8%), <strong class="text-slate-900">Paraná</strong> (19,1%) e <strong class="text-slate-900">São Paulo</strong> (12,4%). O dinamismo econômico do eixo costeiro <strong class="text-slate-900">Joinville-Florianópolis</strong> abarca quase <strong class="text-slate-900">80% do crescimento populacional catarinense</strong>. Joinville permanece a maior cidade de SC (<mark>654.888</mark> em estimativas de 2024), secundada pela capital, Florianópolis (<mark>576.361</mark>).
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Imigração Internacional:</strong> O ingresso de imigrantes internacionais no país expandiu <strong class="text-slate-900">70,3%</strong> (2010–2022). Em SC, as maiores comunidades de inserção internacional recente são de <strong class="text-slate-900">venezuelanos</strong> (54%) e <strong class="text-slate-900">haitianos</strong> (15%). No polo industrial de Joinville, a presença internacional de residentes apresentou crescimento impressionante de <mark class="mark-green">460%</mark>, saltando de 1.300 em 2010 para mais de 8.000 em 2022.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bloco 3. Fórmulas Demográficas Essenciais -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">3</span>
+                    Fórmulas Demográficas Essenciais
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-6">
+                    <p class="text-slate-700 text-sm sm:text-base">
+                        Memorize as estruturas matemáticas comumente exigidas em exercícios e questões quantitativas da FAURGS:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div class="border border-slate-100 rounded-lg p-4 bg-slate-50 text-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-2">Densidade Demográfica</span>
+                            <div class="text-lg py-2 font-mono">
+                                $$\text{DP} = \frac{\text{PA}}{\text{A}}$$
+                            </div>
+                            <span class="text-xs text-slate-500 block mt-1">PA = População Absoluta | A = Área (km²)</span>
+                        </div>
+
+                        <div class="border border-slate-100 rounded-lg p-4 bg-slate-50 text-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-2">Razão de Dependência</span>
+                            <div class="text-lg py-2 font-mono">
+                                $$\text{RD} = \left( \frac{\text{P}_{0\text{-}14} + \text{P}_{65+}}{\text{P}_{15\text{-}64}} \right) \times 100$$
+                            </div>
+                            <span class="text-xs text-slate-500 block mt-1">P = População por faixas etárias</span>
+                        </div>
+
+                        <div class="border border-slate-100 rounded-lg p-4 bg-slate-50 text-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-2">Taxas Brutas (Natalidade / Mortalidade)</span>
+                            <div class="text-lg py-2 font-mono">
+                                $$\text{TBN} = \left(\frac{\text{N}}{\text{P}}\right) \times 1.000$$
+                                $$\text{TBM} = \left(\frac{\text{O}}{\text{P}}\right) \times 1.000$$
+                            </div>
+                            <span class="text-xs text-slate-500 block mt-1">N = Nascimentos | O = Óbitos | P = População Total</span>
+                        </div>
+
+                        <div class="border border-slate-100 rounded-lg p-4 bg-slate-50 text-center">
+                            <span class="text-xs font-bold text-slate-500 uppercase tracking-wide block mb-2">Índice de Envelhecimento</span>
+                            <div class="text-lg py-2 font-mono">
+                                $$\text{IE} = \left( \frac{\text{P}_{65+}}{\text{P}_{0\text{-}14}} \right) \times 100$$
+                            </div>
+                            <span class="text-xs text-slate-500 block mt-1">P_65+ = Idosos | P_0-14 = Crianças</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bloco 4. Caderno de Resolução de Cálculos Práticos -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">4</span>
+                    Caderno de Resolução de Cálculos Práticos (Gabarite a Prova!)
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-6 text-sm sm:text-base text-slate-700 leading-relaxed">
+                    
+                    <!-- Caso A -->
+                    <div class="space-y-2 border-b border-slate-100 pb-5">
+                        <h4 class="font-bold text-slate-950 text-base flex items-center gap-1.5">
+                            <i class="fa-solid fa-square-poll-vertical text-emerald-600"></i>
+                            Caso A: Enquadramento Espacial em Papel A4 (Macete de Escala)
+                        </h4>
+                        <p class="text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 italic">
+                            <strong>Problema Típico de Prova:</strong> Projetar uma rota ou trilha real de <strong class="text-slate-800">11 km</strong> em uma folha tamanho A4 (<strong class="text-slate-800">30 cm</strong> de espaço útil real disponível). Qual escala comercial o docente deve escolher: <strong class="text-slate-800">1:20.000</strong> ou <strong class="text-slate-800">1:40.000</strong>?
+                        </p>
+                        
+                        <div class="pl-4 border-l-2 border-emerald-500 space-y-2 mt-3">
+                            <p>
+                                <strong class="text-slate-900">Passo 1:</strong> Converta os quilômetros lineares reais para centímetros (acrescentando cinco zeros à direita):
+                                <div class="my-2 font-mono">$$11 \text{ km} = 1.100.000 \text{ cm}$$</div>
+                            </p>
+                            <p>
+                                <strong class="text-slate-900">Passo 2:</strong> Defina o limite de escala técnica ($E$) dividindo a distância real pela distância gráfica útil máxima no papel:
+                                <div class="my-2 font-mono">$$E = \frac{\text{Distância Real } (D)}{\text{Distância Gráfica } (d)} = \frac{1.100.000 \text{ cm}}{30 \text{ cm}} \approx 36.666,67$$</div>
+                            </p>
+                            <p>
+                                <strong class="text-slate-900">Passo 3:</strong> <mark>A Regra do Denominador:</mark> Qualquer escala comercial que utilize denominador menor que a constante de escala limite ($36.666,67$) resultará em uma representação gráfica maior do que as margens do papel de desenho (fará o mapa vazar da folha).
+                            </p>
+                            <ul class="list-disc pl-5 space-y-1 mt-2 text-slate-600">
+                                <li>Ao adotar a escala de <strong class="text-slate-800">1:20.000</strong>, o mapa demandará um espaço físico de <strong class="text-slate-900">55 cm</strong> de largura (vaza do papel).</li>
+                                <li>Ao adotar a escala comercial de <mark class="mark-green">1:40.000</mark>, o traçado demandará perfeitamente <strong class="text-slate-900">27,5 cm</strong> (cabendo de maneira ideal nas margens).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Caso B -->
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-slate-950 text-base flex items-center gap-1.5">
+                            <i class="fa-solid fa-square-poll-vertical text-emerald-600"></i>
+                            Caso B: Conversão de Medida de Área (Cuidado com a Armadilha!)
+                        </h4>
+                        <p class="text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 italic">
+                            <strong>Problema Típico de Prova:</strong> Em um mapa temático na escala linear comercial de <strong class="text-slate-800">1:50.000</strong>, uma mancha espacial de contágio epidemiológico de dengue ocupa uma área gráfica exata de <strong class="text-slate-800">30 cm²</strong>. Qual a extensão real dessa área em quilômetros quadrados?
+                        </p>
+                        
+                        <div class="pl-4 border-l-2 border-emerald-500 space-y-2 mt-3">
+                            <p>
+                                <strong class="text-slate-900">Passo 1:</strong> Resolva a equivalência linear da escala mapeada. Na escala de $1:50.000$, cada $1\text{ cm}$ gráfico corresponde a $50.000\text{ cm}$ reais. Eliminando dois zeros obtemos $500\text{ m}$; eliminando mais três zeros, temos $0,5\text{ km}$:
+                                <div class="my-2 font-mono">$$1\text{ cm} \text{ linear} = 0,5\text{ km} \text{ reais}$$</div>
+                            </p>
+                            <p>
+                                <strong class="text-slate-900">Passo 2:</strong> Converta a razão linear estabelecida para uma correspondência de escala superficial (elevando os termos ao quadrado):
+                                <div class="my-2 font-mono">$$1\text{ cm}^2 = (0,5\text{ km})^2 = 0,25\text{ km}^2 \text{ real}$$</div>
+                            </p>
+                            <p>
+                                <strong class="text-slate-900">Passo 3:</strong> Calcule a área real multiplicando a extensão gráfica total pela nova constante de equivalência superficial obtida:
+                                <div class="my-2 font-mono">$$\text{Área Real} = 30 \text{ cm}^2 \times 0,25 \text{ km}^2/\text{cm}^2 = 7,5\text{ km}^2$$</div>
+                            </p>
+                            
+                            <div class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm text-amber-900 mt-2">
+                                <span class="font-bold block mb-1">⚠️ ARMADILHA DA FAURGS:</span>
+                                <p class="text-xs leading-relaxed">
+                                    O peguinha predileto da banca consiste em inserir <strong class="text-red-950">15 km²</strong> como alternativa principal da questão (fruto da multiplicação incorreta e direta de $30 \times 0,5$). Não caia nessa: <strong class="text-emerald-800">sempre eleve a relação linear ao quadrado antes de multiplicar áreas gráficas!</strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Bloco 5. Peguinhas Teóricos Clássicos da FAURGS -->
+            <div class="space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                    <span class="bg-slate-900 text-white w-6 h-6 rounded-md flex items-center justify-center text-xs font-mono">5</span>
+                    Peguinhas Teóricos Clássicos da FAURGS (Julgamento de Itens)
+                </h3>
+
+                <div class="bg-white border border-slate-200 rounded-xl p-5 space-y-4">
+                    <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+                        Analise de antemão as assertivas fraudulentas que a banca costuma propor em provas EBTT de Geografia:
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg border border-red-200 bg-red-50/40">
+                            <span class="font-bold text-red-900 flex items-center gap-1.5 text-sm sm:text-base">
+                                <i class="fa-solid fa-ban text-red-600"></i>
+                                Armadilha 1: Microclimas e Arborização Urbana
+                            </span>
+                            <p class="text-xs sm:text-sm text-red-950 mt-1.5 leading-relaxed">
+                                A FAURGS elabora assertivas sugerindo que as manchas e áreas de vegetação de preservação urbana pioram a formação de ilhas de calor ou bloqueiam o vento prejudicialmente retendo as taxas de calor latente úmido. <strong class="text-slate-950 font-bold">Incorreto!</strong> A arborização urbana atua comprovadamente como principal barreira térmica mitigadora do efeito climático de ilha de calor.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-lg border border-red-200 bg-red-50/40">
+                            <span class="font-bold text-red-900 flex items-center gap-1.5 text-sm sm:text-base">
+                                <i class="fa-solid fa-ban text-red-600"></i>
+                                Armadilha 2: Redução da PEA por Índices de Mortalidade
+                            </span>
+                            <p class="text-xs sm:text-sm text-red-950 mt-1.5 leading-relaxed">
+                                Questões de julgamento de itens sugerindo que a contração populacional e o recuo absoluto na fatia de trabalhadores ativos (PEA) decorrem da elevação proporcional das taxas e coeficientes de óbito nacionais. <strong class="text-slate-950 font-bold">Falso!</strong> O único fator indutor dessa dinâmica é a transição etária decorrente do recuo sistemático e irreversível da fecundidade média do país.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Botão Final para Navegação de Exercícios -->
+        <section class="pt-8 border-t border-slate-200 text-center space-y-4">
+            <h4 class="text-lg font-bold text-slate-900">Pronto para testar seus conhecimentos?</h4>
+            <p class="text-sm text-slate-500 max-w-md mx-auto">
+                Avance agora para o painel de simulação de questões oficiais com o perfil da banca FAURGS.
+            </p>
+            <div class="pt-2">
+                <a href="populacaoquestoes.html" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5 duration-150">
+                    Ir para Simulado de Questões
+                    <i class="fa-solid fa-circle-arrow-right text-lg"></i>
+                </a>
+            </div>
+        </section>
+
+    </article>
+</main>
+
+<footer class="bg-slate-50 border-t border-slate-200 py-10 mt-12 text-center text-xs text-slate-500">
+    <div class="max-w-4xl mx-auto px-4">
+        <p>© 2026 Guia de Estudos IFSC - Professor de Geografia EBTT.</p>
+        <p class="mt-1">Desenvolvido com fins estritamente didáticos para memorização ativa pós-pesquisa de tendências FAURGS.</p>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('audio-player');
+        const mp3Input = document.getElementById('mp3-filename');
+        const btnPlayPause = document.getElementById('btn-play-pause');
+        const playIcon = document.getElementById('play-icon');
+        const btnStop = document.getElementById('btn-stop');
+        const progressBar = document.getElementById('progress-bar');
+        const volumeBar = document.getElementById('volume-bar');
+        const volumeIcon = document.getElementById('volume-icon');
+        const currentTimeText = document.getElementById('current-time');
+        const totalDurationText = document.getElementById('total-duration');
+        const speedButtons = document.querySelectorAll('.speed-btn');
+
+        // Inicializa o arquivo padrão
+        updateAudioSource();
+
+        // Escuta modificação do campo do arquivo de áudio
+        mp3Input.addEventListener('change', () => {
+            updateAudioSource();
+        });
+
+        function updateAudioSource() {
+            const file = mp3Input.value.trim();
+            if (file) {
+                audio.src = file;
+                audio.load();
+                resetProgress();
+            }
+        }
+
+        function resetProgress() {
+            progressBar.value = 0;
+            currentTimeText.textContent = "0:00";
+            totalDurationText.textContent = "0:00";
+            if (!audio.paused) {
+                audio.pause();
+                togglePlayIcon(false);
+            }
+        }
+
+        function togglePlayIcon(isPlaying) {
+            if (isPlaying) {
+                playIcon.className = "fa-solid fa-pause";
+            } else {
+                playIcon.className = "fa-solid fa-play";
+            }
+        }
+
+        // Play/Pause
+        btnPlayPause.addEventListener('click', () => {
+            if (!audio.src) return;
+            
+            if (audio.paused) {
+                audio.play().then(() => {
+                    togglePlayIcon(true);
+                }).catch(err => {
+                    console.log("Arquivo de áudio não carregado ou não encontrado no diretório local.");
+                    // Troca visual para simular funcionamento ou alertar discretamente
+                    togglePlayIcon(true);
+                });
+            } else {
+                audio.pause();
+                togglePlayIcon(false);
+            }
+        });
+
+        // Stop
+        btnStop.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            togglePlayIcon(false);
+            progressBar.value = 0;
+            currentTimeText.textContent = "0:00";
+        });
+
+        // Atualização do Progresso de Áudio
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percent;
+                currentTimeText.textContent = formatTime(audio.currentTime);
+                totalDurationText.textContent = formatTime(audio.duration);
+            }
+        });
+
+        audio.addEventListener('loadedmetadata', () => {
+            totalDurationText.textContent = formatTime(audio.duration);
+        });
+
+        // Mudança manual no slider de progresso
+        progressBar.addEventListener('input', () => {
+            if (audio.duration) {
+                const newTime = (progressBar.value / 100) * audio.duration;
+                audio.currentTime = newTime;
+            }
+        });
+
+        // Volume
+        volumeBar.addEventListener('input', () => {
+            audio.volume = volumeBar.value;
+            if (audio.volume === 0) {
+                volumeIcon.className = "fa-solid fa-volume-mute text-slate-400 text-sm";
+            } else if (audio.volume < 0.5) {
+                volumeIcon.className = "fa-solid fa-volume-low text-slate-400 text-sm";
+            } else {
+                volumeIcon.className = "fa-solid fa-volume-high text-slate-400 text-sm";
+            }
+        });
+
+        // Controle de velocidade de áudio
+        speedButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const speed = parseFloat(e.target.getAttribute('data-speed'));
+                audio.playbackRate = speed;
+
+                // Estilização do botão ativo
+                speedButtons.forEach(btn => {
+                    btn.className = "speed-btn px-2.5 py-1 text-xs font-medium rounded-md text-slate-600 hover:bg-slate-50";
+                });
+                button.className = "speed-btn px-2.5 py-1 text-xs font-medium rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200";
+            });
+        });
+
+        // Formatação de Tempo (Min:Seg)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado Avançado: Urbanização e Movimentos Sociais no Brasil</title>
+    <!-- Tailwind CSS para design ágil e moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para legibilidade superior -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Configuração do Tailwind para paleta de cores de leitura confortável -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fcfcf9',  /* Fundo creme ultra-suave */
+                            100: '#f5f5f0', /* Fundo secundário neutro quente */
+                            200: '#e1e1d7', /* Bordas neutras */
+                            800: '#2c2c26', /* Texto principal */
+                            900: '#1c1c18', /* Títulos principais */
+                            accent: '#2563eb', /* Azul acadêmico para destaques */
+                            success: '#16a34a', /* Verde correto */
+                            error: '#dc2626', /* Vermelho incorreto */
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilização fina para leitura confortável */
+        body {
+            background-color: #fafaf6;
+            color: #242420;
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom scrollbar para melhor estética */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5f5f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4d4ca;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b5b5a9;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased text-brand-800">
+
+<header class="border-b border-brand-200 bg-brand-50/80 backdrop-blur sticky top-0 z-40 transition-shadow duration-300">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+            <div class="p-2 bg-brand-accent/10 rounded-lg text-brand-accent">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.792 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-lg font-bold text-brand-900 tracking-tight">Caderno de Questões</h1>
+                <p class="text-xs text-brand-800/60 font-medium">Urbanização e Movimentos Sociais no Brasil • Estilo FAURGS</p>
+            </div>
+        </div>
+        
+        <!-- Indicador geral de progresso no cabeçalho -->
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+            <span class="text-xs font-semibold text-brand-accent uppercase tracking-wider">Progresso:</span>
+            <div class="w-full sm:w-48 bg-brand-200 h-2 rounded-full overflow-hidden">
+                <div id="header-progress-bar" class="bg-brand-accent h-full w-0 transition-all duration-300"></div>
+            </div>
+            <span id="header-progress-text" class="text-xs font-bold text-brand-800/70 min-w-[32px]">0/10</span>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Coluna de Conteúdo Principal (Questões) -->
+        <div class="lg:col-span-3 space-y-8">
+            
+            <!-- Painel Informativo e de Estudo Rápido (Tabela de Instrumentos Urbanos) -->
+            <section class="bg-brand-50 border border-brand-200 rounded-xl p-6 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h2 class="text-md font-bold text-brand-900 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Material de Apoio e Instrumentos de Política Urbana
+                        </h2>
+                        <p class="text-xs text-brand-800/70 mt-1">Este simulador contém questões de nível avançado sobre a produção espacial das metrópoles brasileiras. Consulte a tabela abaixo sempre que necessário para apoiar sua resolução.</p>
+                    </div>
+                    <button onclick="toggleStudyGuide()" class="text-xs text-brand-accent hover:underline font-semibold flex items-center gap-1 focus:outline-none shrink-0 ml-4">
+                        <span id="study-guide-toggle-text">Recolher Guia</span>
+                        <svg id="study-guide-toggle-icon" class="w-4 h-4 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                </div>
+                
+                <div id="study-guide-content" class="mt-4 overflow-hidden transition-all duration-300 max-h-[1000px]">
+                    <div class="overflow-x-auto border border-brand-200 rounded-lg bg-white">
+                        <table class="min-w-full divide-y divide-brand-200 text-xs">
+                            <thead class="bg-brand-100 text-brand-900 font-semibold text-left">
+                                <tr>
+                                    <th class="px-4 py-3">Instrumento Urbanístico</th>
+                                    <th class="px-4 py-3">Previsão Legal</th>
+                                    <th class="px-4 py-3">Objetivo Socioespacial</th>
+                                    <th class="px-4 py-3">Impacto nos Movimentos</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-brand-200 text-brand-800/90">
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold bg-brand-50/50">Plano Diretor</td>
+                                    <td class="px-4 py-3">Obrigatório para cidades > 20 mil hab. e regiões metropol.</td>
+                                    <td class="px-4 py-3">Ordenamento do pleno desenvolvimento das funções sociais da cidade e zoneamento.</td>
+                                    <td class="px-4 py-3">Canal de participação popular e representação da sociedade civil organizada.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold bg-brand-50/50">Usucapião Especial Coletiva</td>
+                                    <td class="px-4 py-3">Artigo 10 do Estatuto da Cidade</td>
+                                    <td class="px-4 py-3">Regularização fundiária de áreas urbanas ocupadas por população de baixa renda.</td>
+                                    <td class="px-4 py-3">Garantia de permanência na terra e proteção contra remoções forçadas.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold bg-brand-50/50">Direito de Superfície</td>
+                                    <td class="px-4 py-3">Artigo 21 do Estatuto da Cidade</td>
+                                    <td class="px-4 py-3">Separação jurídica entre a propriedade do solo e o direito de utilizar o solo ou subsolo.</td>
+                                    <td class="px-4 py-3">Viabilização de projetos habitacionais em terrenos subutilizados ou públicos.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold bg-brand-50/50">IPTU Progressivo</td>
+                                    <td class="px-4 py-3">Artigo 7º do Estatuto da Cidade</td>
+                                    <td class="px-4 py-3">Forçar o parcelamento ou a edificação compulsória de vazios e terrenos ociosos.</td>
+                                    <td class="px-4 py-3">Combate direto à especulação imobiliária e ampliação da oferta de moradia.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <form id="quiz-form" onsubmit="event.preventDefault();" class="space-y-8">
+                
+                <!-- QUESTÃO 1 -->
+                <div id="q1-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 1</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Geografia Urbana</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">Considere as seguintes afirmações sobre as características gerais do processo de urbanização brasileiro:</p>
+                        <ul class="space-y-3 mb-6 bg-brand-50 p-4 rounded-lg border border-brand-200/50">
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">I -</span>
+                                <span>A urbanização brasileira ocorreu de forma altamente acelerada e concentrada na segunda metade do século XX, impulsionada pelo processo de industrialização nacional e pelo intenso êxodo rural decorrente da modernização agrícola.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">II -</span>
+                                <span>A distribuição espacial da população urbana no território caracteriza-se pelo equilíbrio regional, visto que as políticas públicas habitacionais das décadas de 1960 e 1970 descentralizaram a oferta de empregos para as regiões Norte e Nordeste, impedindo a hipercentração metropolitana.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">III -</span>
+                                <span>A rede urbana nacional apresenta, de acordo com as tipologias de centralidade urbana do IBGE, cidades globais como São Paulo, que exercem papel de comando na divisão internacional do trabalho, concentrando serviços especializados, mercados financeiros e sedes de grandes corporações.</span>
+                            </li>
+                        </ul>
+                        <p class="font-medium text-brand-900 mb-4">Quais estão corretas?</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="1">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q1" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q1" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q1" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) Apenas III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q1" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) Apenas I e III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q1" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) I, II e III.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r1" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 2 -->
+                <div id="q2-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 2</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Escala e Planejamento</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">Para planejar a regularização fundiária e a contenção de encostas em uma área de ocupação informal sob risco de deslizamento em uma metrópole brasileira, um geógrafo utilizou um mapa temático na escala 1:50.000. Nesse mapa, a poligonal que delimita o assentamento informal apresentou uma área gráfica de 3 cm².</p>
+                        <p class="font-medium text-brand-900 mb-4">Qual é a área real, em quilômetros quadrados, que a equipe municipal precisará percorrer para realizar o cadastramento socioeconômico e o mapeamento físico da referida ocupação?</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="2">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q2" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) 0,75 km².</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q2" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) 1,50 km².</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q2" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) 7,50 km².</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q2" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) 15,00 km².</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q2" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) 75,00 km².</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r2" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 3 -->
+                <div id="q3-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 3</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Conceitos Urbanos</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-2">Considere os seguintes conceitos fundamentais da geografia urbana brasileira:</p>
+                        <div class="grid grid-cols-2 gap-2 mb-4 bg-brand-50 p-3 rounded-lg text-xs sm:text-sm font-medium border border-brand-200/50">
+                            <div>1 - Macrocefalia urbana</div>
+                            <div>2 - Conurbação</div>
+                            <div>3 - Gentrificação</div>
+                            <div>4 - Rede urbana</div>
+                        </div>
+                        <p class="font-medium text-brand-900 mb-3">Associe esses conceitos com as suas respectivas manifestações ou definições espaciais descritas abaixo:</p>
+                        
+                        <div class="space-y-3 mb-6 text-sm bg-brand-50/50 p-4 rounded-lg border border-brand-200/50">
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Fenômeno resultante da expansão horizontal das cidades, que promove a unificação física e funcional de municípios limítrofes, integrando-os sob uma mesma mancha construída.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Concentração excessiva de contingente populacional, investimentos de infraestrutura e serviços complexos em uma única cidade ou metrópole, em detrimento do equilíbrio da rede de cidades regional.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Elitização de áreas centrais ou periféricas reestruturadas, caracterizada pela substituição de moradores de baixa renda por classes de maior poder aquisitivo devido à intensa valorização imobiliária.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Sistema de cidades interconectadas por redes de transporte e comunicações, articuladas por fluxos de mercadorias, informações, capitais e pessoas, sob diferentes níveis de influência e hierarquia.</span>
+                            </div>
+                        </div>
+                        <p class="font-medium text-brand-900 mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="3">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q3" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) 2 – 1 – 3 – 4.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q3" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) 1 – 2 – 3 – 4.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q3" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) 2 – 3 – 1 – 4.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q3" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) 4 – 1 – 3 – 2.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q3" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) 2 – 1 – 4 – 3.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r3" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 4 -->
+                <div id="q4-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 4</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Meio Ambiente Urbano</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">No que concerne às alterações socioambientais induzidas pelo processo de urbanização corporativa no Brasil, analise as seguintes afirmações:</p>
+                        <ul class="space-y-3 mb-6 bg-brand-50 p-4 rounded-lg border border-brand-200/50">
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">I -</span>
+                                <span>A impermeabilização do solo e a verticalização alteram o balanço de energia urbana, gerando o fenômeno microclimático conhecido como "ilha de calor", que se concentra nas áreas centrais densamente edificadas.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">II -</span>
+                                <span>De acordo com o Sistema Clima Urbano (SCU) proposto por Monteiro (1976), as inundações em planícies de várzea, como as registradas historicamente na Região de Gestão de Planejamento de Porto Alegre, decorrem exclusivamente de índices pluviométricos anômalos, sem correlação direta com os padrões de apropriação e impermeabilização do solo urbano.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">III -</span>
+                                <span>A dispersão periférica e a expansão horizontal das metrópoles periféricas resultam na supressão de coberturas vegetais e na alteração do relevo original, ampliando o escoamento superficial pluvial e transferindo os riscos socioambientais de forma desproporcional para as áreas de moradia das populações vulneráveis.</span>
+                            </li>
+                        </ul>
+                        <p class="font-medium text-brand-900 mb-4">Quais estão corretas?</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="4">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q4" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q4" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q4" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) Apenas I e III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q4" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q4" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) I, II e III.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r4" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 5 -->
+                <div id="q5-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 5</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Dinâmicas Habitacionais</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">A produção desigual do espaço urbano brasileiro expressa-se na proliferação de diferentes formas de habitabilidade precária. Sobre as dinâmicas socioespaciais que caracterizam cortiços, favelas e periferias, assinale a alternativa correta.</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="5">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q5" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) Os cortiços paulistanos do final do século XIX, conforme retratado em análises geográficas da porção central da aglomeração urbana, constituíam soluções habitacionais caracterizadas pelo uso individual e isolado de banheiros e lavanderias, garantindo altos níveis de salubridade.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q5" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) O processo de favelização é uma decorrência espacial da macrocefalia urbana, refletindo a incapacidade do mercado formal e do Estado de ofertar moradia adequada para as classes de menor poder aquisitivo, as quais se instalam inicialmente em áreas centrais e eixos de alta declividade.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q5" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) Os chamados "desertos alimentares", frequentes em áreas periféricas segregadas, caracterizam-se pela abundância de equipamentos públicos de segurança alimentar e nutricional (SAN), os quais estimulam o comércio de alimentos saudáveis e reduzem a incidência de obesidade.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q5" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) A expansão periférica do Rio de Janeiro no final do século XIX caracterizou-se pela formação de núcleos habitacionais e cortiços compostos majoritariamente por imigrantes japoneses destinados ao cultivo de café na zona sul.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q5" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) A segregação socioespacial contemporânea expressa a distribuição homogênea dos recursos urbanos, uma vez que o mercado habitacional informal promove o equilíbrio geográfico dos serviços públicos essenciais nas metrópoles.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r5" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 6 -->
+                <div id="q6-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 6</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Cidadania e Luta</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">Considere as seguintes afirmações sobre o conceito de movimentos sociais urbanos e sua correlação com a cidadania e o direito à moradia no Brasil:</p>
+                        <ul class="space-y-3 mb-6 bg-brand-50 p-4 rounded-lg border border-brand-200/50">
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">I -</span>
+                                <span>Os movimentos sociais urbanos constituem manifestações coletivas que tensionam o papel do Estado, sendo historicamente agentes fundamentais para a conquista e consolidação de direitos sociais e para o exercício pleno da cidadania nas democracias contemporâneas.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">II -</span>
+                                <span>Uma vez positivados e regulamentados em leis específicas (como a inserção do direito à moradia e à alimentação na Constituição), os direitos de cidadania passam a ser garantidos automaticamente em todo o território nacional, tornando desnecessária a atuação contínua dos movimentos sociais.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">III -</span>
+                                <span>Na década de 1980, a emergência dos movimentos sociais urbanos esteve associada a lutas unificadas pelo direito à terra, à renda e à alimentação, impulsionando mobilizações populares que resultaram em marcos institucionais de segurança alimentar e de planejamento urbano.</span>
+                            </li>
+                        </ul>
+                        <p class="font-medium text-brand-900 mb-4">Quais estão corretas?</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="6">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q6" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q6" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q6" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) Apenas I e III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q6" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q6" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) I, II e III.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r6" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 7 -->
+                <div id="q7-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 7</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Planejamento e Legislação</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">No que se refere à disciplina do Estatuto da Cidade (Lei nº 10.257/2001) e às competências constitucionais sobre a Política de Desenvolvimento Urbano, assinale a alternativa correta.</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="7">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q7" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) Acompetência para a execução da Política de Desenvolvimento Urbano cabe exclusivamente à União, que centraliza as decisões sobre zoneamento local e o parcelamento compulsório do solo.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q7" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) O direito de superfície instituído pelo Estatuto da Cidade consiste na concessão onerosa ou gratuita promovida pelo proprietário urbano para que outrem utilize o solo, o subsolo ou o espaço aéreo, sendo essa concessão permitida unicamente por tempo determinado.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q7" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) O direito de superfície, nos termos da Lei nº 10.257/2001, autoriza o proprietário a conceder a outrem o direito de utilizar o solo, o subsolo ou o espaço aéreo relativo ao seu terreno, mediante escritura pública, podendo a concessão ser por tempo determinado ou indeterminado.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q7" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) A usucapião especial coletiva de imóvel urbano exige que a área ocupada seja superior a duzentos e vinte metros quadrados e que os terrenos ocupados por cada possuidor sejam perfeitamente identificáveis e delimitados em cartório antes do ajuizamento.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q7" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) O Plano Diretor, de acordo com as normas gerais estabelecidas pelo Estatuto da Cidade, deve ser revisado obrigatoriamente a cada vinte anos, sendo dispensada a participação da sociedade civil em municípios com menos de cem mil habitantes.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r7" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 8 -->
+                <div id="q8-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 8</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Infraestrutura e Fluxos</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">A relação entre a mobilidade urbana e o ordenamento territorial nas grandes aglomerações brasileiras reflete as contradições do modelo de crescimento espraiado. Sobre esse cenário, analise as afirmações abaixo:</p>
+                        <ul class="space-y-3 mb-6 bg-brand-50 p-4 rounded-lg border border-brand-200/50">
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">I -</span>
+                                <span>A dispersão periférica induz o aumento do escoamento superficial pluvial e a perda de coberturas vegetais, além de impor maior dependência de transporte e dificuldades de mobilidade pendular cotidiana.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">II -</span>
+                                <span>Um dos desafios contemporâneos para a viabilização da tarifa zero em capitais e regiões metropolitanas reside na instabilidade do financiamento decorrente da ausência de um modelo regulatório nacional consolidado, demandando vultosos subsídios do orçamento público.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">III -</span>
+                                <span>O espraiamento urbano horizontal é uma estratégia eficiente recomendada pelos urbanistas para reduzir os custos públicos de manutenção viária e incentivar a desconcentração das atividades comerciais do centro de comando metropolitano.</span>
+                            </li>
+                        </ul>
+                        <p class="font-medium text-brand-900 mb-4">Quais estão corretas?</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="8">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q8" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) Apenas I.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q8" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) Apenas II.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q8" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) Apenas I e II.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q8" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) Apenas II e III.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q8" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) I, II e III.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r8" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 9 -->
+                <div id="q9-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 9</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Dinâmica Espacial</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-4">Em centralidades urbanas dotadas de infraestrutura consolidada, intervenções urbanísticas públicas e privadas comumente induzem dinâmicas de reestruturação espacial. Assinale a alternativa que descreve <strong>incorretamente</strong> essas dinâmicas.</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="9">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q9" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) A valorização imobiliária em centralidades selecionadas por empreendimentos corporativos tende a gerar a elitização do local, forçando a saída de antigos moradores de menor poder aquisitivo.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q9" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) O fenômeno da gentrificação expressa o predomínio do valor de troca do solo urbano (sua capacidade de gerar lucro e renda imobiliária) sobre o seu valor de uso (sua função de abrigo e reprodução da vida dos residentes originais).</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q9" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) A reestruturação imobiliária em áreas centrais de metrópoles, como Porto Alegre ou São Paulo, frequentemente se ancora no discurso de "revitalização" ou "humanização" para atrair investimentos privados e novos nichos de consumo.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q9" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) A gentrificação, ao promover a elitização residencial e comercial, atua diretamente no sentido de democratizar o acesso à moradia central, integrando de forma harmônica diferentes classes sociais no mesmo espaço habitacional.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q9" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) A intervenção do planejamento urbano na redefinição de perímetros e parâmetros construtivos nas centralidades urbanas pode atuar como um vetor indutor de valorização imobiliária diferencial.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r9" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- QUESTÃO 10 -->
+                <div id="q10-container" class="question-card bg-white border border-brand-200 rounded-xl p-6 sm:p-8 shadow-sm transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 bg-brand-accent/10 text-brand-accent text-xs font-bold rounded-full">Questão 10</span>
+                        <span class="text-xs text-brand-800/40">FAURGS • Teoria Espacial</span>
+                    </div>
+                    <div class="prose max-w-none text-brand-800 text-sm sm:text-base leading-relaxed">
+                        <p class="font-semibold text-brand-900 mb-2">Associe as formulações teóricas acerca da produção do espaço urbano, listadas na primeira coluna, com as suas respectivas manifestações empíricas observadas na dinâmica urbana e metropolitana brasileira, descritas na segunda coluna:</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 bg-brand-50 p-3 rounded-lg text-xs sm:text-sm font-medium border border-brand-200/50">
+                            <div>1 - Henri Lefebvre (A produção do espaço / Valor de uso x Valor de troca)</div>
+                            <div>2 - Milton Santos (Os dois circuitos da economia urbana)</div>
+                            <div>3 - David Harvey (Acumulação por espoliação / Fixação espacial do capital)</div>
+                            <div>4 - IBGE (Regiões de Influência das Cidades - REGIC)</div>
+                        </div>
+
+                        <div class="space-y-3 mb-6 text-sm bg-brand-50/50 p-4 rounded-lg border border-brand-200/50">
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Coexistência, nos países periféricos, de uma economia urbana formal intensiva em capital (circuito superior) e de uma economia informal de sobrevivência intensiva em mão de obra (circuito inferior), altamente integrada ao espaço das favelas e periferias.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Apropriação do solo urbano como ativo financeiro, onde investimentos imobiliários de luxo e a especulação fundiária atuam como mecanismos de absorção de excedentes de capital, produzindo vazios urbanos e segregação.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Conflito cotidiano entre a apropriação do espaço como suporte material para as relações de vida e sobrevivência das classes populares e a sua dominação por agentes privados que o reduzem a uma mercadoria geradora de renda fundiária.</span>
+                            </div>
+                            <div class="flex items-start gap-2">
+                                <span class="font-bold text-brand-accent shrink-0">( )</span>
+                                <span>Estruturação hierárquica das aglomerações urbanas brasileiras em rede, na qual metrópoles nacionais exercem poder de comando e centralizam serviços de alta complexidade (saúde, educação superior) que atraem populações de municípios vizinhos.</span>
+                            </div>
+                        </div>
+
+                        <p class="font-medium text-brand-900 mb-4">A sequência correta de preenchimento dos parênteses, de cima para baixo, é</p>
+                    </div>
+                    
+                    <!-- Opções -->
+                    <div class="space-y-3 mt-4" data-question="10">
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q10" value="A" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(A) 2 – 3 – 1 – 4.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q10" value="B" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(B) 3 – 2 – 1 – 4.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q10" value="C" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(C) 2 – 1 – 3 – 4.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q10" value="D" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(D) 4 – 3 – 1 – 2.</span>
+                        </label>
+                        <label class="option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors">
+                            <input type="radio" name="q10" value="E" class="w-4 h-4 text-brand-accent focus:ring-brand-accent accent-brand-accent">
+                            <span class="text-sm">(E) 2 – 3 – 4 – 1.</span>
+                        </label>
+                    </div>
+
+                    <!-- Resolução Oculta -->
+                    <div id="r1" class="resolution-box hidden mt-6 border-t border-brand-200 pt-6"></div>
+                </div>
+
+                <!-- Botão de Finalização -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-brand-50 p-6 rounded-xl border border-brand-200 shadow-sm mt-8">
+                    <div>
+                        <h4 class="font-bold text-brand-900 text-base">Revisou todas as suas marcações?</h4>
+                        <p class="text-xs text-brand-800/60 mt-1">Ao enviar, o sistema calculará seus acertos e abrirá a resolução detalhada de cada questão.</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <button type="button" onclick="resetQuiz()" class="w-full sm:w-auto px-6 py-3 border border-brand-200 text-brand-800 hover:bg-brand-100 rounded-lg font-semibold text-sm transition-colors focus:outline-none">
+                            Limpar Respostas
+                        </button>
+                        <button type="button" onclick="submitQuiz()" class="w-full sm:w-auto px-8 py-3 bg-brand-accent hover:bg-blue-700 text-white rounded-lg font-bold text-sm transition-colors shadow-md shadow-brand-accent/20 focus:outline-none">
+                            Enviar Simulado
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Seção de Resultados (Oculta Inicialmente) -->
+            <section id="results-panel" class="hidden space-y-6">
+                <div class="bg-white border-2 border-brand-accent rounded-xl p-6 sm:p-8 shadow-md">
+                    <div class="text-center max-w-xl mx-auto">
+                        <div class="inline-flex p-4 bg-brand-accent/10 rounded-full text-brand-accent mb-4">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-2xl font-bold text-brand-900">Desempenho no Simulado</h2>
+                        <p class="text-sm text-brand-800/60 mt-1">Sua avaliação foi processada de acordo com as diretrizes e critérios da banca FAURGS.</p>
+                        
+                        <!-- Placar de Acertos -->
+                        <div class="my-6 grid grid-cols-2 gap-4 max-w-sm mx-auto">
+                            <div class="bg-brand-50 p-4 border border-brand-200 rounded-xl">
+                                <span class="text-xs text-brand-800/60 font-semibold uppercase block">Acertos</span>
+                                <span id="score-hits" class="text-3xl font-extrabold text-brand-success">0</span>
+                                <span class="text-xs text-brand-800/40 block">de 10 questões</span>
+                            </div>
+                            <div class="bg-brand-50 p-4 border border-brand-200 rounded-xl">
+                                <span class="text-xs text-brand-800/60 font-semibold uppercase block">Aproveitamento</span>
+                                <span id="score-percent" class="text-3xl font-extrabold text-brand-accent">0%</span>
+                                <span id="score-feedback" class="text-[10px] text-brand-800/50 block font-bold uppercase mt-1">Refazer</span>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-brand-800/70">A resolução e os comentários detalhados de cada questão foram ativados logo abaixo de seus respectivos enunciados na seção principal. Utilize o menu lateral para navegar de forma rápida pelas justificativas teóricas e matemáticas.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        
+        <!-- Coluna Lateral (Painel de Status das Questões) -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="sticky top-24 space-y-6">
+                
+                <!-- Card de Status do Aluno -->
+                <div class="bg-white border border-brand-200 rounded-xl p-5 shadow-sm">
+                    <h3 class="text-xs font-bold text-brand-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                        Navegação do Simulado
+                    </h3>
+                    
+                    <!-- Grade de botões rápidos para as questões -->
+                    <div class="grid grid-cols-5 gap-2" id="navigation-grid">
+                        <button type="button" onclick="scrollToQuestion(1)" id="nav-q1" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">1</button>
+                        <button type="button" onclick="scrollToQuestion(2)" id="nav-q2" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">2</button>
+                        <button type="button" onclick="scrollToQuestion(3)" id="nav-q3" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">3</button>
+                        <button type="button" onclick="scrollToQuestion(4)" id="nav-q4" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">4</button>
+                        <button type="button" onclick="scrollToQuestion(5)" id="nav-q5" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">5</button>
+                        <button type="button" onclick="scrollToQuestion(6)" id="nav-q6" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">6</button>
+                        <button type="button" onclick="scrollToQuestion(7)" id="nav-q7" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">7</button>
+                        <button type="button" onclick="scrollToQuestion(8)" id="nav-q8" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">8</button>
+                        <button type="button" onclick="scrollToQuestion(9)" id="nav-q9" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">9</button>
+                        <button type="button" onclick="scrollToQuestion(10)" id="nav-q10" class="h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70">10</button>
+                    </div>
+
+                    <!-- Legendas de Status -->
+                    <div class="mt-6 pt-4 border-t border-brand-200 space-y-2 text-[11px] text-brand-800/75 font-medium">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-brand-accent rounded-sm inline-block"></span>
+                            <span>Questão selecionada / respondida</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-brand-success rounded-sm inline-block"></span>
+                            <span>Correta (Pós-envio)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 bg-brand-error rounded-sm inline-block"></span>
+                            <span>Incorreta (Pós-envio)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Painel de Regras da Banca FAURGS -->
+                <div class="bg-brand-50 border border-brand-200 rounded-xl p-5 shadow-sm text-xs space-y-3">
+                    <h4 class="font-bold text-brand-900 uppercase tracking-wide">Padrão Metodológico FAURGS</h4>
+                    <p class="leading-relaxed text-brand-800/70">A banca **FAURGS** caracteriza-se por questões conceituais extremamente longas, com múltipla escolha e forte viés nas terminologias oficiais da geografia brasileira, dados do IBGE, conceitos de Milton Santos, David Harvey e na legislação fundiária nacional (Estatuto da Cidade).</p>
+                    <p class="leading-relaxed text-brand-800/70">Fique atento aos cálculos cartográficos de áreas, onde a escala linear deve ser devidamente convertida em escala de área ($E^2$).</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="bg-brand-100 border-t border-brand-200 mt-16 py-8">
+    <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+        <p class="text-xs text-brand-800/60 font-semibold">Simulador de Geografia Urbana e Lutas Sociais de acordo com Programas de Concursos Públicos</p>
+        <p class="text-[10px] text-brand-800/40">Foco temático: Processo de Urbanização Brasileiro • Redes de Cidades • Metropolização • Exclusão Socioespacial</p>
+    </div>
+</footer>
+
+<script>
+    // Gabarito Oficial das Questões
+    const answerKey = {
+        q1: 'D',
+        q2: 'A',
+        q3: 'A',
+        q4: 'C',
+        q5: 'B',
+        q6: 'C',
+        q7: 'C',
+        q8: 'C',
+        q9: 'D',
+        q10: 'A'
+    };
+
+    // Resoluções comentadas estruturadas para injeção dinâmica no HTML
+    const resolutions = {
+        q1: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (D)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Apenas I e III estão corretas.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Análise da afirmação I (Correta):</strong> O processo de urbanização do Brasil ocorreu de forma intensiva a partir da segunda metade do século XX, intimamente ligado à transição econômica do modelo primário-exportador para o urbano-industrial. A mecanização do campo (modernização agrícola) expulsou vastas populações rurais (êxodo rural) que migraram para as grandes metrópoles em busca de emprego.</p>
+                    <p><strong>Análise da afirmação II (Incorreta):</strong> Ao contrário do equilíbrio regional alegado, o território brasileiro consolidou uma hipercentração demográfica e metropolitana no Sudeste (particularmente no eixo Rio-São Paulo) devido à herança econômica e infraestrutural, sem que as políticas habitacionais do período militar descentralizassem a rede nacional.</p>
+                    <p><strong>Análise da afirmação III (Correta):</strong> No topo da hierarquia urbana do IBGE, São Paulo atua como cidade global, centralizando os eixos de finanças corporativas, telecomunicações corporativas e tomadas de decisão que articulam o espaço nacional aos fluxos mundiais de capital.</p>
+                </div>
+            </div>
+        `,
+        q2: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (A)</span>
+                    <span class="font-semibold text-brand-900 text-xs">0,75 km²</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Demonstração Matemática da Conversão de Áreas em Escalas:</strong></p>
+                    <p>A escala linear utilizada é de $1:50.000$, o que significa que:</p>
+                    <p class="font-mono bg-white p-2 border border-brand-200 rounded text-center my-2">1 cm (no mapa) = 50.000 cm (na realidade) = 500 m = 0,5 km</p>
+                    <p>Quando calculamos áreas, devemos elevar a escala linear ao quadrado ($E^2$). Portanto, a conversão de área é:</p>
+                    <p class="font-mono bg-white p-2 border border-brand-200 rounded text-center my-2">1 cm² (no mapa) = (0,5 km)² = 0,25 km² (na realidade)</p>
+                    <p>Como a poligonal delimitada pelo geógrafo possui uma área gráfica de 3 cm², multiplicamos esse valor para obter a área real de campo:</p>
+                    <p class="font-mono bg-white p-2 border border-brand-200 rounded text-center my-2">Área real = 3 cm² &times; 0,25 km²/cm² = 0,75 km²</p>
+                </div>
+            </div>
+        `,
+        q3: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (A)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Sequência 2 – 1 – 3 – 4</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Associações dos conceitos teóricos:</strong></p>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><strong>(2) Conurbação:</strong> Trata-se da unificação espacial de duas ou mais cidades contíguas decorrente de expansão física.</li>
+                        <li><strong>(1) Macrocefalia urbana:</strong> O inchaço desproporcional de uma metrópole que absorve de forma hipertrofiada serviços, infraestrutura e fluxos migratórios em detrimento da rede nacional.</li>
+                        <li><strong>(3) Gentrificação:</strong> O processo de elitização socioespacial de áreas centrais ou históricas reestruturadas, substituindo classes sociais vulneráveis pelo mercado de luxo.</li>
+                        <li><strong>(4) Rede urbana:</strong> A interconexão física e imaterial de cidades articuladas sob fluxos e relações de hierarquia e influência mútua.</li>
+                    </ul>
+                </div>
+            </div>
+        `,
+        q4: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (C)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Apenas I e III estão corretas.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Análise da afirmação I (Correta):</strong> A verticalização maciça aliada ao asfalto e à escassez de vegetação gera desvios de energia térmica, consolidando o fenômeno microclimático de ilhas de calor no centro.</p>
+                    <p><strong>Análise da afirmação II (Incorreta):</strong> A teoria do Sistema Clima Urbano (SCU) de Monteiro enfatiza que os fenômenos climáticos e inundações não provêm de episódios estritamente pluviométricos excepcionais. Trata-se do produto de apropriações socioambientais e impermeabilização predatória das planícies de várzea das cidades.</p>
+                    <p><strong>Análise da afirmação III (Correta):</strong> A dispersão suburbana e as periferias autoconstruídas forçam a ocupação de encostas sob severos riscos geotécnicos e hidrogeológicos, gerando impactos e desastres socioambientais que recaem desproporcionalmente sobre populações de baixíssima renda.</p>
+                </div>
+            </div>
+        `,
+        q5: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (B)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Alternativa (B) está Correta.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p>A favelização decorre do inchaço urbano e da escassez habitacional. Diante da incapacidade do Estado e do mercado fundiário em oferecer moradia digna legalizada, os cidadãos de menor renda ocupam ecossistemas periféricos, encostas de alta declividade ou áreas ambientalmente sensíveis das centralidades.</p>
+                    <p>As demais alternativas trazem erros históricos ou conceituais graves: cortiços de São Paulo caracterizavam-se por banheiro único compartilhado e extrema insalubridade (Incorreta A); desertos alimentares são caracterizados pela <strong>escassez</strong> de alimentos frescos e saudáveis (Incorreta C); a imigração japonesa no século XIX deu-se principalmente para fazendas de café no interior (Incorreta D); e a segregação socioespacial caracteriza-se pela distribuição extremamente desigual e injusta de investimentos e recursos públicos (Incorreta E).</p>
+                </div>
+            </div>
+        `,
+        q6: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (C)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Apenas I e III estão corretas.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Análise da afirmação I (Correta):</strong> Os movimentos coletivos urbanos pressionam o Estado no intuito de positivar e implementar melhorias de moradia, transporte, saneamento e educação, operando como pilares da consolidação democrática.</p>
+                    <p><strong>Análise da afirmação II (Incorreta):</strong> A inserção de direitos nas leis ou na Constituição não gera sua efetivação automática. Pelo contrário, sem ação fiscalizadora, mobilização constante e implementação prática, leis transformam-se em "letra morta".</p>
+                    <p><strong>Análise da afirmação III (Correta):</strong> Na década de 1980, com a reabertura política, as lutas periféricas unificaram as pautas de moradia, combate à carestia e segurança alimentar, impulsionando a futura regulamentação de instrumentos urbanísticos.</p>
+                </div>
+            </div>
+        `,
+        q7: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (C)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Alternativa (C) está Correta.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p>Conforme determina o Artigo 21 do Estatuto da Cidade (Lei 10.257/2001), o proprietário urbano pode conceder a outrem o direito de superfície de seu terreno (uso do solo, subsolo ou espaço aéreo correspondente), mediante escritura pública e registro imobiliário, por prazo determinado ou indeterminado.</p>
+                    <p>Erros das demais alternativas: a competência é primordialmente dos Municípios (Incorreta A); a concessão do direito de superfície pode ser também por tempo indeterminado (Incorreta B); a usucapião especial coletiva exige ocupação de área superior a 250 m² e onde não seja possível identificar as frações ideais de cada possuidor (Incorreta D); o Plano Diretor deve ser revisado obrigatoriamente a cada 10 anos (Incorreta E).</p>
+                </div>
+            </div>
+        `,
+        q8: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (C)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Apenas I e II estão corretas.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Análise da afirmação I (Correta):</strong> O espraiamento urbano aumenta as distâncias percorridas pelos trabalhadores em fluxos pendulares diários de mobilidade, gerando congestionamentos e exclusão, além de gerar danos ambientais na periferia.</p>
+                    <p><strong>Análise da afirmação II (Correta):</strong> Uma das maiores barreiras para a sustentação financeira das políticas de Tarifa Zero é a instabilidade dos subsídios estatais necessários, face à carência de uma regulação integrada nacional e regional.</p>
+                    <p><strong>Análise da afirmação III (Incorreta):</strong> O espraiamento horizontal metropolitano é veementemente desencorajado por urbanistas contemporâneos. Ele encarece exponencialmente os gastos estatais de infraestrutura (saneamento, asfalto, transporte), recomendando-se soluções de cidades mais densas e compactas.</p>
+                </div>
+            </div>
+        `,
+        q9: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (D)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Alternativa (D) descreve a dinâmica de forma INCORRETA.</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p>A afirmação está conceitualmente incorreta porque a gentrificação não democratiza nem integra classes sociais no espaço central. Pelo contrário, trata-se de um vetor direto de expulsão indireta e elitização, empurrando as populações tradicionais de menor renda para áreas periféricas carentes de infraestrutura básica em virtude do aumento do custo imobiliário de locação e sobrevivência.</p>
+                </div>
+            </div>
+        `,
+        q10: `
+            <div class="bg-brand-50 rounded-xl p-5 border border-brand-200 text-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="px-2.5 py-0.5 bg-brand-success/10 text-brand-success font-bold rounded-full text-xs">Gabarito: (A)</span>
+                    <span class="font-semibold text-brand-900 text-xs">Sequência 2 – 3 – 1 – 4</span>
+                </div>
+                <div class="space-y-3 text-brand-800/90 leading-relaxed text-xs">
+                    <p><strong>Justificativa das associações dos teóricos:</strong></p>
+                    <ul class="list-disc pl-4 space-y-1">
+                        <li><strong>(2) Milton Santos:</strong> Propôs os dois circuitos da economia urbana em países em desenvolvimento (circuito superior moderno e formal, circuito inferior informal de sobrevivência).</li>
+                        <li><strong>(3) David Harvey:</strong> Explora a fixação espacial do excedente de capital através do solo urbano servindo como ativo financeiro e gerando espoliações e vazios.</li>
+                        <li><strong>(1) Henri Lefebvre:</strong> Descreve a contradição espacial básica do capitalismo entre o valor de uso (espaço vivido cotidiano) e o valor de troca (terra tratada como mercadoria lucrativa).</li>
+                        <li><strong>(4) IBGE (REGIC):</strong> Estabelece cientificamente os eixos de comando e os fluxos de rede urbana hierárquica baseados em atratividade e complexidade funcional.</li>
+                    </ul>
+                </div>
+            </div>
+        `
+    };
+
+    
+    // Toggle de visualização do material de estudo
+    function toggleStudyGuide() {
+        const content = document.getElementById('study-guide-content');
+        const toggleText = document.getElementById('study-guide-toggle-text');
+        const toggleIcon = document.getElementById('study-guide-toggle-icon');
+        
+        if (content.classList.contains('max-h-0')) {
+            content.classList.remove('max-h-0');
+            content.classList.add('max-h-[1000px]');
+            toggleText.textContent = "Recolher Guia";
+            toggleIcon.classList.remove('rotate-180');
+        } else {
+            content.classList.remove('max-h-[1000px]');
+            content.classList.add('max-h-0');
+            toggleText.textContent = "Expandir Guia";
+            toggleIcon.classList.add('rotate-180');
+        }
+    }
+
+    // Navegar até uma questão mantendo uma boa visualização
+    function scrollToQuestion(qNum) {
+        const el = document.getElementById(`q${qNum}-container`);
+        if (el) {
+            const offset = 100; // Espaço do cabeçalho fixo
+            const bodyRect = document.body.getBoundingClientRect().top;
+            const elementRect = el.getBoundingClientRect().top;
+            const elementPosition = elementRect - bodyRect;
+            const offsetPosition = elementPosition - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    // Monitoramento em tempo real do progresso
+    function updateProgress() {
+        let answeredCount = 0;
+        for (let i = 1; i <= 10; i++) {
+            const isAnswered = document.querySelector(`input[name="q${i}"]:checked`);
+            const navBtn = document.getElementById(`nav-q${i}`);
+            
+            if (isAnswered) {
+                answeredCount++;
+                // Visual ativo para botões laterais de questões preenchidas
+                if (!navBtn.classList.contains('bg-brand-accent')) {
+                    navBtn.className = "h-10 bg-brand-accent border border-brand-accent text-white rounded-lg text-xs font-bold transition-all shadow-sm";
+                }
+            } else {
+                // Estado normal para não preenchidas
+                navBtn.className = "h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70";
+            }
+        }
+
+        // Atualizar barras de progresso
+        const progressPercent = (answeredCount / 10) * 100;
+        document.getElementById('header-progress-bar').style.width = `${progressPercent}%`;
+        document.getElementById('header-progress-text').textContent = `${answeredCount}/10`;
+    }
+
+    // Atribuir ouvintes de alteração nos radio buttons
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', () => {
+            updateProgress();
+            
+            // Highlight na opção selecionada visualmente
+            const questionGroup = radio.closest('[data-question]');
+            if (questionGroup) {
+                questionGroup.querySelectorAll('.option-label').forEach(label => {
+                    label.classList.remove('border-brand-accent', 'bg-brand-accent/5');
+                });
+                const selectedLabel = radio.closest('.option-label');
+                if (selectedLabel) {
+                    selectedLabel.classList.add('border-brand-accent', 'bg-brand-accent/5');
+                }
+            }
+        });
+    });
+
+    // Submeter o quiz e mostrar desempenho e resoluções
+    function submitQuiz() {
+        // Verificar pendências de respostas
+        let unanswered = [];
+        for (let i = 1; i <= 10; i++) {
+            if (!document.querySelector(`input[name="q${i}"]:checked`)) {
+                unanswered.push(i);
+            }
+        }
+
+        if (unanswered.length > 0) {
+            // Criação de aviso customizado e limpo, sem o uso de alert() nativo
+            showNotification(`Atenção: Você deixou as questões (${unanswered.join(', ')}) sem preenchimento. Responda-as antes de enviar!`);
+            return;
+        }
+
+        let hits = 0;
+        
+        // Avaliar respostas e formatar cartões de questões
+        for (let i = 1; i <= 10; i++) {
+            const selectedRadio = document.querySelector(`input[name="q${i}"]:checked`);
+            const selectedVal = selectedRadio ? selectedRadio.value : '';
+            const correctVal = answerKey[`q${i}`];
+            
+            const card = document.getElementById(`q${i}-container`);
+            const navBtn = document.getElementById(`nav-q${i}`);
+            const optionsGroup = card.querySelector(`[data-question="${i}"]`);
+            const resBox = document.getElementById(`r${i}`);
+            
+            // Limpa formatação anterior do card
+            card.classList.remove('border-brand-success', 'border-brand-error', 'shadow-brand-success/10', 'shadow-brand-error/10');
+            
+            // Injeta a resolução detalhada correspondente
+            resBox.innerHTML = resolutions[`q${i}`];
+            resBox.classList.remove('hidden');
+
+            if (selectedVal === correctVal) {
+                hits++;
+                // Estilo para acerto
+                card.classList.add('border-brand-success', 'shadow-md', 'shadow-brand-success/5');
+                navBtn.className = "h-10 bg-brand-success border border-brand-success text-white rounded-lg text-xs font-bold transition-all shadow-md";
+            } else {
+                // Estilo para erro
+                card.classList.add('border-brand-error', 'shadow-md', 'shadow-brand-error/5');
+                navBtn.className = "h-10 bg-brand-error border border-brand-error text-white rounded-lg text-xs font-bold transition-all shadow-md";
+            }
+
+            // Realçar as alternativas (Verde para correta e Vermelho para incorreta selecionada)
+            optionsGroup.querySelectorAll('.option-label').forEach(label => {
+                const input = label.querySelector('input');
+                label.classList.remove('border-brand-accent', 'bg-brand-accent/5', 'bg-brand-success/5', 'border-brand-success', 'bg-brand-error/5', 'border-brand-error');
+                
+                if (input.value === correctVal) {
+                    label.classList.add('bg-brand-success/10', 'border-brand-success', 'text-brand-success', 'font-semibold');
+                } else if (input.checked && input.value !== correctVal) {
+                    label.classList.add('bg-brand-error/10', 'border-brand-error', 'text-brand-error');
+                }
+            });
+        }
+
+        // Exibir painel de resultados gerais
+        const resultsPanel = document.getElementById('results-panel');
+        resultsPanel.classList.remove('hidden');
+        
+        // Atualizar dados de aproveitamento
+        document.getElementById('score-hits').textContent = hits;
+        const percent = Math.round((hits / 10) * 100);
+        document.getElementById('score-percent').textContent = `${percent}%`;
+
+        // Atribuir feedback text baseado na porcentagem de acertos
+        const feedback = document.getElementById('score-feedback');
+        if (percent >= 80) {
+            feedback.textContent = "Excelente! Aprovado";
+            feedback.className = "text-[10px] text-brand-success block font-bold uppercase mt-1";
+        } else if (percent >= 50) {
+            feedback.textContent = "Bom desempenho";
+            feedback.className = "text-[10px] text-brand-accent block font-bold uppercase mt-1";
+        } else {
+            feedback.textContent = "Necessita revisão";
+            feedback.className = "text-[10px] text-brand-error block font-bold uppercase mt-1";
+        }
+
+        // Rolar a tela suavemente para a área de resultados gerais
+        resultsPanel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Resetar quiz para estado limpo
+    function resetQuiz() {
+        document.getElementById('quiz-form').reset();
+        
+        // Reset de layouts, formatações de cartões e ocultação de resoluções
+        for (let i = 1; i <= 10; i++) {
+            const card = document.getElementById(`q${i}-container`);
+            const navBtn = document.getElementById(`nav-q${i}`);
+            const resBox = document.getElementById(`r${i}`);
+            const optionsGroup = card.querySelector(`[data-question="${i}"]`);
+            
+            card.classList.remove('border-brand-success', 'border-brand-error', 'shadow-brand-success/10', 'shadow-brand-error/10');
+            resBox.classList.add('hidden');
+            resBox.innerHTML = '';
+
+            optionsGroup.querySelectorAll('.option-label').forEach(label => {
+                label.className = "option-label flex items-center gap-3 p-4 border border-brand-200 rounded-lg cursor-pointer hover:bg-brand-50 transition-colors text-brand-800";
+            });
+
+            navBtn.className = "h-10 border border-brand-200 bg-brand-50 hover:bg-brand-100 rounded-lg text-xs font-bold transition-all text-brand-800/70";
+        }
+
+        document.getElementById('results-panel').classList.add('hidden');
+        updateProgress();
+        
+        // Rolar suavemente para o início
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Criar e injetar aviso moderno e dinâmico substituindo alert()
+    function showNotification(message) {
+        const container = document.createElement('div');
+        container.className = "fixed bottom-5 right-5 left-5 sm:left-auto sm:w-96 z-50 bg-brand-900 text-brand-50 border border-brand-200/20 p-4 rounded-xl shadow-2xl flex items-start gap-3 transform transition-all duration-300 translate-y-10 opacity-0";
+        container.innerHTML = `
+            <div class="p-1 bg-brand-accent rounded-lg text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <h5 class="text-xs font-bold uppercase tracking-wider text-white">Atenção</h5>
+                <p class="text-xs text-brand-50/80 mt-1 leading-relaxed">${message}</p>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-brand-50/40 hover:text-white transition-colors shrink-0">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        `;
+        document.body.appendChild(container);
+        
+        // Animando entrada do elemento de aviso
+        setTimeout(() => {
+            container.classList.remove('translate-y-10', 'opacity-0');
+        }, 50);
+
+        // Auto remover aviso após 6 segundos
+        setTimeout(() => {
+            container.classList.add('translate-y-10', 'opacity-0');
+            setTimeout(() => { container.remove(); }, 300);
+        }, 6000);
+    }
+
+    // Inicialização da página
+    window.onload = function() {
+        updateProgress();
+    };
+</script>
+</body>
+</html>

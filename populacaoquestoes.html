@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado: População Brasileira - Foco FAURGS</title>
+    <!-- Tailwind CSS para Estilização de Alta Performance -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones premium -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Configuração e Carregamento do MathJax para Fórmulas Matemáticas na Questão 10 -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fcfbf9; /* Warm White / Alabaster para não cansar a vista */
+            color: #1e293b; /* Slate-800 para contraste suave, menos agressivo que preto puro */
+        }
+        /* Custom scrollbar suave */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f0ea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        /* Efeito de foco sutil */
+        .focus-ring:focus {
+            outline: 2px solid #4f46e5;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+    <!-- Cabeçalho Principal -->
+    <header class="bg-white border-b border-stone-200/80 sticky top-0 z-50 shadow-sm backdrop-blur-md bg-white/95">
+        <div class="max-w-5xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        <i class="fa-solid fa-graduation-cap"></i> Preparação para Concursos
+                    </span>
+                    <h1 class="text-xl md:text-2xl font-bold text-stone-900 mt-1">
+                        População Brasileira: Dinâmica e Estrutura
+                    </h1>
+                    <p class="text-xs md:text-sm text-stone-500 mt-0.5">
+                        Simulado Especializado • Estilo de Banca: <span class="font-semibold text-stone-700">FAURGS</span>
+                    </p>
+                </div>
+                
+                <!-- Barra de Status Rápida -->
+                <div class="flex items-center gap-4 self-end md:self-auto">
+                    <!-- Cronômetro -->
+                    <div class="flex items-center gap-2 bg-stone-50 px-3 py-1.5 rounded-lg border border-stone-200 text-stone-600 font-medium text-sm">
+                        <i class="fa-regular fa-clock text-indigo-600 animate-pulse"></i>
+                        <span id="timer">00:00:00</span>
+                    </div>
+                    <!-- Indicador de Progresso Escrito -->
+                    <div class="text-right">
+                        <span class="text-xs text-stone-400 block uppercase tracking-wider font-semibold">Respondidas</span>
+                        <span class="text-sm font-bold text-stone-700" id="progress-text">0 / 10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Progresso Visual -->
+            <div class="w-full bg-stone-100 h-1.5 rounded-full mt-4 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300 ease-out"></div>
+            </div>
+
+            <!-- Navegador rápido por Questões -->
+            <div class="flex items-center gap-1.5 mt-3 overflow-x-auto py-1 scrollbar-none">
+                <span class="text-xs text-stone-500 font-medium mr-1 shrink-0">Ir para:</span>
+                <div class="flex gap-1.5" id="nav-shortcuts">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        
+        <!-- Alerta Inicial sobre o Modo de Leitura -->
+        <div class="mb-8 bg-amber-50/60 border border-amber-200/80 rounded-xl p-4 flex items-start gap-3">
+            <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-lg shrink-0"></i>
+            <div>
+                <h3 class="text-sm font-semibold text-stone-800">Modo de Leitura Otimizado</h3>
+                <p class="text-xs md:text-sm text-stone-600 mt-1 leading-relaxed">
+                    Este simulado possui fundo suave com alto nível de legibilidade e espaçamentos equilibrados para evitar o cansaço dos olhos em telas. Marque as suas respostas e clique em <strong class="text-indigo-600 font-medium">"Finalizar Simulado e Ver Resoluções"</strong> no fim da página para visualizar seu desempenho e as explicações completas inline.
+                </p>
+            </div>
+        </div>
+
+        <!-- Painel de Resultados (Oculto Inicialmente) -->
+        <section id="results-panel" class="hidden mb-8 transform transition-all duration-500 scale-95 opacity-0">
+            <!-- Renderizado dinamicamente via JS -->
+        </section>
+
+        <!-- Formulário das Questões -->
+        <form id="quiz-form" onsubmit="event.preventDefault();" class="space-y-8">
+            <div id="questions-container" class="space-y-8">
+                <!-- As 10 questões serão renderizadas aqui via JS -->
+            </div>
+
+            <!-- Botão de Submissão -->
+            <div class="pt-6 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-stone-500 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-clipboard-check text-stone-400"></i>
+                    Certifique-se de responder todas as questões antes de enviar.
+                </div>
+                <div class="flex gap-3 w-full sm:w-auto">
+                    <button type="button" id="btn-submit" onclick="submitQuiz()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-8 py-3.5 rounded-xl shadow-md shadow-indigo-100 transition-colors focus-ring flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Finalizar Simulado e Ver Resoluções
+                    </button>
+                    <button type="button" id="btn-reset" onclick="resetQuiz()" class="hidden w-full sm:w-auto bg-stone-100 hover:bg-stone-200 text-stone-700 font-semibold px-6 py-3.5 rounded-xl border border-stone-200 transition-colors focus-ring flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-left"></i> Refazer Simulado
+                    </button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <footer class="bg-stone-100 border-t border-stone-200 py-6 mt-16 text-center text-xs text-stone-500">
+        <div class="max-w-5xl mx-auto px-4">
+            <p>Simulado de Demografia Nacional • Conteúdo baseado no Censo 2022 (IBGE) e dinâmicas demográficas brasileiras históricas.</p>
+            <p class="mt-1 text-stone-400">Desenvolvido com foco em acessibilidade e conforto de leitura de longa duração.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Banco de dados contendo exatamente as questões fornecidas no documento.
+        const questionsData = [
+            {
+                id: 1,
+                title: "Dinâmica do Envelhecimento Populacional (Censo 2022)",
+                statement: `Considere as seguintes afirmações sobre a dinâmica do envelhecimento populacional e a evolução da idade mediana no Brasil com base nos resultados do Censo Demográfico de 2022 divulgado pelo Instituto Brasileiro de Geografia e Estatística (IBGE).<br><br>
+                <strong>I -</strong> O período entre 2010 e 2022 registrou o maior salto de envelhecimento populacional entre períodos intercensitários desde o início da série histórica em 1940, evidenciado pela elevação da idade mediana do brasileiro de 29 para 35 anos.<br>
+                <strong>II -</strong> A análise regional revela uma distribuição espacial homogênea do envelhecimento, de modo que todas as Unidades da Federação convergiram para a mesma idade mediana em 2022, mitigando as disparidades históricas entre o Norte e o Sul do país.<br>
+                <strong>III -</strong> O índice de envelhecimento nacional atingiu o patamar de 80,0 em 2022, o que aponta para a existência de 80 idosos (60 anos ou mais) para cada grupo de 100 crianças de 0 a 14 anos de idade no território nacional.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas I e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "D",
+                resolution: `<strong>Gabarito: (D)</strong><br><br>
+                A análise do envelhecimento populacional e da idade mediana exige uma interpretação rigorosa das mudanças estruturais captadas pelos dados censitários de 2022.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> Os dados consolidados do Censo de 2022 revelam que o país passou por um expressivo envelhecimento demográfico nas últimas décadas. A idade mediana da população — que divide o contingente nacional em duas metades perfeitamente iguais — saltou de 29 anos em 2010 para 35 anos ininterruptos em 2022. Esse incremento representa o maior aumento registrado entre dois censos demográficos desde 1940, evidenciando a celeridade do processo de transição demográfica no país.</li>
+                    <li class="mb-2"><strong>Afirmação II: Incorreta.</strong> O envelhecimento da população brasileira não ocorre de forma espacialmente homogênea, revelando profundas assimetrias regionais e estaduais. No ano de 2022, o estado do Rio Grande do Sul registrou a idade mediana mais elevada do país (38 anos), consolidando-se como a estrutura etária mais madura do território. Por outro lado, o estado de Roraima apresentou o perfil mais jovem da nação, com uma idade mediana de apenas 26 anos. Essas diferenças demonstram que as disparidades regionais históricas entre o Norte e o Sul do Brasil em termos de comportamento de fecundidade e fluxos migratórios permanecem atuantes na estruturação etária do território.</li>
+                    <li class="mb-2"><strong>Afirmação III: Correta.</strong> O índice de envelhecimento relaciona diretamente o tamanho dos dois segmentos etários extremos da população. Calculado a partir da razão entre o número de pessoas com 60 anos ou mais de idade e o contingente de crianças de 0 a 14 anos, esse índice atingiu o valor de 80,0 em 2022. Isso significa que, para cada grupo de 100 crianças residentes no país, existem 80 indivíduos idosos, confirmando o estreitamento progressivo da base infantil e o alargamento do topo da pirâmide etária nacional.</li>
+                </ul><br>
+                Dessa forma, estão corretas as afirmações I e III.`
+            },
+            {
+                id: 2,
+                title: "Distribuição Espacial e Recortes do Censo de 2022",
+                statement: `O Censo Demográfico do IBGE é o principal instrumento para revelar as características socioespaciais e a distribuição da população pelo território nacional. Em relação aos dados de distribuição espacial, recortes tradicionais e inovações metodológicas do Censo de 2022, analise as seguintes afirmações.<br><br>
+                <strong>I -</strong> Mais da metade da população brasileira concentra-se na faixa litorânea do país, herança do processo de colonização e da formação de eixos urbanos primário-exportadores; contudo, a participação relativa desse contingente costeiro recuou ligeiramente em 2022 quando comparada à de 2010.<br>
+                <strong>II -</strong> O Censo de 2022 investigou de maneira inédita a população autodeclarada quilombola no país, revelando que este grupo tradicional soma mais de 1,3 milhão de pessoas, representando aproximadamente 0,65% do total de habitantes do Brasil.<br>
+                <strong>III -</strong> Na região Norte, as maiores concentrações de população em áreas urbanas deixaram de se concentrar nas metrópoles regionais de Belém e Manaus e passaram a se localizar nas capitais Boa Vista e Rio Branco, que registraram o maior crescimento demográfico absoluto do país.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "C",
+                resolution: `<strong>Gabarito: (C)</strong><br><br>
+                Esta questão avalia o domínio sobre a distribuição geográfica da população brasileira, os legados de ocupação e as recentes inovações conceituais promovidas pelo IBGE no Censo de 2022.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> O padrão de adensamento demográfico litorâneo do Brasil é uma herança estrutural da economia colonial primário-exportadora, a qual se estruturou voltada para o mercado externo. Embora a maior parte da população se concentre nessa faixa geográfica litorânea, o Censo de 2022 demonstrou uma suave tendência de desconcentração espacial. A parcela de habitantes residindo na região litorânea recuou de 55,8% em 2010 para cerca de 54,8% em 2022, refletindo uma taxa de crescimento demográfico ligeiramente superior em cidades localizadas no interior do país.</li>
+                    <li class="mb-2"><strong>Afirmação II: Correta.</strong> O Censo de 2022 representou um marco metodológico ao incluir, pela primeira vez na história dos levantamentos censitários brasileiros, perguntas voltadas para a autoidentificação de comunidades quilombolas. Os resultados apontaram a existência de 1.327.802 pessoas quilombolas residentes no território nacional, o que equivale a 0,65% da população total, fornecendo subsídios essenciais para a delimitação de terras e formulação de políticas de inclusão socioespacial.</li>
+                    <li class="mb-2"><strong>Afirmação III: Incorreta.</strong> O crescimento urbano e populacional da região Norte continua polarizado nas metrópoles históricas de Manaus (AM) e Belém (PA), as quais mantêm o estatuto de maiores eixos demográficos e econômicos regionais. Cidades como Boa Vista (RR) e Rio Branco (AC) registraram taxas de crescimento expressivas devido a dinâmicas locais e fluxos fronteiriços, mas seus contingentes absolutos de população urbana continuam muito inferiores às das metrópoles centrais da Amazônia brasileira.</li>
+                </ul><br>
+                Estão corretas apenas as afirmações I e II.`
+            },
+            {
+                id: 3,
+                title: "Evolução Histórica e Recente das Migrações Internas",
+                statement: `As migrações internas no Brasil desempenham um papel fundamental na redistribuição da população e refletem as transformações na divisão inter-regional do trabalho. Sobre a evolução histórica e as tendências recentes dos fluxos migratórios internos no território brasileiro, considere as afirmações a seguir.<br><br>
+                <strong>I -</strong> As décadas de 1950, 1960 e 1970 caracterizaram-se por fluxos migratórios de longa distância altamente polarizados, direcionados sobretudo do Nordeste para as grandes metrópoles do Sudeste, impulsionados pela concentração industrial e pela modernização agrícola.<br>
+                <strong>II -</strong> A partir das décadas de 1980 e 1990, consolidou-se um processo de desconcentração econômica e surgimento de novos polos de atração (como cidades médias e áreas de expansão da fronteira agrícola), o que resultou no aumento das migrações de curto alcance (intrarregionais) e no crescimento das migrações de retorno.<br>
+                <strong>III -</strong> A migração de retorno em direção ao Nordeste superou os fluxos tradicionais a ponto de zerar o saldo migratório histórico negativo da região, fazendo com que o Nordeste passasse a registrar, no início do século XXI, o maior saldo migratório positivo do país.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "C",
+                resolution: `<strong>Gabarito: (C)</strong><br><br>
+                A questão aborda os ciclos migratórios internos do Brasil, relacionando a mobilidade espacial da população com a reorganização econômica do território nacional ao longo do tempo.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> Entre os anos de 1950 e 1980, a dinâmica migratória brasileira foi fortemente polarizada. A industrialização concentrada na região Sudeste (especialmente no eixo metropolitano de São Paulo e Rio de Janeiro), associada à estagnação econômica, crises climáticas periódicas no Semiárido e concentração fundiária no Nordeste, provocou deslocamentos massivos e de longa distância no sentido Nordeste-Sudeste.</li>
+                    <li class="mb-2"><strong>Afirmação II: Correta.</strong> A partir de meados de 1980 e de forma intensa nas décadas de 1990 e 2000, o padrão migratório inter-regional passou por profundas transformações. A desconcentração industrial das metrópoles tradicionais, a doação de terrenos e isenção fiscal promovida por outros entes da federação e o avanço da fronteira agrícola moderna nas regiões Centro-Oeste e Norte reduziram a atratividade relativa do Sudeste urbano. Esse novo arranjo estimulou fluxos intrarregionais (dentro dos próprios estados ou regiões) e o crescimento das chamadas migrações de retorno, em que os indivíduos regressam às suas regiões ou estados de nascimento.</li>
+                    <li class="mb-2"><strong>Afirmação III: Incorreta.</strong> Embora a migração de retorno em direção ao Nordeste tenha se intensificado a partir do final do século XX (com destaque para estados como Ceará, Bahia e Pernambuco), essa dinâmica não zerou o saldo migratório histórico negativo da região, nem converteu o Nordeste no maior polo de atração demográfica do país. O Nordeste continuou a registrar perdas demográficas líquidas absolutas em seus saldos migratórios interestaduais, ainda que em menor escala do que no período áureo de atração do Sudeste. O maior saldo migratório positivo proporcional recente foi registrado no estado de Santa Catarina.</li>
+                </ul><br>
+                Portanto, estão corretas as afirmações I e II.`
+            },
+            {
+                id: 4,
+                title: "Teorias Demográficas e Transição Populacional no Brasil",
+                statement: `A transição demográfica analisa a evolução populacional a partir de alterações nas taxas de natalidade e mortalidade, as quais modificam de forma profunda a estrutura etária de um país. Sobre a transição demográfica no Brasil e a aplicação de teorias demográficas correlatas, assinale a alternativa correta.`,
+                questionText: "Selecione a alternativa correta:",
+                options: [
+                    { key: "A", text: "O chamado \"bônus demográfico\" caracteriza-se pelo aumento acelerado das taxas de fecundidade, gerando um alargamento na base da pirâmide etária e um incremento imediato na oferta de mão de obra altamente qualificada." },
+                    { key: "B", text: "De acordo com a Teoria Reformista, o crescimento populacional acelerado é a causa estrutural da pobreza e do subdesenvolvimento; portanto, o planejamento familiar impositivo e o controle rígido de natalidade são pré-requisitos para a distribuição de renda." },
+                    { key: "C", text: "O Brasil encontra-se atualmente na fase de pré-transição demográfica (Estágio 1), apresentando taxas de natalidade extremamente elevadas que compensam os altos índices de mortalidade infantil, o que resulta em um crescimento vegetativo virtualmente nulo." },
+                    { key: "D", text: "O declínio acentuado e contínuo da taxa de fecundidade no Brasil, intensificado a partir da década de 1970, ocorreu sem a necessidade de políticas estatais de controle demográfico impositivo, sendo impulsionado pela urbanização, maior escolaridade feminina e disseminação de métodos contraceptivos." },
+                    { key: "E", text: "A Teoria Malthusiana clássica defende que a população cresce em progressão aritmética, enquanto a produção de alimentos cresce em progressão geométrica, gerando crises cíclicas de fome que só podem ser contidas pela atração massiva de imigrantes estrangeiros." }
+                ],
+                correctAnswer: "D",
+                resolution: `<strong>Gabarito: (D)</strong><br><br>
+                A questão exige a diferenciação de conceitos demográficos centrais e a análise de sua aplicabilidade e implicações teóricas na transição do perfil populacional do Brasil.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>(A) Incorreta:</strong> O bônus demográfico (ou janela demográfica de oportunidade) não decorre do aumento das taxas de fecundidade, mas sim do seu declínio acelerado. A queda da natalidade reduz a proporção de crianças (base da pirâmide) antes que a proporção de idosos (topo da pirâmide) se eleve de forma expressiva. Isso gera uma estrutura etária temporária em que a População em Idade Ativa (PIA) atinge a sua máxima participação relativa no total de habitantes, reduzindo a razão de dependência econômica geral.</li>
+                    <li class="mb-2"><strong>(B) Incorreta:</strong> A Teoria Reformista defende o oposto do que foi enunciado. Para os reformistas, a taxa de natalidade elevada não é a causa da pobreza, mas sim uma de suas consequências diretas. Defendem que o desenvolvimento socioeconômico, a distribuição de renda e o acesso a direitos básicos são as forças motrizes que levam à redução natural do tamanho das famílias, sendo contrários a políticas de controle impositivo de natalidade promovidas por teorias neomalthusianas.</li>
+                    <li class="mb-2"><strong>(C) Incorreta:</strong> O Brasil superou o estágio de pré-transição demográfica em meados do século XX. Atualmente, o país encontra-se na fase avançada de sua transição demográfica (Estágio 3 ou encaminhando-se para o Estágio 4), caracterizado por baixas taxas de natalidade e de mortalidade, o que resulta em um crescimento vegetativo bastante desacelerado e no rápido envelhecimento populacional.</li>
+                    <li class="mb-2"><strong>(D) Correta:</strong> A queda na taxa de fecundidade brasileira ocorreu de forma contínua e acentuada a partir da década de 1970. Esse fenômeno não foi gerado por políticas impositivas ou compulsórias de controle demográfico promovidas pelo Estado. A transição do perfil reprodutivo foi induzida por transformações espontâneas da sociedade, como a urbanização acelerada, a inserção das mulheres no mercado de trabalho formal, o encarecimento do custo de vida urbano, a elevação da escolaridade feminina e a ampliação do acesso à informação e aos métodos anticoncepcionais.</li>
+                    <li class="mb-2"><strong>(E) Incorreta:</strong> A teoria formulada por Thomas Malthus no final do século XVIII sustenta que a população tende a crescer em progressão geométrica (1, 2, 4, 8, 16...), ao passo que os meios de subsistência e alimentos crescem apenas em progressão aritmética (1, 2, 3, 4, 5...). Malthus não propunha a imigração de estrangeiros como solução, mas sim o controle moral (adiamento de casamentos e abstinência) para conter o crescimento desordenado.</li>
+                </ul>`
+            },
+            {
+                id: 5,
+                title: "Análise de Estrutura de Grupos Etários (Tabela Histórica)",
+                statement: `A evolução da estrutura por idade da população brasileira nas últimas décadas aponta para transformações de grande escala na participação de cada segmento etário. Considere a tabela abaixo, contendo a proporção de pessoas residentes por grandes grupos etários de acordo com os censos demográficos do país:<br><br>
+                <div class="overflow-x-auto my-4 rounded-xl border border-stone-200 shadow-sm bg-white">
+                    <table class="w-full text-sm text-left text-stone-600">
+                        <thead class="text-xs text-stone-700 bg-stone-50 border-b border-stone-200 uppercase font-semibold">
+                            <tr>
+                                <th class="px-6 py-3.5">Ano Censitário</th>
+                                <th class="px-6 py-3.5 text-center">População de 0 a 14 anos (%)</th>
+                                <th class="px-6 py-3.5 text-center">População de 15 a 59 anos (%)</th>
+                                <th class="px-6 py-3.5 text-center">População de 60 anos ou mais (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="px-6 py-3 font-medium text-stone-900">1980</td>
+                                <td class="px-6 py-3 text-center">38,2%</td>
+                                <td class="px-6 py-3 text-center">55,8%</td>
+                                <td class="px-6 py-3 text-center">6,0%</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="px-6 py-3 font-medium text-stone-900">2010</td>
+                                <td class="px-6 py-3 text-center">24,1%</td>
+                                <td class="px-6 py-3 text-center">65,9%</td>
+                                <td class="px-6 py-3 text-center">10,0%</td>
+                            </tr>
+                            <tr class="hover:bg-stone-50/50">
+                                <td class="px-6 py-3 font-medium text-stone-900">2022</td>
+                                <td class="px-6 py-3 text-center">19,8%</td>
+                                <td class="px-6 py-3 text-center">64,4%</td>
+                                <td class="px-6 py-3 text-center">15,8%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                Com base nos dados apresentados e na dinâmica demográfica nacional, analise as seguintes afirmações.<br><br>
+                <strong>I -</strong> Os dados estatísticos evidenciam um processo de rápido envelhecimento demográfico do país, caracterizado pelo encolhimento relativo contínuo da base de jovens e pela expansão proporcional do topo de idosos.<br>
+                <strong>II -</strong> A População em Idade Ativa (PIA), compreendida na faixa de 15 a 59 anos, registrou uma tendência de crescimento relativo ininterrupto ao longo de todo o período representado na tabela (1980 a 2022), indicando que a janela de bônus demográfico continuará se expandindo de forma indefinida.<br>
+                <strong>III -</strong> A alteração no perfil demográfico brasileiro, expressa pela mudança na participação de cada grupo etário entre 1980 e 2022, acarreta uma redução drástica nas demandas de natureza previdenciária e um aumento substancial na necessidade de investimentos em educação básica de primeiro ciclo.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "A",
+                resolution: `<strong>Gabarito: (A)</strong><br><br>
+                A resolução da questão requer a interpretação lógica dos dados estruturais de faixas etárias expressos na tabela e a compreensão das suas implicações socioeconômicas e fiscais no planejamento do Estado.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> A leitura dos dados censitários evidencia de maneira clara que a base infantil (0 a 14 anos) recuou de 38,2% em 1980 para 19,8% em 2022, enquanto a participação proporcional do grupo de idosos (60 anos ou mais) subiu de 6,0% para 15,8% no mesmo período intercensitário. Essa dinâmica comprova o rápido estreitamento da base e alargamento do topo da pirâmide etária do país.</li>
+                    <li class="mb-2"><strong>Afirmação II: Incorreta.</strong> O percentual da População em Idade Ativa (PIA - 15 a 59 anos) não registrou crescimento ininterrupto. Embora tenha crescido significativamente entre 1980 (55,8%) e 2010 (65,9%), a PIA iniciou um declínio proporcional em 2022, recuando para 64,4% devido ao rápido processo de envelhecimento e ascensão da parcela idosa. Esse declínio relativo confirma que a janela demográfica do bônus está se fechando no Brasil.</li>
+                    <li class="mb-2"><strong>Afirmação III: Incorreta.</strong> As transformações na pirâmide etária brasileira exercem pressões no sentido inverso ao apresentado na afirmação. O aumento expressivo do segmento idoso (de 6,0% para 15,8%) gera um severo crescimento das demandas de natureza previdenciária e assistencial, exigindo reformas estruturais para garantir o equilíbrio fiscal das contas públicas. Paralelamente, o encolhimento relativo e absoluto da base infantil reduz a pressão de atendimento na educação primária inicial, transferindo a prioridade de investimentos educacionais para o ensino secundário, profissional e superior.</li>
+                </ul><br>
+                Como apenas a afirmação I está correta, a alternativa correspondente é a (A).`
+            },
+            {
+                id: 6,
+                title: "Deslocamentos Pendulares e Dinâmica Metropolitana",
+                statement: `A mobilidade espacial cotidiana assume um papel central no planejamento de transportes e na dinâmica de uso do solo nas principais aglomerações urbanas do Brasil. No que tange aos deslocamentos pendulares (comutação diária) nas regiões metropolitanas brasileiras, considere as afirmações a seguir.<br><br>
+                <strong>I -</strong> A migração pendular difere dos processos migratórios tradicionais por não envolver a mudança definitiva de residência do indivíduo, caracterizando-se por deslocamentos diários entre municípios limítrofes para fins de trabalho ou estudo.<br>
+                <strong>II -</strong> O crescimento dos deslocamentos pendulares intrametropolitanos está diretamente associado ao processo de segregação socioespacial e à valorização do solo nas áreas centrais das metrópoles, impulsionando a população de menor renda a residir na periferia e a se deslocar diariamente para o polo urbano principal.<br>
+                <strong>III -</strong> O incremento na taxa de comutação diária nas últimas décadas foi registrado de forma expressiva tanto entre a população que migrou recentemente quanto entre os não migrantes, consolidando-se como uma característica estrutural das metrópoles do país.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas III." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas I e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "E",
+                resolution: `<strong>Gabarito: (E)</strong><br><br>
+                A questão discute o conceito de comutação diária (migração pendular) e os seus impactos estruturais na dinâmica habitacional e de transportes públicos nas grandes regiões metropolitanas.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> A migração pendular não constitui um deslocamento migratório no sentido estrito, uma vez que não pressupõe a transferência permanente de residência do trabalhador ou estudante. Trata-se de um movimento de caráter pendular (comutação cotidiana de ida e volta) ligando municípios vizinhos ao centro de gravidade econômica metropolitana.</li>
+                    <li class="mb-2"><strong>Afirmação II: Correta.</strong> O crescimento do volume de trabalhadores pendulares é alimentado por eixos de valorização do solo urbano nas áreas centrais das metrópoles. O elevado custo da moradia nas capitais impulsiona a população de mais baixo rendimento a buscar habitação em municípios periféricos de menor custo de terra (cidades-dormitório), perpetuando um modelo de dependência diária de deslocamentos de longa distância e forte pressão sobre os sistemas de transporte público coletivo interestadual e municipal.</li>
+                    <li class="mb-2"><strong>Afirmação III: Correta.</strong> Dados relativos à mobilidade de comutação metropolitana demonstram que a taxa de mobilidade pendular registrou expansão não apenas entre aqueles que migraram de outras regiões do país, mas de forma extremamente expressiva no estrato populacional classificado como não migrante. Isso aponta que a comutação espacial tornou-se um fenômeno generalizado de organização do trabalho metropolitano, afetando de forma estrutural toda a malha residencial urbana do país.</li>
+                </ul><br>
+                Todas as três afirmações estão corretas.`
+            },
+            {
+                id: 7,
+                title: "Estrutura por Sexo e Razão de Gênero (Censo 2022)",
+                statement: `A razão de sexo é uma variável demográfica essencial para compreender a distribuição de gênero na população e as suas implicações socioeconômicas no território nacional. Sobre a estrutura por sexo da população brasileira revelada pelo Censo Demográfico de 2022, analise as afirmativas abaixo.<br><br>
+                <strong>I -</strong> O Brasil apresenta uma população majoritariamente feminina, com uma razão de sexo média nacional de aproximadamente 94,2 homens para cada 100 mulheres em 2022, patamar que demonstra uma redução contínua desse indicador ao longo das últimas décadas.<br>
+                <strong>II -</strong> A análise espacial da razão de sexo revela que a região Norte é aquela que apresenta a maior proporção relativa de homens em seu território, enquanto a região Sudeste registra a maior proporção relativa de mulheres.<br>
+                <strong>III -</strong> O excedente feminino na população total brasileira a partir da faixa etária jovem-adulta e na velhice é explicado primordialmente pela sobremortalidade masculina decorrente de causas externas (violência e acidentes) e pela maior expectativa de vida das mulheres.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas III." },
+                    { key: "C", text: "Apenas I e II." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "E",
+                resolution: `<strong>Gabarito: (E)</strong><br><br>
+                A questão exige a análise da estrutura populacional por gênero, suas causas biológicas e sociais e a sua distribuição diferenciada no espaço geográfico brasileiro.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> Conforme os resultados finais do Censo de 2022, o Brasil apresenta uma população total com expressivo excedente de mulheres frente ao contingente de homens, registrando uma razão de sexo de 94,2 homens para cada 100 mulheres (o equivalente a 51,5% de mulheres e 48,5% de homens no total nacional). Esse dado acentua a trajetória de redução contínua da razão de sexo no país verificada ao longo das últimas décadas.</li>
+                    <li class="mb-2"><strong>Afirmação II: Correta.</strong> A análise espacial da razão de sexo aponta contrastes nítidos entre as grandes regiões. A região Norte desponta com o perfil mais masculino do país (49,9% da população é composta por homens), o que se relaciona com as frentes de expansão agrícola, extrativismo mineral e vegetal que historicamente atraem força de trabalho masculina. No extremo oposto, a região Sudeste apresenta a maior taxa de feminização nacional (51,8% da população é composta por mulheres), devido à urbanização madura, concentração de serviços e envelhecimento demográfico consolidado, que eleva a proporção de mulheres idosas devido à maior longevidade destas.</li>
+                    <li class="mb-2"><strong>Afirmação III: Correta.</strong> O predomínio absoluto de mulheres nas faixas etárias adultas e idosas no Brasil é decorrente de dois mecanismos demográficos fundamentais: a sobremortalidade masculina por causas externas e a maior expectativa de vida feminina. A mortalidade masculina por causas externas (homicídios, acidentes de trânsito) atinge de forma seletiva homens jovens e adultos (dos 15 aos 29 anos), reduzindo o contingente de homens ao longo das gerações. Paralelamente, as mulheres possuem uma esperança de vida ao nascer significativamente superior à dos homens, o que gera uma estrutura de gênero marcadamente feminina nas faixas etárias idosas da população nacional.</li>
+                </ul><br>
+                Portanto, todas as afirmações estão corretas.`
+            },
+            {
+                id: 8,
+                title: "Desruralização, Êxodo Rural e Dinâmica do Campo",
+                statement: `O processo de transição urbana e desruralização alterou de forma profunda a organização demográfica e a morfologia social do meio rural brasileiro ao longo da segunda metade do século XX. Sobre o êxodo rural e a dinâmica populacional no campo, considere as afirmações a seguir.<br><br>
+                <strong>I -</strong> O movimento de desruralização ocorreu com intensidade nas regiões Sudeste e Sul entre as décadas de 1950 e 1980, períodos em que as respectivas áreas rurais atuaram como os principais polos emissores de imigrantes para as cidades.<br>
+                <strong>II -</strong> A migração diferencial por gênero no meio rural caracteriza-se pelo predomínio histórico de homens nos fluxos migratórios direcionados para as áreas urbanas, o que resultou em uma crescente feminização do meio rural brasileiro.<br>
+                <strong>III -</strong> A partir da década de 1980 e ao longo da década de 1990, o Nordeste consolidou-se como a região de onde saíram os maiores contingentes populacionais de origem rural, enquanto áreas de expansão de fronteira agrícola das Regiões Centro-Oeste e Norte também passaram a atuarem como áreas expulsoras de população rural.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas III." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "C",
+                resolution: `<strong>Gabarito: (C)</strong><br><br>
+                Esta questão aborda o processo de esvaziamento demográfico do campo no Brasil, sua periodização histórica, seletividade por gênero e implicações de atração e repulsão regionais.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> O movimento migratório de desruralização e urbanização acelerada ocorreu com intensidade no país entre os anos de 1950 e 1980. Nesse período, as transformações tecnológicas na lavoura de café e de grãos no Sudeste e no Sul atuaram como fortes fatores de repulsão de camponeses rurais e parceiros agrícolas, fazendo com que as áreas rurais dessas duas regiões fornecessem o maior contingente de emigrantes rurais para os eixos industriais urbanos.</li>
+                    <li class="mb-2"><strong>Afirmação II: Incorreta.</strong> A migração diferencial por sexo no processo de desruralização brasileiro revelou, na verdade, um predomínio sistemático de mulheres nos fluxos migratórios rurais-urbanos nas principais décadas da transição. As mulheres jovens migraram em maior proporção para as cidades, atraídas por oportunidades de inserção no setor de serviços, comércio e emprego doméstico. Esse movimento resultou na redução de mulheres jovens no campo e no fenômeno de masculinização do meio rural brasileiro, expresso pelo aumento expressivo da razão de sexo no meio rural nacional.</li>
+                    <li class="mb-2"><strong>Afirmação III: Correta.</strong> A partir da década de 1980, com a reestruturação econômica e a exaustão da fronteira agrícola tradicional do Sul e Sudeste, o Nordeste consolidou-se como o principal polo emissor rural absoluto do país. Nas décadas de 1980 e 1990, as regiões de expansão de fronteira agropecuária da porção Centro-Oeste e Norte também passaram a registrar saldos migratórios rurais altamente negativos. A modernização intensa dessas novas fronteiras e a concentração das propriedades fundiárias reduziram a capacidade de retenção de mão de obra nessas áreas rurais, impulsionando a urbanização rápida no interior dessas regiões.</li>
+                </ul><br>
+                Dese modo, estão corretas apenas as afirmações I e III.`
+            },
+            {
+                id: 9,
+                title: "Transição Epidemiológica e Razão de Dependência",
+                statement: `A rápida transição demográfica vivenciada pela população brasileira tem alterado de forma expressiva o perfil epidemiológico do país e gerado novos desafios para o planejamento das políticas públicas de saúde e previdência. No que concerne a essas transformações estruturais, analise as seguintes afirmações.<br><br>
+                <strong>I -</strong> O envelhecimento acelerado da população brasileira é acompanhado por uma transição epidemiológica, caracterizada pela elevação expressiva da prevalência de doenças crônicas não transmissíveis associadas aos grupos etários mais maduros.<br>
+                <strong>II -</strong> A queda acelerada das taxas de fecundidade reduziu a Razão de Dependência Jovem, gerando uma redução temporária na Razão de Dependência total da população, momento propício para o investimento em infraestrutura social conhecido como bônus demográfico.<br>
+                <strong>III -</strong> A elevação contínua da expectativa de vida ao nascer projeta um aumento acentuado na Razão de Dependência Idosa, o que exercerá uma pressão fiscal crescente sobre a sustentabilidade financeira dos sistemas de previdência social e de saúde pública do país nas próximas décadas.`,
+                questionText: "Quais estão corretas?",
+                options: [
+                    { key: "A", text: "Apenas I." },
+                    { key: "B", text: "Apenas II." },
+                    { key: "C", text: "Apenas I e III." },
+                    { key: "D", text: "Apenas II e III." },
+                    { key: "E", text: "I, II e III." }
+                ],
+                correctAnswer: "E",
+                resolution: `<strong>Gabarito: (E)</strong><br><br>
+                A questão exige uma análise das interconexões de segunda e terceira ordem entre a transição demográfica, as mudanças na estrutura de dependência populacional e a transição epidemiológica no Brasil.<br><br>
+                <ul>
+                    <li class="mb-2"><strong>Afirmação I: Correta.</strong> A transição demográfica no Brasil produziu transformações profundas na saúde pública, acompanhada pela transição epidemiológica. O aumento progressivo da proporção de idosos na população está correlacionado à elevação substancial de doenças crônicas não transmissíveis (como hipertensão, diabetes, cardiopatias, demências e câncer), substituindo o perfil histórico de dominância de doenças infectocontagiosas e gerando demandas complexas por tratamentos contínuos de longo prazo e serviços especializados de saúde.</li>
+                    <li class="mb-2"><strong>Afirmação II: Correta.</strong> O bônus demográfico é gerado de forma temporária quando a rápida queda de fecundidade diminui a parcela relativa de jovens de 0 a 14 anos na população nacional antes que a parcela correspondente de idosos cresça a ponto de neutralizar esse ganho. Isso gera uma queda acentuada na Razão de Dependência total do país (RDT), abrindo uma janela de oportunidade na qual a capacidade de poupança pública e investimento produtivo atinge o seu ápice histórico.</li>
+                    <li class="mb-2"><strong>Afirmação III: Correta.</strong> À medida que a transição demográfica atinge a maturidade, a elevação sistemática da expectativa de vida promove o rápido crescimento do topo da pirâmide. Esse processo projeta uma elevação substancial da Razão de Dependência Idosa nas próximas décadas, impondo severas pressões fiscais sobre o sistema de seguridade social (RGPS) e de assistência social. A redução contínua da População em Idade Ativa em relação ao contingente inativo de idosos reduz a base contributiva da previdência de repartição simples, demandando reformas regulatórias de longo prazo para evitar crises de solvência fiscal do Estado.</li>
+                </ul><br>
+                Todas as três afirmações estão plenamente corretas.`
+            },
+            {
+                id: 10,
+                title: "Escala Cartográfica Aplicada à Pendularidade",
+                statement: `No planejamento espacial do transporte público metropolitano de passageiros, geógrafos e técnicos utilizam escalas cartográficas apropriadas para calcular distâncias reais de deslocamentos populacionais, como no caso do transporte pendular diário entre municípios periféricos e o núcleo metropolitano de Porto Alegre.<br><br>
+                Considere um mapa temático da Região Metropolitana de Porto Alegre elaborado na escala de $1:250.000$. Se a distância gráfica medida em linha reta entre a área residencial de um município limítrofe e a zona industrial do núcleo metropolitano é de exatamente $12\\text{ cm}$, qual é a distância real, em linha reta, percorrida diariamente por esses trabalhadores metropolitanos?`,
+                questionText: "Selecione a alternativa correta:",
+                options: [
+                    { key: "A", text: "$3,0\\text{ km}$" },
+                    { key: "B", text: "$12,5\\text{ km}$" },
+                    { key: "C", text: "$30,0\\text{ km}$" },
+                    { key: "D", text: "$120,0\\text{ km}$" },
+                    { key: "E", text: "$300,0\\text{ km}$" }
+                ],
+                correctAnswer: "C",
+                resolution: `<strong>Gabarito: (C)</strong><br><br>
+                Esta questão apresenta um problema prático de conversão de escala cartográfica aplicada ao planejamento metropolitano de transportes e de fluxos demográficos cotidianos.<br><br>
+                Para calcular a distância real no terreno, utiliza-se a equação da escala cartográfica, expressa matematicamente por:<br>
+                $$E = \\frac{d}{D}$$<br>
+                Onde:<br>
+                <ul>
+                    <li>$E$ é a escala numérica representada no mapa ($\\frac{1}{250.000}$);</li>
+                    <li>$d$ corresponde à distância gráfica mensurada diretamente na representação ($12\\text{ cm}$);</li>
+                    <li>$D$ representa a distância real em linha reta que se deseja obter.</li>
+                </ul><br>
+                Para isolar a variável da distância real ($D$), a fórmula assume a seguinte configuração:<br>
+                $$D = d \\times \\text{Denominador da Escala}$$<br>
+                Substituindo os valores apresentados na questão:<br>
+                $$D = 12\\text{ cm} \\times 250.000$$<br>
+                $$D = 3.000.000\\text{ cm}$$<br>
+                Uma vez obtido o valor em centímetros, faz-se necessária a conversão desse resultado para a unidade métrica padrão de distância geográfica (quilômetros):<br><br>
+                1. Para converter de centímetros para metros, divide-se o valor por $100$ (relação de $1\\text{ m} = 100\\text{ cm}$):<br>
+                $$3.000.000\\text{ cm} \\div 100 = 30.000\\text{ m}$$<br>
+                2. Para converter de metros para quilômetros, divide-se o valor resultante por $1.000$ (relação de $1\\text{ km} = 1.000\\text{ m}$):<br>
+                $$30.000\\text{ m} \\div 1.000 = 30\\text{ km}$$<br><br>
+                <strong>$$D = 30,0\\text{ km}$$</strong><br><br>
+                Os trabalhadores metropolitanos percorrem uma distância real em linha reta de $30\\text{ km}$ para realizar o seu deslocamento diário de comutação. A alternativa correta é a (C).`
+            }
+        ];
+
+        // Estado do Aplicativo
+        let userAnswers = {};
+        let isSubmitted = false;
+        let secondsElapsed = 0;
+        let timerInterval = null;
+
+        // Inicialização do Cronômetro
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            secondsElapsed = 0;
+            timerInterval = setInterval(() => {
+                secondsElapsed++;
+                const hrs = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+                const mins = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+                const secs = String(secondsElapsed % 60).padStart(2, '0');
+                document.getElementById('timer').innerText = `${hrs}:${mins}:${secs}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        // Renderização dos atalhos de navegação das questões
+        function renderNavigation() {
+            const container = document.getElementById('nav-shortcuts');
+            container.innerHTML = '';
+            
+            questionsData.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `nav-btn-${idx}`;
+                btn.className = `w-10 h-10 rounded-xl font-bold text-sm flex items-center justify-center transition-all focus-ring shrink-0 border ${getNavButtonClass(idx)}`;
+                btn.innerText = q.id;
+                btn.onclick = () => {
+                    const el = document.getElementById(`question-card-${idx}`);
+                    if (el) {
+                        const offset = 120; // altura do header colado
+                        const bodyRect = document.body.getBoundingClientRect().top;
+                        const elementRect = el.getBoundingClientRect().top;
+                        const elementPosition = elementRect - bodyRect;
+                        const offsetPosition = elementPosition - offset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        // Calcula classe dinâmica dos botões de navegação
+        function getNavButtonClass(index) {
+            const hasAnswer = userAnswers[index] !== undefined;
+            if (isSubmitted) {
+                const isCorrect = userAnswers[index] === questionsData[index].correctAnswer;
+                return isCorrect 
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100' 
+                    : 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100';
+            }
+            if (hasAnswer) {
+                return 'bg-indigo-600 text-white border-indigo-600 hover:bg-indigo-700';
+            }
+            return 'bg-white text-stone-600 border-stone-200 hover:bg-stone-50 hover:text-stone-900';
+        }
+
+        // Renderizador das Questões
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questionsData.forEach((q, qIdx) => {
+                const card = document.createElement('article');
+                card.id = `question-card-${qIdx}`;
+                card.className = `bg-white rounded-2xl border border-stone-200/80 p-6 md:p-8 shadow-sm transition-all relative ${
+                    isSubmitted ? (userAnswers[qIdx] === q.correctAnswer ? 'ring-1 ring-emerald-500/30' : 'ring-1 ring-rose-500/30') : ''
+                }`;
+
+                // Cabeçalho do Card
+                let statusHeader = '';
+                if (isSubmitted) {
+                    const isCorrect = userAnswers[qIdx] === q.correctAnswer;
+                    statusHeader = isCorrect 
+                        ? `<div class="mb-4 flex items-center gap-2 text-emerald-700 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold w-fit">
+                            <i class="fa-solid fa-circle-check"></i> Você Acertou!
+                           </div>`
+                        : `<div class="mb-4 flex items-center gap-2 text-rose-700 bg-rose-50 border border-rose-100 px-3 py-1.5 rounded-lg text-xs font-semibold w-fit">
+                            <i class="fa-solid fa-circle-xmark"></i> Resposta Incorreta
+                           </div>`;
+                }
+
+                // Criação do HTML interno do card da questão
+                let cardHTML = `
+                    ${statusHeader}
+                    <div class="flex items-center justify-between gap-4 mb-4">
+                        <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Questão ${q.id}</span>
+                        <span class="text-xs font-medium text-stone-400">FAURGS Demografia</span>
+                    </div>
+                    <h2 class="text-base md:text-lg font-bold text-stone-900 mb-6">${q.title}</h2>
+                    <div class="text-sm md:text-base text-stone-700 leading-relaxed mb-6 space-y-4 tex2jax_process">
+                        ${q.statement}
+                    </div>
+                    <div class="border-t border-stone-100 pt-5">
+                        <p class="text-sm font-semibold text-stone-800 mb-4">${q.questionText}</p>
+                        <div class="space-y-3">
+                `;
+
+                // Renderiza Alternativas
+                q.options.forEach((opt) => {
+                    const isChecked = userAnswers[qIdx] === opt.key;
+                    let optClass = 'border-stone-200 hover:bg-stone-50/50';
+                    let radioIcon = '<div class="w-5 h-5 rounded-full border-2 border-stone-300 shrink-0 flex items-center justify-center transition-all"></div>';
+
+                    if (isChecked) {
+                        optClass = 'border-indigo-600 bg-indigo-50/30 ring-1 ring-indigo-500/20';
+                        radioIcon = '<div class="w-5 h-5 rounded-full border-2 border-indigo-600 shrink-0 flex items-center justify-center bg-indigo-600"><div class="w-2 h-2 rounded-full bg-white"></div></div>';
+                    }
+
+                    if (isSubmitted) {
+                        const isCorrectOpt = opt.key === q.correctAnswer;
+                        const isUserIncorrectOpt = isChecked && !isCorrectOpt;
+
+                        if (isCorrectOpt) {
+                            optClass = 'border-emerald-600 bg-emerald-50/40 ring-1 ring-emerald-500/20';
+                            radioIcon = '<div class="w-5 h-5 rounded-full border-2 border-emerald-600 shrink-0 flex items-center justify-center bg-emerald-600 text-white text-[10px]"><i class="fa-solid fa-check"></i></div>';
+                        } else if (isUserIncorrectOpt) {
+                            optClass = 'border-rose-400 bg-rose-50/40 ring-1 ring-rose-500/20';
+                            radioIcon = '<div class="w-5 h-5 rounded-full border-2 border-rose-500 shrink-0 flex items-center justify-center bg-rose-500 text-white text-[10px]"><i class="fa-solid fa-x"></i></div>';
+                        } else {
+                            optClass = 'border-stone-200/60 opacity-60 pointer-events-none';
+                        }
+                    }
+
+                    cardHTML += `
+                        <label class="flex items-start gap-3 p-4 rounded-xl border text-sm md:text-base leading-relaxed cursor-pointer transition-all ${optClass} group">
+                            <input type="radio" name="question-${qIdx}" value="${opt.key}" ${isChecked ? 'checked' : ''} ${isSubmitted ? 'disabled' : ''} 
+                                   onclick="selectOption(${qIdx}, '${opt.key}')" class="sr-only">
+                            ${radioIcon}
+                            <span class="text-stone-700 font-medium mr-1 select-none">(${opt.key})</span>
+                            <span class="text-stone-600 group-hover:text-stone-900 transition-colors select-none tex2jax_process">${opt.text}</span>
+                        </label>
+                    `;
+                });
+
+                cardHTML += `
+                        </div>
+                    </div>
+                `;
+
+                // Renderiza Resolução Detalhada se submetido
+                if (isSubmitted) {
+                    cardHTML += `
+                        <div class="mt-8 border-t border-dashed border-stone-200 pt-6 transform transition-all duration-300">
+                            <div class="bg-stone-50/80 border border-stone-200/80 rounded-xl p-5 md:p-6">
+                                <h3 class="flex items-center gap-2 text-sm font-bold text-stone-900 mb-3 uppercase tracking-wider">
+                                    <i class="fa-solid fa-circle-nodes text-indigo-500"></i> Resolução Analítica
+                                </h3>
+                                <div class="text-sm text-stone-600 leading-relaxed space-y-3 tex2jax_process">
+                                    ${q.resolution}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = cardHTML;
+                container.appendChild(card);
+            });
+
+            // Atualiza status global
+            updateProgress();
+            renderNavigation();
+
+            // Aciona o MathJax para formatar equações de forma assíncrona
+            if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+                window.MathJax.typesetPromise();
+            }
+        }
+
+        // Manipulação de Escolha de Alternativas
+        function selectOption(qIndex, optionKey) {
+            if (isSubmitted) return;
+            userAnswers[qIndex] = optionKey;
+            
+            // Atualiza progressivamente os atalhos visuais sem renderizar todo o DOM instantaneamente para desempenho
+            updateProgress();
+            renderNavigation();
+            
+            // Re-renderiza o card específico para marcar visualmente o selecionado
+            const card = document.getElementById(`question-card-${qIndex}`);
+            if (card) {
+                // Pequeno delay para garantir fluidez no feedback visual do clique
+                setTimeout(() => { renderQuestions(); }, 50);
+            }
+        }
+
+        // Atualização dos indicadores de progresso
+        function updateProgress() {
+            const total = questionsData.length;
+            const answered = Object.keys(userAnswers).length;
+            const percent = (answered / total) * 100;
+
+            document.getElementById('progress-text').innerText = `${answered} / ${total}`;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        // Finalização e Correção do Simulado
+        function submitQuiz() {
+            if (isSubmitted) return;
+
+            const answeredCount = Object.keys(userAnswers).length;
+            const total = questionsData.length;
+
+            if (answeredCount < total) {
+                // Alerta customizado não invasivo
+                showToast(`Você respondeu apenas ${answeredCount} das ${total} questões. Recomendamos responder todas antes de finalizar.`);
+            }
+
+            isSubmitted = true;
+            stopTimer();
+
+            // Calcula Resultados
+            let score = 0;
+            questionsData.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correctAnswer) {
+                    score++;
+                }
+            });
+
+            const percentCorrect = (score / total) * 100;
+
+            // Renderiza painel de resultados com animação de fade-in
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.remove('hidden');
+            
+            let badgeColor = 'bg-stone-100 text-stone-700';
+            let msg = '';
+            if (percentCorrect >= 80) {
+                badgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+                msg = 'Excelente desempenho! Você possui domínio sólido da dinâmica e estrutura da população brasileira!';
+            } else if (percentCorrect >= 60) {
+                badgeColor = 'bg-amber-50 text-amber-700 border-amber-100';
+                msg = 'Bom trabalho! Uma boa revisão das resoluções ajudará a fixar os detalhes conceituais da FAURGS.';
+            } else {
+                badgeColor = 'bg-rose-50 text-rose-700 border-rose-100';
+                msg = 'Aproveite as resoluções comentadas para sanar suas dúvidas e consolidar a teoria sobre migrações e transição demográfica.';
+            }
+
+            // Converter tempo
+            const hrs = String(Math.floor(secondsElapsed / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((secondsElapsed % 3600) / 60)).padStart(2, '0');
+            const secs = String(secondsElapsed % 60).padStart(2, '0');
+
+            resultsPanel.innerHTML = `
+                <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8 shadow-md">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${badgeColor}">
+                                <i class="fa-solid fa-chart-bar"></i> Resultado Consolidado
+                            </span>
+                            <h2 class="text-2xl font-black text-stone-900 mt-2">Você concluiu o simulado!</h2>
+                            <p class="text-sm text-stone-600 mt-2 leading-relaxed max-w-xl">${msg}</p>
+                        </div>
+                        <div class="flex items-center gap-6 shrink-0 bg-stone-50 p-4 rounded-xl border border-stone-200">
+                            <div class="text-center">
+                                <span class="text-2xl md:text-3xl font-black text-indigo-600 block">${score} <span class="text-stone-400 text-lg">/ ${total}</span></span>
+                                <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mt-0.5">Acertos</span>
+                            </div>
+                            <div class="w-px h-10 bg-stone-200"></div>
+                            <div class="text-center">
+                                <span class="text-2xl md:text-3xl font-black text-stone-700 block">${percentCorrect}%</span>
+                                <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mt-0.5">Aproveitamento</span>
+                            </div>
+                            <div class="w-px h-10 bg-stone-200"></div>
+                            <div class="text-center">
+                                <span class="text-base font-bold text-stone-700 block mt-1">${hrs}:${mins}:${secs}</span>
+                                <span class="text-xs font-bold text-stone-400 uppercase tracking-wider block mt-1">Tempo Gasto</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Controle dos botões inferiores
+            document.getElementById('btn-submit').classList.add('hidden');
+            document.getElementById('btn-reset').classList.remove('hidden');
+
+            // Recarrega as questões agora com o status de submissão ativo (mostrando acertos e resoluções)
+            renderQuestions();
+
+            // Rolagem suave para o topo do resultado
+            setTimeout(() => {
+                resultsPanel.classList.remove('scale-95', 'opacity-0');
+                resultsPanel.classList.add('scale-100', 'opacity-100');
+                window.scrollTo({
+                    top: resultsPanel.offsetTop - 120,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+
+        // Reinicializar o Simulado
+        function resetQuiz() {
+            userAnswers = {};
+            isSubmitted = false;
+            
+            // Oculta painel de resultados
+            const resultsPanel = document.getElementById('results-panel');
+            resultsPanel.classList.add('hidden', 'scale-95', 'opacity-0');
+
+            // Exibe botões padrão
+            document.getElementById('btn-submit').classList.remove('hidden');
+            document.getElementById('btn-reset').classList.add('hidden');
+
+            // Reinicia tempo
+            startTimer();
+
+            // Renderiza novamente a tela zerada
+            renderQuestions();
+
+            // Rola suave para o topo
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            showToast("Simulado reiniciado com sucesso! Boa sorte!");
+        }
+
+        // Criador de Toast Alert Não Obstrutivo
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-5 right-5 z-50 bg-stone-900 text-white text-sm px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 transform translate-y-10 opacity-0 transition-all duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-bell text-indigo-400"></i> <span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Ao carregar a página
+        window.onload = function() {
+            renderQuestions();
+            startTimer();
+        };
+    </script>
+</body>
+</html>

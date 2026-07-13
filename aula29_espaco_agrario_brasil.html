@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geografia Agrária Brasileira - Foco Concurso IFSC (Banca FAURGS)</title>
+    <!-- Tailwind CSS para um design limpo e moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para máxima legibilidade -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome para ícones refinados -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1e293b; /* Slate 800 - Leitura suave */
+            background-color: #ffffff;
+        }
+        /* Estilização de grifos premium (Sublinhados e marcadores discretos) */
+        .grifo {
+            background-color: #fef08a; /* Yellow 200 */
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+            border-radius: 0.125rem;
+            font-weight: 500;
+        }
+        .grifo-importante {
+            background-color: #fed7aa; /* Orange 200 */
+            padding-left: 0.25rem;
+            padding-right: 0.25rem;
+            border-radius: 0.125rem;
+            font-weight: 600;
+        }
+        /* Card de Flip para memorização ativa */
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-flip:hover .card-inner, .card-flip.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        
+        /* Ajuste de tabela para mobile (sem scroll) */
+        @media (max-width: 768px) {
+            .table-responsive {
+                display: block;
+            }
+            .table-responsive thead {
+                display: none;
+            }
+            .table-responsive tbody, .table-responsive tr, .table-responsive td {
+                display: block;
+                width: 100%;
+            }
+            .table-responsive tr {
+                margin-bottom: 1.5rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 0.5rem;
+                padding: 1rem;
+                background-color: #f8fafc;
+            }
+            .table-responsive td {
+                text-align: right;
+                padding-left: 50%;
+                position: relative;
+                border-bottom: 1px solid #f1f5f9;
+                padding-top: 0.75rem;
+                padding-bottom: 0.75rem;
+            }
+            .table-responsive td:last-child {
+                border-bottom: none;
+            }
+            .table-responsive td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 1rem;
+                width: 45%;
+                font-weight: 600;
+                text-align: left;
+                color: #475569;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+
+    <header class="border-b border-slate-200 bg-white sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-md">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900 tracking-tight">IFSC • Professor de Geografia</h1>
+                    <p class="text-xs text-slate-500 font-medium">Foco no Concurso - Banca FAURGS</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <i class="fa-solid fa-circle text-[8px] mr-1.5 animate-pulse"></i> Modo de Memorização Ativa
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+
+        <section class="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <!-- Identificação do Áudio / Upload -->
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-0.5 rounded">AUDIO-AULA</span>
+                        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider">Estudo por Áudio Sincronizado</h2>
+                    </div>
+                    <p class="text-xs text-slate-600 mb-4">Insira abaixo o nome exato do arquivo MP3 correspondente a esta aula para ouvir e controlar a velocidade.</p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <div class="relative flex-1">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                                <i class="fa-solid fa-file-audio"></i>
+                            </span>
+                            <input type="text" id="audio-filename" value="aula_geografia_agraria.mp3" placeholder="Ex: aula.mp3" class="w-full pl-9 pr-3 py-2 bg-white border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-slate-800 transition">
+                        </div>
+                        <button onclick="carregarAudio()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm px-4 py-2 rounded-lg transition shadow-sm active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-rotate"></i> Carregar Áudio
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Controle do Player de Áudio -->
+                <div class="flex-1 bg-white p-4 border border-slate-200 rounded-xl shadow-inner">
+                    <audio id="audio-player" class="hidden" preload="metadata"></audio>
+                    
+                    <!-- Player UI -->
+                    <div class="flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-semibold text-slate-700 truncate max-w-[200px]" id="current-track-name">aula_geografia_agraria.mp3</span>
+                            <span class="text-xs font-mono text-slate-500" id="audio-time">00:00 / 00:00</span>
+                        </div>
+                        
+                        <!-- Barra de Progresso Customizada -->
+                        <div class="w-full bg-slate-100 rounded-full h-2 cursor-pointer relative overflow-hidden" id="progress-container">
+                            <div class="bg-indigo-600 h-full w-0 transition-all duration-100" id="progress-bar"></div>
+                        </div>
+
+                        <!-- Botões de Controle -->
+                        <div class="flex items-center justify-between mt-1">
+                            <div class="flex items-center gap-3">
+                                <button onclick="retrocederAudio()" class="text-slate-600 hover:text-slate-900 transition p-1.5 hover:bg-slate-100 rounded" title="Voltar 10s">
+                                    <i class="fa-solid fa-backward-step"></i>
+                                </button>
+                                <button onclick="togglePlay()" id="play-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white w-9 h-9 rounded-full flex items-center justify-center transition shadow active:scale-95">
+                                    <i class="fa-solid fa-play"></i>
+                                </button>
+                                <button onclick="avancarAudio()" class="text-slate-600 hover:text-slate-900 transition p-1.5 hover:bg-slate-100 rounded" title="Avançar 10s">
+                                    <i class="fa-solid fa-forward-step"></i>
+                                </button>
+                            </div>
+
+                            <!-- Velocidade de Reprodução -->
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-gauge-high mr-1"></i> Vel:</span>
+                                <select id="speed-selector" onchange="mudarVelocidade(this.value)" class="bg-slate-50 border border-slate-200 text-xs font-bold rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                                    <option value="0.5">0.5x</option>
+                                    <option value="1.0" selected>1.0x</option>
+                                    <option value="1.25">1.25x</option>
+                                    <option value="1.5">1.5x</option>
+                                    <option value="1.75">1.75x</option>
+                                    <option value="2.0">2.0x</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Alerta Amigável de Carregamento -->
+            <div id="audio-error-msg" class="hidden mt-3 p-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs rounded-lg flex items-center gap-2">
+                <i class="fa-solid fa-circle-info"></i> Nota: Se o áudio não tocar, verifique se o arquivo está na mesma pasta do arquivo HTML com o nome correto.
+            </div>
+        </section>
+
+        <article class="prose max-w-none">
+            <div class="text-center mb-10">
+                <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Ficha de Memorização Ativa</span>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3 tracking-tight">O Espaço Agrário Brasileiro</h1>
+                <p class="text-slate-500 text-md max-w-2xl mx-auto mt-2">Potência produtiva e contradições estruturais. Conteúdo completo planejado sob as diretrizes de cobrança da banca <strong class="text-indigo-600">FAURGS</strong> para carreiras federais EBTT.</p>
+                <div class="flex justify-center gap-2 mt-4">
+                    <span class="w-16 h-1 bg-indigo-600 rounded"></span>
+                    <span class="w-4 h-1 bg-indigo-300 rounded"></span>
+                </div>
+            </div>
+
+            <section class="mb-12">
+                <div class="border-l-4 border-indigo-600 pl-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900">PÁGINA 1: Formação Histórica, Modernização e Estrutura Fundiária</h2>
+                    <p class="text-sm text-slate-500 mt-1">Evolução regulatória, modernização conservadora e a radiografia do censo agropecuário.</p>
+                </div>
+
+                <!-- 1. Evolução do Acesso à Terra -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                        Evolução do Acesso à Terra (Linha do Tempo para Prova)
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4">
+                        O acesso à terra no Brasil é marcado por uma <span class="grifo">transição jurídica excludente</span> que garantiu a concentração fundiária estrutural desde o período colonial. Memorize as três fases fundamentais:
+                    </p>
+
+                    <!-- Timeline Vertical -->
+                    <div class="space-y-6 relative border-l-2 border-slate-150 pl-6 ml-3 my-6">
+                        <!-- Ponto 1 -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1.5 bg-white border-2 border-indigo-600 rounded-full w-4 h-4"></span>
+                            <h4 class="text-base font-bold text-slate-900">Sesmarias (1530 – 1822)</h4>
+                            <p class="text-sm text-slate-600 mt-1">
+                                Sistema de concessão de terras devolutas pela Coroa Portuguesa a quem possuísse capital. Consolidou a <span class="grifo">monocultura agroexportadora baseada no latifúndio</span> e no trabalho escravizado.
+                            </p>
+                        </div>
+                        <!-- Ponto 2 -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1.5 bg-white border-2 border-indigo-600 rounded-full w-4 h-4"></span>
+                            <h4 class="text-base font-bold text-slate-900">Posse Direta (1822 – 1850)</h4>
+                            <p class="text-sm text-slate-600 mt-1">
+                                Período de vácuo legal pós-Independência. A ocupação de fato e o <span class="grifo">apossamento informal de terras devolutas</span> tornaram-se as únicas formas de acesso para a população livre e posseiros.
+                            </p>
+                        </div>
+                        <!-- Ponto 3 -->
+                        <div class="relative">
+                            <span class="absolute -left-[31px] top-1.5 bg-indigo-600 border-2 border-indigo-600 rounded-full w-4 h-4"></span>
+                            <h4 class="text-base font-bold text-slate-950 flex items-center gap-2">
+                                Lei de Terras – Lei nº 601 (1850) 
+                                <span class="bg-red-50 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded border border-red-200">FOCO EXTREMO</span>
+                            </h4>
+                            <p class="text-sm text-slate-600 mt-1">
+                                Marco regulatório crucial. Determinou que o acesso à terra pública passaria a ocorrer <span class="grifo-importante">exclusivamente por compra mercantil</span> (proibindo a doação ou a simples regularização por posse).
+                            </p>
+                            <div class="mt-2 bg-amber-50 border-l-4 border-amber-500 p-3 rounded-r-lg text-xs text-slate-700">
+                                <strong class="text-amber-800">Cai em Prova:</strong> A lei foi aprovada no mesmo ano da proibição do tráfico negreiro (Lei Eusébio de Queirós) justamente para <span class="grifo">impedir que ex-escravizados e imigrantes europeus se tornassem proprietários rurais autônomos</span>, mantendo-os como mão de obra barata para a elite cafeeira.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Modernização Conservadora e o Agronegócio -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                        Modernização Conservadora e o Agronegócio
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4">
+                        Conceituada originalmente como <span class="grifo">modernização dolorosa</span> (pelo sociólogo José de Souza Martins) ou <span class="grifo-importante">modernização conservadora</span>. Consiste fundamentalmente na tecnificação intensa do campo sem a devida alteração da estrutura fundiária concentrada brasileira.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="p-4 border border-slate-150 rounded-lg">
+                            <h4 class="font-bold text-slate-900 text-sm mb-2"><i class="fa-solid fa-money-bill-wave text-indigo-600 mr-1.5"></i> Base Financeira e Técnica</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                                <li>O Estado coordenou o processo através de crédito altamente subsidiado via <span class="font-semibold text-slate-800">Sistema Nacional de Crédito Rural (SNCR)</span>, priorizando grandes latifúndios.</li>
+                                <li>Introdução sistêmica do pacote tecnológico da <span class="font-semibold text-indigo-900">Revolução Verde</span> (maquinário pesado, agrotóxicos e insumos químicos).</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-4 border border-slate-150 rounded-lg">
+                            <h4 class="font-bold text-slate-900 text-sm mb-2"><i class="fa-solid fa-building text-indigo-600 mr-1.5"></i> Atores e Instituições</h4>
+                            <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+                                <li>Criação da <span class="font-semibold text-slate-800">Embrapa (1973)</span>, fundamental para a correção de solos ácidos do Cerrado (calagem).</li>
+                                <li>Consolidação dos <span class="font-semibold text-indigo-950">Complexos Agroindustriais (CAIs)</span>, que subordinam a atividade primária de produção às indústrias de insumos e às corporações de processamento.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Avanço da Fronteira Agrícola -->
+                    <div class="mt-6 bg-slate-50 border border-slate-150 rounded-xl p-4">
+                        <h4 class="font-bold text-slate-900 text-sm mb-3"><i class="fa-solid fa-map-location-dot text-indigo-600 mr-1.5"></i> Avanço Cronológico da Fronteira Agrícola</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-slate-600">
+                            <div class="bg-white p-3 border border-slate-200 rounded-lg">
+                                <span class="font-bold text-indigo-600 text-sm block mb-1">DÉCADAS DE 1970/1980</span>
+                                Programas federais (<span class="font-semibold">POLOCENTRO</span> e <span class="font-semibold">PRODECER</span>) integraram o Cerrado ao mercado agroexportador de grãos.
+                            </div>
+                            <div class="bg-white p-3 border border-slate-200 rounded-lg">
+                                <span class="font-bold text-indigo-600 text-sm block mb-1">DÉCADA DE 1990 EM DIANTE</span>
+                                Expansão acelerada para o <span class="font-bold text-slate-900">MATOPIBA</span> (Maranhão, Tocantins, Piauí e Bahia), polo global de commodities agrícolas.
+                            </div>
+                            <div class="bg-white p-3 border border-slate-200 rounded-lg">
+                                <span class="font-bold text-indigo-600 text-sm block mb-1">ATUALIDADE</span>
+                                Intensa pressão sobre o bioma da <span class="font-semibold">Amazônia Legal</span>, por meio do avanço de pastagens e plantios de grãos.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-red-50 border-l-4 border-red-500 rounded-r-lg text-xs text-slate-700">
+                        <strong>Efeitos Sócio-Territoriais Críticos:</strong> Reprimarização da pauta de exportação brasileira; contaminação severa dos recursos hídricos por defensivos; mecanização altamente excludente gerando o <span class="grifo">êxodo rural forçado</span> em direção às periferias das médias e grandes cidades.
+                    </div>
+                </div>
+
+                <!-- 3. Estrutura Fundiária em Números -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                        Estrutura Fundiária em Números (Censo Agropecuário 2017)
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4">
+                        O espaço agrário do Brasil demonstra uma distribuição espacial profundamente desigual na posse da terra. Analise e decore os indicadores:
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-indigo-50 border border-indigo-100 p-4 rounded-xl text-center">
+                            <span class="text-xs font-bold text-indigo-600 block uppercase mb-1">Grandes Imóveis</span>
+                            <span class="text-2xl font-black text-indigo-950">0,3%</span>
+                            <p class="text-[11px] text-slate-600 mt-1">dos estabelecimentos dominam <strong class="text-slate-800">25% de toda a área agrícola</strong> do país.</p>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl text-center">
+                            <span class="text-xs font-bold text-emerald-700 block uppercase mb-1">Pequenos Imóveis</span>
+                            <span class="text-2xl font-black text-emerald-950">77%</span>
+                            <p class="text-[11px] text-slate-600 mt-1">dos estabelecimentos (agricultura familiar e minifúndios) ocupam os mesmos <strong class="text-slate-800">25% da área útil</strong>.</p>
+                        </div>
+                        <div class="bg-amber-50 border border-amber-100 p-4 rounded-xl text-center">
+                            <span class="text-xs font-bold text-amber-700 block uppercase mb-1">Índice de Gini da Terra</span>
+                            <span class="text-2xl font-black text-amber-950">0,73 a 0,864</span>
+                            <p class="text-[11px] text-slate-600 mt-1">Varia de 0 (igualdade) a 1 (desigualdade absoluta). O Brasil possui <strong class="text-slate-800">concentração fundiária extrema</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 border border-slate-150 p-4 rounded-xl text-xs space-y-3">
+                        <h4 class="font-bold text-slate-800"><i class="fa-solid fa-earth-americas text-indigo-600 mr-1.5"></i> Distribuição Espacial do Índice de Gini (Foco Concursos)</h4>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1 bg-white p-3 rounded-lg border border-slate-200">
+                                <strong class="text-red-700 block mb-1">MAIOR CONCENTRAÇÃO:</strong> Regiões dominadas pelo agronegócio de monoculturas e commodities de exportação (Mato Grosso, Mato Grosso do Sul, oeste da Bahia e o MATOPIBA).
+                            </div>
+                            <div class="flex-1 bg-white p-3 rounded-lg border border-slate-200">
+                                <strong class="text-emerald-700 block mb-1">MENOR CONCENTRAÇÃO:</strong> Regiões marcadas historicamente pela colonização minifundiária de pequena escala familiar (Santa Catarina, Espírito Santo e Amapá).
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <div class="border-l-4 border-indigo-600 pl-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900">PÁGINA 2: Legislação Agrária, Função Social e Pegadinhas da Banca FAURGS</h2>
+                    <p class="text-sm text-slate-500 mt-1">Conceitos legais, critérios técnicos para desapropriação e novos dinamismos territoriais.</p>
+                </div>
+
+                <!-- 1. Glossário Jurídico-Agrário Obrigatório -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                        Glossário Jurídico-Agrário Obrigatório (Estatuto da Terra & Lei nº 8.629/93)
+                    </h3>
+                    <p class="text-slate-700 text-sm leading-relaxed mb-6">
+                        A legislação agrária brasileira contém termos técnicos de uso obrigatório nas provas de Geografia da banca FAURGS. Leia e memorize as definições literais:
+                    </p>
+
+                    <!-- Glossário Estruturado -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                            <strong class="text-indigo-950 text-sm block mb-1">Imóvel Rural</strong>
+                            <p class="text-slate-600 leading-relaxed">
+                                Prédio rústico de área contínua destinado à exploração agrícola, pecuária, extrativa, florestal ou agroindustrial, <span class="grifo-importante">independentemente de sua localização geográfica</span>. O critério de destinação econômica prevalece sobre o geográfico urbano-municipal.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                            <strong class="text-indigo-950 text-sm block mb-1">Propriedade Familiar</strong>
+                            <p class="text-slate-600 leading-relaxed">
+                                Imóvel rural explorado direta e pessoalmente pelo agricultor e por sua família, absorvendo a quase totalidade de sua força de trabalho, garantindo-lhes subsistência e viabilizando seu progresso socioeconômico.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                            <strong class="text-indigo-950 text-sm block mb-1">Módulo Rural</strong>
+                            <p class="text-slate-600 leading-relaxed">
+                                Unidade de medida dinâmica <span class="grifo">calculada individualmente para cada imóvel</span>, baseada no tipo de exploração predominante. Serve de base para o cálculo da Fração Mínima de Parcelamento (FMP), que impede o desmembramento da terra em minifúndios economicamente inviáveis.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+                            <strong class="text-indigo-950 text-sm block mb-1">Módulo Fiscal</strong>
+                            <p class="text-slate-600 leading-relaxed">
+                                Unidade de medida expressa em hectares, <span class="grifo-importante">fixada de forma estável para cada município</span> pelo INCRA, variando territorialmente de 5 hectares (no Sul do país) até 100 hectares (na região Norte), representando a área mínima necessária para o sustento familiar.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-indigo-50 border border-indigo-200 text-indigo-950 text-xs rounded-lg">
+                        <strong>Módulo de Exploração Indefinida (MEI):</strong> Métrica utilizada pelo INCRA para controlar e limitar legalmente as aquisições territoriais por parte de cidadãos ou empresas estrangeiras no país (limite estabelecido de até 50 MEI).
+                    </div>
+                </div>
+
+                <!-- Tabela de Classificação -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm overflow-hidden">
+                    <h3 class="text-lg font-bold text-indigo-950 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-table text-indigo-600"></i>
+                        Tabela de Classificação dos Imóveis Rurais (Por Módulos Fiscais)
+                    </h3>
+                    <p class="text-slate-500 text-xs mb-4">Esta classificação determina a imunidade jurídica perante desapropriações para fins de Reforma Agrária.</p>
+                    
+                    <table class="w-full text-sm text-left border-collapse table-responsive">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200">
+                                <th class="p-3 text-slate-800 font-bold text-xs uppercase tracking-wider">Classe de Imóvel Rural</th>
+                                <th class="p-3 text-slate-800 font-bold text-xs uppercase tracking-wider">Dimensão em Módulos Fiscais (MF)</th>
+                                <th class="p-3 text-slate-800 font-bold text-xs uppercase tracking-wider">Possibilidade de Desapropriação</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900" data-label="Classe de Imóvel">Minifúndio</td>
+                                <td class="p-3 text-slate-600" data-label="Dimensão (MF)">Área total inferior a 1 MF.</td>
+                                <td class="p-3" data-label="Possibilidade de Desapropriação">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Não desapropriável</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900" data-label="Classe de Imóvel">Pequena Propriedade</td>
+                                <td class="p-3 text-slate-600" data-label="Dimensão (MF)">Área de 1 a 4 MF.</td>
+                                <td class="p-3" data-label="Possibilidade de Desapropriação">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Imune (se dono não possuir outra)</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900" data-label="Classe de Imóvel">Média Propriedade</td>
+                                <td class="p-3 text-slate-600" data-label="Dimensão (MF)">Área superior a 4 e até 15 MF.</td>
+                                <td class="p-3" data-label="Possibilidade de Desapropriação">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">Imune (se dono não possuir outra)</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-900" data-label="Classe de Imóvel">Grande Propriedade</td>
+                                <td class="p-3 text-slate-600" data-label="Dimensão (MF)">Área estritamente superior a 15 MF.</td>
+                                <td class="p-3" data-label="Possibilidade de Desapropriação">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-red-50 text-red-700">Suscetível à desapropriação-sanção</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 2. A Função Social da Propriedade -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                        A Função Social da Propriedade (CF, Art. 186)
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4">
+                        Para manter a garantia de imunidade contra a desapropriação-sanção para fins de reforma agrária, a propriedade rural produtiva deve cumprir, de forma <span class="grifo-importante">simultânea e cumulativa</span>, aos seguintes preceitos constitucionais:
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-700">
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex gap-3">
+                            <span class="text-indigo-600 text-base font-bold">I.</span>
+                            <div>
+                                <strong class="text-slate-950 block mb-1">Aproveitamento Racional e Adequado</strong>
+                                Medido por parâmetros técnicos do INCRA: o <span class="font-semibold text-indigo-900">Grau de Utilização da Terra (GUT)</span> e o <span class="font-semibold text-indigo-900">Grau de Eficiência na Exploração (GEE)</span>.
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex gap-3">
+                            <span class="text-indigo-600 text-base font-bold">II.</span>
+                            <div>
+                                <strong class="text-slate-950 block mb-1">Preservação do Meio Ambiente</strong>
+                                Exige a conformidade com as leis ecológicas e de uso do solo, conservação de Áreas de Preservação Permanente (APPs) e Reserva Legal (Código Florestal).
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex gap-3">
+                            <span class="text-indigo-600 text-base font-bold">III.</span>
+                            <div>
+                                <strong class="text-slate-950 block mb-1">Observância das Leis Trabalhistas</strong>
+                                Garantia integral de direitos e segurança jurídica aos rurícolas, com tolerância zero à exploração de trabalho análogo à escravidão.
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex gap-3">
+                            <span class="text-indigo-600 text-base font-bold">IV.</span>
+                            <div>
+                                <strong class="text-slate-950 block mb-1">Exploração que Favoreça o Bem-Estar</strong>
+                                Atividades de exploração econômica e uso da terra que gerem o desenvolvimento social de proprietários rurais e de seus trabalhadores assalariados.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 p-3 bg-amber-50 border border-amber-200 text-slate-700 text-xs rounded-lg">
+                        <strong>Mecanismo de Desapropriação:</strong> Se o imóvel descumprir qualquer um desses critérios, a desapropriação é decretada pela Presidência da República. A terra é indenizada com <span class="grifo">Títulos da Dívida Agrária (TDAs)</span> resgatáveis em até 20 anos, e benfeitorias úteis são pagas em dinheiro vivo.
+                    </div>
+                </div>
+
+                <!-- 3. Conflitos de Terra e Novas Ruralidades -->
+                <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-950 mb-4 flex items-center gap-2">
+                        <span class="bg-indigo-50 text-indigo-600 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                        Conflitos de Terra e Novas Ruralidades
+                    </h3>
+                    <p class="text-slate-700 leading-relaxed mb-4 text-sm">
+                        O atraso crônico na execução dos assentamentos e da regularização agrária fomenta severos conflitos territoriais:
+                    </p>
+
+                    <ul class="text-xs text-slate-600 space-y-3 pl-4 list-disc mb-6">
+                        <li>
+                            <strong class="text-slate-900">Geografia da Violência:</strong> Os focos recorrentes de homicídios no campo, grilagem de terras públicas e violências sistemáticas concentram-se historicamente na <span class="grifo-importante">Região Norte</span> (estados do Pará, Rondônia e Amapá), especialmente na área de jurisdição da superintendência do INCRA em Marabá/PA.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Regularização e Titulação (Lei nº 13.465/2017):</strong> Reestruturou as diretrizes da regularização de terras públicas. Críticos de movimentos sociais e acadêmicos apontam que a emissão acelerada de títulos individuais, desprovida de programas de crédito e assessoria técnica contínua, induz à revenda barata dos lotes, alimentando a reconcentração de terras pelo agronegócio.
+                        </li>
+                        <li>
+                            <strong class="text-slate-900">Novas Ruralidades e Pluriatividade:</strong> O espaço rural contemporâneo não abriga apenas atividades agropecuárias tradicionais. Famílias rurais combinam plantios com <span class="grifo">fontes não agrícolas de renda (pluriatividade)</span>, tais como o ecoturismo rural, moradias campestres, turismo ecológico e agroindústrias artesanais de nicho.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Mapeamento de Armadilhas FAURGS -->
+            <section class="mb-12">
+                <div class="border-l-4 border-red-500 pl-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900">Mapeamento de Armadilhas e "Peguinhas" da Banca FAURGS</h2>
+                    <p class="text-sm text-slate-500 mt-1">Como os distratores são estruturados na prova objetiva para o cargo EBTT.</p>
+                </div>
+
+                <div class="bg-white border border-red-100 rounded-xl p-6 shadow-sm overflow-hidden">
+                    <table class="w-full text-sm text-left border-collapse table-responsive">
+                        <thead>
+                            <tr class="bg-red-50 border-b border-red-100">
+                                <th class="p-3 text-red-900 font-bold text-xs uppercase tracking-wider">Assunto da Questão</th>
+                                <th class="p-3 text-red-900 font-bold text-xs uppercase tracking-wider">Armadilha do Distrator (Incorreto)</th>
+                                <th class="p-3 text-green-900 font-bold text-xs uppercase tracking-wider bg-green-50/50">Linha de Raciocínio (Correto)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-red-50">
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-950" data-label="Assunto">Parâmetro de Classificação</td>
+                                <td class="p-3 text-red-700 text-xs" data-label="Distrator Incorreto">Afirmar diretamente que a classificação das dimensões dos imóveis rurais (pequena, média, grande) é dada pelo número de <strong class="line-through">Módulos Rurais</strong>.</td>
+                                <td class="p-3 text-green-800 text-xs bg-green-50/30" data-label="Linha Correta">A base de classificação do tamanho das propriedades é dada unicamente pelo <span class="grifo-importante">Módulo Fiscal</span>. O módulo rural é dinâmico e calculado de forma individualizada.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-950" data-label="Assunto">Imunidade Produtiva</td>
+                                <td class="p-3 text-red-700 text-xs" data-label="Distrator Incorreto">Defender que o imóvel rural classificado tecnicamente como "produtivo" é <strong class="line-through">sempre imune à desapropriação</strong> em absoluto.</td>
+                                <td class="p-3 text-green-800 text-xs bg-green-50/30" data-label="Linha Correta">Propriedades produtivas perdem a proteção jurídica de imunidade se infringirem as exigências trabalhistas ou ecológicas fundamentais (Art. 186 CF).</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-950" data-label="Assunto">Índice de Gini da Terra</td>
+                                <td class="p-3 text-red-700 text-xs" data-label="Distrator Incorreto">Sugerir de forma simplificada que todo assentamento ou fracionamento de fazendas reduz o <strong class="line-through">Índice de Gini</strong>.</td>
+                                <td class="p-3 text-green-800 text-xs bg-green-50/30" data-label="Linha Correta">A proliferação de grande volume de micro e minifúndios pode, sob a ótica da fórmula do Gini, <span class="grifo">elevar a desigualdade estatística local</span> se houver grandes latifúndios restantes no mesmo município.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-semibold text-slate-950" data-label="Assunto">Geografia Regional (RS)</td>
+                                <td class="p-3 text-red-700 text-xs" data-label="Distrator Incorreto">Generalizar a totalidade do espaço agrário do Rio Grande do Sul como homogêneo e constituído unicamente por <strong class="line-through">pequena produção familiar</strong>.</td>
+                                <td class="p-3 text-green-800 text-xs bg-green-50/30" data-label="Linha Correta">Coexistem realidades distintas: o Sul e a Campanha Gaúcha com latifúndios tradicionais (pecuária e rizicultura); o Norte, Centro e Noroeste marcados por pequenas propriedades e avicultura/soja tecnificada.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Seção Interativa de Flashcards -->
+            <section class="mb-12">
+                <div class="border-l-4 border-indigo-600 pl-4 mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900">Flashcards Interativos: Memorização Ativa</h2>
+                    <p class="text-sm text-slate-500 mt-1">Clique no card para revelar a resposta e testar o seu conhecimento imediato.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="card-flip h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative duration-500">
+                            <!-- Frente -->
+                            <div class="card-front absolute inset-0 w-full h-full bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between shadow-sm">
+                                <span class="text-[10px] uppercase font-bold text-indigo-600">Conceito Base</span>
+                                <h3 class="text-sm font-bold text-slate-800 text-center">Qual a diferença fundamental entre Módulo Rural e Módulo Fiscal?</h3>
+                                <span class="text-[10px] text-slate-400 text-right"><i class="fa-solid fa-rotate mr-1"></i> Ver resposta</span>
+                            </div>
+                            <!-- Verso -->
+                            <div class="card-back absolute inset-0 w-full h-full bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between shadow-lg">
+                                <span class="text-[10px] uppercase font-bold text-emerald-400">Resposta</span>
+                                <p class="text-xs text-slate-200">O <strong>Módulo Rural</strong> é dinâmico e calculado para cada propriedade individualmente pelo INCRA. O <strong>Módulo Fiscal</strong> é estável e tabelado para cada município de forma fixa.</p>
+                                <span class="text-[10px] text-slate-400 text-right"><i class="fa-solid fa-rotate mr-1"></i> Ver pergunta</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="card-flip h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative duration-500">
+                            <!-- Frente -->
+                            <div class="card-front absolute inset-0 w-full h-full bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between shadow-sm">
+                                <span class="text-[10px] uppercase font-bold text-indigo-600">Lei de 1850</span>
+                                <h3 class="text-sm font-bold text-slate-800 text-center">Por que a Lei de Terras de 1850 foi promulgada junto à proibição do tráfico negreiro?</h3>
+                                <span class="text-[10px] text-slate-400 text-right"><i class="fa-solid fa-rotate mr-1"></i> Ver resposta</span>
+                            </div>
+                            <!-- Verso -->
+                            <div class="card-back absolute inset-0 w-full h-full bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between shadow-lg">
+                                <span class="text-[10px] uppercase font-bold text-emerald-400">Resposta</span>
+                                <p class="text-xs text-slate-200">Para impedir que ex-escravizados e imigrantes comprassem terras livres de forma autônoma, garantindo que fossem compelidos a servir como mão de obra assalariada da cafeicultura.</p>
+                                <span class="text-[10px] text-slate-400 text-right"><i class="fa-solid fa-rotate mr-1"></i> Ver pergunta</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="card-flip h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                        <div class="card-inner w-full h-full relative duration-500">
+                            <!-- Frente -->
+                            <div class="card-front absolute inset-0 w-full h-full bg-slate-50 border border-slate-200 rounded-xl p-5 flex flex-col justify-between shadow-sm">
+                                <span class="text-[10px] uppercase font-bold text-indigo-600">Critério de Imunidade</span>
+                                <h3 class="text-sm font-bold text-slate-800 text-center">Quais os 4 requisitos cumulativos e simultâneos do Artigo 186 da CF?</h3>
+                                <span class="text-[10px] text-slate-400 text-right"><i class="fa-solid fa-rotate mr-1"></i> Ver resposta</span>
+                            </div>
+                            <!-- Verso -->
+                            <div class="card-back absolute inset-0 w-full h-full bg-slate-900 text-white rounded-xl p-5 flex flex-col justify-between shadow-lg">
+                                <span class="text-[10px] uppercase font-bold text-emerald-400">Resposta</span>
+                                <p class="text-xs text-slate-200">1. Aproveitamento racional e adequado; <br>2. Preservação ambiental; <br>3. Respeito às leis trabalhistas; <br>4. Exploração que garanta o bem-estar coletivo.</p>
+                                <span class="text-[10px] text-slate-400 text-right"><i class="fa-solid fa-rotate mr-1"></i> Ver pergunta</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <!-- Footer e Redirecionamento -->
+        <footer class="mt-16 pt-8 border-t border-slate-200 text-center">
+            <p class="text-xs text-slate-400 mb-6">Esta plataforma de memorização é um projeto colaborativo e interativo de estudos para concursos públicos.</p>
+            
+            <!-- Botão de Questões Destacado -->
+            <div class="inline-block">
+                <a href="agrarioquestoes.html" class="inline-flex items-center gap-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base px-8 py-4 rounded-xl shadow-lg hover:shadow-indigo-200 transition-all transform hover:-translate-y-1 active:translate-y-0">
+                    <i class="fa-solid fa-circle-question"></i>
+                    Acessar Banco de Questões
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+            <p class="text-slate-400 text-[11px] mt-2 mb-10">Você será redirecionado para o simulado personalizado (questoes.html).</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Logica para controlar o player de audio de forma nativa e sem sobressaltos
+        const audio = document.getElementById('audio-player');
+        const playBtn = document.getElementById('play-btn');
+        const speedSelector = document.getElementById('speed-selector');
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const audioTime = document.getElementById('audio-time');
+        const audioErrorMsg = document.getElementById('audio-error-msg');
+        const trackNameLabel = document.getElementById('current-track-name');
+        
+        let audioCarregado = false;
+
+        function carregarAudio() {
+            const filenameInput = document.getElementById('audio-filename').value.trim();
+            if (filenameInput) {
+                audio.src = filenameInput;
+                audio.load();
+                trackNameLabel.textContent = filenameInput;
+                audioCarregado = true;
+                audioErrorMsg.classList.remove('hidden'); // Exibe a nota amigável de verificação
+                
+                // Reinicia UI
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                progressBar.style.width = '0%';
+                audioTime.textContent = "00:00 / 00:00";
+            }
+        }
+
+        // Carrega o áudio padrão na inicialização do sistema
+        window.addEventListener('load', () => {
+            carregarAudio();
+        });
+
+        // Alterna entre Play e Pause
+        function togglePlay() {
+            if (!audioCarregado) {
+                carregarAudio();
+            }
+            
+            if (audio.paused) {
+                audio.play().then(() => {
+                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                }).catch(err => {
+                    console.log("Erro de inicialização ou arquivo ausente: ", err);
+                    audioErrorMsg.classList.remove('hidden');
+                });
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            }
+        }
+
+        // Avança o áudio em 10 segundos
+        function avancarAudio() {
+            audio.currentTime = Math.min(audio.currentTime + 10, audio.duration || 0);
+        }
+
+        // Retrocede o áudio em 10 segundos
+        function retrocederAudio() {
+            audio.currentTime = Math.max(audio.currentTime - 10, 0);
+        }
+
+        // Muda a velocidade de reprodução
+        function mudarVelocidade(vel) {
+            audio.playbackRate = parseFloat(vel);
+        }
+
+        // Atualização da barra de progresso e contadores
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const percentual = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = percentual + '%';
+                
+                const curMins = Math.floor(audio.currentTime / 60).toString().padStart(2, '0');
+                const curSecs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+                const durMins = Math.floor(audio.duration / 60).toString().padStart(2, '0');
+                const durSecs = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+                
+                audioTime.textContent = `${curMins}:${curSecs} / ${durMins}:${durSecs}`;
+            }
+        });
+
+        // Clique na barra de progresso para avançar ou recuar
+        progressContainer.addEventListener('click', (e) => {
+            const larguraTotal = progressContainer.clientWidth;
+            const cliqueX = e.offsetX;
+            const percentual = cliqueX / larguraTotal;
+            if (audio.duration) {
+                audio.currentTime = percentual * audio.duration;
+            }
+        });
+
+        // Quando o áudio termina
+        audio.addEventListener('ended', () => {
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            progressBar.style.width = '0%';
+        });
+    </script>
+</body>
+</html>

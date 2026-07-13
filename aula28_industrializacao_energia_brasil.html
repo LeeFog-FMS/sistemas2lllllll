@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparatório Geografia IFSC - FAURGS</title>
+    <!-- Tailwind CSS para estilização moderna e limpa -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter para interface e Merriweather para uma leitura acadêmica confortável -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .highlight-yellow {
+            background-color: rgba(254, 240, 138, 0.7);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+        .highlight-blue {
+            background-color: rgba(219, 234, 254, 0.7);
+            padding: 0.125rem 0.25rem;
+            border-radius: 0.25rem;
+        }
+        /* Garantia extra de responsividade nas tabelas */
+        table {
+            width: 100% !important;
+            table-layout: auto !important;
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <header class="border-b border-slate-100 bg-white sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-slate-900 leading-tight">IFSC Concursos</h1>
+                    <p class="text-xs text-indigo-600 font-semibold tracking-wide uppercase">Banca FAURGS • Aula de Alta Performance</p>
+                </div>
+            </div>
+
+            <!-- Controles de Acessibilidade de Leitura -->
+            <div class="flex items-center gap-3">
+                <!-- Seletor de Fonte -->
+                <button id="btnToggleFont" class="text-xs bg-slate-50 border border-slate-200 hover:bg-slate-100 transition px-3 py-1.5 rounded-md flex items-center gap-1" title="Alternar entre fonte Sans e Serif">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    <span>Fonte: <strong id="fontLabel">Sans</strong></span>
+                </button>
+                
+                <!-- Buscador rápido dentro do documento -->
+                <div class="relative hidden sm:block">
+                    <input type="text" id="searchInput" placeholder="Buscar no resumo..." class="text-xs border border-slate-200 rounded-md py-1.5 pl-8 pr-3 w-44 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+                    <svg class="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="bg-indigo-50/50 border-b border-indigo-100 py-4 px-4 sticky top-[61px] z-30 backdrop-blur-md">
+        <div class="max-w-5xl mx-auto">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+                    
+                    <!-- Lado Esquerdo: Detalhes e Entrada do arquivo -->
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-1.5">
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-800">
+                                ÁUDIO COMPANHEIRO
+                            </span>
+                            <span class="text-xs text-slate-500">Insira seu áudio abaixo para acompanhar a leitura</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label for="audioSourceInput" class="text-xs font-semibold text-slate-600 shrink-0">Arquivo MP3:</label>
+                            <input type="text" id="audioSourceInput" value="aula_geografia_ifsc.mp3" class="text-xs font-mono bg-slate-50 hover:bg-slate-100 focus:bg-white border border-slate-200 rounded px-2 py-1 flex-1 focus:outline-none focus:ring-1 focus:ring-indigo-500" title="Altere para o nome do arquivo hospedado no mesmo diretório">
+                            <button id="btnReloadAudio" class="p-1 bg-slate-100 hover:bg-indigo-100 hover:text-indigo-700 text-slate-600 rounded transition" title="Carregar Novo Arquivo">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18.2"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Centro/Direita: Controles do Player de Áudio -->
+                    <div class="flex flex-wrap items-center gap-3 sm:gap-4 shrink-0 bg-slate-50 p-2.5 rounded-lg border border-slate-200/60">
+                        <!-- Botão Play/Pause -->
+                        <button id="btnPlayPause" class="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center focus:outline-none transition-transform active:scale-95 shadow">
+                            <svg id="svgPlay" class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            <svg id="svgPause" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+
+                        <!-- Informações de Tempo e Barra de Progresso -->
+                        <div class="flex flex-col gap-0.5 w-32 sm:w-44">
+                            <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono">
+                                <span id="timeCurrent">00:00</span>
+                                <span id="timeDuration">00:00</span>
+                            </div>
+                            <input type="range" id="progressSlider" min="0" max="100" value="0" class="w-full h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none">
+                        </div>
+
+                        <!-- Velocidade de Reprodução -->
+                        <div class="flex items-center gap-1">
+                            <span class="text-[10px] uppercase tracking-wider text-slate-500 font-semibold hidden xs:inline">Velocidade:</span>
+                            <select id="selectPlaybackSpeed" class="text-xs bg-white border border-slate-200 hover:border-slate-300 rounded px-2 py-1 font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                                <option value="1">1.0x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5" selected>1.5x</option>
+                                <option value="1.75">1.75x</option>
+                                <option value="2">2.0x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Elemento Invisível para Instanciação de Áudio -->
+            <audio id="audioElement" class="hidden" src="aula_geografia_energia.mp3" preload="metadata"></audio>
+        </div>
+    </div>
+
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar / Sumário e Ferramentas Rápidas -->
+        <aside class="lg:col-span-1 order-2 lg:order-1">
+            <div class="sticky top-[180px] flex flex-col gap-6">
+                
+                <!-- Índice Rápido -->
+                <nav class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <h3 class="font-bold text-slate-900 text-xs tracking-wider uppercase mb-3">Tópicos da Aula</h3>
+                    <ul class="space-y-2.5 text-sm text-slate-600">
+                        <li>
+                            <a href="#industrializacao" class="hover:text-indigo-600 transition flex items-center gap-2 group">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-500"></span>
+                                1. Industrialização Brasileira
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#energia" class="hover:text-indigo-600 transition flex items-center gap-2 group">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-500"></span>
+                                2. Matrizes de Energia
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#circulacao" class="hover:text-indigo-600 transition flex items-center gap-2 group">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-500"></span>
+                                3. Circulação e MTCI
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#faurgs" class="hover:text-indigo-600 transition flex items-center gap-2 group">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-indigo-500"></span>
+                                4. Modo de Operar FAURGS
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <!-- Status de Progresso do Aluno -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <h3 class="font-bold text-slate-900 text-xs tracking-wider uppercase mb-3">Seu Progresso</h3>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+                            <input type="checkbox" id="chkSec1" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                            <span>Industrialização revisada</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+                            <input type="checkbox" id="chkSec2" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                            <span>Energia dominada</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+                            <input type="checkbox" id="chkSec3" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                            <span>Transportes/MTCI compreendidos</span>
+                        </label>
+                        <label class="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+                            <input type="checkbox" id="chkSec4" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                            <span>Estratégia FAURGS memorizada</span>
+                        </label>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-200">
+                        <div class="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
+                            <div id="progressBar" class="h-full bg-emerald-500 w-0 transition-all duration-300"></div>
+                        </div>
+                        <p class="text-[10px] text-right text-slate-500 mt-1" id="progressText">0% concluído</p>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Conteúdo do Documento Principal -->
+        <article id="docContent" class="lg:col-span-3 order-1 lg:order-2 space-y-12 text-slate-800 leading-relaxed max-w-full">
+            
+            <header class="border-b border-slate-100 pb-6">
+                <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                    Resumo de Alta Performance: Industrialização, Energia e Circulação no Brasil
+                </h1>
+                <p class="text-slate-500 mt-2 text-sm">
+                    Especialmente modelado para o concurso de Professor de Geografia do IFSC — Foco na banca <strong class="text-indigo-600 font-semibold">FAURGS</strong>.
+                </p>
+            </header>
+
+            <!-- SEÇÃO 1: INDUSTRIALIZAÇÃO -->
+            <section id="industrializacao" class="space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white bg-slate-900 px-2 py-1 rounded">1</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Processo de Industrialização Brasileira: Da Substituição de Importações à Desconcentração</h2>
+                </div>
+
+                <p>
+                    A industrialização brasileira é classificada teoricamente como <span class="highlight-yellow font-medium">tardia ou retardada</span>, tendo se consolidado aproximadamente um século após o pioneirismo dos países de industrialização originária. Este processo ocorreu sob o modelo de <span class="highlight-yellow font-medium">Processo de Substituição de Importações (PSI)</span>.
+                </p>
+
+                <!-- Divisão em Fases com Destaques -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900 border-l-2 border-indigo-500 pl-3">As Quatro Grandes Fases do PSI e Reestruturação</h3>
+                    
+                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100 space-y-3">
+                        <p class="text-sm">
+                            <strong class="text-slate-900 block mb-1">Fase 1 (1930-1955): Industrialização Restrita</strong>
+                            Marcada pela teoria dos <span class="highlight-blue">"choques adversos"</span> (Celso Furtado e Raúl Prebisch), na qual a Grande Depressão de 1929 e as Guerras Mundiais provocaram o estrangulamento da capacidade nacional de importar. O <span class="highlight-yellow">Estado atuou como investidor direto nas indústrias de base e bens de produção</span> (ex: siderurgia e petroquímica). O espaço geográfico caracterizou-se pela altíssima concentração fabril na Região Metropolitana de São Paulo, herdeira da infraestrutura de transportes e capitais do complexo cafeeiro.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100 space-y-3">
+                        <p class="text-sm">
+                            <strong class="text-slate-900 block mb-1">Fase 2 (1956-1961): Internacionalização e Plano de Metas</strong>
+                            Implementada através do famoso <span class="highlight-blue">"Tripé Econômico" de Juscelino Kubitschek</span>. A divisão do capital estruturou-se de forma clara na prova: 1) <strong>Capital Estatal</strong> voltado à infraestrutura energética e de base; 2) <strong>Capital Estrangeiro/Transnacional</strong> liderando os bens de consumo duráveis (indústria automobilística); 3) <strong>Capital Nacional Privado</strong> focado em bens de consumo não duráveis. Ocorre a integração rodoviária federal para unificar o mercado.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100 space-y-3">
+                        <p class="text-sm">
+                            <strong class="text-slate-900 block mb-1">Fase 3 (1964-1985): Industrialização Pesada e II PND</strong>
+                            Fase de consolidação industrial durante o Regime Militar. O II Plano Nacional de Desenvolvimento (PND) no governo Geisel buscou o fechamento definitivo da cadeia fabril ao focar em bens de capital e insumos intermediários. Geograficamente, iniciou-se o processo de desconcentração industrial induzida por subsídios e projetos estatais regionais (ex: Suframa).
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50/50 p-4 rounded-lg border border-slate-100 space-y-3">
+                        <p class="text-sm">
+                            <strong class="text-slate-900 block mb-1">Fase 4 (1990-Presente): Reestruturação Produtiva e Neoliberalismo</strong>
+                            Abertura comercial acelerada, desregulamentação, privatizações e desconcentração espacial. O fluxo fabril migrou da capital paulista em direção ao interior do estado e a outras regiões, movido principalmente pela <span class="highlight-yellow">"guerra fiscal"</span> municipal e estadual.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Debate Geográfico: Tabela Otimizada Sem Scroll -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900">O Debate Geográfico: Teóricos da Desconcentração</h3>
+                    
+                    <!-- Para evitar scroll, convertemos a tabela visualmente em formato de grid inteligente ou tabela de layout super fluido com quebras automáticas -->
+                    <div class="overflow-hidden border border-slate-200 rounded-lg bg-white">
+                        <table class="min-w-full divide-y divide-slate-200 text-sm">
+                            <thead class="bg-slate-50">
+                                <tr>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider w-1/4">Modelo &amp; Autor</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider w-1/3">Dinâmica Espacial</th>
+                                    <th scope="col" class="px-3 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Gatilho de Prova</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-200">
+                                <tr class="align-top">
+                                    <td class="px-3 py-4 whitespace-normal text-slate-900 font-semibold">
+                                        Desenvolvimento Poligonal<br>
+                                        <span class="text-xs text-indigo-600 font-medium">(Clélio Campolina Diniz)</span>
+                                    </td>
+                                    <td class="px-3 py-4 whitespace-normal text-slate-600">
+                                        A atividade industrial desconcentrou-se de São Paulo, porém não de forma dispersa pelo país, mas sim concentrando-se em um <span class="highlight-yellow">polígono delimitado entre Belo Horizonte e Porto Alegre</span>.
+                                    </td>
+                                    <td class="px-3 py-4 whitespace-normal text-slate-600 text-xs">
+                                        A alta tecnologia, centros decisórios e serviços financeiros das corporações industriais continuam concentrados dentro do polígono (<span class="font-semibold">Região Concentrada</span>).
+                                    </td>
+                                </tr>
+                                <tr class="align-top">
+                                    <td class="px-3 py-4 whitespace-normal text-slate-900 font-semibold">
+                                        Desconcentração Espúria<br>
+                                        <span class="text-xs text-indigo-600 font-medium">(Wilson Cano)</span>
+                                    </td>
+                                    <td class="px-3 py-4 whitespace-normal text-slate-600">
+                                        A perda de dinamismo industrial de São Paulo ocorre de maneira precária e incompleta, acompanhada de um processo acelerado de <span class="highlight-blue">desindustrialização precoce</span>.
+                                    </td>
+                                    <td class="px-3 py-4 whitespace-normal text-slate-600 text-xs">
+                                        A redução da fatia do PIB fabril em São Paulo não gerou polos industriais autônomos e integrados no restante do território brasileiro; gerou sim uma reprimarização econômica nacional.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 2: MATRIZ ENERGÉTICA -->
+            <section id="energia" class="space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white bg-slate-900 px-2 py-1 rounded">2</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Produção de Energia no Brasil: Hidroeletricidade e Fontes Alternativas</h2>
+                </div>
+
+                <div class="bg-rose-50 border-l-4 border-rose-500 p-4 rounded-r-lg">
+                    <h4 class="font-bold text-rose-950 text-sm flex items-center gap-1.5">
+                        <svg class="w-4 h-4 text-rose-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+                        GATILHO ANTI-PEGADINHA DA BANCA FAURGS:
+                    </h4>
+                    <ul class="text-xs text-rose-900 mt-2 list-disc pl-4 space-y-1">
+                        <li><strong>Matriz Energética:</strong> Conjunto total de energia consumida no país (incluindo combustíveis veiculares e calefação industrial). No Brasil, é <span class="underline decoration-rose-500 font-bold">predominantemente NÃO renovável</span> devido ao peso do petróleo/diesel nos transportes.</li>
+                        <li><strong>Matriz Elétrica:</strong> Subconjunto específico destinado apenas à geração de eletricidade comercial. No Brasil, é <span class="underline decoration-rose-500 font-bold">altamente RENOVÁVEL</span> (hidrelétricas, eólica, solar e biomassa).</li>
+                    </ul>
+                </div>
+
+                <p>
+                    A força da hidroeletricidade nacional enfrentou modificações estruturais recentes em seu planejamento territorial, com destaque para a transição dos reservatórios de acumulação para o modelo de <strong>usinas a fio d'água</strong> na Bacia Amazônica (ex: Belo Monte).
+                </p>
+
+                <!-- Usinas a Fio D'água: Quadro de Balanço de Ideias -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="border border-emerald-200 rounded-lg p-4 bg-emerald-50/20">
+                        <h4 class="font-bold text-emerald-900 text-sm flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            Vantagem Territorial (+)
+                        </h4>
+                        <p class="text-xs text-slate-700 mt-2">
+                            A inundação de áreas florestais é drasticamente reduzida. Isso diminui os impactos socioambientais imediatos, o deslocamento forçado de comunidades tradicionais/indígenas e a decomposição de matéria orgânica geradora de gases do efeito estufa.
+                        </p>
+                    </div>
+                    <div class="border border-amber-200 rounded-lg p-4 bg-amber-50/20">
+                        <h4 class="font-bold text-amber-950 text-sm flex items-center gap-1">
+                            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                            Desvantagem Operacional (-)
+                        </h4>
+                        <p class="text-xs text-slate-700 mt-2">
+                            Dependência absoluta da sazonalidade pluvial tropical. Na estação seca amazônica, a usina gera uma fração mínima de sua potência instalada, necessitando do acionamento de usinas termelétricas fósseis para estabilizar o <strong>Sistema Interligado Nacional (SIN)</strong>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-lg font-bold text-slate-900">Fontes de Energia de Transição e Suas Áreas de Cobertura</h3>
+                    <ul class="space-y-2 text-sm text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 mt-1 shrink-0">•</span>
+                            <span><strong>Energia Eólica:</strong> Concentrada majoritariamente no Nordeste brasileiro (ventos alísios estáveis, sem cisalhamento e unidirecionais) e nos distritos do extremo sul do Rio Grande do Sul.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 mt-1 shrink-0">•</span>
+                            <span><strong>Energia Solar Fotovoltaica:</strong> Em forte ritmo de expansão tanto no modelo de Geração Centralizada (usinas solares no semiárido) quanto na <strong>Geração Distribuída</strong> (painéis descentralizados nos telhados de residências e pequenas empresas instaladas próximas ao ponto de consumo, reduzindo gargalos de transmissão).</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 mt-1 shrink-0">•</span>
+                            <span><strong>Biomassa (Bagaço de cana):</strong> Localizada fortemente no Centro-Sul paulista. Sua principal característica vantajosa é a complementaridade sazonal: a safra da cana ocorre justamente no período de estiagem das hidrelétricas, ajudando a poupar água nos reservatórios do SIN.</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-rose-800">
+                            <span class="text-rose-600 mt-1 shrink-0">•</span>
+                            <span><strong>Consumo de Lenha na Caatinga:</strong> O setor tradicional industrial (gesso e cerâmica do Nordeste) ainda consome cerca de 40% de sua energia de queima térmica a partir de lenha nativa, gerando impactos severos de desertificação na Caatinga.</span>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 3: CIRCULAÇÃO -->
+            <section id="circulacao" class="space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white bg-slate-900 px-2 py-1 rounded">3</span>
+                    <h2 class="text-2xl font-bold text-slate-900">Circulação, Modais e o Meio Técnico-Científico-Informacional (MTCI)</h2>
+                </div>
+
+                <p>
+                    A estruturação espacial brasileira transitou de um arranjo de <span class="highlight-yellow font-medium">"arquipélago econômico" ou em "espinha de peixe"</span> (vias independentes unindo o interior exportador diretamente aos portos comerciais) para uma profunda malha unificada a partir das décadas de 1950 e 1960, impulsionada pelo modal rodoviário de transporte.
+                </p>
+
+                <p>
+                    Segundo as teorizações fundamentais de <strong class="text-slate-900">Milton Santos</strong>, a infraestrutura contemporânea do Brasil é moldada pelo <span class="highlight-yellow font-medium">Meio Técnico-Científico-Informacional (MTCI)</span>, onde ciência, tecnologia e fluxos de informação fundem-se em uma única rede de poder e seletividade espacial.
+                </p>
+
+                <!-- Tópicos Críticos do MTCI para Concursos -->
+                <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+                    <div class="p-4 bg-slate-50 border-b border-slate-200">
+                        <h4 class="font-bold text-slate-900 text-sm uppercase tracking-wider">Vocabulário de Milton Santos Essencial para FAURGS</h4>
+                    </div>
+                    <div class="p-4 space-y-4 text-sm">
+                        <div>
+                            <strong class="text-indigo-600 block mb-1">Região Concentrada:</strong>
+                            Compreende o Sul e Sudeste do Brasil, onde a densidade das infovias, conexões de fibra ótica, malha de aeroportos modernos e universidades de ponta formam o arranjo de maior fluidez do território.
+                        </div>
+                        <hr class="border-slate-100">
+                        <div>
+                            <strong class="text-indigo-600 block mb-1">Pontos Luminosos vs. Espaços Opacos:</strong>
+                            Os <strong>Pontos Luminosos</strong> são enclaves territoriais hiperconectados à rede internacional de capitais e dados (por exemplo, cidades de agronegócio de alta precisão no Centro-Oeste ou polos de manufatura avançada). Os <strong>Espaços Opacos</strong> são as periferias sociais e regiões interioranas empobrecidas, dotadas de baixa densidade técnica e conectividade informacional.
+                        </div>
+                        <hr class="border-slate-100">
+                        <div>
+                            <strong class="text-indigo-600 block mb-1">Cidades Médias como Nós Intermediários:</strong>
+                            Atuam centralizando e capilarizando os fluxos de consumo, serviços, maquinários agrícolas e inovações do MTCI em direção ao interior nacional, descentralizando a influência direta das metrópoles.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEÇÃO 4: O "MODO DE OPERAR" DA BANCA -->
+            <section id="faurgs" class="space-y-6">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white bg-slate-900 px-2 py-1 rounded">4</span>
+                    <h2 class="text-2xl font-bold text-slate-900">O "Modo de Operar" da FAURGS e Estratégias Práticas de Prova</h2>
+                </div>
+
+                <div class="bg-indigo-50 border-l-4 border-indigo-600 p-4 rounded-r-lg space-y-2">
+                    <h4 class="font-bold text-indigo-950 text-sm">Estratégia para Itens de Múltipla Escolha e Asserções (V ou F):</h4>
+                    <p class="text-xs text-slate-700">
+                        A FAURGS utiliza com frequência palavras deterministas de exclusão (<span class="font-semibold text-rose-600">totalmente, completamente, aniquilou, isento</span>). Em geografia econômica e regional brasileira, raramente as dinâmicas são totalmente resolvidas ou homogêneas. Se o item afirmar que "a descentralização resolveu as desigualdades regionais brasileiras", o item é <strong>Falso</strong>.
+                    </p>
+                </div>
+
+                <!-- Painel de Treinamento Matemático: Calculadora de Escala Cartográfica -->
+                <div class="bg-white border border-indigo-100 rounded-xl shadow-sm overflow-hidden">
+                    <div class="p-4 bg-indigo-600 text-white flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-sm tracking-wide">TREINADOR DE CÁLCULO CARTOGRÁFICO</h3>
+                            <p class="text-[10px] text-indigo-200">Pratique a clássica questão de escala e área cobrada pela banca</p>
+                        </div>
+                        <span class="text-xs font-mono font-bold bg-indigo-700 px-2 py-1 rounded">FAURGS Clássico</span>
+                    </div>
+                    
+                    <div class="p-4 sm:p-6 space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-lg text-xs leading-relaxed text-slate-600">
+                            <strong class="text-slate-900 block mb-1">Enunciado Tipo:</strong>
+                            "Um mapa construído na escala de <span class="font-semibold text-indigo-600" id="exScale">1:50.000</span> apresenta uma área delimitada graficamente com <span class="font-semibold text-indigo-600" id="exArea">30 cm²</span>. Qual é a área real correspondente a esta marcação no terreno real em <span class="font-semibold">km²</span>?"
+                        </div>
+
+                        <!-- Formulário de Prática Interativa -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Escala Linear (Denominador D)</label>
+                                <input type="number" id="inputScale" value="50000" class="w-full text-sm border border-slate-200 rounded px-3 py-2 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <span class="text-[10px] text-slate-500">Ex: 50000 para uma escala de 1:50.000</span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Área Gráfica no Mapa (cm²)</label>
+                                <input type="number" id="inputArea" value="30" class="w-full text-sm border border-slate-200 rounded px-3 py-2 font-mono focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                                <span class="text-[10px] text-slate-500">Ex: 30 cm² no desenho</span>
+                            </div>
+                        </div>
+
+                        <!-- Botão de Resolução -->
+                        <button id="btnCalculate" class="w-full bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold py-2 rounded-lg transition-transform active:scale-[0.99] flex items-center justify-center gap-2">
+                            <span>Processar Resolução Passo a Passo</span>
+                        </button>
+
+                        <!-- Passo a Passo Detalhado Dinâmico -->
+                        <div id="calculatorResult" class="hidden bg-indigo-50/40 border border-indigo-100 p-4 rounded-lg space-y-3 text-sm">
+                            <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider text-indigo-800">Passo a Passo de Resolução Recomendado:</h4>
+                            
+                            <div class="space-y-2 text-xs text-slate-700">
+                                <p>
+                                    <strong>Passo 1: Converter a Escala Linear de cm para km.</strong><br>
+                                    Cortamos 5 casas decimais do denominador da escala (dividimos por 100.000):<br>
+                                    <span class="font-mono bg-white px-2 py-1 rounded inline-block border border-slate-200/50 mt-1" id="calcStep1">
+                                        50.000 cm ÷ 100.000 = 0,5 km
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>Passo 2: Elevar os dois lados ao quadrado para obter a escala de área.</strong><br>
+                                    Se 1 cm = <span id="calcValLinear">0.5</span> km, então:<br>
+                                    <span class="font-mono bg-white px-2 py-1 rounded inline-block border border-slate-200/50 mt-1" id="calcStep2">
+                                        (1 cm)² = (0,5 km)² ⇒ 1 cm² = 0,25 km²
+                                    </span>
+                                </p>
+                                <p>
+                                    <strong>Passo 3: Multiplicar a área gráfica pela nova escala de área.</strong><br>
+                                    <span class="font-mono bg-white px-2 py-1 rounded inline-block border border-slate-200/50 mt-1" id="calcStep3">
+                                        Área Real = 30 cm² × 0,25 km²/cm² = 7,5 km²
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="pt-2 border-t border-indigo-200/50 flex justify-between items-center">
+                                <span class="text-xs font-semibold text-slate-900">RESPOSTA FINAL:</span>
+                                <span class="text-lg font-extrabold text-indigo-700 font-mono" id="calcFinalResult">7.5 km²</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Memorização Rápida por Flashcards -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-bold text-slate-900">Memorização Ativa: Flashcards Rápidos</h3>
+                    <p class="text-xs text-slate-500">Clique no card para revelar as respostas essenciais de prova.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Card 1 -->
+                        <div class="flashcard border border-slate-200 hover:border-indigo-200 rounded-lg p-4 cursor-pointer bg-slate-50 transition" onclick="toggleFlashcard(this)">
+                            <div class="text-xs font-bold text-indigo-600 mb-1 uppercase tracking-wider">Teoria Industrial</div>
+                            <h4 class="font-semibold text-sm text-slate-900">Qual a lógica do modelo Poligonal de Campolina?</h4>
+                            <p class="text-xs text-slate-600 mt-2 hidden flashcard-answer pt-2 border-t border-slate-200/60">
+                                A industrialização brasileira desconcentrou-se, porém em direção às capitais e cidades médias do Centro-Sul, formando um polígono entre Porto Alegre e Belo Horizonte.
+                            </p>
+                        </div>
+                        
+                        <!-- Card 2 -->
+                        <div class="flashcard border border-slate-200 hover:border-indigo-200 rounded-lg p-4 cursor-pointer bg-slate-50 transition" onclick="toggleFlashcard(this)">
+                            <div class="text-xs font-bold text-indigo-600 mb-1 uppercase tracking-wider">Energia Elétrica</div>
+                            <h4 class="font-semibold text-sm text-slate-900">O que define uma Usina Hidrelétrica a fio d'água?</h4>
+                            <p class="text-xs text-slate-600 mt-2 hidden flashcard-answer pt-2 border-t border-slate-200/60">
+                                Usina sem grande reservatório de acumulação. Reduz enormemente as inundações socioambientais na Amazônia, mas sofre alta instabilidade com o regime sazonal de chuvas.
+                            </p>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="flashcard border border-slate-200 hover:border-indigo-200 rounded-lg p-4 cursor-pointer bg-slate-50 transition" onclick="toggleFlashcard(this)">
+                            <div class="text-xs font-bold text-indigo-600 mb-1 uppercase tracking-wider">Teoria Espacial</div>
+                            <h4 class="font-semibold text-sm text-slate-900">O que caracteriza o MTCI de Milton Santos?</h4>
+                            <p class="text-xs text-slate-600 mt-2 hidden flashcard-answer pt-2 border-t border-slate-200/60">
+                                É a fusão contemporânea do espaço com a ciência, tecnologia avançada e fluxos digitais de informação. Caracteriza-se por pontos luminosos de altíssima fluidez econômica contrapostos a espaços opacos.
+                            </p>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="flashcard border border-slate-200 hover:border-indigo-200 rounded-lg p-4 cursor-pointer bg-slate-50 transition" onclick="toggleFlashcard(this)">
+                            <div class="text-xs font-bold text-indigo-600 mb-1 uppercase tracking-wider">Transportes</div>
+                            <h4 class="font-semibold text-sm text-slate-900">Qual foi o impacto do rodoviarismo de JK?</h4>
+                            <p class="text-xs text-slate-600 mt-2 hidden flashcard-answer pt-2 border-t border-slate-200/60">
+                                A quebra definitiva do modelo de "arquipélagos econômicos" exportadores de base regional (ferrovias isoladas) para a criação de um mercado interno de consumo física e nacionalmente integrado pelas rodovias federais.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Botão de Ação Final -->
+            <footer class="pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="text-xs text-slate-500">
+                    Bons Estudos. Conteúdo gerado para uso focado em vestibulares e concursos EBTT.
+                </div>
+                <a href="energiaquestoes.html" class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-6 py-3 rounded-lg shadow-sm hover:shadow transition-all transform hover:-translate-y-0.5 active:translate-y-0">
+                    <span>Praticar com Questões de Prova</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </footer>
+
+        </article>
+    </main>
+
+    <script>
+        // 1. Controle de Tipografia (Sans vs Serif)
+        const btnToggleFont = document.getElementById('btnToggleFont');
+        const fontLabel = document.getElementById('fontLabel');
+        const docContent = document.getElementById('docContent');
+
+        btnToggleFont.addEventListener('click', () => {
+            if (docContent.classList.contains('font-sans')) {
+                docContent.classList.remove('font-sans');
+                docContent.classList.add('font-serif');
+                fontLabel.textContent = 'Serif';
+            } else {
+                docContent.classList.remove('font-serif');
+                docContent.classList.add('font-sans');
+                fontLabel.textContent = 'Sans';
+            }
+        });
+
+        // 2. Progresso de Leitura
+        const checkboxes = [
+            document.getElementById('chkSec1'),
+            document.getElementById('chkSec2'),
+            document.getElementById('chkSec3'),
+            document.getElementById('chkSec4')
+        ];
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+
+        function updateProgress() {
+            const checkedCount = checkboxes.filter(cb => cb.checked).length;
+            const percentage = Math.round((checkedCount / checkboxes.length) * 100);
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${percentage}% concluído`;
+            
+            // Salva o estado no LocalStorage para conveniência
+            localStorage.setItem('ifsc_study_progress', JSON.stringify(checkboxes.map(cb => cb.checked)));
+        }
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', updateProgress);
+        });
+
+        // Recuperar progresso anterior, se houver
+        window.addEventListener('load', () => {
+            const savedProgress = localStorage.getItem('ifsc_study_progress');
+            if (savedProgress) {
+                try {
+                    const parsed = JSON.parse(savedProgress);
+                    checkboxes.forEach((cb, idx) => {
+                        if (parsed[idx] !== undefined) {
+                            cb.checked = parsed[idx];
+                        }
+                    });
+                    updateProgress();
+                } catch (e) {
+                    console.error("Erro ao carregar progresso salvo", e);
+                }
+            }
+        });
+
+        // 3. Controle Completo do Player de Áudio Customizado
+        const audio = document.getElementById('audioElement');
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const svgPlay = document.getElementById('svgPlay');
+        const svgPause = document.getElementById('svgPause');
+        const progressSlider = document.getElementById('progressSlider');
+        const timeCurrent = document.getElementById('timeCurrent');
+        const timeDuration = document.getElementById('timeDuration');
+        const selectPlaybackSpeed = document.getElementById('selectPlaybackSpeed');
+        const audioSourceInput = document.getElementById('audioSourceInput');
+        const btnReloadAudio = document.getElementById('btnReloadAudio');
+
+        // Formatação do Tempo (ex: 03:45)
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const min = Math.floor(seconds / 60);
+            const sec = Math.floor(seconds % 60);
+            return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+        }
+
+        // Atualizar as durações na interface
+        audio.addEventListener('loadedmetadata', () => {
+            timeDuration.textContent = formatTime(audio.duration);
+            progressSlider.max = Math.floor(audio.duration);
+        });
+
+        // Alternar Play/Pause
+        btnPlayPause.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play().then(() => {
+                    svgPlay.classList.add('hidden');
+                    svgPause.classList.remove('hidden');
+                }).catch(err => {
+                    console.log("Arquivo de áudio não carregado ou indisponível localmente: ", err);
+                    // Feedback visual se o áudio não estiver presente
+                    btnPlayPause.classList.add('bg-rose-600');
+                    setTimeout(() => btnPlayPause.classList.remove('bg-rose-600'), 1500);
+                });
+            } else {
+                audio.pause();
+                svgPlay.classList.remove('hidden');
+                svgPause.classList.add('hidden');
+            }
+        });
+
+        // Atualizar controle deslizante com base na reprodução do áudio
+        audio.addEventListener('timeupdate', () => {
+            progressSlider.value = Math.floor(audio.currentTime);
+            timeCurrent.textContent = formatTime(audio.currentTime);
+        });
+
+        // Permitir que o usuário salte para um ponto do áudio arrastando o slider
+        progressSlider.addEventListener('input', () => {
+            audio.currentTime = progressSlider.value;
+        });
+
+        // Configuração de velocidade de reprodução
+        selectPlaybackSpeed.addEventListener('change', () => {
+            audio.playbackRate = parseFloat(selectPlaybackSpeed.value);
+        });
+
+        // Aplicar a velocidade padrão ao carregar
+        audio.addEventListener('play', () => {
+            audio.playbackRate = parseFloat(selectPlaybackSpeed.value);
+        });
+
+        // Recarregar áudio de forma dinâmica se o usuário trocar o nome do arquivo
+        function reloadAudioSource() {
+            const filename = audioSourceInput.value.trim();
+            if (filename) {
+                const isPlaying = !audio.paused;
+                audio.src = filename;
+                audio.load();
+                if (isPlaying) {
+                    audio.play();
+                } else {
+                    svgPlay.classList.remove('hidden');
+                    svgPause.classList.add('hidden');
+                }
+            }
+        }
+
+        btnReloadAudio.addEventListener('click', reloadAudioSource);
+        audioSourceInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                reloadAudioSource();
+            }
+        });
+
+        // 4. Calculadora Interativa de Escala Cartográfica
+        const inputScale = document.getElementById('inputScale');
+        const inputArea = document.getElementById('inputArea');
+        const btnCalculate = document.getElementById('btnCalculate');
+        const calculatorResult = document.getElementById('calculatorResult');
+        
+        const calcStep1 = document.getElementById('calcStep1');
+        const calcValLinear = document.getElementById('calcValLinear');
+        const calcStep2 = document.getElementById('calcStep2');
+        const calcStep3 = document.getElementById('calcStep3');
+        const calcFinalResult = document.getElementById('calcFinalResult');
+
+        btnCalculate.addEventListener('click', () => {
+            const scaleVal = parseFloat(inputScale.value);
+            const areaVal = parseFloat(inputArea.value);
+
+            if (isNaN(scaleVal) || isNaN(areaVal) || scaleVal <= 0 || areaVal <= 0) {
+                alert("Por favor, preencha os dados da escala e da área com valores válidos maiores que zero.");
+                return;
+            }
+
+            // Passo 1: Converter para Km cortando 5 zeros (ou dividindo por 100.000)
+            const kmLinear = scaleVal / 100000;
+            
+            // Passo 2: Elevar ao quadrado para obter a escala de área em km²
+            const kmSquareFactor = Math.pow(kmLinear, 2);
+            
+            // Passo 3: Multiplicar a área pelo fator quadrático
+            const realAreaResult = areaVal * kmSquareFactor;
+
+            // Preencher os elementos com formatação legível
+            calcStep1.innerHTML = `${scaleVal.toLocaleString('pt-BR')} cm ÷ 100.000 = <span class="font-bold text-indigo-700">${kmLinear.toLocaleString('pt-BR')} km</span>`;
+            calcValLinear.textContent = kmLinear.toLocaleString('pt-BR');
+            calcStep2.innerHTML = `(1 cm)² = (${kmLinear.toLocaleString('pt-BR')} km)² ⇒ <span class="font-bold text-indigo-700">1 cm² = ${kmSquareFactor.toLocaleString('pt-BR', {maximumFractionDigits: 6})} km²</span>`;
+            calcStep3.innerHTML = `Área Real = ${areaVal.toLocaleString('pt-BR')} cm² × ${kmSquareFactor.toLocaleString('pt-BR', {maximumFractionDigits: 6})} km²/cm² = <span class="font-bold text-indigo-700">${realAreaResult.toLocaleString('pt-BR', {maximumFractionDigits: 6})} km²</span>`;
+            
+            calcFinalResult.textContent = `${realAreaResult.toLocaleString('pt-BR', {maximumFractionDigits: 6})} km²`;
+
+            // Mostrar painel de resultados com animação sutil
+            calculatorResult.classList.remove('hidden');
+            calculatorResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // 5. Função de Toggle dos Flashcards
+        function toggleFlashcard(cardElement) {
+            const answer = cardElement.querySelector('.flashcard-answer');
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                cardElement.classList.add('ring-2', 'ring-indigo-500', 'bg-white');
+                cardElement.classList.remove('bg-slate-50');
+            } else {
+                answer.classList.add('hidden');
+                cardElement.classList.remove('ring-2', 'ring-indigo-500', 'bg-white');
+                cardElement.classList.add('bg-slate-50');
+            }
+        }
+
+        // 6. Motor Simples de Busca Dinâmica no Documento (Realce de Palavra-chave)
+        const searchInput = document.getElementById('searchInput');
+        
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.trim().toLowerCase();
+            const paragraphs = docContent.querySelectorAll('p, li, td');
+            
+            paragraphs.forEach(el => {
+                // Remove destaques de busca anteriores se existirem
+                if (el.dataset.originalHTML) {
+                    el.innerHTML = el.dataset.originalHTML;
+                } else {
+                    el.dataset.originalHTML = el.innerHTML;
+                }
+
+                if (query.length < 2) return; // Só busca acima de 2 caracteres
+
+                const rawText = el.textContent;
+                const index = rawText.toLowerCase().indexOf(query);
+                
+                if (index !== -1) {
+                    const regex = new RegExp(`(${query})`, 'gi');
+                    el.innerHTML = el.innerHTML.replace(regex, `<mark class="bg-amber-200 text-slate-900 rounded px-0.5">$1</mark>`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

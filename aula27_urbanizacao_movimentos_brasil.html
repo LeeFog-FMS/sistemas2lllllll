@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preparatório Geografia IFSC - Banca FAURGS</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Inter para legibilidade acadêmica máxima) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome para ícones premium -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1f2937; /* Cinza escuro para evitar fadiga ocular */
+            background-color: #ffffff;
+            line-height: 1.75;
+        }
+        /* Efeito de marca-texto realístico */
+        .grifado {
+            background: linear-gradient(104deg, rgba(254, 240, 138, 0.8) 0%, rgba(254, 240, 138, 0.6) 100%);
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+            font-weight: 600;
+        }
+        .grifado-verde {
+            background: linear-gradient(104deg, rgba(187, 247, 208, 0.8) 0%, rgba(187, 247, 208, 0.5) 100%);
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+            font-weight: 600;
+        }
+        .grifado-azul {
+            background: linear-gradient(104deg, rgba(191, 219, 254, 0.8) 0%, rgba(191, 219, 254, 0.5) 100%);
+            padding: 0.1em 0.3em;
+            border-radius: 0.2em;
+            font-weight: 600;
+        }
+        /* Custom scrollbar suave e elegante */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="selection:bg-yellow-200">
+
+<header class="border-b border-gray-100 bg-white sticky top-0 z-50 shadow-sm">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                <i class="fa-solid fa-graduation-cap text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-gray-900 text-base tracking-tight">Foco IFSC / Banca FAURGS</h1>
+                <p class="text-xs text-gray-500">Curso de Professor de Geografia (EBTT)</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                Memorização Ativa
+            </span>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 py-8">
+
+    <!-- PLAYER DE ÁUDIO CONFIGURÁVEL -->
+    <section class="mb-10 bg-gray-50 rounded-2xl p-6 border border-gray-200 shadow-sm">
+        <div class="flex items-center justify-between mb-4 border-b border-gray-200 pb-3">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-play text-gray-700 text-lg"></i>
+                <h3 class="font-bold text-gray-800 text-sm tracking-tight">Áudioclass Companion</h3>
+            </div>
+            <span class="text-xs font-medium text-gray-400">Insira seu áudio e escute lendo</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+            <!-- Input para arquivo MP3 -->
+            <div class="md:col-span-6">
+                <label for="audioSourceInput" class="block text-xs font-semibold text-gray-600 uppercase tracking-wider mb-1">Caminho / Nome do Arquivo MP3</label>
+                <div class="relative rounded-lg shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-file-audio"></i>
+                    </div>
+                    <input type="text" id="audioSourceInput" 
+                           class="block w-full pl-9 pr-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800" 
+                           placeholder="Ex: aula_urbanizacao.mp3" value="aula_urbanizacao.mp3">
+                </div>
+            </div>
+
+            <!-- Controles do Player -->
+            <div class="md:col-span-6 flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-gray-200">
+                <audio id="myAudio" preload="auto" class="hidden"></audio>
+                
+                <!-- Play / Pause -->
+                <button id="playBtn" class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center hover:bg-gray-800 transition duration-150 focus:outline-none">
+                    <i id="playIcon" class="fa-solid fa-play ml-0.5"></i>
+                </button>
+
+                <!-- Tempo Atual / Total -->
+                <div class="text-xs text-gray-600 font-mono flex items-center gap-1">
+                    <span id="currentTime">00:00</span>
+                    <span>/</span>
+                    <span id="durationTime">00:00</span>
+                </div>
+
+                <!-- Velocidade de Reprodução -->
+                <div class="relative inline-block text-left">
+                    <button id="speedBtn" class="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-700 transition focus:outline-none">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span id="currentSpeed">1.0x</span>
+                    </button>
+                    <!-- Dropdown de Velocidades -->
+                    <div id="speedDropdown" class="hidden absolute right-0 bottom-12 mt-2 w-24 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                        <ul class="py-1">
+                            <li><button class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50" onclick="setSpeed(0.5)">0.5x</button></li>
+                            <li><button class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50" onclick="setSpeed(1.0)">1.0x</button></li>
+                            <li><button class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50" onclick="setSpeed(1.25)">1.25x</button></li>
+                            <li><button class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50" onclick="setSpeed(1.5)">1.5x</button></li>
+                            <li><button class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50" onclick="setSpeed(1.75)">1.75x</button></li>
+                            <li><button class="w-full text-left px-3 py-1.5 text-xs hover:bg-gray-50" onclick="setSpeed(2.0)">2.0x</button></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Controle de Volume Simplificado -->
+                <div class="flex items-center gap-2">
+                    <button id="muteBtn" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                        <i id="muteIcon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="0.8" class="w-16 accent-gray-700 cursor-pointer h-1 rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Slider de Progresso do Áudio -->
+        <div class="mt-4 flex items-center gap-3">
+            <input type="range" id="progressSlider" min="0" max="100" value="0" class="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-gray-800">
+        </div>
+    </section>
+
+    <!-- SESSÃO DE CONTEÚDO PRINCIPAL -->
+    <article class="prose prose-slate max-w-none">
+        
+        <!-- INTRODUÇÃO / METADADOS -->
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-extrabold text-gray-900 leading-tight tracking-tight sm:text-4xl mb-4">
+                Urbanização e Movimentos Sociais no Brasil
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto font-light">
+                O guia definitivo de memorização ativa estruturado em microgargalos e gatilhos de prova exigidos pela <span class="border-b-2 border-red-300 font-semibold">banca FAURGS</span>.
+            </p>
+        </div>
+
+        <!-- SEÇÃO 1 -->
+        <section class="mb-14">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">1</span>
+                <h3 class="text-2xl font-bold text-gray-800 tracking-tight">O Processo de Urbanização Brasileiro</h3>
+            </div>
+
+            <div class="space-y-6 text-gray-700 leading-relaxed">
+                <p>
+                    O processo de formação do tecido urbano brasileiro é eminentemente <span class="grifado">tardio, acelerado e concentrado</span>. Diferente da industrialização orgânica europeia, a reestruturação espacial do país deu-se a reboque da <span class="grifado-verde">industrialização por substituição de importações</span>, capitaneada pelo polo Centro-Sul a partir da década de 1930.
+                </p>
+
+                <div class="bg-gray-50 border-l-4 border-amber-500 rounded-r-xl p-4 my-4">
+                    <strong class="text-amber-800 block mb-1">Gatilho de Prova (FAURGS): Modernização Conservadora do Campo</strong>
+                    A mecanização agrícola do pós-guerra não foi precedida de uma reforma agrária. Essa modernização tecnológica forçada gerou um <span class="grifado">êxodo rural maciço e excludente</span>, transferindo contingentes populacionais massivos para as periferias urbanas sem condições estruturais básicas de acolhimento.
+                </div>
+
+                <h4 class="font-bold text-lg text-gray-800 mt-6 mb-2">Conceitos-Chave Obrigatórios para Concurso</h4>
+                <ul class="space-y-4 pl-4 list-disc marker:text-blue-500">
+                    <li>
+                        <strong>Conurbação:</strong> Processo de <span class="grifado">integração física e horizontal</span> de duas ou mais manchas urbanas contíguas decorrente da expansão territorial das cidades. É um conceito puramente material/espacial.
+                    </li>
+                    <li>
+                        <strong>Metropolização:</strong> Processo de submissão do espaço regional à influência polarizadora de uma metrópole. Gera forte fluxo pendular de trabalhadores da periferia para a centralidade de serviços.
+                    </li>
+                    <li>
+                        <strong>Macrocefalia Urbana:</strong> Inchaço desproporcional de uma metrópole centralizadora, que absorve quase a totalidade dos investimentos de capitais e população de uma região. Revela a <span class="grifado">hipertrofia e colapso de infraestruturas básicas</span> (saúde, saneamento, habitação).
+                    </li>
+                    <li>
+                        <strong>Hipersetorização do Terciário:</strong> Diante de uma indústria incapaz de absorver a força de trabalho excedente do campo, a população urbana passa a atuar no setor de serviços em regime informal. <span class="grifado-azul">Não é apenas crescimento do setor terciário</span>, mas o inchaço de atividades de sobrevivência e subemprego.
+                    </li>
+                </ul>
+
+                <!-- TABELA ADAPTATIVA: Sem Scroll Horizontal -->
+                <div class="mt-8">
+                    <h4 class="font-bold text-base text-gray-800 mb-3 uppercase tracking-wider">Aglomerações Urbanas do Rio Grande do Sul (Clássico FAURGS)</h4>
+                    
+                    <!-- Versão Desktop (Tabela compacta e envolta) -->
+                    <div class="hidden md:block overflow-hidden border border-gray-200 rounded-xl">
+                        <table class="min-w-full divide-y divide-gray-200 text-sm">
+                            <thead class="bg-gray-50 text-gray-700 font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3 text-left">Região / Aglomeração</th>
+                                    <th class="px-4 py-3 text-left">Gatilho Principal de Prova</th>
+                                    <th class="px-4 py-3 text-left">Vulnerabilidade Crítica</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 text-gray-600 bg-white">
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-gray-900">R. M. de Porto Alegre</td>
+                                    <td class="px-4 py-3">Concentra 1/3 da população gaúcha; densidade superior a <span class="grifado">1.000 hab/km²</span>.</td>
+                                    <td class="px-4 py-3">Forte conurbação, segregação socioespacial aguda.</td>
+                                </tr>
+                                <tr class="bg-gray-50/50">
+                                    <td class="px-4 py-3 font-semibold text-gray-900">A. U. do Nordeste</td>
+                                    <td class="px-4 py-3">Foco no polo secundário metalmecânico, móveis e têxtil.</td>
+                                    <td class="px-4 py-3">Rápida atração de mão de obra e frágil infraestrutura social.</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-semibold text-gray-900">A. U. do Sul</td>
+                                    <td class="px-4 py-3">Dinâmica baseada em poucos municípios e investimentos federais portuários.</td>
+                                    <td class="px-4 py-3">Extrema dependência de fluxos e commodities agrícolas.</td>
+                                </tr>
+                                <tr class="bg-gray-50/50">
+                                    <td class="px-4 py-3 font-semibold text-gray-900">A. U. do Litoral Norte</td>
+                                    <td class="px-4 py-3">Marcante sazonalidade demográfica; alta densidade de Unidades de Conservação.</td>
+                                    <td class="px-4 py-3">Vulnerabilidade ambiental severa e forte pressão imobiliária costeira.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Versão Mobile (Cards Inteligentes) -->
+                    <div class="block md:hidden space-y-4">
+                        <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                            <div class="font-bold text-gray-900 border-b border-gray-100 pb-1 text-sm">R. M. de Porto Alegre</div>
+                            <p class="text-xs text-gray-600 mt-2"><strong>Gatilho:</strong> Concentra 1/3 da população estadual; densidade > <span class="grifado">1.000 hab/km²</span>.</p>
+                            <p class="text-xs text-gray-600 mt-1"><strong>Vulnerabilidade:</strong> Conurbação acentuada e segregação.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                            <div class="font-bold text-gray-900 border-b border-gray-100 pb-1 text-sm">A. U. do Nordeste</div>
+                            <p class="text-xs text-gray-600 mt-2"><strong>Gatilho:</strong> Forte polo secundário (bens de capital, móveis, têxtil).</p>
+                            <p class="text-xs text-gray-600 mt-1"><strong>Vulnerabilidade:</strong> Atração acelerada de mão de obra regional.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                            <div class="font-bold text-gray-900 border-b border-gray-100 pb-1 text-sm">A. U. do Sul</div>
+                            <p class="text-xs text-gray-600 mt-2"><strong>Gatilho:</strong> Dinâmica restrita a poucos municípios e fomento federal.</p>
+                            <p class="text-xs text-gray-600 mt-1"><strong>Vulnerabilidade:</strong> Dependência profunda de fluxos agroindustriais.</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-xl p-4 bg-white">
+                            <div class="font-bold text-gray-900 border-b border-gray-100 pb-1 text-sm">A. U. do Litoral Norte</div>
+                            <p class="text-xs text-gray-600 mt-2"><strong>Gatilho:</strong> Forte sazonalidade populacional (veraneio); muitas UCs.</p>
+                            <p class="text-xs text-gray-600 mt-1"><strong>Vulnerabilidade:</strong> Conflitos ambientais e pressão sobre ecossistemas costeiros.</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO 2 -->
+        <section class="mb-14">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">2</span>
+                <h3 class="text-2xl font-bold text-gray-800 tracking-tight">Produção do Espaço e Segregação Socioespacial</h3>
+            </div>
+
+            <div class="space-y-6 text-gray-700 leading-relaxed">
+                <h4 class="font-bold text-lg text-gray-800">Os 5 Agentes Produtores do Espaço (Roberto Lobato Corrêa)</h4>
+                <p class="text-sm">
+                    Para Corrêa, o espaço urbano é uma mercadoria repleta de valor de troca, moldado por conflitos intensos entre agentes intencionais:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <!-- Agente 1 -->
+                    <div class="border border-gray-200 rounded-xl p-4 bg-white flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Agente 1</span>
+                            <h5 class="font-bold text-gray-900 text-sm mt-2 mb-1">Industriais</h5>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Buscam <span class="grifado-azul">seletividade espacial</span> (fácil circulação, portos, energia e terras baratas).</p>
+                    </div>
+                    <!-- Agente 2 -->
+                    <div class="border border-gray-200 rounded-xl p-4 bg-white flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Agente 2</span>
+                            <h5 class="font-bold text-gray-900 text-sm mt-2 mb-1">Proprietários Fundiários</h5>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Garam a <span class="grifado-azul">especulação imobiliária</span> retendo lotes ociosos para valorização.</p>
+                    </div>
+                    <!-- Agente 3 -->
+                    <div class="border border-gray-200 rounded-xl p-4 bg-white flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Agente 3</span>
+                            <h5 class="font-bold text-gray-900 text-sm mt-2 mb-1">Promotores Imobiliários</h5>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Operam a verticalização, as construções e transformam terra em moeda de valor.</p>
+                    </div>
+                    <!-- Agente 4 -->
+                    <div class="border border-gray-200 rounded-xl p-4 bg-white flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Agente 4</span>
+                            <h5 class="font-bold text-gray-900 text-sm mt-2 mb-1">O Estado</h5>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Agente ambíguo que investe em infraestrutura sob medida para as classes dominantes.</p>
+                    </div>
+                    <!-- Agente 5 -->
+                    <div class="border border-gray-200 rounded-xl p-4 bg-white flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Agente 5</span>
+                            <h5 class="font-bold text-gray-900 text-sm mt-2 mb-1">Excluídos</h5>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Forçados a autoproduzir seu espaço (favelas) devido ao custo imobiliário inacessível.</p>
+                    </div>
+                </div>
+
+                <h4 class="font-bold text-lg text-gray-800 mt-8 mb-2">A Lente de Milton Santos para o Dia da Prova</h4>
+                <ul class="space-y-4 pl-4 list-disc marker:text-emerald-500">
+                    <li>
+                        <strong>Sistemas de Objetos e de Ações:</strong> O espaço geográfico não é apenas concreto físico. É a união indissociável de <span class="grifado">objetos</span> (as formas geográficas materiais: redes elétricas, ruas, edifícios) e <span class="grifado">ações</span> (o trabalho, a vida social, as forças de especulação e de controle).
+                    </li>
+                    <li>
+                        <strong>Rugosidades:</strong> São as formas espaciais remanescentes do passado (uma antiga ferrovia abandonada ou palacetes históricos) que funcionam como <span class="grifado-verde">resistências materiais às novas forças do capital</span> e impedem a reestruturação total e imediata do território urbano.
+                    </li>
+                    <li>
+                        <strong>Gentrificação:</strong> Processo socioeconômico no qual áreas periféricas, centrais degradadas ou operárias são alvo de "revitalizações" de interesse privado, promovendo a alteração do perfil populacional da área com a consequente <span class="grifado">expulsão indireta das populações vulneráveis</span> por meio da alta forçada do custo de vida.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 3 -->
+        <section class="mb-14">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">3</span>
+                <h3 class="text-2xl font-bold text-gray-800 tracking-tight">O Estatuto da Cidade (Lei Federal nº 10.257/2001)</h3>
+            </div>
+
+            <div class="space-y-6 text-gray-700 leading-relaxed">
+                <p>
+                    O Estatuto da Cidade visa garantir a <span class="grifado-verde">função social da propriedade urbana</span> e regulamentar as políticas urbanas nacionais. Ele estabelece os limites e as prerrogativas do poder público e as diretrizes do direito de propriedade.
+                </p>
+
+                <h4 class="font-bold text-lg text-gray-800">Marcos de Obrigatoriedade do Plano Diretor</h4>
+                <p class="text-sm">O Plano Diretor é o principal instrumento de desenvolvimento urbano e deve ser obrigatoriamente revisado a cada <span class="grifado">10 anos</span>. Ele é exigido para municípios:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Demografia & Integração</span>
+                        <ul class="text-xs text-gray-600 mt-2 space-y-1 list-disc pl-4">
+                            <li>Com população superior a <span class="grifado font-semibold">20.000 habitantes</span>.</li>
+                            <li>Integrantes de regiões metropolitanas ou aglomerações urbanas consolidadas.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-xl border border-gray-200 bg-white">
+                        <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Vocação & Risco</span>
+                        <ul class="text-xs text-gray-600 mt-2 space-y-1 list-disc pl-4">
+                            <li>Inseridos em áreas de especial interesse turístico ou ambiental.</li>
+                            <li>Em áreas suscetíveis a deslizamentos de terra, inundações ou processos erosivos graves.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="font-bold text-lg text-gray-800 mt-6">Instrumentos Urbanísticos Essenciais para Decodificar</h4>
+                <div class="space-y-4">
+                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <h5 class="font-bold text-gray-900 text-sm">IPTU Progressivo no Tempo & Desapropriação em Títulos</h5>
+                        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                            O município pode notificar proprietários de lotes ociosos ou vazios para edificarem. Caso haja descumprimento, o imposto municipal (IPTU) pode ser majorado anualmente pelo prazo máximo de <span class="grifado">5 anos consecutivos</span>, atingindo o teto legal de 15%. Se o proprietário persistir no descumprimento após esses 5 anos, o Município realiza a desapropriação mediante pagamento em títulos da dívida pública resgatáveis em até <span class="grifado">10 anos</span>.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <h5 class="font-bold text-gray-900 text-sm">Usucapião Especial Coletiva de Imóvel Urbano</h5>
+                        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                            Destinada a núcleos urbanos consolidados informais compostos por populações de baixa renda para fins residenciais. Requisitos básicos: áreas maiores que <span class="grifado">250 m²</span> ocupadas de forma pacífica e ininterrupta por no mínimo <span class="grifado">5 anos</span>, desde que os possuidores não possuam outro imóvel rural ou urbano registrado.
+                        </p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                        <h5 class="font-bold text-gray-900 text-sm">Direito de Superfície</h5>
+                        <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                            Garante a outrem a faculdade de utilizar o solo, o subsolo ou o espaço aéreo de um terreno privado por tempo <span class="grifado-azul">determinado ou indeterminado</span>, por meio de escritura pública registrada no cartório imobiliário.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO 4 -->
+        <section class="mb-14">
+            <div class="flex items-center gap-2 mb-6">
+                <span class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">4</span>
+                <h3 class="text-2xl font-bold text-gray-800 tracking-tight">Raio-X FAURGS: Pegadinhas e Fórmulas de Sucesso</h3>
+            </div>
+
+            <div class="space-y-6 text-gray-700 leading-relaxed">
+                
+                <!-- Armadilha 1 -->
+                <div class="border border-red-100 rounded-2xl p-5 bg-red-50/20">
+                    <div class="flex items-center gap-2 text-red-700 font-bold text-sm mb-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Pegadinha 1: Direito de Superfície e Divergência de Códigos</span>
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed">
+                        A FAURGS sabe que o Código Civil de 2002 restringe o Direito de Superfície somente a prazos <span class="italic">determinados</span>. No entanto, ela cobra a redação do <strong>Estatuto da Cidade (Art. 21)</strong>, que estabelece claramente a validade por tempo <span class="grifado">determinado ou indeterminado</span>. Sempre atente-se a qual base jurídica a questão faz referência expressa!
+                    </p>
+                </div>
+
+                <!-- Armadilha 2 -->
+                <div class="border border-red-100 rounded-2xl p-5 bg-red-50/20">
+                    <div class="flex items-center gap-2 text-red-700 font-bold text-sm mb-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Pegadinha 2: Direitos Básicos Fundamentais</span>
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed">
+                        Cuidado com as questões de "assinale a alternativa incorreta". O Estatuto elenca como direitos à sustentabilidade urbana: moradia, saneamento, infraestrutura, transporte, serviços públicos, <span class="grifado">trabalho e lazer</span>. A banca adora subtrair "lazer" ou tentar enfiar a expressão "gestão compartilhada com o Estado" de forma errônea. Lembre-se: a gestão democrática é compartilhada com a <span class="grifado">população e associações representativas</span>.
+                    </p>
+                </div>
+
+                <!-- Armadilha 3: Cálculo Cartográfico com Simulador -->
+                <div class="border border-indigo-100 rounded-2xl p-5 bg-indigo-50/20">
+                    <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm mb-2">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Pegadinha 3: Cálculo de Escala Bidimensional (Área)</span>
+                    </div>
+                    <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                        A banca costuma cobrar o cálculo de escala de forma bidimensional (área), e não apenas linear. A pegadinha está em multiplicar a escala diretamente pela área sem elevá-la ao quadrado.
+                    </p>
+                    <div class="bg-white p-4 rounded-xl border border-indigo-100 font-mono text-xs text-indigo-900 mb-4">
+                        FÓRMULA CHAVE:
+                        <br>
+                        <strong>Área Real = Área Gráfica (cm²) × (Denominador da Escala)²</strong>
+                        <br><br>
+                        Exemplo: Mapa de risco de deslizamento na escala 1:50.000, com área gráfica de 3 cm² no papel.
+                        <br>
+                        • Transformação linear direta: 1 cm = 500 m = 0,5 km
+                        <br>
+                        • Área: (0,5 km)² = 0,25 km² por cada cm²
+                        <br>
+                        • Área Real: 3 × 0,25 km² = <span class="grifado-verde">0,75 km²</span> (A banca colocará 1,5 km² e 7,5 km² nas alternativas para tentar te derrubar!)
+                    </div>
+
+                    <!-- CALCULADORA INTERATIVA PARA TREINAR NO CELULAR -->
+                    <div class="bg-white p-4 rounded-xl border border-gray-200 mt-4">
+                        <span class="block text-xs font-bold text-gray-800 uppercase tracking-wider mb-3"><i class="fa-solid fa-flask text-indigo-500"></i> Simulador Interativo de Prova</span>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-3">
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">Área no Mapa (cm²)</label>
+                                <input type="number" id="areaGraficaInput" value="3" class="w-full border border-gray-300 rounded px-2 py-1 text-xs">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-600 mb-1">Escala (1:X)</label>
+                                <input type="number" id="escalaInput" value="50000" class="w-full border border-gray-300 rounded px-2 py-1 text-xs">
+                            </div>
+                            <div class="flex items-end">
+                                <button onclick="calcularEscalaArea()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 px-2 rounded text-xs transition">Calcular Área Real</button>
+                            </div>
+                        </div>
+                        <div class="text-xs bg-gray-50 p-2.5 rounded text-gray-700 font-mono" id="resultadoCalculo">
+                            Insira os dados acima para ver o cálculo do gabarito em tempo real.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </article>
+
+    <!-- RODAPÉ DE NAVEGAÇÃO -->
+    <footer class="mt-16 border-t border-gray-200 pt-8 pb-12 flex flex-col items-center justify-center gap-4">
+        <p class="text-sm text-gray-500 text-center">Fim do material de estudo de Urbanização e Movimentos Sociais.</p>
+        
+        <!-- Botão de Questões conforme pedido (questoes.html) -->
+        <a href="urbanizacaoquestoes.html" class="inline-flex items-center gap-2 px-6 py-3.5 bg-gray-900 hover:bg-gray-800 text-white font-bold text-sm tracking-wide rounded-xl shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5 focus:outline-none">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <span>Ir para Questões Práticas</span>
+        </a>
+    </footer>
+
+</main>
+
+<!-- JAVASCRIPT: Controle total do Reprodutor de Áudio e Calculadora -->
+<script>
+    // Configurações do Reprodutor de Áudio
+    const audio = document.getElementById('myAudio');
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const speedBtn = document.getElementById('speedBtn');
+    const speedDropdown = document.getElementById('speedDropdown');
+    const currentSpeedText = document.getElementById('currentSpeed');
+    const progressSlider = document.getElementById('progressSlider');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const muteBtn = document.getElementById('muteBtn');
+    const muteIcon = document.getElementById('muteIcon');
+    const currentTimeText = document.getElementById('currentTime');
+    const durationTimeText = document.getElementById('durationTime');
+    const audioSourceInput = document.getElementById('audioSourceInput');
+
+    // Inicializar áudio salvo no LocalStorage para conveniência do usuário
+    if (localStorage.getItem('savedAudioPath')) {
+        audioSourceInput.value = localStorage.getItem('savedAudioPath');
+    }
+    audio.src = audioSourceInput.value;
+
+    // Monitorar digitação do usuário no input do caminho do áudio
+    audioSourceInput.addEventListener('input', function() {
+        const path = this.value;
+        audio.src = path;
+        localStorage.setItem('savedAudioPath', path);
+        resetPlayer();
+    });
+
+    // Resetar player quando trocar o arquivo
+    function resetPlayer() {
+        audio.pause();
+        playIcon.className = 'fa-solid fa-play ml-0.5';
+        progressSlider.value = 0;
+        currentTimeText.innerText = "00:00";
+    }
+
+    // Toggle Play/Pause
+    playBtn.addEventListener('click', function() {
+        if (audio.paused) {
+            audio.play().then(() => {
+                playIcon.className = 'fa-solid fa-pause';
+            }).catch(err => {
+                console.log("Erro de reprodução - Verifique se o arquivo existe no caminho correto.");
+                // Aviso sutil ao usuário
+                let resultBox = document.getElementById('resultadoCalculo');
+                resultBox.innerHTML = `<span class="text-red-500 font-sans">Aviso: Não encontramos o arquivo "${audioSourceInput.value}" para tocar. Coloque o arquivo de áudio correto na pasta do projeto ou mude o nome no painel.</span>`;
+            });
+        } else {
+            audio.pause();
+            playIcon.className = 'fa-solid fa-play ml-0.5';
+        }
+    });
+
+    // Atualização de progresso
+    audio.addEventListener('timeupdate', function() {
+        if (!isNaN(audio.duration)) {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            progressSlider.value = pct;
+            currentTimeText.innerText = formatTime(audio.currentTime);
+        }
+    });
+
+    // Meta-dados carregados
+    audio.addEventListener('loadedmetadata', function() {
+        durationTimeText.innerText = formatTime(audio.duration);
+    });
+
+    // Controle de deslize do progresso
+    progressSlider.addEventListener('input', function() {
+        if (!isNaN(audio.duration)) {
+            const newTime = (this.value / 100) * audio.duration;
+            audio.currentTime = newTime;
+        }
+    });
+
+    // Dropdown de velocidade de reprodução
+    speedBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        speedDropdown.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', function() {
+        speedDropdown.classList.add('hidden');
+    });
+
+    function setSpeed(val) {
+        audio.playbackRate = val;
+        currentSpeedText.innerText = val + 'x';
+    }
+
+    // Controle de volume
+    volumeSlider.addEventListener('input', function() {
+        audio.volume = this.value;
+        if (this.value == 0) {
+            muteIcon.className = 'fa-solid fa-volume-mute';
+        } else if (this.value < 0.5) {
+            muteIcon.className = 'fa-solid fa-volume-low';
+        } else {
+            muteIcon.className = 'fa-solid fa-volume-high';
+        }
+    });
+
+    // Mute/Unmute
+    muteBtn.addEventListener('click', function() {
+        audio.muted = !audio.muted;
+        if (audio.muted) {
+            muteIcon.className = 'fa-solid fa-volume-mute text-red-500';
+        } else {
+            muteIcon.className = 'fa-solid fa-volume-high';
+        }
+    });
+
+    // Formatador de tempo (Segundos -> MM:SS)
+    function formatTime(secs) {
+        const m = Math.floor(secs / 60);
+        const s = Math.floor(secs % 60);
+        return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    // LÓGICA DA CALCULADORA DE ESCALA DE ÁREA
+    function calcularEscalaArea() {
+        const areaGrafica = parseFloat(document.getElementById('areaGraficaInput').value);
+        const escala = parseFloat(document.getElementById('escalaInput').value);
+        const resultadoBox = document.getElementById('resultadoCalculo');
+
+        if (isNaN(areaGrafica) || isNaN(escala) || areaGrafica <= 0 || escala <= 0) {
+            resultadoBox.innerHTML = "<span class='text-red-500'>Erro: Insira valores positivos e válidos.</span>";
+            return;
+        }
+
+        // Conversão linear direta: 1 cm no mapa = X cm reais
+        // Convertendo para quilômetros (dividir por 100.000)
+        const escalaKm = escala / 100000;
+        
+        // Conversão de área: (escala linear em km)²
+        const escalaAreaFactor = Math.pow(escalaKm, 2);
+        
+        // Área real calculada
+        const areaReal = areaGrafica * escalaAreaFactor;
+
+        resultadoBox.innerHTML = `
+            <strong>Análise Matemática do Gabarito:</strong><br>
+            • Conversão linear: 1 cm no papel = ${escalaKm} km real<br>
+            • Conversão de área: (1 cm)² = (${escalaKm} km)² = ${escalaAreaFactor.toFixed(6)} km² reais<br>
+            • Área Real Total: ${areaGrafica} cm² × ${escalaAreaFactor.toFixed(6)} km²/cm² = <span class='text-emerald-700 font-bold'>${areaReal.toFixed(4)} km²</span>
+        `;
+    }
+
+    // Inicializar cálculo no carregamento do site
+    window.onload = function() {
+        calcularEscalaArea();
+    };
+</script>
+
+</body>
+</html>
